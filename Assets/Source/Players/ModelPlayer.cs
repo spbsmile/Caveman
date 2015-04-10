@@ -4,22 +4,25 @@ namespace Caveman.Players
 {
     public class ModelPlayer : ModelBasePlayer
     {
-        private const int Speed = 2;
-        private Vector2 positionDelta;
+        private const float Speed = 2;
+        private Vector2 delta;
+        private Animator animator;
 
         public void Start()
         {
             transform.position = Vector2.zero;
+            animator = GetComponent<Animator>();
         }
 
         public void Update()
         {
             if (Input.GetMouseButton(0))
             {
-                positionDelta = CalculateDelta(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                delta = CalculateDelta(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                animator.SetFloat("Speed", Speed);
             }
-            transform.position = new Vector3(transform.position.x + positionDelta.x*Time.deltaTime,
-                transform.position.y + positionDelta.y*Time.deltaTime);
+            transform.position = new Vector3(transform.position.x + delta.x*Time.deltaTime,
+                transform.position.y + delta.y*Time.deltaTime);
 
         }
 
