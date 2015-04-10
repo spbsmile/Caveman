@@ -1,0 +1,22 @@
+*.suo
+*.pidb
+*.userprefs
+_ReSharper.*
+bin
+obj
+
+/Wiki
+
+/*.unityproj
+/*.csproj
+/*.sln
+/Library
+/Temp
+
+.DS_Store
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+
+/z. Models
