@@ -4,9 +4,12 @@ namespace Caveman.Players
 {
     public class ModelPlayer : ModelBasePlayer
     {
-        private const float Speed = 2;
+        private const float Speed = 1.2f;
+        private const float ThresholdPosition = 0.1f;
         private Vector2 delta;
         private Animator animator;
+
+        private Vector2 target;
 
         public void Start()
         {
@@ -18,20 +21,29 @@ namespace Caveman.Players
         {
             if (Input.GetMouseButton(0))
             {
-                delta = CalculateDelta(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                delta = UnityExtensions.CalculateDelta(transform.position, target, Speed);
                 animator.SetFloat("Speed", Speed);
             }
-            transform.position = new Vector3(transform.position.x + delta.x*Time.deltaTime,
-                transform.position.y + delta.y*Time.deltaTime);
-
+            if (Vector2.SqrMagnitude((Vector2)transform.position - target) < ThresholdPosition && delta.magnitude > ThresholdPosition)
+            {
+                delta = Vector2.zero;
+                animator.SetFloat("Speed", 0);
+                ThrowStone();
+            }
+            if (delta.magnitude > ThresholdPosition)
+            {
+                transform.position = new Vector3(transform.position.x + delta.x * Time.deltaTime,
+                transform.position.y + delta.y * Time.deltaTime);    
+            }
         }
 
-        private Vector2 CalculateDelta(Vector2 positionTarget)
+        private void ThrowStone()
         {
-            var dx = positionTarget.x - transform.position.x;
-            var dy = positionTarget.y - transform.position.y;
-            var d = Mathf.Sqrt(dx*dx + dy*dy);
-            return d != 0 ? new Vector2((dx/d)*Speed, (dy/d)*Speed) : Vector2.zero;
+            var stone = Instantiate(Resources.Load("weapon", typeof(GameObject))) as GameObject;
+            var weaponModel = stone.GetComponent<WeaponModel>();
+            //animator.SetBool("Throw", true);
+            weaponModel.Move(transform.position, new Vector2(3, 3));
         }
     }
 }
