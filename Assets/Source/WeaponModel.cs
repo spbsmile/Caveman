@@ -1,8 +1,11 @@
 ﻿using Caveman;
+using Caveman.Players;
 using UnityEngine;
 
 public class WeaponModel : MonoBehaviour
 {
+    public Player owner;
+    
     private float speed = 1.5f;
     private Vector2 target;
     private Vector2 delta;
@@ -16,14 +19,11 @@ public class WeaponModel : MonoBehaviour
 	    }
 	}
 
-    public void OnCollisionEnter2D(Collision2D coll)
+    public void Move(Player player, Vector3 positionStart, Vector2 positionTarget)
     {
-
-    }
-
-    public void Move(Vector3 position, Vector2 positionTarget)
-    {
+        owner = player;
+        transform.position = positionStart;
         target = positionTarget;
-        delta = UnityExtensions.CalculateDelta(position, positionTarget, speed);
+        delta = UnityExtensions.CalculateDelta(positionStart, positionTarget, speed);
     }
 }

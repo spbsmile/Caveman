@@ -6,7 +6,7 @@ namespace Caveman.Players
     {
         public Player player;
 
-        public void Ini(Player player, Vector2 position)
+        public void Init(Player player, Vector2 position)
         {
             name = player.name;
             this.player = player;
@@ -15,11 +15,26 @@ namespace Caveman.Players
 
         public void OnTriggerEnter2D(Collider2D other)
         {
+            print("hello");
             if (Time.time < 1) return;
-            if (other.gameObject.GetComponent<WeaponModel>())
+            var weapon = other.gameObject.GetComponent<WeaponModel>();
+            if (weapon != null)
             {
-                player.weapons++;
-                Destroy(other.gameObject);
+                if (weapon.owner == null)
+                {
+                    player.weapons++;
+                    Destroy(other.gameObject);
+                }
+                else
+                {
+                    if (weapon.owner != player)
+                    {
+                        print("killed");
+                        weapon.owner.killed++;
+                        Destroy(other.gameObject);
+                        Destroy(gameObject);
+                    }
+                }
             }
         }
     }

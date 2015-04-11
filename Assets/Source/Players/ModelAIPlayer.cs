@@ -6,11 +6,6 @@ namespace Caveman.Players
     {
         private Transform ContainerWeapons;
 
-        public void Start()
-        {
-            transform.position = new Vector3(3, 3);
-        }
-
         public void Update()
         {
             //delay

@@ -7,45 +7,67 @@ namespace Caveman
 {
     public class EnterPoint : MonoBehaviour
     {
-        private const string PrefabName = "skin_1";
+        private const string PrefabPlayer = "skin_1";
+        private const string PrefabWeapon = "weapon";
 
         public Transform ContainerWeapons;
+        public Transform ContainerPlayers;
         public Text time;
         public Text deaths;
         public Text weapons;
-        public int bots = 1 ;
-        private string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik"};
+        public Text killed;
 
+        public int bots = 4 ;
+        public int weaponsCount = 5;
+        
+        private string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik"};
         private Player player;
         private Random random;
 
         public void Start()
         {
-            random = new System.Random();
+            random = new Random();
 
-            var prefabPlayer = Instantiate(Resources.Load(PrefabName, typeof(GameObject))) as GameObject;
+            var prefabPlayer = Instantiate(Resources.Load(PrefabPlayer, typeof(GameObject))) as GameObject;
             var playerModel = prefabPlayer.AddComponent<ModelPlayer>();
+            playerModel.transform.SetParent(ContainerPlayers);
             player = new Player("Zabiyakin", 37);
-            playerModel.Ini(player, Vector2.zero);
+            playerModel.Init(player, Vector2.zero);
 
-            IniAIPlayers();
+            InitAIPlayers();
+            InitWeapons();
         }
 
         public void Update()
         {
-            time.text = "Time " + Time.time.ToString();
-            weapons.text = "Weapons count : " + player.weapons.ToString();
+            time.text = "Time " + Time.time;
+            weapons.text = "Weapons count : " + player.weapons;
             //deaths.text = player.death.ToString();
+            killed.text = "Killed : " + player.killed;
         }
 
-        private void IniAIPlayers()
+        private void InitAIPlayers()
         {
+            const int boundaryRandom = 6;
             for (var i = 0; i < bots; i++)
             {
-                var prefabPlayer = Instantiate(Resources.Load(PrefabName, typeof(GameObject))) as GameObject;
+                var prefabPlayer = Instantiate(Resources.Load(PrefabPlayer, typeof(GameObject))) as GameObject;
                 var modelAiPlayer = prefabPlayer.AddComponent<ModelAIPlayer>();
-                modelAiPlayer.Ini(new Player(names[i], i),new Vector2(random.Next(0,6),random.Next(0,6)));
+                modelAiPlayer.transform.SetParent(ContainerPlayers);
+                modelAiPlayer.Init(new Player(names[i], i), new Vector2(random.Next(-boundaryRandom, boundaryRandom), random.Next(-boundaryRandom, boundaryRandom)));
                 modelAiPlayer.SetWeapons(ContainerWeapons);
+            }
+        }
+
+        private void InitWeapons()
+        {
+            const int boundaryRandom = 6;
+            for (var i = 0; i < weaponsCount; i++)
+            {
+                var prefabWeapons = Instantiate(Resources.Load(PrefabWeapon, typeof (GameObject))) as GameObject;
+                var modelWeapon = prefabWeapons.AddComponent<WeaponModel>();
+                modelWeapon.transform.SetParent(ContainerWeapons);
+                modelWeapon.transform.position = new Vector2(random.Next(-boundaryRandom, boundaryRandom), random.Next(-boundaryRandom, boundaryRandom));
             }
         }
     }
