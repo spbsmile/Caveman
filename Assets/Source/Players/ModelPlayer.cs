@@ -38,12 +38,6 @@ namespace Caveman.Players
             }
         }
 
-        private void ThrowStone()
-        {
-            var stone = Instantiate(Resources.Load("weapon", typeof(GameObject))) as GameObject;
-            var weaponModel = stone.GetComponent<WeaponModel>();
-            //animator.SetBool("Throw", true);
-            weaponModel.Move(player, transform.position, new Vector2(3, 3));
-        }
+        
     }
 }

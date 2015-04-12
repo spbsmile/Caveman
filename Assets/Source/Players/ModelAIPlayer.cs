@@ -6,8 +6,15 @@ namespace Caveman.Players
     {
         private Transform ContainerWeapons;
 
+        private int timeThrowStone = 300;
+
         public void Update()
         {
+            if (timeThrowStone-- < 0)
+            {
+                ThrowStone();
+                timeThrowStone = 300;
+            }
             //delay
             foreach (Transform weapon in ContainerWeapons)
             {

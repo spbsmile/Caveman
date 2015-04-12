@@ -1,4 +1,5 @@
-﻿using Caveman.Players;
+﻿using System.Collections;
+using Caveman.Players;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = System.Random;
@@ -9,6 +10,7 @@ namespace Caveman
     {
         private const string PrefabPlayer = "skin_1";
         private const string PrefabWeapon = "weapon";
+        private const int BoundaryRandom = 7;
 
         public Transform ContainerWeapons;
         public Transform ContainerPlayers;
@@ -19,7 +21,8 @@ namespace Caveman
 
         public int bots = 4 ;
         public int weaponsCount = 5;
-        
+
+        private float timeRespawnWeapon = 100;
         private string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik"};
         private Player player;
         private Random random;
@@ -28,47 +31,80 @@ namespace Caveman
         {
             random = new Random();
 
-            var prefabPlayer = Instantiate(Resources.Load(PrefabPlayer, typeof(GameObject))) as GameObject;
-            var playerModel = prefabPlayer.AddComponent<ModelPlayer>();
-            playerModel.transform.SetParent(ContainerPlayers);
-            player = new Player("Zabiyakin", 37);
-            playerModel.Init(player, Vector2.zero);
-
-            InitAIPlayers();
-            InitWeapons();
+            CreatePlayer(new Player("Zabiyakin", 37));
+            CreateAiPlayers();
+            CreateWeapons();
         }
 
         public void Update()
         {
             time.text = "Time " + Time.time;
             weapons.text = "Weapons count : " + player.weapons;
-            //deaths.text = player.death.ToString();
             killed.text = "Killed : " + player.killed;
+            if (timeRespawnWeapon-- < 0)
+            {
+                CreateWeapon();
+                timeRespawnWeapon = 100;
+            }
         }
 
-        private void InitAIPlayers()
+        private void CreateAiPlayers()
         {
-            const int boundaryRandom = 6;
             for (var i = 0; i < bots; i++)
             {
-                var prefabPlayer = Instantiate(Resources.Load(PrefabPlayer, typeof(GameObject))) as GameObject;
-                var modelAiPlayer = prefabPlayer.AddComponent<ModelAIPlayer>();
-                modelAiPlayer.transform.SetParent(ContainerPlayers);
-                modelAiPlayer.Init(new Player(names[i], i), new Vector2(random.Next(-boundaryRandom, boundaryRandom), random.Next(-boundaryRandom, boundaryRandom)));
-                modelAiPlayer.SetWeapons(ContainerWeapons);
+                CreateAiPlayer(new Player(names[i], i));
             }
         }
 
-        private void InitWeapons()
+        private void CreateWeapons()
         {
-            const int boundaryRandom = 6;
             for (var i = 0; i < weaponsCount; i++)
             {
-                var prefabWeapons = Instantiate(Resources.Load(PrefabWeapon, typeof (GameObject))) as GameObject;
-                var modelWeapon = prefabWeapons.AddComponent<WeaponModel>();
-                modelWeapon.transform.SetParent(ContainerWeapons);
-                modelWeapon.transform.position = new Vector2(random.Next(-boundaryRandom, boundaryRandom), random.Next(-boundaryRandom, boundaryRandom));
+                CreateWeapon();
             }
+        }
+
+        private void CreateAiPlayer(Player player)
+        {
+            var prefabPlayer = Instantiate(Resources.Load(PrefabPlayer, typeof (GameObject))) as GameObject;
+            var modelAiPlayer = prefabPlayer.AddComponent<ModelAIPlayer>();
+            modelAiPlayer.transform.SetParent(ContainerPlayers);
+            modelAiPlayer.Init(player,
+                new Vector2(random.Next(-BoundaryRandom, BoundaryRandom), random.Next(-BoundaryRandom, BoundaryRandom)));
+            modelAiPlayer.SetWeapons(ContainerWeapons);
+            modelAiPlayer.Respawn += player1 => StartCoroutine(RespawnAiPlayer(player1));
+        }
+
+        IEnumerator RespawnAiPlayer(Player player)
+        {
+            yield return new WaitForSeconds(1);
+            CreateAiPlayer(player);
+        }
+
+        private void CreatePlayer(Player player)
+        {
+            print("create players");
+            var prefabPlayer = Instantiate(Resources.Load(PrefabPlayer, typeof(GameObject))) as GameObject;
+            var playerModel = prefabPlayer.AddComponent<ModelPlayer>();
+            playerModel.transform.SetParent(ContainerPlayers);
+            this.player = player;
+            playerModel.Init(player, Vector2.zero);
+            playerModel.Respawn += player1 => StartCoroutine(RespawnPlayer(player1));
+        }
+
+        IEnumerator RespawnPlayer(Player player)
+        {
+            yield return new WaitForSeconds(1);
+            CreatePlayer(player);
+        }
+
+        private void CreateWeapon()
+        {
+            var prefabWeapons = Instantiate(Resources.Load(PrefabWeapon, typeof (GameObject))) as GameObject;
+            var modelWeapon = prefabWeapons.AddComponent<WeaponModel>();
+            modelWeapon.transform.SetParent(ContainerWeapons);
+            modelWeapon.transform.position = new Vector2(random.Next(-BoundaryRandom, BoundaryRandom),
+                random.Next(-BoundaryRandom, BoundaryRandom));
         }
     }
 }
