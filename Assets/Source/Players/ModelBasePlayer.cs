@@ -1,29 +1,27 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
 
 namespace Caveman.Players
 {
     public class ModelBasePlayer : MonoBehaviour
     {
-        public Transform players;
-        public Player player;
         public Action<Player> Respawn;
-        public void Init(Player player, Vector2 position)
+
+        private Player player;
+        protected Animator animator;
+
+        public void Start()
+        {
+            animator = GetComponent<Animator>();
+        }
+        
+        public void Init(Player player, Vector2 positionStart)
         {
             name = player.name;
             this.player = player;
-            transform.position = position;
+            transform.position = positionStart;
         }
-
-        protected void ThrowStone()
-        {
-            var stone = Instantiate(Resources.Load("weapon", typeof(GameObject))) as GameObject;
-            var weaponModel = stone.GetComponent<WeaponModel>();
-            //animator.SetBool("Throw", true);
-            weaponModel.Move(player, transform.position, new Vector2(3, 3));
-        }
-
+        
         public void OnTriggerEnter2D(Collider2D other)
         {
             if (Time.time < 1) return;
@@ -47,6 +45,42 @@ namespace Caveman.Players
                     }
                 }
             }
+        }
+
+        protected void ThrowStone()
+        {
+            var stone = Instantiate(Resources.Load("weapon", typeof(GameObject))) as GameObject;
+            var weaponModel = stone.GetComponent<WeaponModel>();
+            //animator.SetBool("Throw", true);
+            weaponModel.Move(player, transform.position, FindClosestEnemy());
+        }
+
+        private Vector2 FindClosestEnemy()
+        {
+            float minDistance = 0;
+            var nearPosition = Vector2.zero;
+            foreach (Transform child in transform.parent)
+            {
+                //todo хак, надо поправить
+                if (child.name != name)
+                {
+                    if (minDistance < 0.1f)
+                    {
+                        minDistance = Vector2.Distance(child.position, transform.position);
+                        nearPosition = child.position;
+                    }
+                    else
+                    {
+                        var childDistance = Vector2.Distance(child.position, transform.position);
+                        if (minDistance > childDistance)
+                        {
+                            minDistance = childDistance;
+                            nearPosition = child.position;
+                        }
+                    }
+                }
+            }
+            return nearPosition;
         }
     }
 }

@@ -11,5 +11,7 @@ namespace Caveman
             var d = Mathf.Sqrt(dx * dx + dy * dy);
             return d != 0 ? new Vector2((dx / d) * speed, (dy / d) * speed) : Vector2.zero;
         }
+
+        public static float ThresholdPosition = 0.1f;
     }
 }
