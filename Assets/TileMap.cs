@@ -2,7 +2,6 @@
 
 public class TileMap : MonoBehaviour
 {
-    public Transform container;
     public int width = 15;
     public int height = 15;
 
@@ -17,7 +16,7 @@ public class TileMap : MonoBehaviour
             for (var j = 0; j < height; j++)
 	        {
                 var gameObject = Instantiate(Resources.Load(TileName, typeof(GameObject)) as GameObject);
-                gameObject.transform.SetParent(container);
+                gameObject.transform.SetParent(transform    );
                 gameObject.transform.position = new Vector2(i * tileSize, j * tileSize);
 
 	        }  
