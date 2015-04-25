@@ -9,7 +9,7 @@ namespace Caveman
     public class EnterPoint : MonoBehaviour
     {
         private const string PrefabPlayer = "skin_1";
-        private const string PrefabWeapon = "weapon";
+        private const string PrefabWeapon = "stone_bunch";
         private const int BoundaryRandom = 7;
 
         public Transform ContainerWeapons;
@@ -39,8 +39,8 @@ namespace Caveman
         public void Update()
         {
             time.text = "Time " + Time.time;
-            weapons.text = "Weapons count : " + player.weapons;
-            killed.text = "Killed : " + player.killed;
+            weapons.text = player.weapons.ToString();
+            killed.text = player.killed.ToString();
             if (timeRespawnWeapon-- < 0)
             {
                 CreateWeapon();
@@ -83,7 +83,6 @@ namespace Caveman
 
         private void CreatePlayer(Player player)
         {
-            print("create players");
             var prefabPlayer = Instantiate(Resources.Load(PrefabPlayer, typeof(GameObject))) as GameObject;
             var playerModel = prefabPlayer.AddComponent<ModelPlayer>();
             playerModel.transform.SetParent(ContainerPlayers);

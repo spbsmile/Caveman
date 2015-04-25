@@ -4,7 +4,7 @@ namespace Caveman.Players
 {
     public class ModelPlayer : ModelBasePlayer
     {
-        private const float Speed = 1.2f;
+        private const float Speed = 1.8f;
         private Vector2 delta;
         private Vector2 target;
 

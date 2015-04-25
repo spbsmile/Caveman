@@ -6,7 +6,7 @@ public class WeaponModel : MonoBehaviour
 {
     public Player owner;
     
-    private float speed = 1.5f;
+    private float speed = 2.1f;
     private Vector2 target;
     private Vector2 delta;
     private Animator animator;
