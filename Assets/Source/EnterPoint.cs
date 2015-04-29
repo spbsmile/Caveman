@@ -12,8 +12,9 @@ namespace Caveman
         private const string PrefabWeapon = "stone_bunch";
         private const int BoundaryRandom = 7;
 
-        public Transform ContainerWeapons;
-        public Transform ContainerPlayers;
+        public SmoothCamera smoothCamera;
+        public Transform containerWeapons;
+        public Transform containerPlayers;
         public Text time;
         public Text deaths;
         public Text weapons;
@@ -68,10 +69,10 @@ namespace Caveman
         {
             var prefabPlayer = Instantiate(Resources.Load(PrefabPlayer, typeof (GameObject))) as GameObject;
             var modelAiPlayer = prefabPlayer.AddComponent<ModelAIPlayer>();
-            modelAiPlayer.transform.SetParent(ContainerPlayers);
+            modelAiPlayer.transform.SetParent(containerPlayers);
             modelAiPlayer.Init(player,
                 new Vector2(random.Next(-BoundaryRandom, BoundaryRandom), random.Next(-BoundaryRandom, BoundaryRandom)));
-            modelAiPlayer.SetWeapons(ContainerWeapons);
+            modelAiPlayer.SetWeapons(containerWeapons);
             modelAiPlayer.Respawn += player1 => StartCoroutine(RespawnAiPlayer(player1));
         }
 
@@ -85,10 +86,11 @@ namespace Caveman
         {
             var prefabPlayer = Instantiate(Resources.Load(PrefabPlayer, typeof(GameObject))) as GameObject;
             var playerModel = prefabPlayer.AddComponent<ModelPlayer>();
-            playerModel.transform.SetParent(ContainerPlayers);
+            playerModel.transform.SetParent(containerPlayers);
             this.player = player;
             playerModel.Init(player, Vector2.zero);
             playerModel.Respawn += player1 => StartCoroutine(RespawnPlayer(player1));
+            smoothCamera.target = prefabPlayer.transform;
         }
 
         IEnumerator RespawnPlayer(Player player)
@@ -101,7 +103,7 @@ namespace Caveman
         {
             var prefabWeapons = Instantiate(Resources.Load(PrefabWeapon, typeof (GameObject))) as GameObject;
             var modelWeapon = prefabWeapons.AddComponent<WeaponModel>();
-            modelWeapon.transform.SetParent(ContainerWeapons);
+            modelWeapon.transform.SetParent(containerWeapons);
             modelWeapon.transform.position = new Vector2(random.Next(-BoundaryRandom, BoundaryRandom),
                 random.Next(-BoundaryRandom, BoundaryRandom));
         }
