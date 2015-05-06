@@ -39,7 +39,7 @@ namespace Caveman
 
         public void Update()
         {
-            time.text = "Time " + Time.time;
+            time.text = "Round Time " + Time.time;
             weapons.text = player.weapons.ToString();
             killed.text = player.killed.ToString();
             if (timeRespawnWeapon-- < 0)
@@ -71,7 +71,7 @@ namespace Caveman
             var modelAiPlayer = prefabPlayer.AddComponent<ModelAIPlayer>();
             modelAiPlayer.transform.SetParent(containerPlayers);
             modelAiPlayer.Init(player,
-                new Vector2(random.Next(-BoundaryRandom, BoundaryRandom), random.Next(-BoundaryRandom, BoundaryRandom)));
+                new Vector2(random.Next(-BoundaryRandom, BoundaryRandom), random.Next(-BoundaryRandom, BoundaryRandom)), random);
             modelAiPlayer.SetWeapons(containerWeapons);
             modelAiPlayer.Respawn += player1 => StartCoroutine(RespawnAiPlayer(player1));
         }
@@ -88,7 +88,7 @@ namespace Caveman
             var playerModel = prefabPlayer.AddComponent<ModelPlayer>();
             playerModel.transform.SetParent(containerPlayers);
             this.player = player;
-            playerModel.Init(player, Vector2.zero);
+            playerModel.Init(player, Vector2.zero, random);
             playerModel.Respawn += player1 => StartCoroutine(RespawnPlayer(player1));
             smoothCamera.target = prefabPlayer.transform;
         }

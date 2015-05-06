@@ -1,24 +1,33 @@
 ﻿using System;
 using UnityEngine;
+using Random = System.Random;
 
 namespace Caveman.Players
 {
     public class ModelBasePlayer : MonoBehaviour
     {
+        protected const float Speed = 1.8f;
+        
         public Action<Player> Respawn;
 
-        private Player player;
+        protected Player player;
+        protected Vector2 delta;
         protected Animator animator;
+        protected Vector2 target;
+        protected Random random;
 
-        public void Start()
+        private int timeThrowStone = 300;
+
+        public virtual void Start()
         {
             animator = GetComponent<Animator>();
         }
         
-        public void Init(Player player, Vector2 positionStart)
+        public void Init(Player player, Vector2 positionStart, Random random)
         {
             name = player.name;
             this.player = player;
+            this.random = random;
             transform.position = positionStart;
         }
         
@@ -37,7 +46,6 @@ namespace Caveman.Players
                 {
                     if (weapon.owner != player)
                     {
-                        print("killed");
                         weapon.owner.killed++;
                         Destroy(other.gameObject);
                         Respawn(player);
@@ -47,19 +55,51 @@ namespace Caveman.Players
             }
         }
 
-        protected void ThrowStone()
+        private void ThrowStone()
         {
-            var stone = Instantiate(Resources.Load("weapon", typeof(GameObject))) as GameObject;
-            var weaponModel = stone.GetComponent<WeaponModel>();
-            //animator.SetBool("Throw", true);
-            weaponModel.Move(player, transform.position, FindClosestEnemy());
+            if (player.weapons > 0)
+            {
+                var stone = Instantiate(Resources.Load("weapon", typeof(GameObject))) as GameObject;
+                var weaponModel = stone.GetComponent<WeaponModel>();
+                animator.SetBool("Throw", true);
+                weaponModel.Move(player, transform.position, FindClosest(transform.parent));
+                player.weapons--;
+            }
         }
 
-        private Vector2 FindClosestEnemy()
+        protected bool MoveStop()
+        {
+            if (delta.magnitude > UnityExtensions.ThresholdPosition &&
+                Vector2.SqrMagnitude((Vector2) transform.position - target) < UnityExtensions.ThresholdPosition)
+            {
+                delta = Vector2.zero;
+                return true;
+            }
+            return false;
+        }
+
+        protected void Move()
+        {
+            if (delta.magnitude > UnityExtensions.ThresholdPosition)
+            {
+                transform.position = new Vector3(transform.position.x + delta.x * Time.deltaTime,
+                transform.position.y + delta.y * Time.deltaTime);
+            }
+        }
+
+        protected void ThrowStoneOnTimer()
+        {
+            if (timeThrowStone-- >= 0) return;
+            ThrowStone();
+            timeThrowStone = 300;
+        }
+
+
+        protected Vector2 FindClosest(Transform container)
         {
             float minDistance = 0;
             var nearPosition = Vector2.zero;
-            foreach (Transform child in transform.parent)
+            foreach (Transform child in container)
             {
                 //todo хак, надо поправить
                 if (child.name != name)

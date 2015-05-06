@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class WeaponModel : MonoBehaviour
 {
+    private const float Speed = 2.8f;
+
     public Player owner;
-    
-    private float speed = 2.1f;
+   
     private Vector2 target;
     private Vector2 delta;
     private Animator animator;
@@ -28,22 +29,23 @@ public class WeaponModel : MonoBehaviour
 	        }
 	        else
 	        {
-                //animator.SetTrigger("stoneCrash");
-	            Destroy(gameObject);
+	            Destroy();
 	        }
 	    }
 	}
-
-    //public void OnTriggerEnter2D(Collider2D other)
-    //{
-         //animator.SetTrigger("stoneCrash");
-    //}
+   
 
     public void Move(Player player, Vector3 positionStart, Vector2 positionTarget)
     {
         owner = player;
         transform.position = positionStart;
         target = positionTarget;
-        delta = UnityExtensions.CalculateDelta(positionStart, positionTarget, speed);
+        delta = UnityExtensions.CalculateDelta(positionStart, positionTarget, Speed);
+    }
+
+    private void Destroy()
+    {
+        //stoneCrash
+        Destroy(gameObject);
     }
 }

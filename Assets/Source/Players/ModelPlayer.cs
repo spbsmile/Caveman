@@ -4,28 +4,23 @@ namespace Caveman.Players
 {
     public class ModelPlayer : ModelBasePlayer
     {
-        private const float Speed = 1.8f;
-        private Vector2 delta;
-        private Vector2 target;
-
         public void Update()
         {
+            ThrowStoneOnTimer();
+
             if (Input.GetMouseButton(0))
             {
                 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 delta = UnityExtensions.CalculateDelta(transform.position, target, Speed);
                 animator.SetFloat("Speed", Speed);
             }
-            if (delta.magnitude > UnityExtensions.ThresholdPosition && Vector2.SqrMagnitude((Vector2)transform.position - target) < UnityExtensions.ThresholdPosition)
+            if (MoveStop())
             {
-                delta = Vector2.zero;
                 animator.SetFloat("Speed", 0);
-                ThrowStone();
             }
-            if (delta.magnitude > UnityExtensions.ThresholdPosition)
+            else
             {
-                transform.position = new Vector3(transform.position.x + delta.x * Time.deltaTime,
-                transform.position.y + delta.y * Time.deltaTime);    
+                 Move();   
             }
         }
     }
