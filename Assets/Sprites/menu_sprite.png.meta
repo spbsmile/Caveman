@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: dd5529d3665c2644b8d52a746c3a1f13
-timeCreated: 1429136942
+timeCreated: 1430935377
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -58,51 +58,51 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 2762
-        width: 5400
-        height: 686
-      alignment: 1
-      pivot: {x: 0, y: 1}
+        y: 2761
+        width: 4096
+        height: 689
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: menu_sprite_1
       rect:
         serializedVersion: 2
         x: 0
-        y: 2070
-        width: 5400
+        y: 2072
+        width: 4096
         height: 689
-      alignment: 1
-      pivot: {x: 0, y: 1}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: menu_sprite_2
       rect:
         serializedVersion: 2
         x: 0
-        y: 1380
-        width: 5400
-        height: 688
-      alignment: 1
-      pivot: {x: 0, y: 1}
+        y: 1383
+        width: 4096
+        height: 689
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: menu_sprite_3
       rect:
         serializedVersion: 2
         x: 0
-        y: 692
-        width: 5400
-        height: 685
-      alignment: 1
-      pivot: {x: 0, y: 1}
+        y: 694
+        width: 4096
+        height: 689
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: menu_sprite_4
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 5400
-        height: 688
-      alignment: 1
-      pivot: {x: 0, y: 1}
+        y: 5
+        width: 4096
+        height: 689
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

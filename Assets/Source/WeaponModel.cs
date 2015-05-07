@@ -4,18 +4,12 @@ using UnityEngine;
 
 public class WeaponModel : MonoBehaviour
 {
-    private const float Speed = 2.8f;
+    private const float Speed = 3.2f;
 
     public Player owner;
    
     private Vector2 target;
     private Vector2 delta;
-    private Animator animator;
-
-    public void Start()
-    {
-        animator = GetComponent<Animator>();
-    }
 
 	public void Update () 
     {
@@ -23,9 +17,9 @@ public class WeaponModel : MonoBehaviour
 	    {
 	        if (Vector2.Distance(target, transform.position) > UnityExtensions.ThresholdPosition)
 	        {
-	             transform.position = new Vector3(transform.position.x + delta.x * Time.deltaTime,
-                transform.position.y + delta.y * Time.deltaTime); 
-                transform.Rotate(Vector3.forward, 10);
+	            transform.position = new Vector3(transform.position.x + delta.x*Time.deltaTime,
+	                transform.position.y + delta.y*Time.deltaTime);
+	            transform.Rotate(Vector3.forward, 10);
 	        }
 	        else
 	        {
@@ -33,7 +27,6 @@ public class WeaponModel : MonoBehaviour
 	        }
 	    }
 	}
-   
 
     public void Move(Player player, Vector3 positionStart, Vector2 positionTarget)
     {

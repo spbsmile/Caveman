@@ -6,7 +6,7 @@ namespace Caveman.Players
 {
     public class ModelBasePlayer : MonoBehaviour
     {
-        protected const float Speed = 1.8f;
+        protected const float Speed = 2.5f;
         
         public Action<Player> Respawn;
 
@@ -46,7 +46,8 @@ namespace Caveman.Players
                 {
                     if (weapon.owner != player)
                     {
-                        weapon.owner.killed++;
+                        weapon.owner.kills++;
+                        player.deaths++;
                         Destroy(other.gameObject);
                         Respawn(player);
                         Destroy(gameObject);

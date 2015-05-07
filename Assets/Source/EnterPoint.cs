@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Caveman.Players;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,50 +11,96 @@ namespace Caveman
     {
         private const string PrefabPlayer = "skin_1";
         private const string PrefabWeapon = "stone_bunch";
+        private const string PrefabText = "Text";
         private const int BoundaryRandom = 7;
+        private const int MaxCountPlayers = 10;
+        private const int RoundTime = 10;
+        private const int TimeRespawnWeapon = 2;
+        private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
+        private readonly Player[] players = new Player[MaxCountPlayers];
 
         public SmoothCamera smoothCamera;
         public Transform containerWeapons;
         public Transform containerPlayers;
-        public Text time;
-        public Text deaths;
+        public Transform result;
+        public Text roundTime;
         public Text weapons;
         public Text killed;
-
-        public int bots = 4 ;
+        public int botsCount = 4 ;
         public int weaponsCount = 5;
+       
+        private float timeCurrentRespawnWeapon;
 
-        private float timeRespawnWeapon = 100;
-        private string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik"};
         private Player player;
         private Random random;
+        private bool flagEnd;
+        private int countRespawnWeappons = 1;
 
         public void Start()
         {
             random = new Random();
-
-            CreatePlayer(new Player("Zabiyakin", 37));
+            CreatePlayer(new Player("Zabiyakin"));
             CreateAiPlayers();
             CreateWeapons();
         }
 
         public void Update()
         {
-            time.text = "Round Time " + Time.time;
+            var remainTime = RoundTime - Math.Floor(Time.time);
+            var displayTime = remainTime > 60 ? "1 : " + (remainTime - 60) : remainTime.ToString();
+            roundTime.text = "Round Time " + displayTime;
+            if (remainTime < 0 && !flagEnd)
+            {
+                flagEnd = true; 
+                result.gameObject.SetActive(true);
+                StartCoroutine(DisplayResult());
+            }
+
             weapons.text = player.weapons.ToString();
-            killed.text = player.killed.ToString();
-            if (timeRespawnWeapon-- < 0)
+            killed.text = player.kills.ToString();
+            timeCurrentRespawnWeapon = countRespawnWeappons*TimeRespawnWeapon - Time.time;
+            if (timeCurrentRespawnWeapon-- < 0)
             {
                 CreateWeapon();
-                timeRespawnWeapon = 100;
+                countRespawnWeappons++;
+                timeCurrentRespawnWeapon = TimeRespawnWeapon;
             }
+        }
+
+        private IEnumerator DisplayResult()
+        {
+            yield return new WaitForSeconds(1f);
+            Time.timeScale = 0.00001f;
+
+            var namePlayer = result.GetChild(1);
+            var kills = result.GetChild(2);
+            var deaths = result.GetChild(3);
+            var axisY = -20;
+            const int deltaY = 30;
+            for (var i = 0; i < botsCount + 1; i++)
+            {
+                Write(players[i].name, namePlayer, axisY);
+                Write(players[i].kills.ToString(), kills, axisY);
+                Write(players[i].deaths.ToString(), deaths, axisY);
+                axisY -= deltaY;
+            }
+        }
+
+        private void Write(string value, Transform parent, int axisY)
+        {
+            var goName = Instantiate(Resources.Load(PrefabText, typeof (GameObject))) as GameObject;
+            goName.transform.SetParent(parent);
+            goName.transform.localPosition = new Vector2(-2, axisY);
+            goName.transform.rotation = Quaternion.identity;
+            goName.GetComponent<Text>().text = value;
         }
 
         private void CreateAiPlayers()
         {
-            for (var i = 0; i < bots; i++)
+            for (var i = 0; i < botsCount; i++)
             {
-                CreateAiPlayer(new Player(names[i], i));
+                players[i + 1] = new Player(names[i]);
+                CreateAiPlayer(players[i + 1]);
             }
         }
 
@@ -84,6 +131,7 @@ namespace Caveman
 
         private void CreatePlayer(Player player)
         {
+            players[0] = player;
             var prefabPlayer = Instantiate(Resources.Load(PrefabPlayer, typeof(GameObject))) as GameObject;
             var playerModel = prefabPlayer.AddComponent<ModelPlayer>();
             playerModel.transform.SetParent(containerPlayers);

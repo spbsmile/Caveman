@@ -29,6 +29,7 @@ namespace Caveman.Players
                 if (player.weapons < MaxCountWeapons)
                 {
                     target = FindClosest(ContainerWeapons);
+                    //todo if target null random move
                     delta = UnityExtensions.CalculateDelta(transform.position, target, Speed);
                 }
                 else

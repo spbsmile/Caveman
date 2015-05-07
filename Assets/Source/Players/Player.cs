@@ -2,17 +2,14 @@
 {
     public class Player
     {
-        public int killed;
-        public int death;
+        public int kills;
+        public int deaths;
         public int weapons;
         public readonly string name;
 
-        private int id;
-
-        public Player(string name, int id)
+        public Player(string name)
         {
             this.name = name;
-            this.id = id;
         }
     }
 }
