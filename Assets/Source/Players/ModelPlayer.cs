@@ -11,8 +11,8 @@ namespace Caveman.Players
             if (Input.GetMouseButton(0))
             {
                 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                delta = UnityExtensions.CalculateDelta(transform.position, target, Speed);
-                animator.SetFloat("Speed", Speed);
+                delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedPlayer);
+                animator.SetFloat("Speed", Settings.SpeedPlayer);
             }
             if (MoveStop())
             {

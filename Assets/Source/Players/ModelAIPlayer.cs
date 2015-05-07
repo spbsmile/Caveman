@@ -16,8 +16,8 @@ namespace Caveman.Players
             GetComponent<SpriteRenderer>().color = new Color32((byte) random.Next(255), (byte) random.Next(255),
                 (byte) random.Next(255), 255);
             target = new Vector2(random.Next(-TempBoundary, TempBoundary), random.Next(-TempBoundary, TempBoundary));
-            delta = UnityExtensions.CalculateDelta(transform.position, target, Speed);
-            animator.SetFloat("Speed", Speed);
+            delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedPlayer);
+            animator.SetFloat("Speed", Settings.SpeedPlayer);
         }
 
         public void Update()
@@ -30,12 +30,12 @@ namespace Caveman.Players
                 {
                     target = FindClosest(ContainerWeapons);
                     //todo if target null random move
-                    delta = UnityExtensions.CalculateDelta(transform.position, target, Speed);
+                    delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedPlayer);
                 }
                 else
                 {
                     target = new Vector2(random.Next(-TempBoundary, TempBoundary), random.Next(-TempBoundary, TempBoundary));
-                    delta = UnityExtensions.CalculateDelta(transform.position, target, Speed);
+                    delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedPlayer);
                 }
             }
             else

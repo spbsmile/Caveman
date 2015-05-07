@@ -12,12 +12,9 @@ namespace Caveman
         private const string PrefabPlayer = "skin_1";
         private const string PrefabWeapon = "stone_bunch";
         private const string PrefabText = "Text";
-        private const int BoundaryRandom = 7;
-        private const int MaxCountPlayers = 10;
-        private const int RoundTime = 10;
-        private const int TimeRespawnWeapon = 2;
+
         private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
-        private readonly Player[] players = new Player[MaxCountPlayers];
+        private readonly Player[] players = new Player[Settings.MaxCountPlayers];
 
         public SmoothCamera smoothCamera;
         public Transform containerWeapons;
@@ -26,8 +23,6 @@ namespace Caveman
         public Text roundTime;
         public Text weapons;
         public Text killed;
-        public int botsCount = 4 ;
-        public int weaponsCount = 5;
        
         private float timeCurrentRespawnWeapon;
 
@@ -46,7 +41,7 @@ namespace Caveman
 
         public void Update()
         {
-            var remainTime = RoundTime - Math.Floor(Time.time);
+            var remainTime = Settings.RoundTime - Math.Floor(Time.time);
             var displayTime = remainTime > 60 ? "1 : " + (remainTime - 60) : remainTime.ToString();
             roundTime.text = "Round Time " + displayTime;
             if (remainTime < 0 && !flagEnd)
@@ -58,12 +53,12 @@ namespace Caveman
 
             weapons.text = player.weapons.ToString();
             killed.text = player.kills.ToString();
-            timeCurrentRespawnWeapon = countRespawnWeappons*TimeRespawnWeapon - Time.time;
+            timeCurrentRespawnWeapon = countRespawnWeappons*Settings.TimeRespawnWeapon - Time.time;
             if (timeCurrentRespawnWeapon-- < 0)
             {
                 CreateWeapon();
                 countRespawnWeappons++;
-                timeCurrentRespawnWeapon = TimeRespawnWeapon;
+                timeCurrentRespawnWeapon = Settings.TimeRespawnWeapon;
             }
         }
 
@@ -77,7 +72,7 @@ namespace Caveman
             var deaths = result.GetChild(3);
             var axisY = -20;
             const int deltaY = 30;
-            for (var i = 0; i < botsCount + 1; i++)
+            for (var i = 0; i < Settings.BotsCount + 1; i++)
             {
                 Write(players[i].name, namePlayer, axisY);
                 Write(players[i].kills.ToString(), kills, axisY);
@@ -97,7 +92,7 @@ namespace Caveman
 
         private void CreateAiPlayers()
         {
-            for (var i = 0; i < botsCount; i++)
+            for (var i = 0; i < Settings.BotsCount; i++)
             {
                 players[i + 1] = new Player(names[i]);
                 CreateAiPlayer(players[i + 1]);
@@ -106,7 +101,7 @@ namespace Caveman
 
         private void CreateWeapons()
         {
-            for (var i = 0; i < weaponsCount; i++)
+            for (var i = 0; i < Settings.WeaponsCount; i++)
             {
                 CreateWeapon();
             }
@@ -118,7 +113,7 @@ namespace Caveman
             var modelAiPlayer = prefabPlayer.AddComponent<ModelAIPlayer>();
             modelAiPlayer.transform.SetParent(containerPlayers);
             modelAiPlayer.Init(player,
-                new Vector2(random.Next(-BoundaryRandom, BoundaryRandom), random.Next(-BoundaryRandom, BoundaryRandom)), random);
+                new Vector2(random.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom), random.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom)), random);
             modelAiPlayer.SetWeapons(containerWeapons);
             modelAiPlayer.Respawn += player1 => StartCoroutine(RespawnAiPlayer(player1));
         }
@@ -152,8 +147,8 @@ namespace Caveman
             var prefabWeapons = Instantiate(Resources.Load(PrefabWeapon, typeof (GameObject))) as GameObject;
             var modelWeapon = prefabWeapons.AddComponent<WeaponModel>();
             modelWeapon.transform.SetParent(containerWeapons);
-            modelWeapon.transform.position = new Vector2(random.Next(-BoundaryRandom, BoundaryRandom),
-                random.Next(-BoundaryRandom, BoundaryRandom));
+            modelWeapon.transform.position = new Vector2(random.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom),
+                random.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom));
         }
     }
 }

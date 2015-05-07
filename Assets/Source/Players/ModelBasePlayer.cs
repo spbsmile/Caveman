@@ -6,8 +6,6 @@ namespace Caveman.Players
 {
     public class ModelBasePlayer : MonoBehaviour
     {
-        protected const float Speed = 2.5f;
-        
         public Action<Player> Respawn;
 
         protected Player player;
@@ -16,7 +14,8 @@ namespace Caveman.Players
         protected Vector2 target;
         protected Random random;
 
-        private int timeThrowStone = 300;
+        private float timeCurrentThrow;
+        private int countRespawnThrow = 1;
 
         public virtual void Start()
         {
@@ -90,9 +89,11 @@ namespace Caveman.Players
 
         protected void ThrowStoneOnTimer()
         {
-            if (timeThrowStone-- >= 0) return;
+            timeCurrentThrow = countRespawnThrow*Settings.TimeThrowStone - Time.time;
+            if (timeCurrentThrow-- >= 0) return;
+            countRespawnThrow++;
             ThrowStone();
-            timeThrowStone = 300;
+            timeCurrentThrow = Settings.TimeThrowStone;
         }
 
 
