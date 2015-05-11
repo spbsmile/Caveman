@@ -40,6 +40,7 @@ namespace Caveman.Players
                 if (weapon.owner == null)
                 {
                     player.weapons++;
+                    //animator.SetTrigger("Pickup");
                     Destroy(other.gameObject);
                 }
                 else
