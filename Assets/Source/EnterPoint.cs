@@ -9,7 +9,8 @@ namespace Caveman
 {
     public class EnterPoint : MonoBehaviour
     {
-        private const string PrefabPlayer = "skin_1";
+        private const string PrefabPlayer = "player";
+        private const string PrefabBot = "bot";
         private const string PrefabLyingWeapon = "stone_bunch";
         private const string PrefabText = "Text";
         private const string PrefabDeath = "dead";
@@ -161,7 +162,7 @@ namespace Caveman
         {
             players[0] = player;
             var prefabPlayer = Instantiate(Resources.Load(PrefabPlayer, typeof(GameObject))) as GameObject;
-            var playerModel = prefabPlayer.AddComponent<ModelPlayer>();
+            var playerModel = prefabPlayer.GetComponent<ModelPlayer>();
             playerModel.transform.SetParent(containerPlayers);
             this.player = player;
             playerModel.Init(player, Vector2.zero, random);
@@ -173,8 +174,8 @@ namespace Caveman
 
         private void CreateAiPlayer(Player player)
         {
-            var prefabPlayer = Instantiate(Resources.Load(PrefabPlayer, typeof(GameObject))) as GameObject;
-            var modelAiPlayer = prefabPlayer.AddComponent<ModelAIPlayer>();
+            var prefabPlayer = Instantiate(Resources.Load(PrefabBot, typeof(GameObject))) as GameObject;
+            var modelAiPlayer = prefabPlayer.GetComponent<ModelAIPlayer>();
             modelAiPlayer.transform.SetParent(containerPlayers);
             modelAiPlayer.Init(player,
                 new Vector2(random.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom), random.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom)), random);

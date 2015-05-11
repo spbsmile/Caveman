@@ -58,15 +58,26 @@ namespace Caveman.Players
             }
         }
 
-        private void Throw()
+        public void Throw()
         {
+            ThrowStone(player, transform.position, FindClosest(transform.parent));
+            player.weapons--;
+        }
+
+        protected void ThrowStoneOnTimer()
+        {
+            timeCurrentThrow = player.countRespawnThrow * Settings.TimeThrowStone - Time.time;
+            if (timeCurrentThrow-- >= 0) return;
+            player.countRespawnThrow++;
+
             if (player.weapons > 0)
             {
-                ThrowStone(player, transform.position, FindClosest(transform.parent));
                 animator.SetBool("Throw", true);
-                player.weapons--;
             }
+            timeCurrentThrow = Settings.TimeThrowStone;
         }
+
+        
 
         protected bool MoveStop()
         {
@@ -87,16 +98,6 @@ namespace Caveman.Players
                 transform.position.y + delta.y * Time.deltaTime);
             }
         }
-
-        protected void ThrowStoneOnTimer()
-        {
-            timeCurrentThrow = player.countRespawnThrow*Settings.TimeThrowStone - Time.time;
-            if (timeCurrentThrow-- >= 0) return;
-            player.countRespawnThrow++;
-            Throw();
-            timeCurrentThrow = Settings.TimeThrowStone;
-        }
-
 
         protected Vector2 FindClosest(Transform container)
         {
