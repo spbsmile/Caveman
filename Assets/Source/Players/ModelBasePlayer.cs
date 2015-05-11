@@ -7,6 +7,8 @@ namespace Caveman.Players
     public class ModelBasePlayer : MonoBehaviour
     {
         public Action<Player> Respawn;
+        public Action<Vector2> Death;
+        public Action<Player, Vector2, Vector2> ThrowStone;
 
         protected Player player;
         protected Vector2 delta;
@@ -15,7 +17,6 @@ namespace Caveman.Players
         protected Random random;
 
         private float timeCurrentThrow;
-        private int countRespawnThrow = 1;
 
         public virtual void Start()
         {
@@ -48,6 +49,7 @@ namespace Caveman.Players
                         weapon.owner.kills++;
                         player.deaths++;
                         Destroy(other.gameObject);
+                        Death(transform.position);
                         Respawn(player);
                         Destroy(gameObject);
                     }
@@ -55,14 +57,12 @@ namespace Caveman.Players
             }
         }
 
-        private void ThrowStone()
+        private void Throw()
         {
             if (player.weapons > 0)
             {
-                var stone = Instantiate(Resources.Load("weapon", typeof(GameObject))) as GameObject;
-                var weaponModel = stone.GetComponent<WeaponModel>();
+                ThrowStone(player, transform.position, FindClosest(transform.parent));
                 animator.SetBool("Throw", true);
-                weaponModel.Move(player, transform.position, FindClosest(transform.parent));
                 player.weapons--;
             }
         }
@@ -89,10 +89,10 @@ namespace Caveman.Players
 
         protected void ThrowStoneOnTimer()
         {
-            timeCurrentThrow = countRespawnThrow*Settings.TimeThrowStone - Time.time;
+            timeCurrentThrow = player.countRespawnThrow*Settings.TimeThrowStone - Time.time;
             if (timeCurrentThrow-- >= 0) return;
-            countRespawnThrow++;
-            ThrowStone();
+            player.countRespawnThrow++;
+            Throw();
             timeCurrentThrow = Settings.TimeThrowStone;
         }
 

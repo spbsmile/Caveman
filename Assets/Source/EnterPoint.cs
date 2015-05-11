@@ -10,8 +10,11 @@ namespace Caveman
     public class EnterPoint : MonoBehaviour
     {
         private const string PrefabPlayer = "skin_1";
-        private const string PrefabWeapon = "stone_bunch";
+        private const string PrefabLyingWeapon = "stone_bunch";
         private const string PrefabText = "Text";
+        private const string PrefabDeath = "dead";
+        private const string PrefabStoneFlagment = "stone";
+        private const string PrefabStone = "weapon";
 
         private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
         private readonly Player[] players = new Player[Settings.MaxCountPlayers];
@@ -36,7 +39,7 @@ namespace Caveman
             random = new Random();
             CreatePlayer(new Player("Zabiyakin"));
             CreateAiPlayers();
-            CreateWeapons();
+            CreateAllWeapons();
         }
 
         public void Update()
@@ -56,7 +59,7 @@ namespace Caveman
             timeCurrentRespawnWeapon = countRespawnWeappons*Settings.TimeRespawnWeapon - Time.time;
             if (timeCurrentRespawnWeapon-- < 0)
             {
-                CreateWeapon();
+                CreateAllWeapons();
                 countRespawnWeappons++;
                 timeCurrentRespawnWeapon = Settings.TimeRespawnWeapon;
             }
@@ -99,26 +102,56 @@ namespace Caveman
             }
         }
 
-        private void CreateWeapons()
+        private void CreateAllWeapons()
         {
             for (var i = 0; i < Settings.WeaponsCount; i++)
             {
-                CreateWeapon();
+                CreateLyingWeapon();
             }
         }
 
-        private void CreateAiPlayer(Player player)
+        
+
+        private void DeathAnimate(Vector2 position)
         {
-            var prefabPlayer = Instantiate(Resources.Load(PrefabPlayer, typeof (GameObject))) as GameObject;
-            var modelAiPlayer = prefabPlayer.AddComponent<ModelAIPlayer>();
-            modelAiPlayer.transform.SetParent(containerPlayers);
-            modelAiPlayer.Init(player,
-                new Vector2(random.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom), random.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom)), random);
-            modelAiPlayer.SetWeapons(containerWeapons);
-            modelAiPlayer.Respawn += player1 => StartCoroutine(RespawnAiPlayer(player1));
+            var deathImage = Instantiate(Resources.Load(PrefabDeath, typeof(GameObject)) as GameObject, position, Quaternion.identity) as GameObject;
+            var sprite = deathImage.GetComponent<SpriteRenderer>();
+            if (sprite)
+            {
+                StartCoroutine(FadeOut(sprite));    
+            }
         }
 
-        IEnumerator RespawnAiPlayer(Player player)
+        private IEnumerator FadeOut(SpriteRenderer spriteRenderer)
+        {
+            for (float i = 1f; i > 0; i -= 0.1f)
+            {
+                var c = spriteRenderer.color;
+                c.a = i;
+                spriteRenderer.color = c;
+                yield return null;
+            }
+            Destroy(spriteRenderer.gameObject);
+        }
+
+        private IEnumerator FadeIn(SpriteRenderer spriteRenderer)
+        {
+            var color = spriteRenderer.color;
+            color.a = 0;
+            spriteRenderer.color = color;
+            for (var i = 0f; i < 1; i += 0.1f)
+            {
+                if (spriteRenderer)
+                {
+                    var c = spriteRenderer.color;
+                    c.a = i;
+                    spriteRenderer.color = c;
+                }
+                yield return null;
+            }
+        }
+
+        private IEnumerator RespawnAiPlayer(Player player)
         {
             yield return new WaitForSeconds(1);
             CreateAiPlayer(player);
@@ -133,22 +166,58 @@ namespace Caveman
             this.player = player;
             playerModel.Init(player, Vector2.zero, random);
             playerModel.Respawn += player1 => StartCoroutine(RespawnPlayer(player1));
+            playerModel.Death += DeathAnimate;
+            playerModel.ThrowStone += CreateStone;
             smoothCamera.target = prefabPlayer.transform;
         }
 
-        IEnumerator RespawnPlayer(Player player)
+        private void CreateAiPlayer(Player player)
+        {
+            var prefabPlayer = Instantiate(Resources.Load(PrefabPlayer, typeof(GameObject))) as GameObject;
+            var modelAiPlayer = prefabPlayer.AddComponent<ModelAIPlayer>();
+            modelAiPlayer.transform.SetParent(containerPlayers);
+            modelAiPlayer.Init(player,
+                new Vector2(random.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom), random.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom)), random);
+            modelAiPlayer.SetWeapons(containerWeapons);
+            modelAiPlayer.Respawn += player1 => StartCoroutine(RespawnAiPlayer(player1));
+            modelAiPlayer.Death += DeathAnimate;
+            modelAiPlayer.ThrowStone += CreateStone;
+        }
+
+        private void CreateStone(Player owner, Vector2 start, Vector2 target)
+        {
+            var stone = Instantiate(Resources.Load(PrefabStone, typeof(GameObject))) as GameObject;
+            var weaponModel = stone.GetComponent<WeaponModel>();
+            weaponModel.Splash += CreateStoneFlagment;
+            weaponModel.Move(owner, start, target);
+        }
+
+        private IEnumerator RespawnPlayer(Player player)
         {
             yield return new WaitForSeconds(1);
             CreatePlayer(player);
         }
 
-        private void CreateWeapon()
+        private void CreateLyingWeapon()
         {
-            var prefabWeapons = Instantiate(Resources.Load(PrefabWeapon, typeof (GameObject))) as GameObject;
+            var prefabWeapons = Instantiate(Resources.Load(PrefabLyingWeapon, typeof (GameObject))) as GameObject;
+            var sprite = prefabWeapons.GetComponent<SpriteRenderer>();
+            StartCoroutine(FadeIn(sprite));
             var modelWeapon = prefabWeapons.AddComponent<WeaponModel>();
             modelWeapon.transform.SetParent(containerWeapons);
             modelWeapon.transform.position = new Vector2(random.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom),
                 random.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom));
+        }
+
+        private void CreateStoneFlagment(Vector2 position)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                var flagment =
+                    Instantiate(Resources.Load(PrefabStoneFlagment, typeof(GameObject)), position, Quaternion.identity) as GameObject;
+                flagment.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                flagment.GetComponent<StoneSplash>().Init(i);
+            }
         }
     }
 }

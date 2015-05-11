@@ -5,9 +5,6 @@ namespace Caveman.Players
     public class ModelAIPlayer : ModelBasePlayer
     {
         private const int MaxCountWeapons = 4;
-        //todo boundary tileMap
-        private const int TempBoundary = 7;
-
         private Transform ContainerWeapons;
 
         public override void Start()
@@ -15,7 +12,7 @@ namespace Caveman.Players
             base.Start();
             GetComponent<SpriteRenderer>().color = new Color32((byte) random.Next(255), (byte) random.Next(255),
                 (byte) random.Next(255), 255);
-            target = new Vector2(random.Next(-TempBoundary, TempBoundary), random.Next(-TempBoundary, TempBoundary));
+            target = RandomPosition;
             delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedPlayer);
             animator.SetFloat("Speed", Settings.SpeedPlayer);
         }
@@ -29,12 +26,15 @@ namespace Caveman.Players
                 if (player.weapons < MaxCountWeapons)
                 {
                     target = FindClosest(ContainerWeapons);
-                    //todo if target null random move
+                    if (target == Vector2.zero)
+                    {
+                        target = RandomPosition;
+                    }
                     delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedPlayer);
                 }
                 else
                 {
-                    target = new Vector2(random.Next(-TempBoundary, TempBoundary), random.Next(-TempBoundary, TempBoundary));
+                    target = RandomPosition;
                     delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedPlayer);
                 }
             }
@@ -47,6 +47,11 @@ namespace Caveman.Players
         public void SetWeapons(Transform weapons)
         {
             ContainerWeapons = weapons;
+        }
+
+        private Vector2 RandomPosition
+        {
+            get { return new Vector2(random.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom), random.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom)); }
         }
     }
 }

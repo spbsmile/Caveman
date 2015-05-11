@@ -6,6 +6,8 @@
         public int deaths;
         public int weapons;
         public readonly string name;
+        //todo hack
+        public float countRespawnThrow = 1;
 
         public Player(string name)
         {

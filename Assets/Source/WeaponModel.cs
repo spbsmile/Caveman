@@ -1,4 +1,6 @@
-﻿using Caveman.Players;
+﻿using System;
+using System.Collections;
+using Caveman.Players;
 using UnityEngine;
 
 namespace Caveman
@@ -6,6 +8,7 @@ namespace Caveman
     public class WeaponModel : MonoBehaviour
     {
         public Player owner;
+        public Action<Vector2> Splash;
 
         private Vector2 target;
         private Vector2 delta;
@@ -16,7 +19,7 @@ namespace Caveman
             {
                 if (Vector2.Distance(target, transform.position) > UnityExtensions.ThresholdPosition)
                 {
-                    transform.position = new Vector3(transform.position.x + delta.x*Time.deltaTime,
+                    transform.position = new Vector2(transform.position.x + delta.x*Time.deltaTime,
                         transform.position.y + delta.y*Time.deltaTime);
                     transform.Rotate(Vector3.forward, 10);
                 }
@@ -37,7 +40,7 @@ namespace Caveman
 
         private void Destroy()
         {
-            //stoneCrash
+            Splash(transform.position);
             Destroy(gameObject);
         }
     }
