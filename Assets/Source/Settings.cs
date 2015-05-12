@@ -15,5 +15,16 @@
         public const float SpeedPlayer = 2.5f;
 
         public const int TimeThrowStone = 3;
+        public const int TimeRespawnPlayer = 1;
+
+        public const int RotateStoneParameter = 10; 
+
+        public const string AnimRunF = "run_f";
+        public const string AnimRunB = "run_b";
+        public const string AnimThrowF = "throw_f";
+        public const string AnimThrowB = "throw_b";
+        public const string AnimStayB = "stay_b";
+        public const string AnimStayF = "stay_f";
+        public const string AnimPickup = "pickup";
     }
 }

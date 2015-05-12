@@ -40,7 +40,7 @@ namespace Caveman.Players
                 if (weapon.owner == null)
                 {
                     player.weapons++;
-                    //animator.SetTrigger("Pickup");
+                    //animator.SetTrigger(Settings.AnimPickup);
                     Destroy(other.gameObject);
                 }
                 else
@@ -72,7 +72,8 @@ namespace Caveman.Players
 
             if (player.weapons > 0)
             {
-                animator.SetBool("Throw", true);
+                //animator.SetBool("throw", true);
+                animator.SetBool(Settings.AnimThrowB, true);
             }
             timeCurrentThrow = Settings.TimeThrowStone;
         }

@@ -111,8 +111,6 @@ namespace Caveman
             }
         }
 
-        
-
         private void DeathAnimate(Vector2 position)
         {
             var deathImage = Instantiate(Resources.Load(PrefabDeath, typeof(GameObject)) as GameObject, position, Quaternion.identity) as GameObject;
@@ -152,12 +150,6 @@ namespace Caveman
             }
         }
 
-        private IEnumerator RespawnAiPlayer(Player player)
-        {
-            yield return new WaitForSeconds(1);
-            CreateAiPlayer(player);
-        }
-
         private void CreatePlayer(Player player)
         {
             players[0] = player;
@@ -185,18 +177,24 @@ namespace Caveman
             modelAiPlayer.ThrowStone += CreateStone;
         }
 
+        private IEnumerator RespawnAiPlayer(Player player)
+        {
+            yield return new WaitForSeconds(Settings.TimeRespawnPlayer);
+            CreateAiPlayer(player);
+        }
+
+        private IEnumerator RespawnPlayer(Player player)
+        {
+            yield return new WaitForSeconds(Settings.TimeRespawnPlayer);
+            CreatePlayer(player);
+        }
+
         private void CreateStone(Player owner, Vector2 start, Vector2 target)
         {
             var stone = Instantiate(Resources.Load(PrefabStone, typeof(GameObject))) as GameObject;
             var weaponModel = stone.GetComponent<WeaponModel>();
             weaponModel.Splash += CreateStoneFlagment;
             weaponModel.Move(owner, start, target);
-        }
-
-        private IEnumerator RespawnPlayer(Player player)
-        {
-            yield return new WaitForSeconds(1);
-            CreatePlayer(player);
         }
 
         private void CreateLyingWeapon()

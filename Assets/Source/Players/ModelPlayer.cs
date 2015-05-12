@@ -12,11 +12,12 @@ namespace Caveman.Players
             {
                 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedPlayer);
-                animator.SetFloat("Speed", Settings.SpeedPlayer);
+                animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Settings.SpeedPlayer);
             }
             if (MoveStop())
             {
-                animator.SetFloat("Speed", 0);
+                //animator.SetFloat("Speed", 0);
+                animator.SetFloat(Settings.AnimStayF, 0);
             }
             else
             {

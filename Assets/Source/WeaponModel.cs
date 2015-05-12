@@ -21,7 +21,7 @@ namespace Caveman
                 {
                     transform.position = new Vector2(transform.position.x + delta.x*Time.deltaTime,
                         transform.position.y + delta.y*Time.deltaTime);
-                    transform.Rotate(Vector3.forward, 10);
+                    transform.Rotate(Vector3.forward, Settings.RotateStoneParameter);
                 }
                 else
                 {
