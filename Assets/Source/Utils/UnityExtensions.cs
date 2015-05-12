@@ -12,6 +12,6 @@ namespace Caveman
             return d != 0 ? new Vector2((dx / d) * speed, (dy / d) * speed) : Vector2.zero;
         }
 
-        public static float ThresholdPosition = 0.1f;
+        public const float ThresholdPosition = 0.1f;
     }
 }

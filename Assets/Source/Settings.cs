@@ -14,6 +14,6 @@
         public const float SpeedWeapon = 3.2f;
         public const float SpeedPlayer = 2.5f;
 
-        public const int TimeThrowStone = 2;
+        public const int TimeThrowStone = 3;
     }
 }
