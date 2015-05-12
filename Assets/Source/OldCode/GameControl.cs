@@ -15,17 +15,17 @@ public class GameControl : MonoBehaviour
 	// Use this for initialization
 	void Start()
     {
-        startServer();
+        //startServer();
 
-        var json = new JSONObject(JSONObject.Type.OBJECT);
+        //var json = new JSONObject(JSONObject.Type.OBJECT);
 
-        json.AddField("action","login");
-        json.AddField("id",1);
-        json.AddField("name","petya");
-        var str = "#" + json + "#";
-        var msg = new Message (str);
-        Debug.Log ("WTF " + str);
-        send (msg);
+        //json.AddField("action","login");
+        //json.AddField("id",1);
+        //json.AddField("name","petya");
+        //var str = "#" + json + "#";
+        //var msg = new Message (str);
+        //Debug.Log ("WTF " + str);
+        //send (msg);
 	}
 	
 	// Update is called once per frame
