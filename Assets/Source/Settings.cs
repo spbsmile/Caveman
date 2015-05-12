@@ -13,7 +13,7 @@
         public const int BotsCount = 4;
         public const int WeaponsCount = 10;
         
-        public const float SpeedWeapon = 3.2f;
+        public const float SpeedWeapon = 4f;
         public const float SpeedPlayer = 2.5f;
 
         public const int TimeThrowStone = 3;

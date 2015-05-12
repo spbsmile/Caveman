@@ -40,7 +40,7 @@ namespace Caveman.Players
                 if (weapon.owner == null)
                 {
                     player.weapons++;
-                    //animator.SetTrigger(Settings.AnimPickup);
+                    animator.SetTrigger(Settings.AnimPickup);
                     Destroy(other.gameObject);
                 }
                 else
@@ -72,8 +72,7 @@ namespace Caveman.Players
 
             if (player.weapons > 0)
             {
-                //animator.SetBool("throw", true);
-                animator.SetBool(Settings.AnimThrowB, true);
+                animator.SetTrigger(Settings.AnimThrowF);
             }
             timeCurrentThrow = Settings.TimeThrowStone;
         }
@@ -85,6 +84,7 @@ namespace Caveman.Players
             if (delta.magnitude > UnityExtensions.ThresholdPosition &&
                 Vector2.SqrMagnitude((Vector2) transform.position - target) < UnityExtensions.ThresholdPosition)
             {
+                animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, 0);
                 delta = Vector2.zero;
                 return true;
             }
@@ -97,8 +97,8 @@ namespace Caveman.Players
             {
                  var position = new Vector3(transform.position.x + delta.x * Time.deltaTime,
                 transform.position.y + delta.y * Time.deltaTime);
-                 transform.position = new Vector3(Mathf.Clamp(position.x, -Settings.BoundaryEndMap, Settings.BoundaryEndMap),
-                     Mathf.Clamp(position.y, -Settings.BoundaryEndMap, Settings.BoundaryEndMap));
+                transform.position = position;//new Vector3(Mathf.Clamp(position.x, -Settings.BoundaryEndMap, Settings.BoundaryEndMap),
+                     //Mathf.Clamp(position.y, -Settings.BoundaryEndMap, Settings.BoundaryEndMap));
             }
         }
 

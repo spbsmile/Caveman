@@ -11,6 +11,7 @@ namespace Caveman.Players
             if (Input.GetMouseButton(0))
             {
                 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, 0);
                 delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedPlayer);
                 animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Settings.SpeedPlayer);
             }
@@ -18,11 +19,10 @@ namespace Caveman.Players
             {
                 //переход в стоячее положение внутри animatora
                 //animator.SetFloat("Speed", 0);
-                animator.SetFloat(Settings.AnimStayF, 0);
             }
             else
             {
-                 Move();   
+                Move();
             }
         }
     }

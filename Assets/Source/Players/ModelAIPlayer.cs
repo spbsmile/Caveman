@@ -14,8 +14,7 @@ namespace Caveman.Players
                 (byte) random.Next(255), 255);
             target = RandomPosition;
             delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedPlayer);
-            //animator.SetFloat("Speed", Settings.SpeedPlayer);
-            animator.SetFloat(Settings.AnimRunF, Settings.SpeedPlayer);
+            animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Settings.SpeedPlayer);
         }
 
         public void Update()
