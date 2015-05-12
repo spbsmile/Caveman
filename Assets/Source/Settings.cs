@@ -3,7 +3,9 @@
     public class Settings
     {
         public const int MaxCountPlayers = 10;
+
         public const int BoundaryRandom = 10;
+        public const float BoundaryEndMap = 9; 
 
         public const int RoundTime = 50;
         public const int TimeRespawnWeapon = 5;

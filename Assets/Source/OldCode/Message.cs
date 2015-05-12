@@ -1,13 +1,14 @@
 using System;
 using System.IO;
 using UnityEngine;
-using AssemblyCSharp;
 
-public class Message {
+public class Message 
+{
 	public ushort length { get; set; }
 	public string content { get; set; }
 	
-	public static Message ReadFromStream(StreamReader reader) {
+	public static Message ReadFromStream(StreamReader reader) 
+    {
 		//ushort len;
 		//byte[] len_buf;
 		string buffer;
@@ -26,10 +27,12 @@ public class Message {
 		return new Message(buffer);
 	}
 	
-	public void WriteToStream(StreamWriter writer) {
+	public void WriteToStream(StreamWriter writer) 
+    {
 		byte[] len_bytes = BitConverter.GetBytes(length);
 		
-		if (BitConverter.IsLittleEndian) {
+		if (BitConverter.IsLittleEndian) 
+        {
 			Array.Reverse(len_bytes);
 		}
 		//writer.Write(len_bytes);
@@ -57,7 +60,8 @@ public class Message {
 		return new string(chars);
 	}
 	
-	public Message(string data) {
+	public Message(string data) 
+    {
 		content = data;
 	}
 }

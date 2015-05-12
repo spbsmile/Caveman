@@ -16,6 +16,7 @@ namespace Caveman.Players
             }
             if (MoveStop())
             {
+                //переход в стоячее положение внутри animatora
                 //animator.SetFloat("Speed", 0);
                 animator.SetFloat(Settings.AnimStayF, 0);
             }

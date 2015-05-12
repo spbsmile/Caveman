@@ -95,8 +95,10 @@ namespace Caveman.Players
         {
             if (delta.magnitude > UnityExtensions.ThresholdPosition)
             {
-                transform.position = new Vector3(transform.position.x + delta.x * Time.deltaTime,
+                 var position = new Vector3(transform.position.x + delta.x * Time.deltaTime,
                 transform.position.y + delta.y * Time.deltaTime);
+                 transform.position = new Vector3(Mathf.Clamp(position.x, -Settings.BoundaryEndMap, Settings.BoundaryEndMap),
+                     Mathf.Clamp(position.y, -Settings.BoundaryEndMap, Settings.BoundaryEndMap));
             }
         }
 
