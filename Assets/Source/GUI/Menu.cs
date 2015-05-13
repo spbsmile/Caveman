@@ -2,18 +2,24 @@
 
 public class Menu : MonoBehaviour 
 {
-	public void LoadSingleGame()
-	{
-		LoadLevel ();
-	}
+    public void LoadSingleGame()
+    {
+        Application.LoadLevel(1);
+    }
 
-	public void LoadMultiGame()
-	{
-		LoadLevel();
-	}
+    public void LoadMenu()
+    {
+        Time.timeScale = 1;
+        Application.LoadLevel(0);
+    }
 
-	public void LoadLevel() 
-	{
-		Application.LoadLevel (1);
-	}
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
+    public void Settings()
+    {
+        Application.LoadLevel(2);
+    }
 }

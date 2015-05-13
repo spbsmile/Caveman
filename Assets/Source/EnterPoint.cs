@@ -37,6 +37,7 @@ namespace Caveman
 
         public void Start()
         {
+            print("hello enterpoint");
             random = new Random();
             CreatePlayer(new Player("Zabiyakin"));
             CreateAiPlayers();
@@ -45,7 +46,7 @@ namespace Caveman
 
         public void Update()
         {
-            var remainTime = Settings.RoundTime - Math.Floor(Time.time);
+            var remainTime = Settings.RoundTime - Math.Floor(Time.timeSinceLevelLoad);
             var displayTime = remainTime > 60 ? "1 : " + (remainTime - 60) : remainTime.ToString();
             roundTime.text = "Round Time " + displayTime;
             if (remainTime < 0 && !flagEnd)
@@ -210,7 +211,7 @@ namespace Caveman
 
         private void CreateStoneFlagment(Vector2 position)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 2; i++)
             {
                 var flagment =
                     Instantiate(Resources.Load(PrefabStoneFlagment, typeof(GameObject)), position, Quaternion.identity) as GameObject;

@@ -66,7 +66,7 @@ namespace Caveman.Players
 
         protected void ThrowStoneOnTimer()
         {
-            timeCurrentThrow = player.countRespawnThrow * Settings.TimeThrowStone - Time.time;
+            timeCurrentThrow = player.countRespawnThrow * Settings.TimeThrowStone - Time.timeSinceLevelLoad;
             if (timeCurrentThrow-- >= 0) return;
             player.countRespawnThrow++;
 
@@ -97,8 +97,7 @@ namespace Caveman.Players
             {
                  var position = new Vector3(transform.position.x + delta.x * Time.deltaTime,
                 transform.position.y + delta.y * Time.deltaTime);
-                transform.position = position;//new Vector3(Mathf.Clamp(position.x, -Settings.BoundaryEndMap, Settings.BoundaryEndMap),
-                     //Mathf.Clamp(position.y, -Settings.BoundaryEndMap, Settings.BoundaryEndMap));
+                transform.position = position;
             }
         }
 
@@ -108,14 +107,14 @@ namespace Caveman.Players
             var nearPosition = Vector2.zero;
             foreach (Transform child in container)
             {
-				ModelBasePlayer childModelPlayer = child.gameObject.GetComponent<ModelBasePlayer>();
+				var childModelPlayer = child.gameObject.GetComponent<ModelBasePlayer>();
                 if (childModelPlayer != this)
                 {
                     if (minDistance < 0.1f)
                     {
                         minDistance = Vector2.Distance(child.position, transform.position);
                         nearPosition = child.position;
-						break;
+				    	//break;
                     }
                     else
                     {
