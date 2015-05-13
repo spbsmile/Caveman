@@ -108,13 +108,14 @@ namespace Caveman.Players
             var nearPosition = Vector2.zero;
             foreach (Transform child in container)
             {
-                //todo хак, надо поправить
-                if (child.name != name)
+				ModelBasePlayer childModelPlayer = child.gameObject.GetComponent<ModelBasePlayer>();
+                if (childModelPlayer != this)
                 {
                     if (minDistance < 0.1f)
                     {
                         minDistance = Vector2.Distance(child.position, transform.position);
                         nearPosition = child.position;
+						break;
                     }
                     else
                     {
