@@ -6,25 +6,6 @@ using UnityEngine.UI;
 
 public class ForceSettings : MonoBehaviour 
 {
-    public const int MaxCountPlayers = 10;
-
-    public const int BoundaryRandom = 10;
-    public const float BoundaryEndMap = 10;
-
-    public const int RoundTime = 3;
-    public const int TimeRespawnWeapon = 5;
-
-    public const int BotsCount = 4;
-    public const int WeaponsCount = 10;
-
-    public const float SpeedWeapon = 4f;
-    public const float SpeedPlayer = 2.5f;
-
-    public const int TimeThrowStone = 3;
-    public const int TimeRespawnPlayer = 1;
-
-    public const int RotateStoneParameter = 10;
-
     public InputField InputRoundTime;
     public InputField InputTimeRespawnWeapon;
     public InputField InputBotsCount;
@@ -51,27 +32,27 @@ public class ForceSettings : MonoBehaviour
     }
     public void SetTimeRespawnWeapon()
     {
-
+        Settings.TimeRespawnWeapon = Convert.ToInt32(InputTimeRespawnWeapon.text);
     }
     public void SetBotsCount()
     {
-
+        Settings.BotsCount = Convert.ToInt32(InputBotsCount.text);
     }
     public void SetTimeThrow()
     {
-
+        Settings.TimeThrowStone = Convert.ToInt32(InputTimeThrow.text);
     }
     public void SetInitialCountWeapons()
     {
-
+        Settings.WeaponsCount = Convert.ToInt32(InputInitialCountWeapons.text);
     }
     public void SetSpeedPlayer()
     {
-
+        Settings.SpeedPlayer = Convert.ToInt32(InputSpeedPlayer.text);
     }
     public void SetSpeedWeapon()
     {
-
+        Settings.SpeedWeapon = Convert.ToInt32(InputSpeedWeapon.text);
     }
     public void Set()
     {

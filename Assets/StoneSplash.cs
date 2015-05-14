@@ -5,6 +5,8 @@ public class StoneSplash : MonoBehaviour
 {
     private Vector2 delta;
     private Vector2 target;
+
+    private bool afterInit; 
     
     public void Update () 
     {
@@ -19,6 +21,13 @@ public class StoneSplash : MonoBehaviour
             else
             {
                 Destroy(gameObject);
+            }
+        }
+        else
+        {
+            if (afterInit)
+            {
+                Destroy(gameObject);    
             }
         }
 	}
@@ -41,6 +50,7 @@ public class StoneSplash : MonoBehaviour
         {
             target = (Vector2)transform.position - (0.5f) * Vector2.up;
         }
+        afterInit = true;
         delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedWeapon);
     }
 }

@@ -15,7 +15,11 @@ namespace Caveman
         private const string PrefabText = "Text";
         private const string PrefabDeath = "dead";
         private const string PrefabStoneFlagment = "stone";
+
         private const string PrefabStone = "weapon";
+        public Transform prefabStoneIns;
+        public Transform prefabStoneFlagmentInc;
+        public Transform prefabLyingWeapon;
 
         private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
         private readonly Player[] players = new Player[Settings.MaxCountPlayers];
@@ -58,7 +62,7 @@ namespace Caveman
 
             weapons.text = player.weapons.ToString();
             killed.text = player.kills.ToString();
-            timeCurrentRespawnWeapon = countRespawnWeappons*Settings.TimeRespawnWeapon - Time.time;
+            timeCurrentRespawnWeapon = countRespawnWeappons * Settings.TimeRespawnWeapon - Time.timeSinceLevelLoad;
             if (timeCurrentRespawnWeapon-- < 0)
             {
                 CreateAllWeapons();
@@ -192,7 +196,7 @@ namespace Caveman
 
         private void CreateStone(Player owner, Vector2 start, Vector2 target)
         {
-            var stone = Instantiate(Resources.Load(PrefabStone, typeof(GameObject))) as GameObject;
+            var stone = Instantiate(prefabStoneIns);
             var weaponModel = stone.GetComponent<WeaponModel>();
             weaponModel.Splash += CreateStoneFlagment;
             weaponModel.Move(owner, start, target);
@@ -200,10 +204,10 @@ namespace Caveman
 
         private void CreateLyingWeapon()
         {
-            var prefabWeapons = Instantiate(Resources.Load(PrefabLyingWeapon, typeof (GameObject))) as GameObject;
+            var prefabWeapons = Instantiate(prefabLyingWeapon);
             var sprite = prefabWeapons.GetComponent<SpriteRenderer>();
             StartCoroutine(FadeIn(sprite));
-            var modelWeapon = prefabWeapons.AddComponent<WeaponModel>();
+            var modelWeapon = prefabWeapons.gameObject.AddComponent<WeaponModel>();
             modelWeapon.transform.SetParent(containerWeapons);
             modelWeapon.transform.position = new Vector2(random.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom),
                 random.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom));
@@ -214,7 +218,7 @@ namespace Caveman
             for (int i = 0; i < 2; i++)
             {
                 var flagment =
-                    Instantiate(Resources.Load(PrefabStoneFlagment, typeof(GameObject)), position, Quaternion.identity) as GameObject;
+                    Instantiate(prefabStoneFlagmentInc);
                 flagment.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
                 flagment.GetComponent<StoneSplash>().Init(i);
             }

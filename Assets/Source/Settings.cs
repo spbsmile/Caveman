@@ -7,7 +7,7 @@
         public const int BoundaryRandom = 10;
         public const float BoundaryEndMap = 10; 
 
-        public static int RoundTime = 3;
+        public static int RoundTime = 50;
         public static int TimeRespawnWeapon = 5;
 
         public static int BotsCount = 4;
