@@ -52,6 +52,7 @@ namespace Caveman.Players
                         Destroy(other.gameObject);
                         Death(transform.position);
                         Respawn(player);
+                        // todo use Object pool pattern
                         Destroy(gameObject);
                     }
                 }
@@ -105,6 +106,7 @@ namespace Caveman.Players
         {
             float minDistance = 0;
             var nearPosition = Vector2.zero;
+            // todo use array instead ienumerable
             foreach (Transform child in container)
             {
 				var childModelPlayer = child.gameObject.GetComponent<ModelBasePlayer>();

@@ -41,7 +41,6 @@ namespace Caveman
 
         public void Start()
         {
-            print("hello enterpoint");
             random = new Random();
             CreatePlayer(new Player("Zabiyakin"));
             CreateAiPlayers();
@@ -50,6 +49,7 @@ namespace Caveman
 
         public void Update()
         {
+            // todo use events!
             var remainTime = Settings.RoundTime - Math.Floor(Time.timeSinceLevelLoad);
             var displayTime = remainTime > 60 ? "1 : " + (remainTime - 60) : remainTime.ToString();
             roundTime.text = "Round Time " + displayTime;
@@ -194,6 +194,7 @@ namespace Caveman
             CreatePlayer(player);
         }
 
+        // todo use Object pool pattern
         private void CreateStone(Player owner, Vector2 start, Vector2 target)
         {
             var stone = Instantiate(prefabStoneIns);
@@ -220,7 +221,7 @@ namespace Caveman
                 var flagment =
                     Instantiate(prefabStoneFlagmentInc);
                 flagment.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-                flagment.GetComponent<StoneSplash>().Init(i);
+                flagment.GetComponent<StoneSplash>().Init(i, position);
             }
         }
     }

@@ -32,23 +32,24 @@ public class StoneSplash : MonoBehaviour
         }
 	}
 
-    public void Init(int i)
+    public void Init(int i, Vector2 position)
     {
+        transform.position = position;
         if (i == 0)
         {
-            target = (Vector2) transform.position + (0.5f)*Vector2.right;
+            target = position + (0.5f)*Vector2.right;
         }
         if (i == 1)
         {
-            target = (Vector2)transform.position - (0.5f) * Vector2.right;
+            target = position - (0.5f) * Vector2.right;
         }
         if (i == 2)
         {
-            target = (Vector2)transform.position + (0.5f) * Vector2.up;
+            target = position + (0.5f) * Vector2.up;
         }
         if (i == 3)
         {
-            target = (Vector2)transform.position - (0.5f) * Vector2.up;
+            target = position - (0.5f) * Vector2.up;
         }
         afterInit = true;
         delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedWeapon);

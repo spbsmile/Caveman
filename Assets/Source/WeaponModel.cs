@@ -25,6 +25,7 @@ namespace Caveman
                 }
                 else
                 {
+                    // todo use Object pool pattern
                     Destroy();
                 }
             }
