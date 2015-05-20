@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using Assets.Source;
+using Assets.Source.Settings;
 using Caveman.Players;
 using UnityEngine;
 using UnityEngine.UI;
@@ -39,12 +41,24 @@ namespace Caveman
         private bool flagEnd;
         private int countRespawnWeappons = 1;
 
+        private ObjectPool<WeaponModel> weaponPool; 
+
         public void Start()
         {
             random = new Random();
             CreatePlayer(new Player("Zabiyakin"));
             CreateAiPlayers();
             CreateAllWeapons();
+
+            weaponPool = new ObjectPool<WeaponModel>(30, null, null);
+            for (var i = 0; i < 30; i++)
+            {
+                var weaponGo = Instantiate(prefabStoneIns);
+                weaponGo.gameObject.SetActive(false);
+                var weaponModel = weaponGo.GetComponent<WeaponModel>();
+                weaponModel.Init(weaponPool);
+                weaponPool.Store(weaponModel);
+            }
         }
 
         public void Update()
@@ -197,7 +211,8 @@ namespace Caveman
         // todo use Object pool pattern
         private void CreateStone(Player owner, Vector2 start, Vector2 target)
         {
-            var stone = Instantiate(prefabStoneIns);
+            var stone = weaponPool.New();
+            stone.gameObject.SetActive(true);
             var weaponModel = stone.GetComponent<WeaponModel>();
             weaponModel.Splash += CreateStoneFlagment;
             weaponModel.Move(owner, start, target);

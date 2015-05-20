@@ -1,4 +1,4 @@
-﻿namespace Caveman
+﻿namespace Assets.Source.Settings
 {
     public class Settings
     {

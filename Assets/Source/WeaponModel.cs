@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections;
+using Assets.Source;
+using Assets.Source.Settings;
 using Caveman.Players;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace Caveman
 
         private Vector2 target;
         private Vector2 delta;
+        private ObjectPool<WeaponModel> weaponPool;
 
         public void Update()
         {
@@ -31,6 +33,11 @@ namespace Caveman
             }
         }
 
+        public void Init(ObjectPool<WeaponModel> objectPool)
+        {
+            weaponPool = objectPool;
+        }
+
         public void Move(Player player, Vector3 positionStart, Vector2 positionTarget)
         {
             owner = player;
@@ -42,7 +49,9 @@ namespace Caveman
         private void Destroy()
         {
             Splash(transform.position);
-            Destroy(gameObject);
+            //todo reference on poolweapons
+            gameObject.SetActive(false);
+            weaponPool.Store(this);
         }
     }
 }

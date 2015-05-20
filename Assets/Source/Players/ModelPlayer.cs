@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Source.Settings;
+using UnityEngine;
 
 namespace Caveman.Players
 {
