@@ -37,18 +37,16 @@ namespace Caveman
         private float timeCurrentRespawnWeapon;
 
         private Player player;
-        private Random random;
+        private Random r;
         private bool flagEnd;
         private int countRespawnWeappons = 1;
 
-        private ObjectPool<WeaponModel> weaponPool; 
+        private ObjectPool<WeaponModel> weaponPool;
+        private ObjectPool<WeaponModel> weaponLandPool;
 
         public void Start()
         {
-            random = new Random();
-            CreatePlayer(new Player("Zabiyakin"));
-            CreateAiPlayers();
-            CreateAllWeapons();
+            r = new Random();
 
             weaponPool = new ObjectPool<WeaponModel>(30, null, null);
             for (var i = 0; i < 30; i++)
@@ -56,9 +54,23 @@ namespace Caveman
                 var weaponGo = Instantiate(prefabStoneIns);
                 weaponGo.gameObject.SetActive(false);
                 var weaponModel = weaponGo.GetComponent<WeaponModel>();
-                weaponModel.Init(weaponPool);
+                weaponModel.SetWeaponPool(weaponPool);
                 weaponPool.Store(weaponModel);
             }
+
+            //todo внимательно посмотреть, когда камни закончаться в пуле 
+            weaponLandPool = new ObjectPool<WeaponModel>(30, null, null);
+            for (var i = 0; i < 30; i++)
+            {
+                var weaponLand = Instantiate(prefabLyingWeapon);
+                weaponLand.gameObject.SetActive(false);
+                var weaponModel = weaponLand.GetComponent<WeaponModel>();
+                weaponLandPool.Store(weaponModel);
+            }
+
+            CreatePlayer(new Player("Zabiyakin"));
+            CreateAiPlayers();
+            CreateAllWeapons();
         }
 
         public void Update()
@@ -176,7 +188,7 @@ namespace Caveman
             var playerModel = prefabPlayer.GetComponent<ModelPlayer>();
             playerModel.transform.SetParent(containerPlayers);
             this.player = player;
-            playerModel.Init(player, Vector2.zero, random);
+            playerModel.Init(player, Vector2.zero, r, weaponLandPool);
             playerModel.Respawn += player1 => StartCoroutine(RespawnPlayer(player1));
             playerModel.Death += DeathAnimate;
             playerModel.ThrowStone += CreateStone;
@@ -189,7 +201,7 @@ namespace Caveman
             var modelAiPlayer = prefabPlayer.GetComponent<ModelAIPlayer>();
             modelAiPlayer.transform.SetParent(containerPlayers);
             modelAiPlayer.Init(player,
-                new Vector2(random.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom), random.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom)), random);
+                new Vector2(r.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom), r.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom)), r, weaponLandPool);
             modelAiPlayer.SetWeapons(containerWeapons);
             modelAiPlayer.Respawn += player1 => StartCoroutine(RespawnAiPlayer(player1));
             modelAiPlayer.Death += DeathAnimate;
@@ -208,7 +220,6 @@ namespace Caveman
             CreatePlayer(player);
         }
 
-        // todo use Object pool pattern
         private void CreateStone(Player owner, Vector2 start, Vector2 target)
         {
             var stone = weaponPool.New();
@@ -220,13 +231,14 @@ namespace Caveman
 
         private void CreateLyingWeapon()
         {
-            var prefabWeapons = Instantiate(prefabLyingWeapon);
+            var prefabWeapons = weaponLandPool.New();
+            prefabWeapons.gameObject.SetActive(true);
             var sprite = prefabWeapons.GetComponent<SpriteRenderer>();
             StartCoroutine(FadeIn(sprite));
             var modelWeapon = prefabWeapons.gameObject.AddComponent<WeaponModel>();
             modelWeapon.transform.SetParent(containerWeapons);
-            modelWeapon.transform.position = new Vector2(random.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom),
-                random.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom));
+            modelWeapon.transform.position = new Vector2(r.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom),
+                r.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom));
         }
 
         private void CreateStoneFlagment(Vector2 position)

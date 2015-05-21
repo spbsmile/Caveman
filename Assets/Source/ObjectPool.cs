@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Source
 {
@@ -30,6 +31,7 @@ namespace Assets.Source
             }
             else
             {
+                Debug.Log("SDFGSDFGSDFGSDFGSDFGSDFG");
                 var t = new T();
                 if (onetimeInitAction != null)
                 {

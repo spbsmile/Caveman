@@ -1,4 +1,5 @@
 ﻿using System;
+using Assets.Source;
 using Assets.Source.Settings;
 using UnityEngine;
 using Random = System.Random;
@@ -18,18 +19,20 @@ namespace Caveman.Players
         protected Random random;
 
         private float timeCurrentThrow;
+        private ObjectPool<WeaponModel> weaponLandPool;
 
         public virtual void Start()
         {
             animator = GetComponent<Animator>();
         }
         
-        public void Init(Player player, Vector2 positionStart, Random random)
+        public void Init(Player player, Vector2 positionStart, Random random, ObjectPool<WeaponModel> weaponLandPool)
         {
             name = player.name;
             this.player = player;
             this.random = random;
             transform.position = positionStart;
+            this.weaponLandPool = weaponLandPool;
         }
         
         public void OnTriggerEnter2D(Collider2D other)
@@ -42,7 +45,9 @@ namespace Caveman.Players
                 {
                     player.weapons++;
                     animator.SetTrigger(Settings.AnimPickup);
-                    Destroy(other.gameObject);
+                    //todo инкапсулировать, оружие базовый класс метод дестрой
+                    weapon.gameObject.SetActive(false);
+                    weaponLandPool.Store(weapon);
                 }
                 else
                 {

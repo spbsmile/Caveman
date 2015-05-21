@@ -13,7 +13,9 @@ namespace Caveman
 
         private Vector2 target;
         private Vector2 delta;
+        //todo возможно, разные скрипты под разные пулы
         private ObjectPool<WeaponModel> weaponPool;
+        private ObjectPool<WeaponModel> weaponLandPool; 
 
         public void Update()
         {
@@ -33,7 +35,7 @@ namespace Caveman
             }
         }
 
-        public void Init(ObjectPool<WeaponModel> objectPool)
+        public void SetWeaponPool(ObjectPool<WeaponModel> objectPool)
         {
             weaponPool = objectPool;
         }
