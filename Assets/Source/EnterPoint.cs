@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections;
-using Assets.Source;
-using Assets.Source.Settings;
 using Caveman.Players;
+using Caveman.Setting;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = System.Random;
+using Caveman.Utils;
 
 namespace Caveman
 {
@@ -59,18 +59,18 @@ namespace Caveman
             }
 
             //todo внимательно посмотреть, когда камни закончаться в пуле 
-            weaponLandPool = new ObjectPool<WeaponModel>(30, null, null);
-            for (var i = 0; i < 30; i++)
-            {
-                var weaponLand = Instantiate(prefabLyingWeapon);
-                weaponLand.gameObject.SetActive(false);
-                var weaponModel = weaponLand.GetComponent<WeaponModel>();
-                weaponLandPool.Store(weaponModel);
-            }
+            //weaponLandPool = new ObjectPool<WeaponModel>(30, null, null);
+            //for (var i = 0; i < 30; i++)
+            //{
+            //    var weaponLand = Instantiate(prefabLyingWeapon);
+            //    weaponLand.gameObject.SetActive(false);
+            //    var weaponModel = weaponLand.GetComponent<WeaponModel>();
+            //    weaponLandPool.Store(weaponModel);
+            //}
 
             CreatePlayer(new Player("Zabiyakin"));
             CreateAiPlayers();
-            CreateAllWeapons();
+            CreateAllLyingWeapons();
         }
 
         public void Update()
@@ -91,7 +91,7 @@ namespace Caveman
             timeCurrentRespawnWeapon = countRespawnWeappons * Settings.TimeRespawnWeapon - Time.timeSinceLevelLoad;
             if (timeCurrentRespawnWeapon-- < 0)
             {
-                CreateAllWeapons();
+                CreateAllLyingWeapons();
                 countRespawnWeappons++;
                 timeCurrentRespawnWeapon = Settings.TimeRespawnWeapon;
             }
@@ -134,7 +134,7 @@ namespace Caveman
             }
         }
 
-        private void CreateAllWeapons()
+        private void CreateAllLyingWeapons()
         {
             for (var i = 0; i < Settings.WeaponsCount; i++)
             {
@@ -191,7 +191,7 @@ namespace Caveman
             playerModel.Init(player, Vector2.zero, r, weaponLandPool);
             playerModel.Respawn += player1 => StartCoroutine(RespawnPlayer(player1));
             playerModel.Death += DeathAnimate;
-            playerModel.ThrowStone += CreateStone;
+            playerModel.ThrowStone += CreateWeapon;
             smoothCamera.target = prefabPlayer.transform;
         }
 
@@ -205,7 +205,7 @@ namespace Caveman
             modelAiPlayer.SetWeapons(containerWeapons);
             modelAiPlayer.Respawn += player1 => StartCoroutine(RespawnAiPlayer(player1));
             modelAiPlayer.Death += DeathAnimate;
-            modelAiPlayer.ThrowStone += CreateStone;
+            modelAiPlayer.ThrowStone += CreateWeapon;
         }
 
         private IEnumerator RespawnAiPlayer(Player player)
@@ -220,7 +220,7 @@ namespace Caveman
             CreatePlayer(player);
         }
 
-        private void CreateStone(Player owner, Vector2 start, Vector2 target)
+        private void CreateWeapon(Player owner, Vector2 start, Vector2 target)
         {
             var stone = weaponPool.New();
             stone.gameObject.SetActive(true);
@@ -231,8 +231,9 @@ namespace Caveman
 
         private void CreateLyingWeapon()
         {
-            var prefabWeapons = weaponLandPool.New();
-            prefabWeapons.gameObject.SetActive(true);
+            var prefabWeapons = Instantiate(prefabLyingWeapon);
+            //var prefabWeapons = weaponLandPool.New();
+            //prefabWeapons.gameObject.SetActive(true);
             var sprite = prefabWeapons.GetComponent<SpriteRenderer>();
             StartCoroutine(FadeIn(sprite));
             var modelWeapon = prefabWeapons.gameObject.AddComponent<WeaponModel>();

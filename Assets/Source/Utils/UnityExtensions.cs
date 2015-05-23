@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Caveman
+namespace Caveman.Utils
 {
     public static class UnityExtensions
     {

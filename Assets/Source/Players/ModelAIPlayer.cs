@@ -1,4 +1,5 @@
-﻿using Assets.Source.Settings;
+﻿using Caveman.Setting;
+using Caveman.Utils;
 using UnityEngine;
 
 namespace Caveman.Players

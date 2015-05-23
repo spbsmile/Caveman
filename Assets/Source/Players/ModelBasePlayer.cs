@@ -1,6 +1,6 @@
 ﻿using System;
-using Assets.Source;
-using Assets.Source.Settings;
+using Caveman.Setting;
+using Caveman.Utils;
 using UnityEngine;
 using Random = System.Random;
 
@@ -45,9 +45,10 @@ namespace Caveman.Players
                 {
                     player.weapons++;
                     animator.SetTrigger(Settings.AnimPickup);
+                    Destroy(other.gameObject);
                     //todo инкапсулировать, оружие базовый класс метод дестрой
-                    weapon.gameObject.SetActive(false);
-                    weaponLandPool.Store(weapon);
+                    //weapon.gameObject.SetActive(false);
+                    //weaponLandPool.Store(weapon);
                 }
                 else
                 {

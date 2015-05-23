@@ -1,7 +1,7 @@
 ﻿using System;
-using Assets.Source;
-using Assets.Source.Settings;
 using Caveman.Players;
+using Caveman.Setting;
+using Caveman.Utils;
 using UnityEngine;
 
 namespace Caveman

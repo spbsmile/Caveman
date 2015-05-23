@@ -1,6 +1,6 @@
 ﻿using System;
-using Assets.Source.Settings;
 using UnityEngine;
+using Caveman.Setting;
 
 namespace Caveman
 {

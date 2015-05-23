@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Source
+namespace Caveman.Utils
 {
     public class ObjectPool<T> where T : class ,new ()
     {

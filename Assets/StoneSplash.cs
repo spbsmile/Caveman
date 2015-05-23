@@ -1,5 +1,5 @@
-﻿using Assets.Source.Settings;
-using Caveman;
+﻿using Caveman.Setting;
+using Caveman.Utils;
 using UnityEngine;
 
 public class StoneSplash : MonoBehaviour
