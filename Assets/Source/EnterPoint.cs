@@ -2,10 +2,11 @@
 using System.Collections;
 using Caveman.Players;
 using Caveman.Setting;
+using Caveman.Utils;
+using Caveman.Weapons;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = System.Random;
-using Caveman.Utils;
 
 namespace Caveman
 {
@@ -13,12 +14,9 @@ namespace Caveman
     {
         private const string PrefabPlayer = "player";
         private const string PrefabBot = "bot";
-        private const string PrefabLyingWeapon = "stone_bunch";
         private const string PrefabText = "Text";
         private const string PrefabDeath = "dead";
-        private const string PrefabStoneFlagment = "stone";
-
-        private const string PrefabStone = "weapon";
+        
         public Transform prefabStoneIns;
         public Transform prefabStoneFlagmentInc;
         public Transform prefabLyingWeapon;
@@ -27,7 +25,9 @@ namespace Caveman
         private readonly Player[] players = new Player[Settings.MaxCountPlayers];
 
         public SmoothCamera smoothCamera;
-        public Transform containerWeapons;
+        public Transform containerWeaponsLyingPool;
+        public Transform containerStoneSplashPool;
+        public Transform containerWeaponsHandPool;
         public Transform containerPlayers;
         public Transform result;
         public Text roundTime;
@@ -41,32 +41,45 @@ namespace Caveman
         private bool flagEnd;
         private int countRespawnWeappons = 1;
 
-        private ObjectPool<WeaponModel> weaponPool;
-        private ObjectPool<WeaponModel> weaponLandPool;
+        private ObjectPool poolWeaponsLying;
+        private ObjectPool poolWeaponsHand;
+        private ObjectPool poolstoneSplash;
 
         public void Start()
         {
             r = new Random();
 
-            weaponPool = new ObjectPool<WeaponModel>(30, null, null);
+            poolWeaponsLying = containerWeaponsLyingPool.GetComponent<ObjectPool>();
+            poolWeaponsLying.CreatePool(prefabLyingWeapon, 30);
+            for (var i = 0; i < 30; i++)
+            {
+                var weaponGo = Instantiate(prefabLyingWeapon);
+                weaponGo.SetParent(poolWeaponsLying.transform);
+                var weaponModel = weaponGo.GetComponent<BaseWeaponModel>();
+                weaponModel.SetPool(poolWeaponsLying);
+                poolWeaponsLying.Store(weaponModel.transform);
+            }
+
+            poolWeaponsHand = containerWeaponsHandPool.GetComponent<ObjectPool>();
+            poolWeaponsHand.CreatePool(prefabStoneIns, 30);
             for (var i = 0; i < 30; i++)
             {
                 var weaponGo = Instantiate(prefabStoneIns);
-                weaponGo.gameObject.SetActive(false);
+                weaponGo.SetParent(poolWeaponsHand.transform);
                 var weaponModel = weaponGo.GetComponent<WeaponModel>();
-                weaponModel.SetWeaponPool(weaponPool);
-                weaponPool.Store(weaponModel);
+                weaponModel.SetPool(poolWeaponsHand);
+                poolWeaponsHand.Store(weaponModel.transform);
             }
 
-            //todo внимательно посмотреть, когда камни закончаться в пуле 
-            //weaponLandPool = new ObjectPool<WeaponModel>(30, null, null);
-            //for (var i = 0; i < 30; i++)
-            //{
-            //    var weaponLand = Instantiate(prefabLyingWeapon);
-            //    weaponLand.gameObject.SetActive(false);
-            //    var weaponModel = weaponLand.GetComponent<WeaponModel>();
-            //    weaponLandPool.Store(weaponModel);
-            //}
+            poolstoneSplash = containerStoneSplashPool.GetComponent<ObjectPool>();
+            poolstoneSplash.CreatePool(prefabStoneFlagmentInc, 30);
+            for (var i = 0; i < 30; i++)
+            {
+                var splashGo = Instantiate(prefabStoneFlagmentInc);
+                splashGo.SetParent(poolstoneSplash.transform);
+                var splash = splashGo.GetComponent<StoneSplash>();
+                poolstoneSplash.Store(splash.transform);
+            }
 
             CreatePlayer(new Player("Zabiyakin"));
             CreateAiPlayers();
@@ -144,6 +157,7 @@ namespace Caveman
 
         private void DeathAnimate(Vector2 position)
         {
+            // todo use pool !!
             var deathImage = Instantiate(Resources.Load(PrefabDeath, typeof(GameObject)) as GameObject, position, Quaternion.identity) as GameObject;
             var sprite = deathImage.GetComponent<SpriteRenderer>();
             if (sprite)
@@ -185,10 +199,10 @@ namespace Caveman
         {
             players[0] = player;
             var prefabPlayer = Instantiate(Resources.Load(PrefabPlayer, typeof(GameObject))) as GameObject;
-            var playerModel = prefabPlayer.GetComponent<ModelPlayer>();
+            var playerModel = prefabPlayer.GetComponent<PlayerModel>();
             playerModel.transform.SetParent(containerPlayers);
             this.player = player;
-            playerModel.Init(player, Vector2.zero, r, weaponLandPool);
+            playerModel.Init(player, Vector2.zero, r);
             playerModel.Respawn += player1 => StartCoroutine(RespawnPlayer(player1));
             playerModel.Death += DeathAnimate;
             playerModel.ThrowStone += CreateWeapon;
@@ -198,11 +212,11 @@ namespace Caveman
         private void CreateAiPlayer(Player player)
         {
             var prefabPlayer = Instantiate(Resources.Load(PrefabBot, typeof(GameObject))) as GameObject;
-            var modelAiPlayer = prefabPlayer.GetComponent<ModelAIPlayer>();
+            var modelAiPlayer = prefabPlayer.GetComponent<AiPlayerModel>();
             modelAiPlayer.transform.SetParent(containerPlayers);
             modelAiPlayer.Init(player,
-                new Vector2(r.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom), r.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom)), r, weaponLandPool);
-            modelAiPlayer.SetWeapons(containerWeapons);
+                new Vector2(r.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom), r.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom)), r);
+            modelAiPlayer.SetWeapons(containerWeaponsLyingPool);
             modelAiPlayer.Respawn += player1 => StartCoroutine(RespawnAiPlayer(player1));
             modelAiPlayer.Death += DeathAnimate;
             modelAiPlayer.ThrowStone += CreateWeapon;
@@ -222,34 +236,36 @@ namespace Caveman
 
         private void CreateWeapon(Player owner, Vector2 start, Vector2 target)
         {
-            var stone = weaponPool.New();
-            stone.gameObject.SetActive(true);
+            var stone = poolWeaponsHand.New();
             var weaponModel = stone.GetComponent<WeaponModel>();
+            if (weaponModel.PoolIsEmty)
+            {
+                weaponModel.SetPool(poolWeaponsHand);
+            }
             weaponModel.Splash += CreateStoneFlagment;
             weaponModel.Move(owner, start, target);
         }
 
         private void CreateLyingWeapon()
         {
-            var prefabWeapons = Instantiate(prefabLyingWeapon);
-            //var prefabWeapons = weaponLandPool.New();
-            //prefabWeapons.gameObject.SetActive(true);
-            var sprite = prefabWeapons.GetComponent<SpriteRenderer>();
-            StartCoroutine(FadeIn(sprite));
-            var modelWeapon = prefabWeapons.gameObject.AddComponent<WeaponModel>();
-            modelWeapon.transform.SetParent(containerWeapons);
-            modelWeapon.transform.position = new Vector2(r.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom),
+            var prefabWeapons = poolWeaponsLying.New();
+            prefabWeapons.SetParent(poolWeaponsLying.transform);
+            StartCoroutine(FadeIn(prefabWeapons.GetComponent<SpriteRenderer>()));
+            var weaponModel = prefabWeapons.GetComponent<BaseWeaponModel>();
+            if (weaponModel.PoolIsEmty)
+            {
+                weaponModel.SetPool(poolWeaponsLying);
+            }
+            prefabWeapons.transform.position = new Vector2(r.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom),
                 r.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom));
         }
 
         private void CreateStoneFlagment(Vector2 position)
         {
-            for (int i = 0; i < 2; i++)
+            for (var i = 0; i < 4; i++)
             {
-                var flagment =
-                    Instantiate(prefabStoneFlagmentInc);
-                flagment.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-                flagment.GetComponent<StoneSplash>().Init(i, position);
+                var flagment = poolstoneSplash.New();
+                flagment.GetComponent<StoneSplash>().Init(i, position, poolstoneSplash);
             }
         }
     }

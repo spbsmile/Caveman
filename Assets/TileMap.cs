@@ -37,12 +37,14 @@ public class TileMap : MonoBehaviour
         for (var i = 0; i < DotCount; i++)
 	    {
             var gameObject = Instantiate(Resources.Load(DotPath, typeof(GameObject)) as GameObject);
+            gameObject.transform.SetParent(transform);
             gameObject.transform.position = new Vector2(random.Next((int)(-width / 2), (int)(width / 2)), random.Next((int)(-heigth / 2), (int)(heigth / 2)));
 	    }
 
 	    for (var i = 0; i < PoolCount; i++)
 	    {
             var gameObject = Instantiate(Resources.Load(PoolPath, typeof(GameObject)) as GameObject);
+            gameObject.transform.SetParent(transform);
             gameObject.transform.position = new Vector2(random.Next((int)(-width / 3), (int)(width / 3)), random.Next((int)(-heigth / 3), (int)(heigth / 3)));
 	    }
 	}

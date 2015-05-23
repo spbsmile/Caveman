@@ -1,49 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Caveman.Utils
 {
-    public class ObjectPool<T> where T : class ,new ()
+    public class ObjectPool : MonoBehaviour
     {
-        private Stack<T> objectStack;
+        private Stack<Transform> stack;
+        private Transform prefab;
 
-        private Action<T> resetAction;
-        private Action<T> onetimeInitAction;
-
-        public ObjectPool(int initialBufferSize, Action<T> ResetAction = null, Action<T> OnetimeInitAction = null) 
+        public void CreatePool(Transform prefab, int initialBufferSize)
         {
-            objectStack = new Stack<T>(initialBufferSize);
-            resetAction = ResetAction;
-            onetimeInitAction = OnetimeInitAction;
+            stack = new Stack<Transform>(initialBufferSize);
+            this.prefab = prefab;
         }
 
-        public T New()
+        public Transform New()
         {
-            if (objectStack.Count > 0)
+            if (stack.Count > 0)
             {
-                T t = objectStack.Pop();
-                if (resetAction != null)
-                {
-                    resetAction(t);
-                }
+                var t = stack.Pop();
+                t.gameObject.SetActive(true);
                 return t;
             }
             else
             {
-                Debug.Log("SDFGSDFGSDFGSDFGSDFGSDFG");
-                var t = new T();
-                if (onetimeInitAction != null)
-                {
-                    onetimeInitAction(t);
-                }
+                var t = Instantiate(prefab);
+                t.gameObject.SetActive(true);
                 return t;
             }
         }
 
-        public void Store(T obj)
+        public void Store(Transform obj)
         {
-             objectStack.Push(obj);            
+            obj.gameObject.SetActive(false);
+            obj.gameObject.transform.position = new Vector3(100, 100, 100);
+            stack.Push(obj);            
         }
     }
 }

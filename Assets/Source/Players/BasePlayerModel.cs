@@ -1,12 +1,13 @@
 ﻿using System;
 using Caveman.Setting;
 using Caveman.Utils;
+using Caveman.Weapons;
 using UnityEngine;
 using Random = System.Random;
 
 namespace Caveman.Players
 {
-    public class ModelBasePlayer : MonoBehaviour
+    public class BasePlayerModel : MonoBehaviour
     {
         public Action<Player> Respawn;
         public Action<Vector2> Death;
@@ -19,36 +20,31 @@ namespace Caveman.Players
         protected Random random;
 
         private float timeCurrentThrow;
-        private ObjectPool<WeaponModel> weaponLandPool;
 
         public virtual void Start()
         {
             animator = GetComponent<Animator>();
         }
         
-        public void Init(Player player, Vector2 positionStart, Random random, ObjectPool<WeaponModel> weaponLandPool)
+        public void Init(Player player, Vector2 positionStart, Random random)
         {
             name = player.name;
             this.player = player;
             this.random = random;
             transform.position = positionStart;
-            this.weaponLandPool = weaponLandPool;
         }
         
         public void OnTriggerEnter2D(Collider2D other)
         {
             if (Time.time < 1) return;
-            var weapon = other.gameObject.GetComponent<WeaponModel>();
+            var weapon = other.gameObject.GetComponent<BaseWeaponModel>();
             if (weapon != null)
             {
                 if (weapon.owner == null)
                 {
                     player.weapons++;
                     animator.SetTrigger(Settings.AnimPickup);
-                    Destroy(other.gameObject);
-                    //todo инкапсулировать, оружие базовый класс метод дестрой
-                    //weapon.gameObject.SetActive(false);
-                    //weaponLandPool.Store(weapon);
+                    weapon.Destroy();
                 }
                 else
                 {
@@ -56,7 +52,7 @@ namespace Caveman.Players
                     {
                         weapon.owner.kills++;
                         player.deaths++;
-                        Destroy(other.gameObject);
+                        weapon.Destroy();
                         Death(transform.position);
                         Respawn(player);
                         // todo use Object pool pattern
@@ -114,9 +110,11 @@ namespace Caveman.Players
             float minDistance = 0;
             var nearPosition = Vector2.zero;
             // todo use array instead ienumerable
+            // todo после того как засуну в пул игроков. кидать камни в ближайшего, идти к ближайшему 
             foreach (Transform child in container)
             {
-				var childModelPlayer = child.gameObject.GetComponent<ModelBasePlayer>();
+                if (!child.gameObject.activeSelf) continue;
+				var childModelPlayer = child.gameObject.GetComponent<BasePlayerModel>();
                 if (childModelPlayer != this)
                 {
                     if (minDistance < 0.1f)

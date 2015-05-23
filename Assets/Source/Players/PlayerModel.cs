@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Caveman.Players
 {
-    public class ModelPlayer : ModelBasePlayer
+    public class PlayerModel : BasePlayerModel
     {
         public void Update()
         {

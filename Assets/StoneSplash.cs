@@ -7,7 +7,8 @@ public class StoneSplash : MonoBehaviour
     private Vector2 delta;
     private Vector2 target;
 
-    private bool afterInit; 
+    private bool afterInit;
+    private ObjectPool pool;
     
     public void Update () 
     {
@@ -21,20 +22,21 @@ public class StoneSplash : MonoBehaviour
             }
             else
             {
-                Destroy(gameObject);
+                pool.Store(transform);
             }
         }
         else
         {
             if (afterInit)
             {
-                Destroy(gameObject);    
+                pool.Store(transform);   
             }
         }
 	}
 
-    public void Init(int i, Vector2 position)
+    public void Init(int i, Vector2 position, ObjectPool pool)
     {
+        this.pool = pool;
         transform.position = position;
         if (i == 0)
         {

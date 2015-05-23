@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Caveman.Players
 {
-    public class ModelAIPlayer : ModelBasePlayer
+    public class AiPlayerModel : BasePlayerModel
     {
         private const int MaxCountWeapons = 4;
         private Transform ContainerWeapons;
