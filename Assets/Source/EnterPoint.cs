@@ -15,11 +15,11 @@ namespace Caveman
         private const string PrefabPlayer = "player";
         private const string PrefabBot = "bot";
         private const string PrefabText = "Text";
-        private const string PrefabDeath = "dead";
         
         public Transform prefabStoneIns;
         public Transform prefabStoneFlagmentInc;
         public Transform prefabLyingWeapon;
+        public Transform prefabDeathImage;
 
         private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
         private readonly Player[] players = new Player[Settings.MaxCountPlayers];
@@ -28,6 +28,7 @@ namespace Caveman
         public Transform containerWeaponsLyingPool;
         public Transform containerStoneSplashPool;
         public Transform containerWeaponsHandPool;
+        public Transform containerDeathImagesPool;
         public Transform containerPlayers;
         public Transform result;
         public Text roundTime;
@@ -44,6 +45,7 @@ namespace Caveman
         private ObjectPool poolWeaponsLying;
         private ObjectPool poolWeaponsHand;
         private ObjectPool poolstoneSplash;
+        private ObjectPool poolDeathImage;
 
         public void Start()
         {
@@ -79,6 +81,15 @@ namespace Caveman
                 splashGo.SetParent(poolstoneSplash.transform);
                 var splash = splashGo.GetComponent<StoneSplash>();
                 poolstoneSplash.Store(splash.transform);
+            }
+
+            poolDeathImage = containerDeathImagesPool.GetComponent<ObjectPool>();
+            poolDeathImage.CreatePool(prefabDeathImage, 8);
+            for (int i = 0; i < 8; i++)
+            {
+                var deathImageGo = Instantiate(prefabDeathImage);
+                deathImageGo.SetParent(containerDeathImagesPool);
+                poolDeathImage.Store(deathImageGo.transform);
             }
 
             CreatePlayer(new Player("Zabiyakin"));
@@ -157,8 +168,8 @@ namespace Caveman
 
         private void DeathAnimate(Vector2 position)
         {
-            // todo use pool !!
-            var deathImage = Instantiate(Resources.Load(PrefabDeath, typeof(GameObject)) as GameObject, position, Quaternion.identity) as GameObject;
+            var deathImage = poolDeathImage.New();
+            deathImage.position = position;
             var sprite = deathImage.GetComponent<SpriteRenderer>();
             if (sprite)
             {
@@ -175,7 +186,7 @@ namespace Caveman
                 spriteRenderer.color = c;
                 yield return null;
             }
-            Destroy(spriteRenderer.gameObject);
+            poolDeathImage.Store(spriteRenderer.transform);
         }
 
         private IEnumerator FadeIn(SpriteRenderer spriteRenderer)
