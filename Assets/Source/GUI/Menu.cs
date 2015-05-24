@@ -5,7 +5,6 @@ public class Menu : MonoBehaviour
 {
     public void LoadSingleGame()
     {
-        print(LoadingScreen.instance == null);
         LoadingScreen.instance.ProgressTo(1);
     }
 

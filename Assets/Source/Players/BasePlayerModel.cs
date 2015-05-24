@@ -45,7 +45,14 @@ namespace Caveman.Players
                 if (weapon.owner == null)
                 {
                     player.weapons++;
-                    animator.SetTrigger(Settings.AnimPickup);
+                    if (animator)
+                    {
+                        animator.SetTrigger(Settings.AnimPickup);    
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Pickup animator null reference");
+                    }
                     weapon.Destroy();
                 }
                 else

@@ -18,7 +18,7 @@ namespace Caveman.GUI
             }
             else
             {
-                DestroyImmediate(gameObject);
+                DestroyImmediate(root.gameObject);
             }
             base.Awake();
         }
@@ -33,14 +33,19 @@ namespace Caveman.GUI
             ProgressTo(Application.LoadLevelAsync(level));
         }
 
-        private IEnumerator ProgressTo(AsyncOperation load)
+        private void ProgressTo(AsyncOperation loadLevelAsync)
+        {
+            StopAllCoroutines();
+            StartCoroutine(WithProgress(loadLevelAsync));
+        }
+
+        private IEnumerator WithProgress(AsyncOperation load)
         {
             root.gameObject.SetActive(true);
 
             while (!load.isDone)
             {
                 slider.value = load.progress;
-                
                 yield return new WaitForFixedUpdate();
             }
 

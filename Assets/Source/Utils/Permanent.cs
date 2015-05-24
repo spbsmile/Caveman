@@ -1,5 +1,4 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Caveman.Utils
 {
@@ -11,16 +10,10 @@ namespace Caveman.Utils
         {
             if (instance == null)
             {
-                instance = (T)this;
+                instance = (T) this;
                 DontDestroyOnLoad(this);
             }
-            else
-            {
-                if (this != instance)
-                {
-                    Destroy(gameObject);
-                }
-            }
+            else DestroyImmediate(gameObject);
         }
     }
 }
