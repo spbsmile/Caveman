@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using Caveman.Animation;
+using Caveman.Level;
 using Caveman.Players;
 using Caveman.Setting;
 using Caveman.Utils;
@@ -68,7 +70,7 @@ namespace Caveman
             {
                 var weaponGo = Instantiate(prefabStoneIns);
                 weaponGo.SetParent(poolWeaponsHand.transform);
-                var weaponModel = weaponGo.GetComponent<WeaponModel>();
+                var weaponModel = weaponGo.GetComponent<StoneModel>();
                 weaponModel.SetPool(poolWeaponsHand);
                 poolWeaponsHand.Store(weaponModel.transform);
             }
@@ -99,7 +101,6 @@ namespace Caveman
 
         public void Update()
         {
-            // todo use events!
             var remainTime = Settings.RoundTime - Math.Floor(Time.timeSinceLevelLoad);
             var displayTime = remainTime > 60 ? "1 : " + (remainTime - 60) : remainTime.ToString();
             roundTime.text = "Round Time " + displayTime;
@@ -110,8 +111,10 @@ namespace Caveman
                 StartCoroutine(DisplayResult());
             }
 
+            // todo use events!
             weapons.text = player.weapons.ToString();
             killed.text = player.kills.ToString();
+
             timeCurrentRespawnWeapon = countRespawnWeappons * Settings.TimeRespawnWeapon - Time.timeSinceLevelLoad;
             if (timeCurrentRespawnWeapon-- < 0)
             {
@@ -248,7 +251,7 @@ namespace Caveman
         private void CreateWeapon(Player owner, Vector2 start, Vector2 target)
         {
             var stone = poolWeaponsHand.New();
-            var weaponModel = stone.GetComponent<WeaponModel>();
+            var weaponModel = stone.GetComponent<StoneModel>();
             if (weaponModel.PoolIsEmty)
             {
                 weaponModel.SetPool(poolWeaponsHand);

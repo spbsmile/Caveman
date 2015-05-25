@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Caveman.Weapons
 {
-    public class WeaponModel : BaseWeaponModel
+    public class StoneModel : BaseWeaponModel
     {
         public Action<Vector2> Splash;
 

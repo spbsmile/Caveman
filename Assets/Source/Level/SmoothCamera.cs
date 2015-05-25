@@ -2,7 +2,7 @@
 using UnityEngine;
 using Caveman.Setting;
 
-namespace Caveman
+namespace Caveman.Level
 {
     public class SmoothCamera : MonoBehaviour
     {
