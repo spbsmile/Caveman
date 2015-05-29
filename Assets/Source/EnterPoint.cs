@@ -49,50 +49,18 @@ namespace Caveman
         private ObjectPool poolstoneSplash;
         private ObjectPool poolDeathImage;
 
+        // todo подумать
+        public static EnterPoint instance;
+
         public void Start()
         {
             r = new Random();
+            instance = this;
 
-            poolWeaponsLying = containerWeaponsLyingPool.GetComponent<ObjectPool>();
-            poolWeaponsLying.CreatePool(prefabLyingWeapon, 30);
-            for (var i = 0; i < 30; i++)
-            {
-                var weaponGo = Instantiate(prefabLyingWeapon);
-                weaponGo.SetParent(poolWeaponsLying.transform);
-                var weaponModel = weaponGo.GetComponent<BaseWeaponModel>();
-                weaponModel.SetPool(poolWeaponsLying);
-                poolWeaponsLying.Store(weaponModel.transform);
-            }
-
-            poolWeaponsHand = containerWeaponsHandPool.GetComponent<ObjectPool>();
-            poolWeaponsHand.CreatePool(prefabStoneIns, 30);
-            for (var i = 0; i < 30; i++)
-            {
-                var weaponGo = Instantiate(prefabStoneIns);
-                weaponGo.SetParent(poolWeaponsHand.transform);
-                var weaponModel = weaponGo.GetComponent<StoneModel>();
-                weaponModel.SetPool(poolWeaponsHand);
-                poolWeaponsHand.Store(weaponModel.transform);
-            }
-
-            poolstoneSplash = containerStoneSplashPool.GetComponent<ObjectPool>();
-            poolstoneSplash.CreatePool(prefabStoneFlagmentInc, 30);
-            for (var i = 0; i < 30; i++)
-            {
-                var splashGo = Instantiate(prefabStoneFlagmentInc);
-                splashGo.SetParent(poolstoneSplash.transform);
-                var splash = splashGo.GetComponent<StoneSplash>();
-                poolstoneSplash.Store(splash.transform);
-            }
-
-            poolDeathImage = containerDeathImagesPool.GetComponent<ObjectPool>();
-            poolDeathImage.CreatePool(prefabDeathImage, 8);
-            for (int i = 0; i < 8; i++)
-            {
-                var deathImageGo = Instantiate(prefabDeathImage);
-                deathImageGo.SetParent(containerDeathImagesPool);
-                poolDeathImage.Store(deathImageGo.transform);
-            }
+            poolWeaponsLying = CreatePool(30, containerWeaponsLyingPool, prefabLyingWeapon);
+            poolWeaponsHand = CreatePool(30, containerWeaponsHandPool, prefabStoneIns);
+            poolstoneSplash = CreatePool(30, containerStoneSplashPool, prefabStoneFlagmentInc);
+            poolDeathImage = CreatePool(8, containerDeathImagesPool, prefabDeathImage);
 
             CreatePlayer(new Player("Zabiyakin"));
             CreateAiPlayers();
@@ -182,7 +150,7 @@ namespace Caveman
 
         private IEnumerator FadeOut(SpriteRenderer spriteRenderer)
         {
-            for (float i = 1f; i > 0; i -= 0.1f)
+            for (var i = 1f; i > 0; i -= 0.1f)
             {
                 var c = spriteRenderer.color;
                 c.a = i;
@@ -281,6 +249,19 @@ namespace Caveman
                 var flagment = poolstoneSplash.New();
                 flagment.GetComponent<StoneSplash>().Init(i, position, poolstoneSplash);
             }
+        }
+
+        private ObjectPool CreatePool(int initialBufferSize, Transform container, Transform prefab)
+        {
+            var pool = container.GetComponent<ObjectPool>();
+            pool.CreatePool(prefab, initialBufferSize);
+            for (var i = 0; i < initialBufferSize; i++)
+            {
+                var gO = Instantiate(prefab);
+                gO.SetParent(container);
+                pool.Store(gO.transform);
+            }
+            return pool;
         }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using Caveman.Setting;
 using Caveman.Utils;
 using Caveman.Weapons;
@@ -44,16 +42,19 @@ namespace Caveman.Players
             {
                 if (weapon.owner == null)
                 {
-                    player.weapons++;
-                    if (animator)
+                    if (player.weapons < Settings.MaxCountWeapons)
                     {
-                        animator.SetTrigger(Settings.AnimPickup);    
+                        player.weapons++;
+                        if (animator)
+                        {
+                            animator.SetTrigger(Settings.AnimPickup);
+                        }
+                        else
+                        {
+                            Debug.LogWarning("Pickup animator null reference");
+                        }
+                        weapon.Destroy();
                     }
-                    else
-                    {
-                        Debug.LogWarning("Pickup animator null reference");
-                    }
-                    weapon.Destroy();
                 }
                 else
                 {
@@ -90,8 +91,6 @@ namespace Caveman.Players
             timeCurrentThrow = Settings.TimeThrowStone;
         }
 
-        
-
         protected bool MoveStop()
         {
             if (delta.magnitude > UnityExtensions.ThresholdPosition &&
@@ -118,13 +117,10 @@ namespace Caveman.Players
         {
             float minDistance = 0;
             var nearPosition = Vector2.zero;
-            // todo use array instead ienumerable
-            // todo после того как засуну в пул игроков. кидать камни в ближайшего, идти к ближайшему 
             foreach (Transform child in container)
             {
                 if (!child.gameObject.activeSelf) continue;
-				var childModelPlayer = child.gameObject.GetComponent<BasePlayerModel>();
-                if (childModelPlayer != this)
+                if (child.gameObject.GetComponent<BasePlayerModel>() != this)
                 {
                     if (minDistance < 0.1f)
                     {
@@ -139,6 +135,36 @@ namespace Caveman.Players
                         {
                             minDistance = childDistance;
                             nearPosition = child.position;
+                        }
+                    }
+                }
+            }
+            return nearPosition;
+        }
+
+        protected Vector2 FindClosest(params Transform[] array)
+        {
+            float minDistance = 0;
+            var nearPosition = Vector2.zero;
+
+            for (var i = 0; i < array.Length; i++)
+            {
+                if(array[i].gameObject.activeSelf) continue;
+                if (array[i].gameObject.GetComponent<BasePlayerModel>() != this)
+                {
+                    if (minDistance < 0.1f)
+                    {
+                        minDistance = Vector2.Distance(array[i].position, transform.position);
+                        nearPosition = array[i].position;
+                        //break;
+                    }
+                    else
+                    {
+                        var childDistance = Vector2.Distance(array[i].position, transform.position);
+                        if (minDistance > childDistance)
+                        {
+                            minDistance = childDistance;
+                            nearPosition = array[i].position;
                         }
                     }
                 }

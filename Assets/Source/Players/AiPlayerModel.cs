@@ -6,7 +6,6 @@ namespace Caveman.Players
 {
     public class AiPlayerModel : BasePlayerModel
     {
-        private const int MaxCountWeapons = 4;
         private Transform ContainerWeapons;
 
         public override void Start()
@@ -25,7 +24,7 @@ namespace Caveman.Players
 
             if (MoveStop())
             {
-                if (player.weapons < MaxCountWeapons)
+                if (player.weapons < Settings.MaxCountWeapons)
                 {
                     target = FindClosest(ContainerWeapons);
                     if (target == Vector2.zero)

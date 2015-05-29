@@ -3,9 +3,11 @@
     public class Settings
     {
         public const int MaxCountPlayers = 10;
-
         public const int BoundaryRandom = 10;
-        public const float BoundaryEndMap = 10; 
+        public const float BoundaryEndMap = 10;
+        public const int TimeRespawnPlayer = 1;
+        public const int RotateStoneParameter = 10; 
+
 
         public static int RoundTime = 50;
         public static int TimeRespawnWeapon = 5;
@@ -17,9 +19,7 @@
         public static float SpeedPlayer = 2.5f;
 
         public static int TimeThrowStone = 3;
-        public const int TimeRespawnPlayer = 1;
-
-        public const int RotateStoneParameter = 10; 
+        public static int MaxCountWeapons = 4;
 
         public const string AnimRunF = "run_f";
         public const string AnimRunB = "run_b";
