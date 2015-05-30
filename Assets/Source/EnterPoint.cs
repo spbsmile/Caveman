@@ -48,23 +48,24 @@ namespace Caveman
         private ObjectPool poolWeaponsHand;
         private ObjectPool poolstoneSplash;
         private ObjectPool poolDeathImage;
-
-        // todo подумать
-        public static EnterPoint instance;
+        private Transform[] arrayLyingWeapons;
 
         public void Start()
         {
             r = new Random();
-            instance = this;
 
             poolWeaponsLying = CreatePool(30, containerWeaponsLyingPool, prefabLyingWeapon);
             poolWeaponsHand = CreatePool(30, containerWeaponsHandPool, prefabStoneIns);
             poolstoneSplash = CreatePool(30, containerStoneSplashPool, prefabStoneFlagmentInc);
             poolDeathImage = CreatePool(8, containerDeathImagesPool, prefabDeathImage);
+            arrayLyingWeapons = poolWeaponsLying.ToArray();
 
             CreatePlayer(new Player("Zabiyakin"));
             CreateAiPlayers();
             CreateAllLyingWeapons();
+
+            player.WeaponsCountChanged += WeaponsCountChanged;
+            player.KillsCountChanged += KillsCountChanged;
         }
 
         public void Update()
@@ -78,10 +79,6 @@ namespace Caveman
                 result.gameObject.SetActive(true);
                 StartCoroutine(DisplayResult());
             }
-
-            // todo use events!
-            weapons.text = player.weapons.ToString();
-            killed.text = player.kills.ToString();
 
             timeCurrentRespawnWeapon = countRespawnWeappons * Settings.TimeRespawnWeapon - Time.timeSinceLevelLoad;
             if (timeCurrentRespawnWeapon-- < 0)
@@ -105,10 +102,20 @@ namespace Caveman
             for (var i = 0; i < Settings.BotsCount + 1; i++)
             {
                 Write(players[i].name, namePlayer, axisY);
-                Write(players[i].kills.ToString(), kills, axisY);
+                Write(players[i].Kills.ToString(), kills, axisY);
                 Write(players[i].deaths.ToString(), deaths, axisY);
                 axisY -= deltaY;
             }
+        }
+
+        private void WeaponsCountChanged(int count)
+        {
+            weapons.text = count.ToString();
+        }
+
+        private void KillsCountChanged(int count)
+        {
+            killed.text = count.ToString();
         }
 
         private void Write(string value, Transform parent, int axisY)
@@ -198,7 +205,7 @@ namespace Caveman
             modelAiPlayer.transform.SetParent(containerPlayers);
             modelAiPlayer.Init(player,
                 new Vector2(r.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom), r.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom)), r);
-            modelAiPlayer.SetWeapons(containerWeaponsLyingPool);
+            modelAiPlayer.SetWeapons(arrayLyingWeapons);
             modelAiPlayer.Respawn += player1 => StartCoroutine(RespawnAiPlayer(player1));
             modelAiPlayer.Death += DeathAnimate;
             modelAiPlayer.ThrowStone += CreateWeapon;

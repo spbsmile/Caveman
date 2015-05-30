@@ -42,9 +42,9 @@ namespace Caveman.Players
             {
                 if (weapon.owner == null)
                 {
-                    if (player.weapons < Settings.MaxCountWeapons)
+                    if (player.Weapons < Settings.MaxCountWeapons)
                     {
-                        player.weapons++;
+                        player.Weapons++;
                         if (animator)
                         {
                             animator.SetTrigger(Settings.AnimPickup);
@@ -60,7 +60,7 @@ namespace Caveman.Players
                 {
                     if (weapon.owner != player)
                     {
-                        weapon.owner.kills++;
+                        weapon.owner.Kills++;
                         player.deaths++;
                         weapon.Destroy();
                         Death(transform.position);
@@ -75,7 +75,7 @@ namespace Caveman.Players
         public void Throw()
         {
             ThrowStone(player, transform.position, FindClosest(transform.parent));
-            player.weapons--;
+            player.Weapons--;
         }
 
         protected void ThrowStoneOnTimer()
@@ -83,8 +83,7 @@ namespace Caveman.Players
             timeCurrentThrow = player.countRespawnThrow * Settings.TimeThrowStone - Time.timeSinceLevelLoad;
             if (timeCurrentThrow-- >= 0) return;
             player.countRespawnThrow++;
-
-            if (player.weapons > 0)
+            if (player.Weapons > 0)
             {
                 animator.SetTrigger(Settings.AnimThrowF);
             }
@@ -126,7 +125,6 @@ namespace Caveman.Players
                     {
                         minDistance = Vector2.Distance(child.position, transform.position);
                         nearPosition = child.position;
-				    	//break;
                     }
                     else
                     {
@@ -136,6 +134,31 @@ namespace Caveman.Players
                             minDistance = childDistance;
                             nearPosition = child.position;
                         }
+                    }
+                }
+            }
+            return nearPosition;
+        }
+
+        protected Vector2 FindClosestLyingWeapon(params Transform[] array)
+        {
+            float minDistance = 0;
+            var nearPosition = Vector2.zero;
+            for (var i = 0; i < array.Length; i++)
+            {
+                if (!array[i].gameObject.activeSelf) continue;
+                if (minDistance < 0.1f)
+                {
+                    minDistance = Vector2.Distance(array[i].position, transform.position);
+                    nearPosition = array[i].position;
+                }
+                else
+                {
+                    var childDistance = Vector2.Distance(array[i].position, transform.position);
+                    if (minDistance > childDistance)
+                    {
+                        minDistance = childDistance;
+                        nearPosition = array[i].position;
                     }
                 }
             }
@@ -156,7 +179,6 @@ namespace Caveman.Players
                     {
                         minDistance = Vector2.Distance(array[i].position, transform.position);
                         nearPosition = array[i].position;
-                        //break;
                     }
                     else
                     {

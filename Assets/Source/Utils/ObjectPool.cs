@@ -36,5 +36,10 @@ namespace Caveman.Utils
             obj.gameObject.transform.position = new Vector3(100, 100, 100);
             stack.Push(obj);            
         }
+
+        public Transform[] ToArray()
+        {
+            return stack.ToArray();
+        }
     }
 }

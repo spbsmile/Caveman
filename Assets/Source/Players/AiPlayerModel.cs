@@ -6,7 +6,7 @@ namespace Caveman.Players
 {
     public class AiPlayerModel : BasePlayerModel
     {
-        private Transform ContainerWeapons;
+        private Transform[] weapons;
 
         public override void Start()
         {
@@ -24,9 +24,9 @@ namespace Caveman.Players
 
             if (MoveStop())
             {
-                if (player.weapons < Settings.MaxCountWeapons)
+                if (player.Weapons < Settings.MaxCountWeapons)
                 {
-                    target = FindClosest(ContainerWeapons);
+                    target = FindClosestLyingWeapon(weapons);
                     if (target == Vector2.zero)
                     {
                         target = RandomPosition;
@@ -47,9 +47,9 @@ namespace Caveman.Players
             }
         }
 
-        public void SetWeapons(Transform weapons)
+        public void SetWeapons(Transform[] weapons)
         {
-            ContainerWeapons = weapons;
+            this.weapons = weapons;
         }
 
         private Vector2 RandomPosition
