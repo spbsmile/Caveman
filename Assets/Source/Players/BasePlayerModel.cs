@@ -12,26 +12,36 @@ namespace Caveman.Players
         public Action<Player> Respawn;
         public Action<Vector2> Death;
         public Action<Player, Vector2, Vector2> ThrowStone;
-
-        protected Player player;
+        //todo внимательно посмотреть 
+        public Player player;
+        
         protected Vector2 delta;
         protected Animator animator;
         protected Vector2 target;
-        protected Random random;
+        protected Random r;
 
         private float timeCurrentThrow;
+        private PlayerPool playerPool;
+        private bool inMotion;
 
-        public virtual void Start()
+        protected virtual void Start()
         {
             animator = GetComponent<Animator>();
         }
         
-        public void Init(Player player, Vector2 positionStart, Random random)
+        public void Init(Player player, Vector2 positionStart, Random random, PlayerPool playerPool)
         {
             name = player.name;
             this.player = player;
-            this.random = random;
+            this.playerPool = playerPool;
+            r = random;
             transform.position = positionStart;
+        }
+
+        // todo проверить рандом. использование в ai убрать
+        public void RandomPosition()
+        {
+            transform.position = new Vector2(r.Next(-Settings.Br, Settings.Br), r.Next(-Settings.Br, Settings.Br));
         }
         
         public void OnTriggerEnter2D(Collider2D other)
@@ -65,8 +75,7 @@ namespace Caveman.Players
                         weapon.Destroy();
                         Death(transform.position);
                         Respawn(player);
-                        // todo use Object pool pattern
-                        Destroy(gameObject);
+                        playerPool.Store(this);  
                     }
                 }
             }
@@ -88,18 +97,23 @@ namespace Caveman.Players
                 animator.SetTrigger(Settings.AnimThrowF);
             }
             timeCurrentThrow = Settings.TimeThrowStone;
-        }
+        }   
 
-        protected bool MoveStop()
+        public bool InMotion
         {
-            if (delta.magnitude > UnityExtensions.ThresholdPosition &&
-                Vector2.SqrMagnitude((Vector2) transform.position - target) < UnityExtensions.ThresholdPosition)
+            protected get
             {
-                animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, 0);
-                delta = Vector2.zero;
-                return true;
+                if (delta.magnitude > UnityExtensions.ThresholdPosition &&
+                    Vector2.SqrMagnitude((Vector2) transform.position - target) < UnityExtensions.ThresholdPosition)
+                {
+                    animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, 0);
+                    delta = Vector2.zero;
+                    inMotion = false;
+                    return inMotion;
+                }
+                return inMotion;
             }
-            return false;
+            set { inMotion = value; }
         }
 
         protected void Move()
@@ -140,6 +154,35 @@ namespace Caveman.Players
             return nearPosition;
         }
 
+        protected Vector2 FindClosestPlayer(params BasePlayerModel[] array)
+        {
+            float minDistance = 0;
+            var nearPosition = Vector2.zero;
+
+            for (var i = 0; i < array.Length; i++)
+            {
+                if (array[i].gameObject.activeSelf) continue;
+                if (array[i] != this)
+                {
+                    if (minDistance < 0.1f)
+                    {
+                        minDistance = Vector2.Distance(array[i].transform.position, transform.position);
+                        nearPosition = array[i].transform.position;
+                    }
+                    else
+                    {
+                        var childDistance = Vector2.Distance(array[i].transform.position, transform.position);
+                        if (minDistance > childDistance)
+                        {
+                            minDistance = childDistance;
+                            nearPosition = array[i].transform.position;
+                        }
+                    }
+                }
+            }
+            return nearPosition;
+        }
+
         protected Vector2 FindClosestLyingWeapon(params Transform[] array)
         {
             float minDistance = 0;
@@ -165,34 +208,8 @@ namespace Caveman.Players
             return nearPosition;
         }
 
-        protected Vector2 FindClosest(params Transform[] array)
-        {
-            float minDistance = 0;
-            var nearPosition = Vector2.zero;
 
-            for (var i = 0; i < array.Length; i++)
-            {
-                if(array[i].gameObject.activeSelf) continue;
-                if (array[i].gameObject.GetComponent<BasePlayerModel>() != this)
-                {
-                    if (minDistance < 0.1f)
-                    {
-                        minDistance = Vector2.Distance(array[i].position, transform.position);
-                        nearPosition = array[i].position;
-                    }
-                    else
-                    {
-                        var childDistance = Vector2.Distance(array[i].position, transform.position);
-                        if (minDistance > childDistance)
-                        {
-                            minDistance = childDistance;
-                            nearPosition = array[i].position;
-                        }
-                    }
-                }
-            }
-            return nearPosition;
-        }
+        
     }
 }
 

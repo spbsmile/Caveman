@@ -24,14 +24,13 @@ namespace Caveman
         public Transform prefabDeathImage;
 
         private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
-        private readonly Player[] players = new Player[Settings.MaxCountPlayers];
 
         public SmoothCamera smoothCamera;
         public Transform containerWeaponsLyingPool;
         public Transform containerStoneSplashPool;
         public Transform containerWeaponsHandPool;
         public Transform containerDeathImagesPool;
-        public Transform containerPlayers;
+        public Transform containerPlayerPool;
         public Transform result;
         public Text roundTime;
         public Text weapons;
@@ -39,7 +38,7 @@ namespace Caveman
        
         private float timeCurrentRespawnWeapon;
 
-        private Player player;
+        private Player humanPlayer;
         private Random r;
         private bool flagEnd;
         private int countRespawnWeappons = 1;
@@ -48,11 +47,13 @@ namespace Caveman
         private ObjectPool poolWeaponsHand;
         private ObjectPool poolstoneSplash;
         private ObjectPool poolDeathImage;
+        private PlayerPool poolPlayers;
         private Transform[] arrayLyingWeapons;
 
         public void Start()
         {
             r = new Random();
+            Player.idCounter = 0;
 
             poolWeaponsLying = CreatePool(30, containerWeaponsLyingPool, prefabLyingWeapon);
             poolWeaponsHand = CreatePool(30, containerWeaponsHandPool, prefabStoneIns);
@@ -60,12 +61,17 @@ namespace Caveman
             poolDeathImage = CreatePool(8, containerDeathImagesPool, prefabDeathImage);
             arrayLyingWeapons = poolWeaponsLying.ToArray();
 
-            CreatePlayer(new Player("Zabiyakin"));
-            CreateAiPlayers();
+            poolPlayers = containerPlayerPool.GetComponent<PlayerPool>();
+            poolPlayers.Init(Settings.BotsCount + 1);
+            CreatePlayer(new Player("Zabiyakin"), false);
+            for (var i = 0; i < Settings.BotsCount; i++)
+            {
+                CreatePlayer(new Player(names[i]), true);
+            }
             CreateAllLyingWeapons();
 
-            player.WeaponsCountChanged += WeaponsCountChanged;
-            player.KillsCountChanged += KillsCountChanged;
+            humanPlayer.WeaponsCountChanged += WeaponsCountChanged;
+            humanPlayer.KillsCountChanged += KillsCountChanged;
         }
 
         public void Update()
@@ -101,9 +107,9 @@ namespace Caveman
             const int deltaY = 30;
             for (var i = 0; i < Settings.BotsCount + 1; i++)
             {
-                Write(players[i].name, namePlayer, axisY);
-                Write(players[i].Kills.ToString(), kills, axisY);
-                Write(players[i].deaths.ToString(), deaths, axisY);
+                Write(poolPlayers.GetName(i), namePlayer, axisY);
+                Write(poolPlayers.GetKills(i), kills, axisY);
+                Write(poolPlayers.GetDeaths(i), deaths, axisY);
                 axisY -= deltaY;
             }
         }
@@ -127,21 +133,94 @@ namespace Caveman
             goName.GetComponent<Text>().text = value;
         }
 
-        private void CreateAiPlayers()
-        {
-            for (var i = 0; i < Settings.BotsCount; i++)
-            {
-                players[i + 1] = new Player(names[i]);
-                CreateAiPlayer(players[i + 1]);
-            }
-        }
-
         private void CreateAllLyingWeapons()
         {
             for (var i = 0; i < Settings.WeaponsCount; i++)
             {
                 CreateLyingWeapon();
             }
+        }
+
+        private void CreatePlayer(Player player, bool isAiPlayer)
+        {
+            BasePlayerModel playerModel;
+            if (isAiPlayer)
+            {
+                var prefab = Instantiate(Resources.Load(PrefabBot, typeof(GameObject))) as GameObject;
+                playerModel = prefab.GetComponent<AiPlayerModel>();
+                var ai = (AiPlayerModel) playerModel;
+                ai.SetWeapons(arrayLyingWeapons);
+                playerModel.Init(player,
+                new Vector2(r.Next(-Settings.Br, Settings.Br), r.Next(-Settings.Br, Settings.Br)), r, poolPlayers);
+            }
+            else
+            {
+                var prefabPlayer = Instantiate(Resources.Load(PrefabPlayer, typeof(GameObject))) as GameObject;
+                humanPlayer = player;
+                playerModel = prefabPlayer.GetComponent<PlayerModel>();
+                smoothCamera.target = prefabPlayer.transform;
+                playerModel.Init(player, Vector2.zero, r, poolPlayers);
+            }
+            poolPlayers.Add(player.id, playerModel);
+            playerModel.transform.SetParent(containerPlayerPool);
+            playerModel.Respawn += player1 => StartCoroutine(RespawnPlayer(player));
+            playerModel.Death += DeathAnimate;
+            playerModel.ThrowStone += CreateWeapon;
+        }
+
+        private IEnumerator RespawnPlayer(Player player)
+        {
+            yield return new WaitForSeconds(Settings.TimeRespawnPlayer);
+            poolPlayers.New(player.id).RandomPosition();
+        }
+
+        private void CreateWeapon(Player owner, Vector2 start, Vector2 target)
+        {
+            var stone = poolWeaponsHand.New();
+            var weaponModel = stone.GetComponent<StoneModel>();
+            if (weaponModel.PoolIsEmty)
+            {
+                weaponModel.SetPool(poolWeaponsHand);
+            }
+            // todo возможно, могуть быть лишние подписки по аналогии с игроками. посмотреть
+            weaponModel.Splash += CreateStoneFlagment;
+            weaponModel.Move(owner, start, target);
+        }
+
+        private void CreateLyingWeapon()
+        {
+            var prefabWeapons = poolWeaponsLying.New();
+            prefabWeapons.SetParent(poolWeaponsLying.transform);
+            StartCoroutine(FadeIn(prefabWeapons.GetComponent<SpriteRenderer>()));
+            var weaponModel = prefabWeapons.GetComponent<BaseWeaponModel>();
+            if (weaponModel.PoolIsEmty)
+            {
+                weaponModel.SetPool(poolWeaponsLying);
+            }
+            prefabWeapons.transform.position = new Vector2(r.Next(-Settings.Br, Settings.Br),
+                r.Next(-Settings.Br, Settings.Br));
+        }
+
+        private void CreateStoneFlagment(Vector2 position)
+        {
+            for (var i = 0; i < 4; i++)
+            {
+                var flagment = poolstoneSplash.New();
+                flagment.GetComponent<StoneSplash>().Init(i, position, poolstoneSplash);
+            }
+        }
+
+        private ObjectPool CreatePool(int initialBufferSize, Transform container, Transform prefab)
+        {
+            var pool = container.GetComponent<ObjectPool>();
+            pool.CreatePool(prefab, initialBufferSize);
+            for (var i = 0; i < initialBufferSize; i++)
+            {
+                var gO = Instantiate(prefab);
+                gO.SetParent(container);
+                pool.Store(gO.transform);
+            }
+            return pool;
         }
 
         private void DeathAnimate(Vector2 position)
@@ -151,7 +230,7 @@ namespace Caveman
             var sprite = deathImage.GetComponent<SpriteRenderer>();
             if (sprite)
             {
-                StartCoroutine(FadeOut(sprite));    
+                StartCoroutine(FadeOut(sprite));
             }
         }
 
@@ -182,93 +261,6 @@ namespace Caveman
                 }
                 yield return null;
             }
-        }
-
-        private void CreatePlayer(Player player)
-        {
-            players[0] = player;
-            var prefabPlayer = Instantiate(Resources.Load(PrefabPlayer, typeof(GameObject))) as GameObject;
-            var playerModel = prefabPlayer.GetComponent<PlayerModel>();
-            playerModel.transform.SetParent(containerPlayers);
-            this.player = player;
-            playerModel.Init(player, Vector2.zero, r);
-            playerModel.Respawn += player1 => StartCoroutine(RespawnPlayer(player1));
-            playerModel.Death += DeathAnimate;
-            playerModel.ThrowStone += CreateWeapon;
-            smoothCamera.target = prefabPlayer.transform;
-        }
-
-        private void CreateAiPlayer(Player player)
-        {
-            var prefabPlayer = Instantiate(Resources.Load(PrefabBot, typeof(GameObject))) as GameObject;
-            var modelAiPlayer = prefabPlayer.GetComponent<AiPlayerModel>();
-            modelAiPlayer.transform.SetParent(containerPlayers);
-            modelAiPlayer.Init(player,
-                new Vector2(r.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom), r.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom)), r);
-            modelAiPlayer.SetWeapons(arrayLyingWeapons);
-            modelAiPlayer.Respawn += player1 => StartCoroutine(RespawnAiPlayer(player1));
-            modelAiPlayer.Death += DeathAnimate;
-            modelAiPlayer.ThrowStone += CreateWeapon;
-        }
-
-        private IEnumerator RespawnAiPlayer(Player player)
-        {
-            yield return new WaitForSeconds(Settings.TimeRespawnPlayer);
-            CreateAiPlayer(player);
-        }
-
-        private IEnumerator RespawnPlayer(Player player)
-        {
-            yield return new WaitForSeconds(Settings.TimeRespawnPlayer);
-            CreatePlayer(player);
-        }
-
-        private void CreateWeapon(Player owner, Vector2 start, Vector2 target)
-        {
-            var stone = poolWeaponsHand.New();
-            var weaponModel = stone.GetComponent<StoneModel>();
-            if (weaponModel.PoolIsEmty)
-            {
-                weaponModel.SetPool(poolWeaponsHand);
-            }
-            weaponModel.Splash += CreateStoneFlagment;
-            weaponModel.Move(owner, start, target);
-        }
-
-        private void CreateLyingWeapon()
-        {
-            var prefabWeapons = poolWeaponsLying.New();
-            prefabWeapons.SetParent(poolWeaponsLying.transform);
-            StartCoroutine(FadeIn(prefabWeapons.GetComponent<SpriteRenderer>()));
-            var weaponModel = prefabWeapons.GetComponent<BaseWeaponModel>();
-            if (weaponModel.PoolIsEmty)
-            {
-                weaponModel.SetPool(poolWeaponsLying);
-            }
-            prefabWeapons.transform.position = new Vector2(r.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom),
-                r.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom));
-        }
-
-        private void CreateStoneFlagment(Vector2 position)
-        {
-            for (var i = 0; i < 4; i++)
-            {
-                var flagment = poolstoneSplash.New();
-                flagment.GetComponent<StoneSplash>().Init(i, position, poolstoneSplash);
-            }
-        }
-
-        private ObjectPool CreatePool(int initialBufferSize, Transform container, Transform prefab)
-        {
-            var pool = container.GetComponent<ObjectPool>();
-            pool.CreatePool(prefab, initialBufferSize);
-            for (var i = 0; i < initialBufferSize; i++)
-            {
-                var gO = Instantiate(prefab);
-                gO.SetParent(container);
-                pool.Store(gO.transform);
-            }
-            return pool;
         }
     }
 }

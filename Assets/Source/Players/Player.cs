@@ -4,11 +4,14 @@ namespace Caveman.Players
 {
     public class Player
     {
+        public static int idCounter;
+
         public Action<int> WeaponsCountChanged;
         public Action<int> KillsCountChanged;
 
         public int deaths;
         public readonly string name;
+        public readonly int id;
         //todo hack
         public float countRespawnThrow = 1;
        
@@ -18,6 +21,7 @@ namespace Caveman.Players
         public Player(string name)
         {
             this.name = name;
+            id = idCounter++;
         }
 
         public int Weapons

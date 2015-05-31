@@ -1,4 +1,5 @@
-﻿using Caveman.Setting;
+﻿using System;
+using Caveman.Setting;
 using Caveman.Utils;
 using UnityEngine;
 
@@ -8,11 +9,11 @@ namespace Caveman.Players
     {
         private Transform[] weapons;
 
-        public override void Start()
+        protected override void Start()
         {
             base.Start();
-            GetComponent<SpriteRenderer>().color = new Color32((byte) random.Next(255), (byte) random.Next(255),
-                (byte) random.Next(255), 255);
+            GetComponent<SpriteRenderer>().color = new Color32((byte) r.Next(255), (byte) r.Next(255),
+                (byte) r.Next(255), 255);
             target = RandomPosition;
             delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedPlayer);
             animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Settings.SpeedPlayer);
@@ -22,7 +23,7 @@ namespace Caveman.Players
         {
             ThrowStoneOnTimer();
 
-            if (MoveStop())
+            if (!InMotion)
             {
                 if (player.Weapons < Settings.MaxCountWeapons)
                 {
@@ -40,6 +41,7 @@ namespace Caveman.Players
                     delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedPlayer);
                     animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Settings.SpeedPlayer);
                 }
+                InMotion = !InMotion;
             }
             else
             {
@@ -54,7 +56,7 @@ namespace Caveman.Players
 
         private Vector2 RandomPosition
         {
-            get { return new Vector2(random.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom), random.Next(-Settings.BoundaryRandom, Settings.BoundaryRandom)); }
+            get { return new Vector2(r.Next(-Settings.Br, Settings.Br), r.Next(-Settings.Br, Settings.Br)); }
         }
     }
 }

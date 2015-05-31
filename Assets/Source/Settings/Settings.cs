@@ -3,7 +3,7 @@
     public class Settings
     {
         public const int MaxCountPlayers = 10;
-        public const int BoundaryRandom = 10;
+        public const int Br = 10;
         public const float BoundaryEndMap = 10;
         public const int TimeRespawnPlayer = 1;
         public const int RotateStoneParameter = 10; 
