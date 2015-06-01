@@ -165,7 +165,7 @@ namespace Caveman
             playerModel.transform.SetParent(containerPlayerPool);
             playerModel.Respawn += player1 => StartCoroutine(RespawnPlayer(player));
             playerModel.Death += DeathAnimate;
-            playerModel.ThrowStone += CreateWeapon;
+            playerModel.ThrowStone += ThrowStone;
         }
 
         private IEnumerator RespawnPlayer(Player player)
@@ -174,7 +174,8 @@ namespace Caveman
             poolPlayers.New(player.id).RandomPosition();
         }
 
-        private void CreateWeapon(Player owner, Vector2 start, Vector2 target)
+        // todo метод перенести в файл игрока
+        private void ThrowStone(Player owner, Vector2 start, Vector2 target)
         {
             var stone = poolWeaponsHand.New();
             var weaponModel = stone.GetComponent<StoneModel>();
@@ -182,20 +183,23 @@ namespace Caveman
             {
                 weaponModel.SetPool(poolWeaponsHand);
             }
-            // todo возможно, могуть быть лишние подписки по аналогии с игроками. посмотреть
-            weaponModel.Splash += CreateStoneFlagment;
+            if (weaponModel.Splash == null)
+            {
+                weaponModel.Splash += CreateStoneFlagment;    
+            }
             weaponModel.Move(owner, start, target);
         }
+         
 
         private void CreateLyingWeapon()
         {
             var prefabWeapons = poolWeaponsLying.New();
-            prefabWeapons.SetParent(poolWeaponsLying.transform);
             StartCoroutine(FadeIn(prefabWeapons.GetComponent<SpriteRenderer>()));
             var weaponModel = prefabWeapons.GetComponent<BaseWeaponModel>();
             if (weaponModel.PoolIsEmty)
             {
                 weaponModel.SetPool(poolWeaponsLying);
+                weaponModel.transform.SetParent(containerWeaponsLyingPool);
             }
             prefabWeapons.transform.position = new Vector2(r.Next(-Settings.Br, Settings.Br),
                 r.Next(-Settings.Br, Settings.Br));

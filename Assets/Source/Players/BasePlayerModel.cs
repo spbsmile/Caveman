@@ -22,6 +22,7 @@ namespace Caveman.Players
 
         private float timeCurrentThrow;
         private PlayerPool playerPool;
+        private ObjectPool weaponsHandPool;
         private bool inMotion;
 
         protected virtual void Start()
@@ -126,6 +127,7 @@ namespace Caveman.Players
             }
         }
 
+        // todo 
         protected Vector2 FindClosest(Transform container)
         {
             float minDistance = 0;
