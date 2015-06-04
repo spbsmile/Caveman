@@ -57,7 +57,7 @@ namespace Caveman.Animation
                 target = position - (0.5f)*Vector2.up;
             }
             afterInit = true;
-            delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedWeapon);
+            delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedStone);
         }
     }
 }

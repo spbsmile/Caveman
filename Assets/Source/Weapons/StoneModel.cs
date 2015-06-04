@@ -35,7 +35,7 @@ namespace Caveman.Weapons
             owner = player;
             transform.position = positionStart;
             target = positionTarget;
-            delta = UnityExtensions.CalculateDelta(positionStart, positionTarget, Settings.SpeedWeapon);
+            delta = UnityExtensions.CalculateDelta(positionStart, positionTarget, Settings.SpeedStone);
         }
 
         public override void Destroy()
