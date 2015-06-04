@@ -36,12 +36,9 @@ namespace Caveman
         public Text weapons;
         public Text killed;
        
-        private float timeCurrentRespawnWeapon;
-
         private Player humanPlayer;
         private Random r;
         private bool flagEnd;
-        private int countRespawnWeappons = 1;
 
         private ObjectPool poolWeaponsLying;
         private ObjectPool poolWeaponsHand;
@@ -72,6 +69,8 @@ namespace Caveman
 
             humanPlayer.WeaponsCountChanged += WeaponsCountChanged;
             humanPlayer.KillsCountChanged += KillsCountChanged;
+
+            Invoke("CreateAllLyingWeapons", Settings.TimeRespawnWeapon);
         }
 
         public void Update()
@@ -84,14 +83,6 @@ namespace Caveman
                 flagEnd = true; 
                 result.gameObject.SetActive(true);
                 StartCoroutine(DisplayResult());
-            }
-
-            timeCurrentRespawnWeapon = countRespawnWeappons * Settings.TimeRespawnWeapon - Time.timeSinceLevelLoad;
-            if (timeCurrentRespawnWeapon-- < 0)
-            {
-                CreateAllLyingWeapons();
-                countRespawnWeappons++;
-                timeCurrentRespawnWeapon = Settings.TimeRespawnWeapon;
             }
         }
 
@@ -139,6 +130,7 @@ namespace Caveman
             {
                 CreateLyingWeapon();
             }
+            Invoke("CreateAllLyingWeapons", Settings.TimeRespawnWeapon);
         }
 
         private void CreatePlayer(Player player, bool isAiPlayer)

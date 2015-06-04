@@ -5,15 +5,11 @@ namespace Caveman.Players
     public class Player
     {
         public static int idCounter;
-
         public Action<int> WeaponsCountChanged;
         public Action<int> KillsCountChanged;
-
         public int deaths;
         public readonly string name;
         public readonly int id;
-        //todo hack
-        public float countRespawnThrow = 1;
        
         private int weapons;
         private int kills;
