@@ -20,13 +20,14 @@ namespace Caveman.Players
         protected Vector2 target;
         protected Random r;
 
-        private float timeCurrentThrow;
         private PlayerPool playerPool;
+        private ObjectPool weaponsHandPool;
         private bool inMotion;
 
         protected virtual void Start()
         {
             animator = GetComponent<Animator>();
+            Invoke("ThrowStoneOnTimer", Settings.TimeThrowStone);
         }
         
         public void Init(Player player, Vector2 positionStart, Random random, PlayerPool playerPool)
@@ -89,14 +90,11 @@ namespace Caveman.Players
 
         protected void ThrowStoneOnTimer()
         {
-            timeCurrentThrow = player.countRespawnThrow * Settings.TimeThrowStone - Time.timeSinceLevelLoad;
-            if (timeCurrentThrow-- >= 0) return;
-            player.countRespawnThrow++;
             if (player.Weapons > 0)
             {
                 animator.SetTrigger(Settings.AnimThrowF);
             }
-            timeCurrentThrow = Settings.TimeThrowStone;
+            Invoke("ThrowStoneOnTimer", Settings.TimeThrowStone);
         }   
 
         public bool InMotion
@@ -126,6 +124,7 @@ namespace Caveman.Players
             }
         }
 
+        // todo 
         protected Vector2 FindClosest(Transform container)
         {
             float minDistance = 0;

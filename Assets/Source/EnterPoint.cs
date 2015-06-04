@@ -36,12 +36,9 @@ namespace Caveman
         public Text weapons;
         public Text killed;
        
-        private float timeCurrentRespawnWeapon;
-
         private Player humanPlayer;
         private Random r;
         private bool flagEnd;
-        private int countRespawnWeappons = 1;
 
         private ObjectPool poolWeaponsLying;
         private ObjectPool poolWeaponsHand;
@@ -72,6 +69,8 @@ namespace Caveman
 
             humanPlayer.WeaponsCountChanged += WeaponsCountChanged;
             humanPlayer.KillsCountChanged += KillsCountChanged;
+
+            Invoke("CreateAllLyingWeapons", Settings.TimeRespawnWeapon);
         }
 
         public void Update()
@@ -84,14 +83,6 @@ namespace Caveman
                 flagEnd = true; 
                 result.gameObject.SetActive(true);
                 StartCoroutine(DisplayResult());
-            }
-
-            timeCurrentRespawnWeapon = countRespawnWeappons * Settings.TimeRespawnWeapon - Time.timeSinceLevelLoad;
-            if (timeCurrentRespawnWeapon-- < 0)
-            {
-                CreateAllLyingWeapons();
-                countRespawnWeappons++;
-                timeCurrentRespawnWeapon = Settings.TimeRespawnWeapon;
             }
         }
 
@@ -139,6 +130,7 @@ namespace Caveman
             {
                 CreateLyingWeapon();
             }
+            Invoke("CreateAllLyingWeapons", Settings.TimeRespawnWeapon);
         }
 
         private void CreatePlayer(Player player, bool isAiPlayer)
@@ -165,7 +157,7 @@ namespace Caveman
             playerModel.transform.SetParent(containerPlayerPool);
             playerModel.Respawn += player1 => StartCoroutine(RespawnPlayer(player));
             playerModel.Death += DeathAnimate;
-            playerModel.ThrowStone += CreateWeapon;
+            playerModel.ThrowStone += ThrowStone;
         }
 
         private IEnumerator RespawnPlayer(Player player)
@@ -174,7 +166,8 @@ namespace Caveman
             poolPlayers.New(player.id).RandomPosition();
         }
 
-        private void CreateWeapon(Player owner, Vector2 start, Vector2 target)
+        // todo метод перенести в файл игрока
+        private void ThrowStone(Player owner, Vector2 start, Vector2 target)
         {
             var stone = poolWeaponsHand.New();
             var weaponModel = stone.GetComponent<StoneModel>();
@@ -182,20 +175,23 @@ namespace Caveman
             {
                 weaponModel.SetPool(poolWeaponsHand);
             }
-            // todo возможно, могуть быть лишние подписки по аналогии с игроками. посмотреть
-            weaponModel.Splash += CreateStoneFlagment;
+            if (weaponModel.Splash == null)
+            {
+                weaponModel.Splash += CreateStoneFlagment;    
+            }
             weaponModel.Move(owner, start, target);
         }
+         
 
         private void CreateLyingWeapon()
         {
             var prefabWeapons = poolWeaponsLying.New();
-            prefabWeapons.SetParent(poolWeaponsLying.transform);
             StartCoroutine(FadeIn(prefabWeapons.GetComponent<SpriteRenderer>()));
             var weaponModel = prefabWeapons.GetComponent<BaseWeaponModel>();
             if (weaponModel.PoolIsEmty)
             {
                 weaponModel.SetPool(poolWeaponsLying);
+                weaponModel.transform.SetParent(containerWeaponsLyingPool);
             }
             prefabWeapons.transform.position = new Vector2(r.Next(-Settings.Br, Settings.Br),
                 r.Next(-Settings.Br, Settings.Br));
