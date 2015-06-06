@@ -43,5 +43,15 @@ namespace Caveman.Weapons
             Splash(transform.position);
             base.Destroy();
         }
+
+        private const float BuizerInterval = 1;
+
+        private Vector2 CurveBuizer(Vector2 p0, Vector2 p2)
+        {
+            var p1 = new Vector2((p0.x + p2.x) * 0.5f, (p0.y + p2.y) * 0.5f);
+
+
+            return Vector2.up;
+        }
     }
 }

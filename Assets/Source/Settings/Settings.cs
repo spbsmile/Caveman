@@ -9,7 +9,7 @@
         public const int RotateStoneParameter = 10; 
 
         public static int RoundTime = 50;
-        public static int TimeRespawnWeapon = 5;
+        public static int TimeRespawnWeapon = 10;
         public static int BotsCount = 4;
         public static int InitialLyingWeapons = 10;
         public static float SpeedStone = 4f;
@@ -24,7 +24,6 @@
         //todo объединить два пула
         public const int PoolCountHandStones = 30;
         public const int PoolCountSplashStones = 30;
-        
         
         public const string AnimRunF = "run_f";
         public const string AnimRunB = "run_b";

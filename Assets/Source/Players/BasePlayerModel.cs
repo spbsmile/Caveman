@@ -21,6 +21,7 @@ namespace Caveman.Players
         protected Random r;
 
         private PlayerPool playerPool;
+        private BasePlayerModel[] players;
         private ObjectPool weaponsHandPool;
         private bool inMotion;
 
@@ -35,6 +36,7 @@ namespace Caveman.Players
             name = player.name;
             this.player = player;
             this.playerPool = playerPool;
+            players = playerPool.GetArray();
             r = random;
             transform.position = positionStart;
         }
@@ -84,7 +86,7 @@ namespace Caveman.Players
 
         public void Throw()
         {
-            ThrowStone(player, transform.position, FindClosest(transform.parent));
+            ThrowStone(player, transform.position, FindClosestPlayer());
             player.Weapons--;
         }
 
@@ -124,57 +126,28 @@ namespace Caveman.Players
             }
         }
 
-        // todo 
-        protected Vector2 FindClosest(Transform container)
-        {
-            float minDistance = 0;
-            var nearPosition = Vector2.zero;
-            foreach (Transform child in container)
-            {
-                if (!child.gameObject.activeSelf) continue;
-                if (child.gameObject.GetComponent<BasePlayerModel>() != this)
-                {
-                    if (minDistance < 0.1f)
-                    {
-                        minDistance = Vector2.Distance(child.position, transform.position);
-                        nearPosition = child.position;
-                    }
-                    else
-                    {
-                        var childDistance = Vector2.Distance(child.position, transform.position);
-                        if (minDistance > childDistance)
-                        {
-                            minDistance = childDistance;
-                            nearPosition = child.position;
-                        }
-                    }
-                }
-            }
-            return nearPosition;
-        }
-
-        protected Vector2 FindClosestPlayer(params BasePlayerModel[] array)
+        private Vector2 FindClosestPlayer()
         {
             float minDistance = 0;
             var nearPosition = Vector2.zero;
 
-            for (var i = 0; i < array.Length; i++)
+            for (var i = 0; i < players.Length; i++)
             {
-                if (array[i].gameObject.activeSelf) continue;
-                if (array[i] != this)
+                if (!players[i].gameObject.activeSelf) continue;
+                if (players[i] != this)
                 {
                     if (minDistance < 0.1f)
                     {
-                        minDistance = Vector2.Distance(array[i].transform.position, transform.position);
-                        nearPosition = array[i].transform.position;
+                        minDistance = Vector2.Distance(players[i].transform.position, transform.position);
+                        nearPosition = players[i].transform.position;
                     }
                     else
                     {
-                        var childDistance = Vector2.Distance(array[i].transform.position, transform.position);
+                        var childDistance = Vector2.Distance(players[i].transform.position, transform.position);
                         if (minDistance > childDistance)
                         {
                             minDistance = childDistance;
-                            nearPosition = array[i].transform.position;
+                            nearPosition = players[i].transform.position;
                         }
                     }
                 }
@@ -206,9 +179,6 @@ namespace Caveman.Players
             }
             return nearPosition;
         }
-
-
-        
     }
 }
 

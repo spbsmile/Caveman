@@ -41,8 +41,8 @@ namespace Caveman
         private bool flagEnd;
 
         private ObjectPool poolWeaponsLying;
-        private ObjectPool poolWeaponsHand;
-        private ObjectPool poolstoneSplash;
+        private ObjectPool poolStonesHand;
+        private ObjectPool poolStonesSplash;
         private ObjectPool poolDeathImage;
         private PlayerPool poolPlayers;
         private Transform[] arrayLyingWeapons;
@@ -52,10 +52,10 @@ namespace Caveman
             r = new Random();
             Player.idCounter = 0;
 
-            poolWeaponsLying = CreatePool(30, containerWeaponsLyingPool, prefabLyingWeapon);
-            poolWeaponsHand = CreatePool(30, containerWeaponsHandPool, prefabStoneIns);
-            poolstoneSplash = CreatePool(30, containerStoneSplashPool, prefabStoneFlagmentInc);
-            poolDeathImage = CreatePool(8, containerDeathImagesPool, prefabDeathImage);
+            poolWeaponsLying = CreatePool(Settings.PoolCountLyingStones, containerWeaponsLyingPool, prefabLyingWeapon);
+            poolStonesHand = CreatePool(Settings.PoolCountHandStones, containerWeaponsHandPool, prefabStoneIns);
+            poolStonesSplash = CreatePool(Settings.PoolCountSplashStones, containerStoneSplashPool, prefabStoneFlagmentInc);
+            poolDeathImage = CreatePool(Settings.PoolCountDeathImages, containerDeathImagesPool, prefabDeathImage);
             arrayLyingWeapons = poolWeaponsLying.ToArray();
 
             poolPlayers = containerPlayerPool.GetComponent<PlayerPool>();
@@ -126,7 +126,7 @@ namespace Caveman
 
         private void CreateAllLyingWeapons()
         {
-            for (var i = 0; i < Settings.WeaponsCount; i++)
+            for (var i = 0; i < Settings.InitialLyingWeapons; i++)
             {
                 CreateLyingWeapon();
             }
@@ -169,11 +169,11 @@ namespace Caveman
         // todo метод перенести в файл игрока
         private void ThrowStone(Player owner, Vector2 start, Vector2 target)
         {
-            var stone = poolWeaponsHand.New();
+            var stone = poolStonesHand.New();
             var weaponModel = stone.GetComponent<StoneModel>();
             if (weaponModel.PoolIsEmty)
             {
-                weaponModel.SetPool(poolWeaponsHand);
+                weaponModel.SetPool(poolStonesHand);
             }
             if (weaponModel.Splash == null)
             {
@@ -201,8 +201,8 @@ namespace Caveman
         {
             for (var i = 0; i < 4; i++)
             {
-                var flagment = poolstoneSplash.New();
-                flagment.GetComponent<StoneSplash>().Init(i, position, poolstoneSplash);
+                var flagment = poolStonesSplash.New();
+                flagment.GetComponent<StoneSplash>().Init(i, position, poolStonesSplash);
             }
         }
 
