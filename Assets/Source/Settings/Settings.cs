@@ -9,7 +9,7 @@
         public const int RotateStoneParameter = 10; 
 
         public static int RoundTime = 50;
-        public static int TimeRespawnWeapon = 10;
+        public static int TimeRespawnWeapon = 14;
         public static int BotsCount = 4;
         public static int InitialLyingWeapons = 10;
         public static float SpeedStone = 4f;

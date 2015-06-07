@@ -40,6 +40,7 @@ namespace Caveman.Weapons
 
         public override void Destroy()
         {
+            owner = null;
             Splash(transform.position);
             base.Destroy();
         }
