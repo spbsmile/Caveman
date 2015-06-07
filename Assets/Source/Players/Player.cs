@@ -10,6 +10,9 @@ namespace Caveman.Players
         public int deaths;
         public readonly string name;
         public readonly int id;
+
+        //todo hack
+        public float countRespawnThrow = 1;
        
         private int weapons;
         private int kills;

@@ -20,6 +20,7 @@ namespace Caveman.Players
         protected Vector2 target;
         protected Random r;
 
+        private float timeCurrentThrow;
         private PlayerPool playerPool;
         private BasePlayerModel[] players;
         private ObjectPool weaponsHandPool;
@@ -28,7 +29,7 @@ namespace Caveman.Players
         protected virtual void Start()
         {
             animator = GetComponent<Animator>();
-            Invoke("ThrowStoneOnTimer", Settings.TimeThrowStone);
+            //Invoke("ThrowStoneOnTimer", Settings.TimeThrowStone);
         }
         
         public void Init(Player player, Vector2 positionStart, Random random, PlayerPool playerPool)
@@ -36,6 +37,7 @@ namespace Caveman.Players
             name = player.name;
             this.player = player;
             this.playerPool = playerPool;
+            // todo при сервере подписки на добавление удаление игроков
             players = playerPool.GetArray();
             r = random;
             transform.position = positionStart;
@@ -92,11 +94,15 @@ namespace Caveman.Players
 
         protected void ThrowStoneOnTimer()
         {
+            timeCurrentThrow = player.countRespawnThrow * Settings.TimeThrowStone - Time.timeSinceLevelLoad;
+            if (timeCurrentThrow-- >= 0) return;
+            player.countRespawnThrow++;
             if (player.Weapons > 0)
             {
                 animator.SetTrigger(Settings.AnimThrowF);
             }
-            Invoke("ThrowStoneOnTimer", Settings.TimeThrowStone);
+            timeCurrentThrow = Settings.TimeThrowStone;
+            //Invoke("ThrowStoneOnTimer", Settings.TimeThrowStone);
         }   
 
         public bool InMotion
