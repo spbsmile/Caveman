@@ -35,6 +35,7 @@ namespace Caveman.Players
         public void Init(Player player, Vector2 positionStart, Random random, PlayerPool playerPool)
         {
             name = player.name;
+            transform.GetChild(0).GetComponent<TextMesh>().text = name;
             this.player = player;
             this.playerPool = playerPool;
             // todo при сервере подписки на добавление удаление игроков
