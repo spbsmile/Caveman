@@ -1,7 +1,7 @@
-﻿using System;
-using Caveman.Setting;
+﻿using Caveman.Setting;
 using Caveman.Utils;
 using UnityEngine;
+using Random = System.Random;
 
 namespace Caveman.Players
 {
@@ -17,6 +17,12 @@ namespace Caveman.Players
             target = RandomPosition;
             delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedPlayer);
             animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Settings.SpeedPlayer);
+        }
+
+        public void InitAi(Player player, Vector2 start, Random random, PlayerPool pool, Transform[] allLyingWeapons)
+        {
+            Init(player, start, random, pool);
+            weapons = allLyingWeapons;
         }
 
         public void Update()
@@ -49,9 +55,29 @@ namespace Caveman.Players
             }
         }
 
-        public void SetWeapons(Transform[] weapons)
+        private Vector2 FindClosestLyingWeapon(params Transform[] array)
         {
-            this.weapons = weapons;
+            float minDistance = 0;
+            var nearPosition = Vector2.zero;
+            for (var i = 0; i < array.Length; i++)
+            {
+                if (!array[i].gameObject.activeSelf) continue;
+                if (minDistance < 0.1f)
+                {
+                    minDistance = Vector2.Distance(array[i].position, transform.position);
+                    nearPosition = array[i].position;
+                }
+                else
+                {
+                    var childDistance = Vector2.Distance(array[i].position, transform.position);
+                    if (minDistance > childDistance)
+                    {
+                        minDistance = childDistance;
+                        nearPosition = array[i].position;
+                    }
+                }
+            }
+            return nearPosition;
         }
 
         private Vector2 RandomPosition

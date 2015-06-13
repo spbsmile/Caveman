@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Source.Weapons
+namespace Assets.Source.Utils
 {
     public class BezierTest : MonoBehaviour
     {

@@ -14,15 +14,17 @@
         public static int InitialLyingWeapons = 10;
         public static float SpeedStone = 4f;
         public static float SpeedPlayer = 2.5f;
+        public static float SpeedSkull = 5f;
         public static int TimeThrowStone = 3;
         public static int MaxCountWeapons = 4;
         public static float HeightCamera = 1;
+        
 
         //мощность множества - посмотреть перевод
-        public const int PoolCountLyingStones = 30;
+        public const int PoolCountStones = 30;
         public const int PoolCountDeathImages = 9;
         //todo объединить два пула
-        public const int PoolCountHandStones = 30;
+        public const int PoolCountSkulls = 30;
         public const int PoolCountSplashStones = 30;
         
         public const string AnimRunF = "run_f";

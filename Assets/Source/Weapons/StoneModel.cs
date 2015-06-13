@@ -1,5 +1,4 @@
-﻿using System;
-using Caveman.Players;
+﻿using Caveman.Animation;
 using Caveman.Setting;
 using Caveman.Utils;
 using UnityEngine;
@@ -8,10 +7,17 @@ namespace Caveman.Weapons
 {
     public class StoneModel : BaseWeaponModel
     {
-        public Action<Vector2> Splash;
+        private ObjectPool poolStonesSplash;
 
-        private Vector2 target;
-        private Vector2 delta;
+        public override WeaponType Type
+        {
+            get { return WeaponType.Stone; }
+        }
+
+        protected override float Speed
+        {
+            get { return Settings.SpeedStone; }
+        }
 
         public void Update()
         {
@@ -30,29 +36,24 @@ namespace Caveman.Weapons
             }
         }
 
-        public void Move(Player player, Vector3 positionStart, Vector2 positionTarget)
-        {
-            owner = player;
-            transform.position = positionStart;
-            target = positionTarget;
-            delta = UnityExtensions.CalculateDelta(positionStart, positionTarget, Settings.SpeedStone);
-        }
-
         public override void Destroy()
         {
-            owner = null;
-            Splash(transform.position);
+            CreateStoneFlagment(transform.position);
             base.Destroy();
         }
 
-        private const float BuizerInterval = 1;
-
-        private Vector2 CurveBuizer(Vector2 p0, Vector2 p2)
+        private void CreateStoneFlagment(Vector2 position)
         {
-            var p1 = new Vector2((p0.x + p2.x) * 0.5f, (p0.y + p2.y) * 0.5f);
+            for (var i = 0; i < 4; i++)
+            {
+                var flagment = poolStonesSplash.New();
+                flagment.GetComponent<StoneSplash>().Init(i, position, poolStonesSplash);
+            }
+        }
 
-
-            return Vector2.up;
+        public void SetPoolSplash(ObjectPool objectPool)
+        {
+            poolStonesSplash = objectPool;
         }
     }
 }

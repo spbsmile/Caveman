@@ -11,7 +11,8 @@ namespace Caveman.Players
     {
         public Action<Player> Respawn;
         public Action<Vector2> Death;
-        public Action<Player, Vector2, Vector2> ThrowStone;
+        public Func<WeaponType, ObjectPool> ChangedWeapons; 
+
         //todo внимательно посмотреть 
         public Player player;
         
@@ -20,11 +21,13 @@ namespace Caveman.Players
         protected Vector2 target;
         protected Random r;
 
-        private float timeCurrentThrow;
-        private PlayerPool playerPool;
-        private BasePlayerModel[] players;
-        private ObjectPool weaponsHandPool;
         private bool inMotion;
+        private float timeCurrentThrow;
+        private PlayerPool playersPool;
+        private ObjectPool weaponsPool;
+        private WeaponType weaponType;
+        private BasePlayerModel[] players;
+    
 
         protected virtual void Start()
         {
@@ -32,16 +35,16 @@ namespace Caveman.Players
             //Invoke("ThrowStoneOnTimer", Settings.TimeThrowStone);
         }
         
-        public void Init(Player player, Vector2 positionStart, Random random, PlayerPool playerPool)
+        public void Init(Player player, Vector2 start, Random random, PlayerPool pool)
         {
             name = player.name;
             transform.GetChild(0).GetComponent<TextMesh>().text = name;
             this.player = player;
-            this.playerPool = playerPool;
+            playersPool = pool;
             // todo при сервере подписки на добавление удаление игроков
-            players = playerPool.GetArray();
+            players = pool.GetArray();
             r = random;
-            transform.position = positionStart;
+            transform.position = start;
         }
 
         // todo проверить рандом. использование в ai убрать
@@ -58,18 +61,14 @@ namespace Caveman.Players
             {
                 if (weapon.owner == null)
                 {
-                    if (player.Weapons < Settings.MaxCountWeapons)
+                    switch (weapon.Type)
                     {
-                        player.Weapons++;
-                        if (animator)
-                        {
-                            animator.SetTrigger(Settings.AnimPickup);
-                        }
-                        else
-                        {
-                            Debug.LogWarning("Pickup animator null reference");
-                        }
-                        weapon.Destroy();
+                        case WeaponType.Stone:
+                            Pickup(other.gameObject.GetComponent<StoneModel>());
+                            break;
+                        case WeaponType.Skull:
+                            Pickup(other.gameObject.GetComponent<SkullModel>());
+                            break;
                     }
                 }
                 else
@@ -81,15 +80,73 @@ namespace Caveman.Players
                         weapon.Destroy();
                         Death(transform.position);
                         Respawn(player);
-                        playerPool.Store(this);  
+                        playersPool.Store(this);  
+                    }
+                    else
+                    {
+                        // for check temp
+                        print(" weapon.owner == player");
                     }
                 }
             }
         }
 
-        public void Throw()
+        //todo времено. переписать
+        private void Pickup(BaseWeaponModel weaponModel)
         {
-            ThrowStone(player, transform.position, FindClosestPlayer());
+            if (weaponsPool == null)
+            {
+                weaponsPool = ChangedWeapons(weaponModel.Type);
+                weaponType = weaponModel.Type;
+                player.Weapons++;
+                if (animator)
+                {
+                    animator.SetTrigger(Settings.AnimPickup);
+                }
+                weaponModel.Destroy();
+            }
+            else
+            {
+                if (weaponModel.Type != weaponType)
+                {
+                    for (var i = 0; i < player.Weapons; i++)
+                    {
+                        //todo подумать, как выкидывать камни
+                        Throw(transform.position);
+                    }
+                    weaponsPool = ChangedWeapons(weaponModel.Type);
+                    weaponType = weaponModel.Type;
+                    player.Weapons++;
+                    if (animator)
+                    {
+                        animator.SetTrigger(Settings.AnimPickup);
+                    }
+                    weaponModel.Destroy();
+                }
+                else
+                {
+                    if (player.Weapons < Settings.MaxCountWeapons)
+                    {
+                        player.Weapons++;
+                        if (animator)
+                        {
+                            animator.SetTrigger(Settings.AnimPickup);
+                        }
+                        else
+                        {
+                            Debug.LogWarning("Pickup animator null reference");
+                        }
+                        weaponModel.Destroy();
+                    }
+                }
+            }
+            
+        }
+
+        //Todo разные цели полета 
+        private void Throw(Vector2 target)
+        {
+            weaponsPool.New().GetComponent<BaseWeaponModel>().SetMotion(player, transform.position, target);
             player.Weapons--;
         }
 
@@ -101,6 +158,8 @@ namespace Caveman.Players
             if (player.Weapons > 0)
             {
                 animator.SetTrigger(Settings.AnimThrowF);
+                //todo возможно, ждать конца интервала анимации по карутине и потом кидать камень, вместо проставления в аниматоре
+                Throw(FindClosestPlayer);
             }
             timeCurrentThrow = Settings.TimeThrowStone;
             //Invoke("ThrowStoneOnTimer", Settings.TimeThrowStone);
@@ -133,58 +192,36 @@ namespace Caveman.Players
             }
         }
 
-        private Vector2 FindClosestPlayer()
+        private Vector2 FindClosestPlayer
         {
-            float minDistance = 0;
-            var nearPosition = Vector2.zero;
-
-            for (var i = 0; i < players.Length; i++)
+            get
             {
-                if (!players[i].gameObject.activeSelf) continue;
-                if (players[i] != this)
+                float minDistance = 0;
+                var nearPosition = Vector2.zero;
+
+                for (var i = 0; i < players.Length; i++)
                 {
-                    if (minDistance < 0.1f)
+                    if (!players[i].gameObject.activeSelf) continue;
+                    if (players[i] != this)
                     {
-                        minDistance = Vector2.Distance(players[i].transform.position, transform.position);
-                        nearPosition = players[i].transform.position;
-                    }
-                    else
-                    {
-                        var childDistance = Vector2.Distance(players[i].transform.position, transform.position);
-                        if (minDistance > childDistance)
+                        if (minDistance < 0.1f)
                         {
-                            minDistance = childDistance;
+                            minDistance = Vector2.Distance(players[i].transform.position, transform.position);
                             nearPosition = players[i].transform.position;
+                        }
+                        else
+                        {
+                            var childDistance = Vector2.Distance(players[i].transform.position, transform.position);
+                            if (minDistance > childDistance)
+                            {
+                                minDistance = childDistance;
+                                nearPosition = players[i].transform.position;
+                            }
                         }
                     }
                 }
+                return nearPosition;
             }
-            return nearPosition;
-        }
-
-        protected Vector2 FindClosestLyingWeapon(params Transform[] array)
-        {
-            float minDistance = 0;
-            var nearPosition = Vector2.zero;
-            for (var i = 0; i < array.Length; i++)
-            {
-                if (!array[i].gameObject.activeSelf) continue;
-                if (minDistance < 0.1f)
-                {
-                    minDistance = Vector2.Distance(array[i].position, transform.position);
-                    nearPosition = array[i].position;
-                }
-                else
-                {
-                    var childDistance = Vector2.Distance(array[i].position, transform.position);
-                    if (minDistance > childDistance)
-                    {
-                        minDistance = childDistance;
-                        nearPosition = array[i].position;
-                    }
-                }
-            }
-            return nearPosition;
         }
     }
 }
