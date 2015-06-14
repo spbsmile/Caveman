@@ -31,6 +31,7 @@ namespace Caveman.Weapons
                 }
                 else
                 {
+                    // todo при любом кидании уничтожается - плохо 
                     Destroy();
                 }
             }

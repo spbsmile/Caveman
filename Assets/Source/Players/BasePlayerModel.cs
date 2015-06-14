@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Caveman.Setting;
 using Caveman.Utils;
 using Caveman.Weapons;
@@ -9,8 +10,8 @@ namespace Caveman.Players
 {
     public class BasePlayerModel : MonoBehaviour
     {
-        public Action<Player> Respawn;
         public Action<Vector2> Death;
+        public Action<Player> Respawn; 
         public Func<WeaponType, ObjectPool> ChangedWeapons; 
 
         //todo внимательно посмотреть 
@@ -27,7 +28,6 @@ namespace Caveman.Players
         private ObjectPool weaponsPool;
         private WeaponType weaponType;
         private BasePlayerModel[] players;
-    
 
         protected virtual void Start()
         {
@@ -42,7 +42,7 @@ namespace Caveman.Players
             this.player = player;
             playersPool = pool;
             // todo при сервере подписки на добавление удаление игроков
-            players = pool.GetArray();
+            players = pool.Players;
             r = random;
             transform.position = start;
         }
@@ -103,7 +103,7 @@ namespace Caveman.Players
                 {
                     animator.SetTrigger(Settings.AnimPickup);
                 }
-                weaponModel.Destroy();
+                weaponModel.Take();
             }
             else
             {
@@ -121,7 +121,7 @@ namespace Caveman.Players
                     {
                         animator.SetTrigger(Settings.AnimPickup);
                     }
-                    weaponModel.Destroy();
+                    weaponModel.Take();
                 }
                 else
                 {
@@ -136,17 +136,15 @@ namespace Caveman.Players
                         {
                             Debug.LogWarning("Pickup animator null reference");
                         }
-                        weaponModel.Destroy();
+                        weaponModel.Take();
                     }
                 }
             }
-            
         }
 
-        //Todo разные цели полета 
-        private void Throw(Vector2 target)
+        private void Throw(Vector2 aim)
         {
-            weaponsPool.New().GetComponent<BaseWeaponModel>().SetMotion(player, transform.position, target);
+            weaponsPool.New().GetComponent<BaseWeaponModel>().SetMotion(player, transform.position, aim);
             player.Weapons--;
         }
 

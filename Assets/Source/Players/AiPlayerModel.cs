@@ -7,7 +7,7 @@ namespace Caveman.Players
 {
     public class AiPlayerModel : BasePlayerModel
     {
-        private Transform[] weapons;
+        private Transform weapons;
 
         protected override void Start()
         {
@@ -19,7 +19,7 @@ namespace Caveman.Players
             animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Settings.SpeedPlayer);
         }
 
-        public void InitAi(Player player, Vector2 start, Random random, PlayerPool pool, Transform[] allLyingWeapons)
+        public void InitAi(Player player, Vector2 start, Random random, PlayerPool pool, Transform allLyingWeapons)
         {
             Init(player, start, random, pool);
             weapons = allLyingWeapons;
@@ -33,7 +33,7 @@ namespace Caveman.Players
             {
                 if (player.Weapons < Settings.MaxCountWeapons)
                 {
-                    target = FindClosestLyingWeapon(weapons);
+                    target = FindClosestLyingWeapon;
                     if (target == Vector2.zero)
                     {
                         target = RandomPosition;
@@ -55,29 +55,33 @@ namespace Caveman.Players
             }
         }
 
-        private Vector2 FindClosestLyingWeapon(params Transform[] array)
+        private Vector2 FindClosestLyingWeapon
         {
-            float minDistance = 0;
-            var nearPosition = Vector2.zero;
-            for (var i = 0; i < array.Length; i++)
+            get
             {
-                if (!array[i].gameObject.activeSelf) continue;
-                if (minDistance < 0.1f)
+                float minDistance = 0;
+                var nearPosition = Vector2.zero;
+
+                foreach (Transform weapon in weapons)
                 {
-                    minDistance = Vector2.Distance(array[i].position, transform.position);
-                    nearPosition = array[i].position;
-                }
-                else
-                {
-                    var childDistance = Vector2.Distance(array[i].position, transform.position);
-                    if (minDistance > childDistance)
+                    if (!weapon.gameObject.activeSelf) continue;
+                    if (minDistance < 0.1f)
                     {
-                        minDistance = childDistance;
-                        nearPosition = array[i].position;
+                        minDistance = Vector2.Distance(weapon.position, transform.position);
+                        nearPosition = weapon.position;
+                    }
+                    else
+                    {
+                        var childDistance = Vector2.Distance(weapon.position, transform.position);
+                        if (minDistance > childDistance)
+                        {
+                            minDistance = childDistance;
+                            nearPosition = weapon.position;
+                        }
                     }
                 }
+                return nearPosition;
             }
-            return nearPosition;
         }
 
         private Vector2 RandomPosition

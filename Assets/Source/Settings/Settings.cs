@@ -18,12 +18,10 @@
         public static int TimeThrowStone = 3;
         public static int MaxCountWeapons = 4;
         public static float HeightCamera = 1;
-        
+        public static int CountLyingSkulls = 3;
 
-        //мощность множества - посмотреть перевод
-        public const int PoolCountStones = 30;
+        public const int PoolCountStones = 40;
         public const int PoolCountDeathImages = 9;
-        //todo объединить два пула
         public const int PoolCountSkulls = 30;
         public const int PoolCountSplashStones = 30;
         

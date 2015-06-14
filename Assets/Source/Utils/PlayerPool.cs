@@ -48,9 +48,9 @@ namespace Caveman.Utils
             return players[id].player.deaths.ToString();
         }
 
-        public BasePlayerModel[] GetArray()
+        public BasePlayerModel[] Players
         {
-            return players;
+            get { return players; }
         }
     }
 }

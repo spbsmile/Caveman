@@ -22,25 +22,22 @@ namespace Caveman.Weapons
             pool.Store(transform);
         }
 
-        public void SetMotion(Player player, Vector3 start, Vector2 target)
+        public void Take()
+        {
+            pool.Store(transform);    
+        }
+
+        public void SetMotion(Player player, Vector3 start, Vector2 aim)
         {
             owner = player;
             transform.position = start;
-            this.target = target;
-            delta = UnityExtensions.CalculateDelta(start, target, Speed);
+            target = aim;
+            delta = UnityExtensions.CalculateDelta(start, aim, Speed);
         }
 
-        public void SetPool(ObjectPool pool)
+        public void SetPool(ObjectPool weaponPool)
         {
-            this.pool = pool;
-        }
-
-        public bool PoolIsEmty
-        {
-            get
-            {
-                return pool == null;
-            }
+            pool = weaponPool;
         }
     }
 
