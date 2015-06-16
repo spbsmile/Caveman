@@ -27,6 +27,12 @@ namespace Caveman.Weapons
             pool.Store(transform);    
         }
 
+        public void UnTake(Vector2 position)
+        {
+            owner = null;
+            transform.position = position;
+        }
+
         public void SetMotion(Player player, Vector3 start, Vector2 aim)
         {
             owner = player;

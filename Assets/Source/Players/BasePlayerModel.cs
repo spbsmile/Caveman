@@ -109,11 +109,14 @@ namespace Caveman.Players
             {
                 if (weaponModel.Type != weaponType)
                 {
-                    for (var i = 0; i < player.Weapons; i++)
-                    {
-                        //todo подумать, как выкидывать камни
-                        Throw(transform.position);
-                    }
+                    //for (var i = 0; i < player.Weapons; i++)
+                    //{
+                    //    weaponsPool.New().GetComponent<BaseWeaponModel>().UnTake(transform.position);
+                    //    //todo подумать, как выкидывать камни
+                    //    Throw(transform.position);
+                    //    print("выкидывание оружия !");
+                    //}
+                    player.Weapons = 0;
                     weaponsPool = ChangedWeapons(weaponModel.Type);
                     weaponType = weaponModel.Type;
                     player.Weapons++;
