@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+using UnityEngine;
 
 /// <summary>
 /// Touchpad control. Much like in Dead Trigger 2 or Shadowgun
@@ -14,10 +18,19 @@ public class CNTouchpad : CNAbstractController
     /// </summary>
     public bool IsAlwaysNormalized { get { return _isAlwaysNormalized; } set { _isAlwaysNormalized = value; } }
 
+    /// <summary>
+    /// Indicates whether the touchpad should be stretched
+    /// </summary>
+    public bool IsStretched { get { return _isStretched; } set { _isStretched = value; } }
+
     // Serialized fields
     [SerializeField]
     [HideInInspector]
     private bool _isAlwaysNormalized = true;
+
+    [SerializeField]
+    [HideInInspector]
+    private bool _isStretched = false;
 
     /// <summary>
     /// To find touch movement delta we need to store previous touch position
@@ -26,21 +39,32 @@ public class CNTouchpad : CNAbstractController
     /// </summary>
     public Vector3 PreviousPosition { get; set; }
 
-    /// <summary>
-    /// Good old Update method where all the magic happens
-    /// </summary>
-    protected virtual void Update()
+    public override void OnEnable()
     {
-        // If we tweaked, we return and don't check for other touches
-        if (TweakIfNeeded())
-            return;
+        base.OnEnable();
 
-        // If we didn't tweak, we try to capture any touch
-        Touch currentTouch;
-        if (!IsTouchCaptured(out currentTouch)) return;
+        if (IsStretched)
+        {
+            TransformCache.localPosition = CalculateStretchedSizeAndPosition();
+        }
+    }
 
-        // Setting our initial "previous" position
-        PreviousPosition = ParentCamera.ScreenToWorldPoint(currentTouch.position);
+    protected Vector3 CalculateStretchedSizeAndPosition()
+    {
+        float height = ParentCamera.orthographicSize * 2f;
+        float width = ParentCamera.aspect * height;
+
+        TouchZoneSize = new Vector2(width, height);
+
+        TransformCache.localPosition = Vector3.zero;
+
+        CalculatedTouchZone = new Rect(
+            TransformCache.position.x - TouchZoneSize.x / 2f,
+            TransformCache.position.y - TouchZoneSize.y / 2f,
+            TouchZoneSize.x,
+            TouchZoneSize.y);
+
+        return Vector3.zero;
     }
 
     /// <summary>
@@ -62,4 +86,25 @@ public class CNTouchpad : CNAbstractController
 
         PreviousPosition = worldPosition;
     }
+
+    protected override void MoreUpdateLogic(Touch capturedTouch)
+    {
+        PreviousPosition = ParentCamera.ScreenToWorldPoint(capturedTouch.position);
+    }
+
+#if UNITY_EDITOR
+
+    override protected void OnDrawGizmosSelected()
+    {
+        base.OnDrawGizmosSelected();
+
+        if (!EditorApplication.isPlaying && IsStretched)
+        {
+            TransformCache = GetComponent<Transform>();
+
+            TransformCache.localPosition = CalculateStretchedSizeAndPosition();
+        }
+    }
+
+#endif
 }

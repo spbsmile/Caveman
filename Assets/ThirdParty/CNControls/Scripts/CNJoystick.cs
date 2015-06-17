@@ -77,7 +77,6 @@ public class CNJoystick : CNAbstractController
             _baseGameObject.gameObject.SetActive(true);
             _stickGameObject.gameObject.SetActive(true);
         }
-        
     }
 
     /// <summary>
@@ -113,22 +112,6 @@ public class CNJoystick : CNAbstractController
 
         _baseGameObject.gameObject.SetActive(true);
         _stickGameObject.gameObject.SetActive(true);
-    }
-
-    /// <summary>
-    /// Your favorite Update method where all the magic happens
-    /// </summary>
-    protected virtual void Update()
-    {
-        // Check for touches
-        if (TweakIfNeeded())
-                return;
-
-        Touch currentTouch;
-        if (IsTouchCaptured(out currentTouch))
-            // Place joystick under the finger 
-            // "No jumping" logic is also in this method
-            PlaceJoystickBaseUnderTheFinger(currentTouch);
     }
 
     /// <summary>
@@ -168,6 +151,13 @@ public class CNJoystick : CNAbstractController
 
         // We also fire our event if there are subscribers
         OnControllerMoved(differenceVector);
+    }
+
+    protected override void MoreUpdateLogic(Touch capturedTouch)
+    {
+        // Place joystick under the finger 
+        // "No jumping" logic is also in this method
+        PlaceJoystickBaseUnderTheFinger(capturedTouch);
     }
 
     /// <summary>

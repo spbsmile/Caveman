@@ -38,7 +38,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb0c38ddbd58d554390a2607cdb9aa4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _anchor: 9
+  _anchor: 10
   _axisNameX: Horizontal
   _axisNameY: Vertical
   _touchZoneSize: {x: 6, y: 6}
