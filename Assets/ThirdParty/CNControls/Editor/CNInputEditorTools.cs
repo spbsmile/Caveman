@@ -18,7 +18,7 @@ public class CNInputEditorTools : EditorWindow
 
         if (cameraGo == null)
         {
-            cameraGo = AssetDatabase.LoadAssetAtPath("Assets/CNControls/Prefabs/CNControlCamera.prefab", typeof(GameObject)) as GameObject;
+            cameraGo = AssetDatabase.LoadAssetAtPath("Assets/ThirdParty/CNControls/Prefabs/CNControlCamera.prefab", typeof(GameObject)) as GameObject;
             if (cameraGo == null)
             {
                 throw new UnityException("Can't find CNControlCamera prefab. " +
@@ -45,7 +45,7 @@ public class CNInputEditorTools : EditorWindow
         GameObject cameraGo = CNInputEditorTools.GetControlCamera();
 
         var controlObject = AssetDatabase.LoadAssetAtPath(
-            "Assets/CNControls/Prefabs/" + controlName + ".prefab", 
+            "Assets/ThirdParty/CNControls/Prefabs/" + controlName + ".prefab", 
             typeof(GameObject)) as GameObject;
 
         if (controlObject == null)

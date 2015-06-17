@@ -16,7 +16,8 @@ namespace Caveman
         private const string PrefabPlayer = "player";
         private const string PrefabBot = "bot";
         private const string PrefabText = "Text";
-        
+
+        public CNAbstractController movementJoystick;
         public Transform prefabSkull;
         public Transform prefabStoneFlagmentInc;
         public Transform prefabStone;
@@ -192,6 +193,8 @@ namespace Caveman
                 playerModel = prefabPlayer.GetComponent<PlayerModel>();
                 smoothCamera.target = prefabPlayer.transform;
                 playerModel.Init(player, Vector2.zero, r, poolPlayers);
+                var pl = (PlayerModel) playerModel;
+                pl.SetJoystick(movementJoystick);
             }
             poolPlayers.Add(player.id, playerModel);
             playerModel.transform.SetParent(containerPlayerPool);
