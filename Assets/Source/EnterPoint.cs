@@ -18,11 +18,13 @@ namespace Caveman
         private const string PrefabText = "Text";
 
         public CNAbstractController movementJoystick;
-        public Transform prefabPause;
+        public Transform prefabPauseBtn;
         public Transform prefabSkull;
         public Transform prefabStoneFlagmentInc;
         public Transform prefabStone;
         public Transform prefabDeathImage;
+
+        public GameObject windowPause;
 
         private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
 
@@ -78,7 +80,8 @@ namespace Caveman
         public void PauseGame()
         {
             Debug.Log("PAUSE GAME");
-            //Time.timeScale = 0;
+            Time.timeScale = 0.000001f;
+            windowPause.SetActive(true);
             //TODO stop scale time
             //TODO stop all animations
             //TODO show pause window
