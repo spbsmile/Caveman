@@ -8,6 +8,11 @@ public class Menu : MonoBehaviour
         LoadingScreen.instance.ProgressTo(1);
     }
 
+	public void LoadMultiplayGame()
+	{
+		Application.LoadLevel(4);
+	}
+
     public void LoadMenu()
     {
         Time.timeScale = 1;
