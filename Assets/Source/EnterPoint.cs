@@ -18,10 +18,13 @@ namespace Caveman
         private const string PrefabText = "Text";
 
         public CNAbstractController movementJoystick;
+        public Transform prefabPauseBtn;
         public Transform prefabSkull;
         public Transform prefabStoneFlagmentInc;
         public Transform prefabStone;
         public Transform prefabDeathImage;
+
+        public GameObject windowPause;
 
         private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
 
@@ -74,11 +77,29 @@ namespace Caveman
             Invoke("PutWeapons", Settings.TimeRespawnWeapon);
         }
 
+        public void PauseGame()
+        {
+            Debug.Log("PAUSE GAME");
+            Time.timeScale = 0.000001f;
+            windowPause.SetActive(true);
+            //TODO stop scale time
+            //TODO stop all animations
+            //TODO show pause window
+        }
+
         public void Update()
         {
             var remainTime = Settings.RoundTime - Math.Floor(Time.timeSinceLevelLoad);
-            var displayTime = remainTime > 60 ? "1 : " + (remainTime - 60) : remainTime.ToString();
-            roundTime.text = "Round Time " + displayTime;
+            int m = Convert.ToInt32(remainTime / 60);
+            int s = Convert.ToInt32(remainTime % 60);
+            if (m < 60)
+            {
+                m = 0;
+            }
+                       
+            //var displayTime = remainTime > 60 ? "1 : " + (remainTime - 60) : remainTime.ToString();
+            var displayTime = m + ":" + s;
+            roundTime.text = displayTime;
             if (remainTime < 0 && !flagEnd)
             {
                 flagEnd = true; 
