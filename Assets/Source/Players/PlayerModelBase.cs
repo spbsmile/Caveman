@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using Caveman.Setting;
 using Caveman.Utils;
 using Caveman.Weapons;
@@ -8,7 +7,7 @@ using Random = System.Random;
 
 namespace Caveman.Players
 {
-    public class BasePlayerModel : MonoBehaviour
+    public class PlayerModelBase : MonoBehaviour
     {
         public Action<Vector2> Death;
         public Action<Player> Respawn; 
@@ -27,8 +26,8 @@ namespace Caveman.Players
         private PlayerPool playersPool;
         private ObjectPool weaponsPool;
         private WeaponType weaponType;
-        private BasePlayerModel[] players;
-
+        private PlayerModelBase[] players;
+                        
         protected virtual void Start()
         {
             animator = GetComponent<Animator>();
@@ -47,12 +46,6 @@ namespace Caveman.Players
             transform.position = start;
         }
 
-        // todo проверить рандом. использование в ai убрать
-        public void RandomPosition()
-        {
-            transform.position = new Vector2(r.Next(-Settings.Br, Settings.Br), r.Next(-Settings.Br, Settings.Br));
-        }
-        
         public void OnTriggerEnter2D(Collider2D other)
         {
             if (Time.time < 1) return;

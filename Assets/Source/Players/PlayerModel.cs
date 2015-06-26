@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Caveman.Players
 {
-    public class PlayerModel : BasePlayerModel
+    public class PlayerModel : PlayerModelBase
     {
         public void Update()
         {

@@ -5,7 +5,7 @@ using Random = System.Random;
 
 namespace Caveman.Players
 {
-    public class AiPlayerModel : BasePlayerModel
+    public class AiPlayerModel : PlayerModelBase
     {
         private Transform weapons;
 

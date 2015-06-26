@@ -194,7 +194,7 @@ namespace Caveman
 
         private void CreatePlayer(Player player, bool isAiPlayer)
         {
-            BasePlayerModel playerModel;
+            PlayerModelBase playerModel;
             if (isAiPlayer)
             {
                 var prefab = Instantiate(Resources.Load(PrefabBot, typeof(GameObject))) as GameObject;
@@ -233,7 +233,7 @@ namespace Caveman
         private IEnumerator RespawnPlayer(Player player)
         {
             yield return new WaitForSeconds(Settings.TimeRespawnPlayer);
-            poolPlayers.New(player.id).RandomPosition();
+            poolPlayers.New(player.id).transform.position = new Vector2(r.Next(-Settings.Br, Settings.Br), r.Next(-Settings.Br, Settings.Br));
         }
 
         private void DeathAnimate(Vector2 position)

@@ -5,16 +5,16 @@ namespace Caveman.Utils
 {
     public class PlayerPool : MonoBehaviour
     {
-        private BasePlayerModel[] players;
+        private PlayerModelBase[] players;
 
-        public void Store(BasePlayerModel player)
+        public void Store(PlayerModelBase player)
         {
             //todo при смерти скидывать ли камни ?
             player.InMotion = false;
             player.gameObject.SetActive(false);
         }
 
-        public BasePlayerModel New(int id)
+        public PlayerModelBase New(int id)
         {
             players[id].gameObject.SetActive(true);
             return players[id];
@@ -23,10 +23,10 @@ namespace Caveman.Utils
         //TODO подумать над разумностью 
         public void Init(int count)
         {
-            players = new BasePlayerModel[count];
+            players = new PlayerModelBase[count];
         }
 
-        public void Add(int id, BasePlayerModel model)
+        public void Add(int id, PlayerModelBase model)
         {
             model.InMotion = true;
             players[id] = model;
@@ -48,7 +48,7 @@ namespace Caveman.Utils
             return players[id].player.deaths.ToString();
         }
 
-        public BasePlayerModel[] Players
+        public PlayerModelBase[] Players
         {
             get { return players; }
         }
