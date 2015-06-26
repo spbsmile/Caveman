@@ -48,94 +48,52 @@ namespace Caveman.Players
 
         public void OnTriggerEnter2D(Collider2D other)
         {
-            if (Time.time < 1) return;
+           // if (Time.time < 1) return;
             var weapon = other.gameObject.GetComponent<BaseWeaponModel>();
-            if (weapon != null)
+            if (weapon == null) return;
+            if (weapon.owner == null)
             {
-                if (weapon.owner == null)
+                switch (weapon.Type)
                 {
-                    switch (weapon.Type)
-                    {
-                        case WeaponType.Stone:
-                            Pickup(other.gameObject.GetComponent<StoneModel>());
-                            break;
-                        case WeaponType.Skull:
-                            Pickup(other.gameObject.GetComponent<SkullModel>());
-                            break;
-                    }
+                    case WeaponType.Stone:
+                        Pickup(other.gameObject.GetComponent<StoneModel>());
+                        break;
+                    case WeaponType.Skull:
+                        Pickup(other.gameObject.GetComponent<SkullModel>());
+                        break;
+                }
+            }
+            else
+            {
+                if (weapon.owner != player)
+                {
+                    weapon.owner.Kills++;
+                    player.deaths++;
+                    weapon.Destroy();
+                    Death(transform.position);
+                    Respawn(player);
+                    playersPool.Store(this);  
                 }
                 else
                 {
-                    if (weapon.owner != player)
-                    {
-                        weapon.owner.Kills++;
-                        player.deaths++;
-                        weapon.Destroy();
-                        Death(transform.position);
-                        Respawn(player);
-                        playersPool.Store(this);  
-                    }
-                    else
-                    {
-                        // for check temp
-                        print(" weapon.owner == player");
-                    }
+                    // for check temp
+                    print(" weapon.owner == player");
                 }
             }
         }
 
-        //todo времено. переписать
         private void Pickup(BaseWeaponModel weaponModel)
         {
-            if (weaponsPool == null)
+            if (player.Weapons > Settings.MaxCountWeapons) return;
+            if (weaponsPool == null || weaponModel.Type != weaponType)
             {
+                player.Weapons = 0;
                 weaponsPool = ChangedWeapons(weaponModel.Type);
                 weaponType = weaponModel.Type;
-                player.Weapons++;
-                if (animator)
-                {
-                    animator.SetTrigger(Settings.AnimPickup);
-                }
-                weaponModel.Take();
             }
-            else
-            {
-                if (weaponModel.Type != weaponType)
-                {
-                    //for (var i = 0; i < player.Weapons; i++)
-                    //{
-                    //    weaponsPool.New().GetComponent<BaseWeaponModel>().UnTake(transform.position);
-                    //    //todo подумать, как выкидывать камни
-                    //    Throw(transform.position);
-                    //    print("выкидывание оружия !");
-                    //}
-                    player.Weapons = 0;
-                    weaponsPool = ChangedWeapons(weaponModel.Type);
-                    weaponType = weaponModel.Type;
-                    player.Weapons++;
-                    if (animator)
-                    {
-                        animator.SetTrigger(Settings.AnimPickup);
-                    }
-                    weaponModel.Take();
-                }
-                else
-                {
-                    if (player.Weapons < Settings.MaxCountWeapons)
-                    {
-                        player.Weapons++;
-                        if (animator)
-                        {
-                            animator.SetTrigger(Settings.AnimPickup);
-                        }
-                        else
-                        {
-                            Debug.LogWarning("Pickup animator null reference");
-                        }
-                        weaponModel.Take();
-                    }
-                }
-            }
+            player.Weapons++;
+            animator.SetTrigger(Settings.AnimPickup);
+            weaponModel.Take();
         }
 
         private void Throw(Vector2 aim)
@@ -195,22 +153,19 @@ namespace Caveman.Players
 
                 for (var i = 0; i < players.Length; i++)
                 {
-                    if (!players[i].gameObject.activeSelf) continue;
-                    if (players[i] != this)
+                    if (!players[i].gameObject.activeSelf || players[i] == this) continue;
+                    if (minDistance < 0.1f)
                     {
-                        if (minDistance < 0.1f)
+                        minDistance = Vector2.Distance(players[i].transform.position, transform.position);
+                        nearPosition = players[i].transform.position;
+                    }
+                    else
+                    {
+                        var childDistance = Vector2.Distance(players[i].transform.position, transform.position);
+                        if (minDistance > childDistance)
                         {
-                            minDistance = Vector2.Distance(players[i].transform.position, transform.position);
+                            minDistance = childDistance;
                             nearPosition = players[i].transform.position;
-                        }
-                        else
-                        {
-                            var childDistance = Vector2.Distance(players[i].transform.position, transform.position);
-                            if (minDistance > childDistance)
-                            {
-                                minDistance = childDistance;
-                                nearPosition = players[i].transform.position;
-                            }
                         }
                     }
                 }
