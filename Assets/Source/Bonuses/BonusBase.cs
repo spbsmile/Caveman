@@ -2,7 +2,6 @@
 using Caveman.Utils;
 using Caveman.Players;
 using Caveman.Setting;
-using System;
 
 namespace Caveman.Bonuses
 {
@@ -44,9 +43,9 @@ namespace Caveman.Bonuses
 		public virtual void Effect(BasePlayerModel playerModel)
 		{
 			
-			playerModel.Speed = playerModel.Speed*2;
-			/// no func
-			playerModel.ResetBonus -= playerModel.Speed = playerModel.Speed/2;
+            //playerModel.Speed = playerModel.Speed*2;
+            ///// no func
+            //playerModel.ResetBonus -= playerModel.Speed = playerModel.Speed/2;
 		}
 	}
 }

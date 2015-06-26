@@ -79,7 +79,6 @@ namespace Caveman
 
         public void PauseGame()
         {
-            Debug.Log("PAUSE GAME");
             Time.timeScale = 0.000001f;
             windowPause.SetActive(true);
             //TODO stop scale time
@@ -90,16 +89,13 @@ namespace Caveman
         public void Update()
         {
             var remainTime = Settings.RoundTime - Math.Floor(Time.timeSinceLevelLoad);
-            int m = Convert.ToInt32(remainTime / 60);
-            int s = Convert.ToInt32(remainTime % 60);
+            var m = Convert.ToInt32(remainTime / 60);
+            var s = Convert.ToInt32(remainTime % 60);
             if (m < 60)
             {
                 m = 0;
             }
-                       
-            //var displayTime = remainTime > 60 ? "1 : " + (remainTime - 60) : remainTime.ToString();
-            var displayTime = m + ":" + s;
-            roundTime.text = displayTime;
+            roundTime.text = m + ":" + s;
             if (remainTime < 0 && !flagEnd)
             {
                 flagEnd = true; 
@@ -203,8 +199,7 @@ namespace Caveman
             {
                 var prefab = Instantiate(Resources.Load(PrefabBot, typeof(GameObject))) as GameObject;
                 playerModel = prefab.GetComponent<AiPlayerModel>();
-                var ai = (AiPlayerModel) playerModel;
-                ai.InitAi(player,
+                (playerModel as AiPlayerModel).InitAi(player,
                 new Vector2(r.Next(-Settings.Br, Settings.Br), r.Next(-Settings.Br, Settings.Br)), r, poolPlayers, containerStonesPool);
             }
             else
@@ -214,8 +209,7 @@ namespace Caveman
                 playerModel = prefabPlayer.GetComponent<PlayerModel>();
                 smoothCamera.target = prefabPlayer.transform;
                 playerModel.Init(player, Vector2.zero, r, poolPlayers);
-                var pl = (PlayerModel) playerModel;
-                pl.SetJoystick(movementJoystick);
+                (playerModel as PlayerModel).SetJoystick(movementJoystick);
             }
             poolPlayers.Add(player.id, playerModel);
             playerModel.transform.SetParent(containerPlayerPool);
