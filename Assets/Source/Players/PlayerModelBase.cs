@@ -22,7 +22,6 @@ namespace Caveman.Players
         protected Random r;
 
         private bool inMotion;
-        private float timeCurrentThrow;
         private PlayerPool playersPool;
         private ObjectPool weaponsPool;
         private WeaponType weaponType;
@@ -31,7 +30,7 @@ namespace Caveman.Players
         protected virtual void Start()
         {
             animator = GetComponent<Animator>();
-            //Invoke("ThrowStoneOnTimer", Settings.TimeThrowStone);
+            Invoke("ThrowOnTimer", Settings.TimeThrowStone);
         }
         
         public void Init(Player player, Vector2 start, Random random, PlayerPool pool)
@@ -48,7 +47,6 @@ namespace Caveman.Players
 
         public void OnTriggerEnter2D(Collider2D other)
         {
-           // if (Time.time < 1) return;
             var weapon = other.gameObject.GetComponent<WeaponModelBase>();
             if (weapon == null) return;
             if (weapon.owner == null)
@@ -102,19 +100,15 @@ namespace Caveman.Players
             player.Weapons--;
         }
 
-        protected void ThrowStoneOnTimer()
+        private void ThrowOnTimer()
         {
-            timeCurrentThrow = player.countRespawnThrow * Settings.TimeThrowStone - Time.timeSinceLevelLoad;
-            if (timeCurrentThrow-- >= 0) return;
-            player.countRespawnThrow++;
             if (player.Weapons > 0)
             {
                 animator.SetTrigger(Settings.AnimThrowF);
-                //todo возможно, ждать конца интервала анимации по карутине и потом кидать камень, вместо проставления в аниматоре
+                //todo ждать конца интервала анимации по карутине
                 Throw(FindClosestPlayer);
             }
-            timeCurrentThrow = Settings.TimeThrowStone;
-            //Invoke("ThrowStoneOnTimer", Settings.TimeThrowStone);
+            Invoke("ThrowOnTimer", Settings.TimeThrowStone);
         }   
 
         public bool InMotion
@@ -148,25 +142,17 @@ namespace Caveman.Players
         {
             get
             {
-                float minDistance = 0;
+                var minDistance = Settings.BoundaryEndMap;
                 var nearPosition = Vector2.zero;
 
                 for (var i = 0; i < players.Length; i++)
                 {
                     if (!players[i].gameObject.activeSelf || players[i] == this) continue;
-                    if (minDistance < 0.1f)
+                    var childDistance = Vector2.Distance(players[i].transform.position, transform.position);
+                    if (minDistance > childDistance)
                     {
-                        minDistance = Vector2.Distance(players[i].transform.position, transform.position);
+                        minDistance = childDistance;
                         nearPosition = players[i].transform.position;
-                    }
-                    else
-                    {
-                        var childDistance = Vector2.Distance(players[i].transform.position, transform.position);
-                        if (minDistance > childDistance)
-                        {
-                            minDistance = childDistance;
-                            nearPosition = players[i].transform.position;
-                        }
                     }
                 }
                 return nearPosition;

@@ -1,4 +1,5 @@
-﻿using Caveman.Setting;
+﻿using System.Linq;
+using Caveman.Setting;
 using Caveman.Utils;
 using UnityEngine;
 using Random = System.Random;
@@ -25,11 +26,14 @@ namespace Caveman.Players
             weapons = allLyingWeapons;
         }
 
+        //todo переписать   
         public void Update()
         {
-            ThrowStoneOnTimer();
-
-            if (!InMotion)
+            if (InMotion)
+            {
+                Move();
+            }
+            else
             {
                 if (player.Weapons < Settings.MaxCountWeapons)
                 {
@@ -49,35 +53,23 @@ namespace Caveman.Players
                 }
                 InMotion = !InMotion;
             }
-            else
-            {
-                Move();
-            }
         }
 
         private Vector2 FindClosestLyingWeapon
         {
             get
             {
-                float minDistance = 0;
+                var minDistance = Settings.BoundaryEndMap;
                 var nearPosition = Vector2.zero;
 
                 foreach (Transform weapon in weapons)
                 {
                     if (!weapon.gameObject.activeSelf) continue;
-                    if (minDistance < 0.1f)
+                    var childDistance = Vector2.Distance(weapon.position, transform.position);
+                    if (minDistance > childDistance)
                     {
-                        minDistance = Vector2.Distance(weapon.position, transform.position);
+                        minDistance = childDistance;
                         nearPosition = weapon.position;
-                    }
-                    else
-                    {
-                        var childDistance = Vector2.Distance(weapon.position, transform.position);
-                        if (minDistance > childDistance)
-                        {
-                            minDistance = childDistance;
-                            nearPosition = weapon.position;
-                        }
                     }
                 }
                 return nearPosition;
