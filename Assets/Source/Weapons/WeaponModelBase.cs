@@ -25,6 +25,7 @@ namespace Caveman.Weapons
         public virtual void Destroy()
         {
             owner = null;
+            delta = Vector2.zero;
             pool.Store(transform);
         }
 
