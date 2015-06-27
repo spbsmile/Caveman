@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Caveman.Weapons
 {
-    public class StoneModel : BaseWeaponModel
+    public class StoneModel : WeaponModelBase
     {
         private ObjectPool poolStonesSplash;
 

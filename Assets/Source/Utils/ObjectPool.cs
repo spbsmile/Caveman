@@ -32,9 +32,9 @@ namespace Caveman.Utils
             else
             {
                 var t = Instantiate(prefab);
-                if (t.GetComponent<BaseWeaponModel>())
+                if (t.GetComponent<WeaponModelBase>())
                 {
-                    t.GetComponent<BaseWeaponModel>().SetPool(this);    
+                    t.GetComponent<WeaponModelBase>().SetPool(this);    
                 }
                 if (RelatedPool != null && t.GetComponent<StoneModel>())
                 {

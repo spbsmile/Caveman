@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Caveman.Weapons
 {
-    public class SkullModel : BaseWeaponModel
+    public class SkullModel : WeaponModelBase
     {
         public override WeaponType Type
         {

@@ -4,7 +4,13 @@ using UnityEngine;
 
 namespace Caveman.Weapons
 {
-    public  class BaseWeaponModel : MonoBehaviour
+    public enum WeaponType
+    {
+        Stone,
+        Skull
+    }
+
+    public  class WeaponModelBase : MonoBehaviour
     {
         public virtual WeaponType Type{ get { return WeaponType.Stone; }}
         protected virtual float Speed{ get { return 1f; }}
@@ -45,11 +51,5 @@ namespace Caveman.Weapons
         {
             pool = weaponPool;
         }
-    }
-
-    public enum WeaponType
-    {
-        Stone,
-        Skull
     }
 }

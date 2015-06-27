@@ -49,7 +49,7 @@ namespace Caveman.Players
         public void OnTriggerEnter2D(Collider2D other)
         {
            // if (Time.time < 1) return;
-            var weapon = other.gameObject.GetComponent<BaseWeaponModel>();
+            var weapon = other.gameObject.GetComponent<WeaponModelBase>();
             if (weapon == null) return;
             if (weapon.owner == null)
             {
@@ -82,7 +82,7 @@ namespace Caveman.Players
             }
         }
 
-        private void Pickup(BaseWeaponModel weaponModel)
+        private void Pickup(WeaponModelBase weaponModel)
         {
             if (player.Weapons > Settings.MaxCountWeapons) return;
             if (weaponsPool == null || weaponModel.Type != weaponType)
@@ -98,7 +98,7 @@ namespace Caveman.Players
 
         private void Throw(Vector2 aim)
         {
-            weaponsPool.New().GetComponent<BaseWeaponModel>().SetMotion(player, transform.position, aim);
+            weaponsPool.New().GetComponent<WeaponModelBase>().SetMotion(player, transform.position, aim);
             player.Weapons--;
         }
 
