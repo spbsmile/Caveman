@@ -4,44 +4,50 @@
 		"selected_items":
 		[
 			[
-				"condition",
-				"conditions_video_info"
-			],
-			[
-				"hx",
-				"hxStr"
+				"go",
+				"go_all_diagonals"
 			]
 		]
 	},
 	"buffers":
 	[
+		{
+			"file": "CavemanUnity.sublime-project",
+			"settings":
+			{
+				"buffer_size": 155,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/dima/Library/Application Support/Sublime Text 2/Packages/User/JSON.sublime-settings",
+			"settings":
+			{
+				"buffer_size": 161,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Assets/Source/OldCode/RPC.cs",
+			"settings":
+			{
+				"buffer_size": 5266,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
-	"build_system_choices":
-	[
-	],
-	"build_varint": "",
 	"command_palette":
 	{
-		"height": 347.0,
-		"last_filter": "",
+		"height": 0.0,
 		"selected_items":
 		[
-			[
-				"Pack",
-				"Package Control: Install Package"
-			]
 		],
-		"width": 449.0
+		"width": 0.0
 	},
 	"console":
 	{
-		"height": 126.0,
-		"history":
-		[
-			"import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
-			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
-		]
+		"height": 125.0
 	},
 	"distraction_free":
 	{
@@ -52,168 +58,146 @@
 		"side_bar_visible": false,
 		"status_bar_visible": false
 	},
-	"expanded_folders":
-	[
-		"/Users/dima/workspace/CavemanUnity5"
-	],
 	"file_history":
 	[
-		"/Users/dima/workspace/CavemanUnity5/Assets/Source/OldCode/RPC.cs",
-		"/Users/dima/workspace/CavemanUnity5/CavemanUnity.sublime-project",
-		"/Users/dima/workspace/Dispute/DisputeAppClient/DisputeAppClient/Resources/config/config_local.json",
-		"/Users/dima/workspace/glowman/Flips/Flips/Resources/levelsInfo/8.json",
-		"/Users/dima/workspace/glowman/Flips/Flips/Resources/levelsInfo/11.json",
-		"/Users/dima/workspace/glowman/Flips/Flips/Resources/levelsInfo/17.json",
-		"/Users/dima/workspace/glowman/Flips/Flips/Resources/levelsInfo/20.json",
-		"/Users/dima/workspace/glowman/Flips/Flips/Resources/levelsInfo/23.json",
-		"/Users/dima/workspace/glowman/Flips/Flips/Resources/levelsInfo/24.json",
-		"/Users/dima/workspace/glowman/Flips/Flips/Resources/levelsInfo/27.json",
-		"/Users/dima/workspace/glowman/Flips/Flips/Resources/levelsInfo/28.json",
-		"/Users/dima/workspace/glowman/Flips/Flips/Resources/levelsInfo/30.json",
-		"/Users/dima/workspace/glowman/Flips/Flips/Resources/levelsInfo/32.json",
-		"/Users/dima/workspace/glowman/Flips/Flips/Resources/levelsInfo/38.json",
-		"/Users/dima/workspace/glowman/Flips/Flips/Resources/levelsInfo/41.json",
-		"/Users/dima/workspace/glowman/Flips/Flips/Resources/levelsInfo/46.json",
-		"/Users/dima/workspace/glowman/Flips/Flips/Resources/levelsInfo/48.json",
-		"/Users/dima/workspace/glowman/Flips/Flips/Resources/levelsInfo/51.json",
-		"/Users/dima/workspace/Dispute/DisputeAppClient/DisputeAppClient/Resources/config/config_valid_options.json",
-		"/Users/dima/workspace/krivorukoff/Max/disputes/server.py",
-		"/Users/dima/workspace/krivorukoff/Max/disputes/models.py",
-		"/Users/dima/workspace/talespin/extract_configs/client_assets/mov/sfx/Shark_e.xml",
-		"/Users/dima/workspace/talespin/js/swfobject.js",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/1.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/2.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/3.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/4.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/5.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/6.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/7.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/25.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/17.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/18.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/24.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/23.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/22.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/21.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/20.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/19.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/16.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/15.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/14.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/13.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/12.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/11.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/10.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/9.json",
-		"/Users/dima/workspace/ios/guessTheRect/guessTheRect/Resources/levelsInfo/8.json",
-		"/Users/dima/Documents/colors/colors/colors.txt",
-		"/Users/dima/Documents/colors/colors/convert.erl",
-		"/Users/dima/workspace/Dispute/DisputeAppClient/DisputeAppClient/Resources/config/config_base.json",
-		"/Users/dima/workspace/krivorukoff/Max/.gitignore",
+		"/Users/dima/workspace/CavemanUnity5/Assets/Source/Bonuses/BonusBase.cs",
 		"/Users/dima/workspace/Dispute/DisputeAppClient/DisputeAppClient/Resources/config/config_debug.json",
-		"/Users/dima/workspace/Dispute/DisputeAppClient/DisputeAppClient/Resources/config/config_release.json",
-		"/Users/dima/workspace/krivorukoff/Max/disputes/local_settings.py",
-		"/Users/dima/Documents/colors/colors/hexToRGB.erl",
-		"/Users/dima/Library/Application Support/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
-		"/Users/dima/workspace/krivorukoff/Max/disputes/fields.py",
-		"/Users/dima/workspace/krivorukoff/Max/disputes/thirdparty/couchbasekit/fields.py",
-		"/Users/dima/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
-		"/Users/dima/workspace/krivorukoff/Max/eggs/zc.buildout-2.2.5-py2.7.egg/zc/buildout/buildout.py",
-		"/Users/dima/workspace/krivorukoff/Max/run.py",
-		"/Users/dima/workspace/talespin/client/assets/confirm.xml",
-		"/Users/dima/workspace/talespin/client/assets/giftItem.xml",
-		"/Users/dima/workspace/talespin/client/assets/processBuilding.xml",
-		"/Users/dima/workspace/talespin/client/assets/quest.xml",
-		"/Users/dima/workspace/talespin/client/assets/questChainFinished.xml",
-		"/Users/dima/workspace/talespin/client/assets/questChat.xml",
-		"/Users/dima/workspace/talespin/client/assets/questfinished.xml",
-		"/Users/dima/workspace/talespin/client/assets/simplequest.xml",
-		"/Users/dima/workspace/talespin/client/assets/takeoff.xml",
-		"/Users/dima/workspace/talespin/client/assets/upgradeBuilding.xml",
+		"/Users/dima/workspace/Dispute/DisputeAppClient/DisputeAppClient/Resources/config/config_local.json",
+		"/Users/dima/workspace/Dispute/DisputeAppClient/DisputeAppClient/Resources/config/config_base.json",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/Config.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/actions/AnimationAction.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/actions/BuildAction.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/actions/IsoAction.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/actions/LogicAction.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/actions/MoveRotateAction.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/actions/ScreenAction.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/actions/ShopAction.hx",
 		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/animation/AnimationController.hx",
 		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/animation/AnimationControllerNew.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/animation/AnimationParams.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/animation/AnimationRenderer.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/animation/AnimationRendererNew.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/animation/BuildingAnimationsController.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/animation/SfxAnimationsController.hx",
 		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/iso/IsoController.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/IslandMapMediator.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/SplashScreenMediator.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/tempstuff/ServerSyncStatusMediator.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/FutureGlobalMapMediator.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/FrontScreenMediator.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/quest/QuestChatMediator.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/logic/LogicController.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/iso/IsoTileShapeBuilder.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/logic/CityDataController.hx",
 		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/logic/QuestsController.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/logic/shared/checks/builds/BuildPlaceCheck.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/logic/shared/checks/isoobjects/IsoCollisionCheck.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/logic/shared/commands/flights/GuestLandCommand.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/logic/shared/commands/RegenerateCommand.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/logic/shared/commands/social/GiftAcceptAllCommand.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/logic/shared/commands/social/GiftCommand.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/logic/shared/commands/social/HelpCommand.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/quests/QuestsViewController.hx",
 		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/startup/GameDataAdapterController.hx",
 		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/startup/ScheduleTickController.hx",
 		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/startup/StartupController.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/logic/CityDataController.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/PlayerLevelController.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/BuildingOperationsScreenMediator.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/gifts/FriendsMediator.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/gifts/GiftsMediator.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/main/FriendIslandIconsMediator.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/popups/ResourceDealMediatorBase.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/popups/TakeOffMediator.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/quest/SimpleQuestMediator.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/ShopScreenMediator.hx",
-		"/Users/dima/workspace/talespin/extract_configs/compile_configs.py",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/quests/QuestsViewController.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/tutorials/TutorialsController.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/view/ViewController.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/WaitScreenMediator.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/tutorials/TutFullScreenMediator.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/tutorials/TutGlobalMediator.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/tutorials/TutHomeMediator.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/tutorials/TutShopMediator.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/statistic/StatCodec.hx",
 		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/statistic/StatisticController.hx",
-		"/Users/dima/workspace/talespin/extract_configs/out_cfg_client/ApplicationConfigData.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/main/MainScreenWidget.hx",
-		"/Users/dima/workspace/talespin/extract_configs/extract_configs",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/controller/view/ViewController.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/model/AssetsManager.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/model/info/islands/IslandInfo.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/model/info/tutorials/TutorialHelper.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/model/iso/TileData.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/model/iso/Walker.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/model/iso/WalkerRenderer.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/model/proxy/AssetsManagerProxy.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/model/proxy/GameDataProxy.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/model/proxy/IsoDataProxy.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/model/proxy/MetaDataProxy.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/model/SoundManager.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/model/vo/players/GiftsHelper.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/model/vo/players/HelpHelper.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/SocialConfigPrivate.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/Talespin.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/TalespinApplicationConfig.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/TalespinFacade.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/TalespinPreloader.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/BuildingOperationsScreenMediator.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/BuildingProcessView.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/BuildingSaleMediator.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/components/game/TileTexture.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/components/scene/CustomTexture.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/components/scene/SimpleTexture.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/components/scene/Texture.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/components/scrollablescene/Camera.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/components/scrollablescene/CameraEvent.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/components/scrollablescene/CameraNew.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/components/scrollablescene/ISceneContent.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/components/scrollablescene/IScrollSceneContent.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/components/scrollablescene/SceneContent.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/components/scrollablescene/SceneRenderer.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/components/scrollablescene/SceneView.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/components/scrollablescene/ScrollSceneContent.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/components/scrollablescene/ScrollSceneContentEvent.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/components/scrollablescene/ScrollSceneEvent.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/components/scrollablescene/ScrollSceneRenderer.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/components/scrollablescene/ScrollSceneView.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/components/ui/FakeSocialDataMediator.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/components/ui/HSBHelper.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/FakeFoundationClickMediator.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/FakeHangarSelectMediator.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/FlightFinishMediator.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/FlightInfoView.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/GrayScale.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/GuestLandConfirmMediator.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/FutureGlobalMapMediator.hx",
 		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/globalmap/CityView.hx",
 		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/globalmap/HomeView.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/islandmap/drops/DropEvent.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/islandmap/drops/DropIcon.hx",
 		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/islandmap/drops/DropIconManager.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/islandmap/drops/DropText.hx",
 		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/islandmap/FlightManager.hx",
 		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/islandmap/IslandContentManager.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/islandmap/IslandStateManager.hx",
 		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/islandmap/IslandWalkersManager.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/islandmap/IsoLayer.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/islandmap/isolayer/ABasicBuildingIcon.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/islandmap/isolayer/BaseSceneView.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/islandmap/isolayer/BuildingHintView.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/islandmap/isolayer/BuildingHintWidget.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/islandmap/isolayer/BuildingIcon.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/islandmap/isolayer/IslandCursor.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/islandmap/isolayer/IsoLayerEvent.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/islandmap/ProcessFinishedIcon.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/islandmap/TileMoveView.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/mapscenes/IslandMapMediator.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/PlotBuyingMediator.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/ProcessFinishMediator.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/resource/FlightResourcesMediator.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/bank/BankMediator.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/bank/BankWidget.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/buildings/ProcessBuildingWidget.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/buildings/ProcessShortageMediator.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/buildings/RequestBuildingWidget.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/buildings/ResourceFrameWidget.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/buildings/UpgradeBuildingWidget.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/buildings/UpgradeItemWidget.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/FrameIconLoadWidget.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/FrontScreenMediator.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/gifts/FriendCheckAvatar.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/gifts/FriendsMediator.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/gifts/FriendsWidget.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/gifts/GiftFriendWidget.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/gifts/GiftItemWidget.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/gifts/GiftsMediator.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/gifts/GiftsWidget.hx",
 		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/global_map/AirCraftFlightView.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/main/AircraftList.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/main/GuestAircraftIcon.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/main/HelpIcon.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/main/OptionsPanelWidget.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/main/QuestIndicator.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/quest/QuestChatWidget.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/quest/QuestIconList.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/quest/QuestWidget.hx",
-		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/tutorials/TutArrow.hx",
-		"/Users/dima/workspace/talespin/client/haxe_libs/ru/tria/sdk/data/wrapper/DWDictionary.hx",
-		"/Users/dima/workspace/talespin/client/haxe_libs/ru/tria/sdk/data/wrapper/DWFactory.hx",
-		"/Users/dima/workspace/talespin/client/haxe_libs/ru/tria/sdk/data/wrapper/DWObject.hx"
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/main/AircraftIcon.hx",
+		"/Users/dima/workspace/talespin/client/src/ru/tria/talespin/view/screens/main/AircraftList.hx"
 	],
 	"find":
 	{
-		"height": 23.0
+		"height": 35.0
 	},
 	"find_in_files":
 	{
-		"height": 93.0,
+		"height": 0.0,
 		"where_history":
 		[
-			"/Users/dima/workspace/krivorukoff/Max",
-			"/Users/dima/workspace/talespin/client/assets",
-			"/Users/dima/workspace/talespin/client/src",
-			"/Users/dima/workspace/talespin/client/tailespin",
-			"/Users/dima/workspace/talespin/client/src",
-			"/Users/dima/workspace/talespin/client/haxe_libs",
-			"/Users/dima/workspace/talespin/client/src",
-			"/Users/dima/workspace/talespin/client/haxe_libs",
-			"/Users/dima/workspace/talespin/client/src",
-			"/Users/dima/workspace/talespin/client/haxe_libs",
-			"/Users/dima/workspace/talespin/client/haxe_libs/ru/tria",
-			"/Users/dima/workspace/talespin/client/haxe_libs/com/fermmmtools",
-			"/Users/dima/workspace/talespin/client/haxe_libs/ru/tria",
-			"/Users/dima/workspace/talespin/client/haxe_libs/statm",
-			"/Users/dima/workspace/talespin/client/haxe_libs/com/fermmmtools/utils",
-			"/Users/dima/workspace/talespin/client/haxe_libs/com/fermmmtools/geometry",
-			"/Users/dima/workspace/talespin/client/haxe_libs/com/fermmmtools",
-			"/Users/dima/workspace/talespin/client/haxe_libs",
 			"/Users/dima/workspace/talespin/client/src"
 		]
 	},
@@ -222,46 +206,10 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"get_user_dict",
-			"getContacts",
-			"getusers",
-			"by_ow",
-			"contact",
-			"getContacts",
-			"User = None",
-			"unparsed_arguments",
-			"Login",
-			"Room()",
-			"Default choice for",
-			"RoomStateField",
-			"Default choice for",
-			"white space",
-			"get_session_user",
-			"run",
-			"port",
-			" wordWrap=",
-			"wordWrap=",
-			"getSystemInterests",
-			"getModelInterests",
-			"getActionInterests",
-			"getSystemInterests():Map<",
-			"getModelInterests():Map<",
-			"getActionInterests():Map<",
-			"Map < ActionEvent -> Void >",
-			"Map < ActionEvent->Void >",
-			"Lib.stage",
-			"result",
-			", implements",
-			"com.eclecticdesignstudio.",
-			"Hash",
-			"Haxe",
-			"Hash<Dynamic>",
-			"Hash",
-			"commands",
-			"Hash",
-			"Hash<Dynamic>",
-			"Hash",
-			"flash.Assets"
+			"nme.",
+			"tabs",
+			"space_",
+			"white"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -269,19 +217,7 @@
 		"regex": false,
 		"replace_history":
 		[
-			" label.wordWrap=",
-			"get_systemInterests",
-			"get_modelInterests",
-			"get_actionInterests",
-			"get_systemInterests():Map<",
-			"get_modelInterests():Map<",
-			"get_actionInterests():Map<",
-			"Map <String, ActionEvent -> Void >",
-			"Map <String, ActionEvent->Void >",
-			"Lib.current.stage",
-			"",
-			"Map",
-			"openfl.Assets"
+			"flash."
 		],
 		"reverse": false,
 		"show_context": true,
@@ -292,18 +228,98 @@
 	"groups":
 	[
 		{
+			"selected": 2,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "CavemanUnity.sublime-project",
+					"settings":
+					{
+						"buffer_size": 155,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/Users/dima/Library/Application Support/Sublime Text 2/Packages/User/JSON.sublime-settings",
+					"settings":
+					{
+						"buffer_size": 161,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								161,
+								161
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "Assets/Source/OldCode/RPC.cs",
+					"settings":
+					{
+						"buffer_size": 5266,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1462,
+								1462
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 846.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		}
 	],
 	"incremental_find":
 	{
-		"height": 23.0
+		"height": 0.0
 	},
 	"input":
 	{
-		"height": 31.0
+		"height": 0.0
 	},
 	"layout":
 	{
@@ -328,59 +344,31 @@
 		]
 	},
 	"menu_visible": true,
-	"output.find_results":
-	{
-		"height": 0.0
-	},
-	"pinned_build_system": "",
-	"project": "CavemanUnity.sublime-project",
 	"replace":
 	{
-		"height": 42.0
+		"height": 0.0
 	},
 	"save_all_on_build": true,
 	"select_file":
 	{
 		"height": 0.0,
-		"last_filter": "",
 		"selected_items":
 		[
-			[
-				"server",
-				"krivorukoff/Max/disputes/server.py"
-			]
 		],
 		"width": 0.0
 	},
 	"select_project":
 	{
 		"height": 0.0,
-		"last_filter": "",
 		"selected_items":
 		[
 		],
 		"width": 0.0
-	},
-	"select_symbol":
-	{
-		"height": 0.0,
-		"last_filter": "",
-		"selected_items":
-		[
-		],
-		"width": 0.0
-	},
-	"selected_group": 0,
-	"settings":
-	{
 	},
 	"show_minimap": true,
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 351.0,
-	"status_bar_visible": true,
-	"template_settings":
-	{
-	}
+	"side_bar_width": 258.0,
+	"status_bar_visible": true
 }
