@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using Caveman.Level;
 using Caveman.Players;
 using Caveman.Setting;
@@ -13,15 +14,14 @@ namespace Caveman
 {
     public class EnterPoint : MonoBehaviour
     {
-        private const string PrefabPlayer = "player";
-        private const string PrefabBot = "bot";
-        private const string PrefabText = "Text";
-
         public CNAbstractController movementJoystick;
         public Transform prefabSkull;
         public Transform prefabStoneFlagmentInc;
         public Transform prefabStone;
         public Transform prefabDeathImage;
+        private Transform prefabPlayer;
+        private Transform prefabBot;
+        private Transform prefabText;
 
         private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
 
@@ -181,7 +181,7 @@ namespace Caveman
 
         private void Write(string value, Transform parent, int axisY)
         {
-            var goName = Instantiate(Resources.Load(PrefabText, typeof (GameObject))) as GameObject;
+            var goName = Instantiate(prefabText);
             goName.transform.SetParent(parent);
             goName.transform.localPosition = new Vector2(-2, axisY);
             goName.transform.rotation = Quaternion.identity;
@@ -193,17 +193,17 @@ namespace Caveman
             PlayerModelBase playerModel;
             if (isAiPlayer)
             {
-                var prefab = Instantiate(Resources.Load(PrefabBot, typeof(GameObject))) as GameObject;
+                var prefab = Instantiate(prefabBot);
                 playerModel = prefab.GetComponent<AiPlayerModel>();
                 (playerModel as AiPlayerModel).InitAi(player,
                 new Vector2(r.Next(-Settings.Br, Settings.Br), r.Next(-Settings.Br, Settings.Br)), r, poolPlayers, containerStones);
             }
             else
             {
-                var prefabPlayer = Instantiate(Resources.Load(PrefabPlayer, typeof(GameObject))) as GameObject;
+                var prefab = Instantiate(prefabPlayer);
                 humanPlayer = player;
-                playerModel = prefabPlayer.GetComponent<PlayerModel>();
-                smoothCamera.target = prefabPlayer.transform;
+                playerModel = prefab.GetComponent<PlayerModel>();
+                smoothCamera.target = prefab.transform;
                 playerModel.Init(player, Vector2.zero, r, poolPlayers);
                 (playerModel as PlayerModel).SetJoystick(movementJoystick);
             }
