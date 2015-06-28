@@ -19,9 +19,9 @@ namespace Caveman
         public Transform prefabStoneFlagmentInc;
         public Transform prefabStone;
         public Transform prefabDeathImage;
-        private Transform prefabPlayer;
-        private Transform prefabBot;
-        private Transform prefabText;
+        public Transform prefabPlayer;
+        public Transform prefabBot;
+        public Transform prefabText;
 
         private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
 
