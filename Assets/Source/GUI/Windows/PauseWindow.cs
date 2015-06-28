@@ -14,8 +14,12 @@ public class PauseWindow : MonoBehaviour
     {
         Time.timeScale = 0.000001f;
         window.gameObject.SetActive(true);
-        //TODO stop scale time
         //TODO stop all animations
-        //TODO show pause window
+    }
+
+    public void ExitGame()
+    {
+        Application.LoadLevel(0);
+        Time.timeScale = 1;
     }
 }
