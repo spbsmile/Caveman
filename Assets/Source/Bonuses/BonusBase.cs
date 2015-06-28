@@ -1,6 +1,8 @@
-﻿using Caveman.Players;
+﻿using System;
+using Caveman.Players;
 using Caveman.Setting;
 using Caveman.Utils;
+using Caveman.Weapons;
 using UnityEngine;
 using Random = System.Random;
 
@@ -8,41 +10,44 @@ namespace Caveman.Bonuses
 {
     public class BonusBase : MonoBehaviour
     {
+        public Action<Transform> ChangedBonus;
+
         protected Animator animator;
 
         private float duration;
+        private float value;
         private ObjectPool pool;
         private Random r;
+        private Transform icon;
 
         public void Start()
         {
             animator = GetComponent<Animator>();
         }
 
-        public void Init(Random random, ObjectPool pool, string name)
+        public void Init(Random random, ObjectPool pool, Transform icon)
         {
-            this.name = name;
+            this.icon = icon;
             this.pool = pool;
             r = random;
-        }
-
-        public void RandomPosition()
-        {
-            transform.position = new Vector2(r.Next(-Settings.Br, Settings.Br), r.Next(-Settings.Br, Settings.Br));
         }
 
         public void OnTriggerEnter2D(Collider2D other)
         {
             if (other.gameObject.GetComponent<PlayerModelBase>())
             {
+                Effect(other.gameObject.GetComponent<PlayerModelBase>());
+            }
+            if (other.gameObject.GetComponent<WeaponModelBase>())
+            {
+                pool.Store(transform);
             }
         }
 
         public virtual void Effect(PlayerModelBase playerModel)
         {
-            //playerModel.Speed = playerModel.Speed*2;
-            ///// no func
-            //playerModel.ResetBonus -= playerModel.Speed = playerModel.Speed/2;
+            ChangedBonus(icon);
+            pool.Store(transform);
         }
     }
 }
