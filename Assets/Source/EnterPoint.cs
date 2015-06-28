@@ -18,23 +18,22 @@ namespace Caveman
         private const string PrefabText = "Text";
 
         public CNAbstractController movementJoystick;
+        public Transform prefabPauseBtn;
         public Transform prefabSkull;
         public Transform prefabStoneFlagmentInc;
         public Transform prefabStone;
         public Transform prefabDeathImage;
 
+        public GameObject windowPause;
+
         private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
 
         public SmoothCamera smoothCamera;
-        public Transform containerStones;
-        public Transform containerSplashStones;
-        public Transform containerSkulls;
-        public Transform containerDeathImages;
-        public Transform containerPlayers;
-        public Transform containerBonusesSpeed;
-        public Transform containerBonusesForce;
-        public Transform containerBonusesShield;
-
+        public Transform containerStonesPool;
+        public Transform containerStoneSplashPool;
+        public Transform containerSkullsPool;
+        public Transform containerDeathImagesPool;
+        public Transform containerPlayerPool;
         public Transform result;
         public Text roundTime;
         public Text weapons;
@@ -49,23 +48,20 @@ namespace Caveman
         private ObjectPool poolStonesSplash;
         private ObjectPool poolDeathImage;
         private PlayerPool poolPlayers;
-        private ObjectPool poolBonusesSpeed;
-        private ObjectPool poolBonusesForce;
-        private ObjectPool poolBonusesShield;
 
         public void Start()
         {
             r = new Random();
             Player.idCounter = 0;
             
-            poolStonesSplash = CreatePool(Settings.PoolCountSplashStones, containerSplashStones, prefabStoneFlagmentInc, null);
-            poolStones = CreatePool(Settings.PoolCountStones, containerStones, prefabStone, InitStoneModel);
-            poolSkulls = CreatePool(Settings.PoolCountSkulls, containerSkulls, prefabSkull, InitSkullModel);
-            poolDeathImage = CreatePool(Settings.PoolCountDeathImages, containerDeathImages, prefabDeathImage, null);
+            poolStonesSplash = CreatePool(Settings.PoolCountSplashStones, containerStoneSplashPool, prefabStoneFlagmentInc, null);
+            poolStones = CreatePool(Settings.PoolCountStones, containerStonesPool, prefabStone, InitStoneModel);
+            poolSkulls = CreatePool(Settings.PoolCountSkulls, containerSkullsPool, prefabSkull, InitSkullModel);
+            poolDeathImage = CreatePool(Settings.PoolCountDeathImages, containerDeathImagesPool, prefabDeathImage, null);
 
             poolStones.RelatedPool += () => poolStonesSplash;
 
-            poolPlayers = containerPlayers.GetComponent<PlayerPool>();
+            poolPlayers = containerPlayerPool.GetComponent<PlayerPool>();
             poolPlayers.Init(Settings.BotsCount + 1);
             CreatePlayer(new Player("Zabiyakin"), false);
             for (var i = 0; i < Settings.BotsCount; i++)
@@ -81,20 +77,29 @@ namespace Caveman
             Invoke("PutWeapons", Settings.TimeRespawnWeapon);
         }
 
+        public void PauseGame()
+        {
+            Time.timeScale = 0.000001f;
+            windowPause.SetActive(true);
+            //TODO stop all animations
+        }
+
         public void Update()
         {
             var remainTime = Settings.RoundTime - Math.Floor(Time.timeSinceLevelLoad);
-            var m = Convert.ToInt32(remainTime / 60);
-            var s = Convert.ToInt32(remainTime % 60);
+            int m = Convert.ToInt32(remainTime / 60);
+            int s = Convert.ToInt32(remainTime % 60);
             if (m < 60)
             {
                 m = 0;
             }
-            roundTime.text = m + ":" + s;
+                       
+            //var displayTime = remainTime > 60 ? "1 : " + (remainTime - 60) : remainTime.ToString();
+            var displayTime = m + ":" + s;
+            roundTime.text = displayTime;
             if (remainTime < 0 && !flagEnd)
             {
-                flagEnd = true;
-                //todo перенести это в отдельный скрипт гуя
+                flagEnd = true; 
                 result.gameObject.SetActive(true);
                 StartCoroutine(DisplayResult());
             }
@@ -190,13 +195,14 @@ namespace Caveman
 
         private void CreatePlayer(Player player, bool isAiPlayer)
         {
-            PlayerModelBase playerModel;
+            BasePlayerModel playerModel;
             if (isAiPlayer)
             {
                 var prefab = Instantiate(Resources.Load(PrefabBot, typeof(GameObject))) as GameObject;
                 playerModel = prefab.GetComponent<AiPlayerModel>();
-                (playerModel as AiPlayerModel).InitAi(player,
-                new Vector2(r.Next(-Settings.Br, Settings.Br), r.Next(-Settings.Br, Settings.Br)), r, poolPlayers, containerStones);
+                var ai = (AiPlayerModel) playerModel;
+                ai.InitAi(player,
+                new Vector2(r.Next(-Settings.Br, Settings.Br), r.Next(-Settings.Br, Settings.Br)), r, poolPlayers, containerStonesPool);
             }
             else
             {
@@ -205,10 +211,11 @@ namespace Caveman
                 playerModel = prefabPlayer.GetComponent<PlayerModel>();
                 smoothCamera.target = prefabPlayer.transform;
                 playerModel.Init(player, Vector2.zero, r, poolPlayers);
-                (playerModel as PlayerModel).SetJoystick(movementJoystick);
+                var pl = (PlayerModel) playerModel;
+                pl.SetJoystick(movementJoystick);
             }
             poolPlayers.Add(player.id, playerModel);
-            playerModel.transform.SetParent(containerPlayers);
+            playerModel.transform.SetParent(containerPlayerPool);
             playerModel.Respawn += player1 => StartCoroutine(RespawnPlayer(player));
             playerModel.Death += DeathAnimate;
             playerModel.ChangedWeapons += ChangedWeapons;
@@ -229,7 +236,7 @@ namespace Caveman
         private IEnumerator RespawnPlayer(Player player)
         {
             yield return new WaitForSeconds(Settings.TimeRespawnPlayer);
-            poolPlayers.New(player.id).transform.position = new Vector2(r.Next(-Settings.Br, Settings.Br), r.Next(-Settings.Br, Settings.Br));
+            poolPlayers.New(player.id).RandomPosition();
         }
 
         private void DeathAnimate(Vector2 position)
