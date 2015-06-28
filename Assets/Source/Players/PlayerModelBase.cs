@@ -1,4 +1,5 @@
 ﻿using System;
+using Caveman.Bonuses;
 using Caveman.Setting;
 using Caveman.Utils;
 using Caveman.Weapons;
@@ -25,6 +26,7 @@ namespace Caveman.Players
         private PlayerPool playersPool;
         private ObjectPool weaponsPool;
         private WeaponType weaponType;
+        private BonusBase bonusType;
         private PlayerModelBase[] players;
                         
         protected virtual void Start()
@@ -47,6 +49,7 @@ namespace Caveman.Players
 
         public void OnTriggerEnter2D(Collider2D other)
         {
+            if (Time.time < 1) return; // todo подумать. 
             var weapon = other.gameObject.GetComponent<WeaponModelBase>();
             if (weapon == null) return;
             if (weapon.owner == null)
@@ -111,6 +114,7 @@ namespace Caveman.Players
             Invoke("ThrowOnTimer", Settings.TimeThrowStone);
         }   
 
+        //todo переписать
         public bool InMotion
         {
             protected get
