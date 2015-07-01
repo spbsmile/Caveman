@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using Caveman.Players;
-using Caveman.Setting;
 using Caveman.Utils;
 using Caveman.Weapons;
 using UnityEngine;
@@ -9,7 +8,7 @@ using Random = System.Random;
 
 namespace Caveman.Bonuses
 {
-    public class BonusBase : MonoBehaviour
+    public class BonusBase : ISupportPool
     {
         public Action<Transform> ChangedBonus;
 
@@ -17,8 +16,8 @@ namespace Caveman.Bonuses
         protected float duration;
         protected float value;
         protected float preValue;
-
-        private ObjectPool pool;
+        //todo hack private
+        protected ObjectPool pool;
         private Random r;
         private Transform icon;
 
@@ -27,10 +26,10 @@ namespace Caveman.Bonuses
             animator = GetComponent<Animator>();
         }
 
-        public void Init(ObjectPool pool, Random random, Transform icon)
+        public void Init(ObjectPool poolBonuses, Random random, Transform icon)
         {
             this.icon = icon;
-            this.pool = pool;
+            pool = poolBonuses;
             r = random;
         }
 
@@ -47,18 +46,23 @@ namespace Caveman.Bonuses
             }
         }
 
+        public override void SetPool(ObjectPool item)
+        {
+            pool = item;
+        }
+
         protected virtual void Effect(PlayerModelBase playerModel)
         {
             //ChangedBonus(icon);
-            pool.Store(transform);
-            gameObject.SetActive(true);
+            //todo hack, внедрить систему событий
+            transform.position = new Vector3(100, 100, 100);
             StartCoroutine(UnEffect(playerModel));
         }
 
         protected virtual IEnumerator UnEffect(PlayerModelBase playerModel)
         {
             //ChangedBonus(icon);
-            yield return new WaitForSeconds(Settings.DurationBonusSpeed);
+            yield return null;
         }
     }
 }

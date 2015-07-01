@@ -5,10 +5,14 @@ using UnityEngine;
 
 namespace Caveman.Utils
 {
+    public abstract class ISupportPool : MonoBehaviour
+    {
+        public abstract void SetPool(ObjectPool item);
+    }
+
     public class ObjectPool : MonoBehaviour
     {
         public Func<ObjectPool> RelatedPool;
-        //public Func<ObjectPool>  
 
         private Stack<Transform> stack;
         private Transform prefab;
@@ -19,8 +23,6 @@ namespace Caveman.Utils
             this.prefab = prefab;
         }
 
-
-        //todo объекты не знают о своем пуле 
         public Transform New()
         {
             if (stack.Count > 0)
@@ -32,15 +34,14 @@ namespace Caveman.Utils
             else
             {
                 var t = Instantiate(prefab);
-                if (t.GetComponent<WeaponModelBase>())
+                if (t.GetComponent<ISupportPool>())
                 {
-                    t.GetComponent<WeaponModelBase>().SetPool(this);    
+                    t.GetComponent<ISupportPool>().SetPool(this);    
                 }
                 if (RelatedPool != null && t.GetComponent<StoneModel>())
                 {
                     t.GetComponent<StoneModel>().SetPoolSplash(RelatedPool());
                 }
-
                 t.gameObject.SetActive(true);
                 return t;
             }
