@@ -1,15 +1,12 @@
 using System;
-
+using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
 using System.Net.Sockets;
 using System.Threading;
-using System.Collections.Generic;
+using UnityEngine;
 
 namespace Caveman.Network
 {
-
-
     public interface IServerListener
     {
         void StoneAddedReceived(Vector2 point);
@@ -28,25 +25,23 @@ namespace Caveman.Network
 
         private const string IP = "188.166.37.212";
         private const int PORT = 8080;
-
-        private float lastTimeUpdated;
-
-        private TcpClient client;
-        private StreamReader reader;
-        private StreamWriter writer;
-        private Thread networkThread;
+        private static RPC instance;
         private readonly Queue<ServerMessage> messageQueue = new Queue<ServerMessage>();
 
-
-        public IServerListener ServerListener {get;set;}
+        private TcpClient client;
+        private float lastTimeUpdated;
+        private Thread networkThread;
+        private StreamReader reader;
+        private StreamWriter writer;
 
         private RPC()
         {
             lastTimeUpdated = Time.timeSinceLevelLoad;
         }
 
-        static private RPC instance;
-        static RPC Instance
+        public IServerListener ServerListener { get; set; }
+
+        private static RPC Instance
         {
             get
             {
@@ -62,7 +57,8 @@ namespace Caveman.Network
             Sends tick if it is time
             Checks if there are messages for client and sends them via listener interface
         */
-        void Update()
+
+        private void Update()
         {
             if (Time.timeSinceLevelLoad - lastTimeUpdated > 0.2)
             {
@@ -83,21 +79,23 @@ namespace Caveman.Network
 
         private void SendTick()
         {
-             ClientMessage msg = ClientMessage.TickMessage();
-             SendStringToSocket(msg.Content);
+            ClientMessage msg = ClientMessage.TickMessage();
+            SendStringToSocket(msg.Content);
         }
 
         /**
          * Runs session and starts listen to the server
          * */
-        void StartSession()
+
+        private void StartSession()
         {
             if (client == null)
             {
-                try {
+                try
+                {
                     client = new TcpClient(IP, PORT);
                     Stream stream = client.GetStream();
-    //                 ns.ReadTimeout = 1;
+                    //                 ns.ReadTimeout = 1;
                     reader = new StreamReader(stream);
                     writer = new StreamWriter(stream);
 
@@ -107,7 +105,9 @@ namespace Caveman.Network
                     actionParams.Add(ServerParams.USER_NAME, "Petya");
                     ClientMessage msg = ClientMessage.LoginMessage(actionParams);
                     SendStringToSocket(msg.Content);
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     Debug.Log("Socket error: " + e);
                 }
             }
@@ -116,7 +116,8 @@ namespace Caveman.Network
         /**
          * Stops opened session
          */
-        void stopSession()
+
+        private void stopSession()
         {
             if (client != null)
             {
@@ -129,24 +130,24 @@ namespace Caveman.Network
             }
         }
 
-        void SendUseWeapon(Vector2 point, int weaponType)
+        private void SendUseWeapon(Vector2 point, int weaponType)
         {
-             ClientMessage msg = ClientMessage.UseWeapon(point.x, point.y);
-             if (msg != null)
+            ClientMessage msg = ClientMessage.UseWeapon(point.x, point.y);
+            if (msg != null)
                 SendStringToSocket(msg.Content);
         }
 
-        void SendPickWeapon(Vector2 point, int weaponType)
+        private void SendPickWeapon(Vector2 point, int weaponType)
         {
-             ClientMessage msg = ClientMessage.PickWeapon(point.x, point.y);
-             if (msg != null)
+            ClientMessage msg = ClientMessage.PickWeapon(point.x, point.y);
+            if (msg != null)
                 SendStringToSocket(msg.Content);
         }
 
-        void SendPickBonus(Vector2 point, int bonusType)
+        private void SendPickBonus(Vector2 point, int bonusType)
         {
-             ClientMessage msg = ClientMessage.PickBonus(point.x, point.y);
-             if (msg != null)
+            ClientMessage msg = ClientMessage.PickBonus(point.x, point.y);
+            if (msg != null)
                 SendStringToSocket(msg.Content);
         }
 
@@ -155,53 +156,58 @@ namespace Caveman.Network
 
         private void SendStringToSocket(string str)
         {
-             writer.Write(str);
-             writer.Flush();
+            writer.Write(str);
+            writer.Flush();
         }
 
 
         /**
             Listens to the server while Reader is not null
         */
+
         private void StartListeningServer()
         {
             networkThread = new Thread(() =>
             {
                 while (reader != null)
                 {
-                    try {
-                         ServerMessage[] msgs = ServerMessage.MessageListFromStream(reader);
-                         foreach (ServerMessage msg in msgs) { AddItemToQueue(msg); }
-                    } catch (Exception e) {
+                    try
+                    {
+                        ServerMessage[] msgs = ServerMessage.MessageListFromStream(reader);
+                        foreach (ServerMessage msg in msgs)
+                        {
+                            AddItemToQueue(msg);
+                        }
+                    }
+                    catch (Exception e)
+                    {
                         Debug.Log("ERR " + e);
                         break;
                     }
                 }
 
-                lock(networkThread)
+                lock (networkThread)
                 {
                     networkThread = null;
                 }
             });
             networkThread.Start();
         }
+
         private void AddItemToQueue(ServerMessage item)
         {
-            lock(messageQueue)
+            lock (messageQueue)
             {
                 messageQueue.Enqueue(item);
             }
         }
+
         private ServerMessage GetItemFromQueue()
         {
-            lock(messageQueue)
+            lock (messageQueue)
             {
                 return messageQueue.Count > 0 ? messageQueue.Dequeue() : null;
             }
         }
-
-
     }
 }
-
-

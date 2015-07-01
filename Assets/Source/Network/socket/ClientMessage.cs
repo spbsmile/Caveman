@@ -1,22 +1,26 @@
-
 using System.Collections.Generic;
 
 namespace Caveman.Network
 {
     public class ClientMessage
     {
+        private ClientMessage(string content)
+        {
+            Content = content;
+        }
+
         public ushort Length { get; set; }
         public string Content { get; set; }
 
         //private functions
 
-        public static ClientMessage LoginMessage(IDictionary<string,string> actionParams)
+        public static ClientMessage LoginMessage(IDictionary<string, string> actionParams)
         {
-            var userName = actionParams[ServerParams.USER_NAME];
+            string userName = actionParams[ServerParams.USER_NAME];
 
             var json = new JSONObject(JSONObject.Type.OBJECT);
-            json.AddField(ServerParams.ACTION_TYPE,"login");
-            json.AddField(ServerParams.USER_ID,1);
+            json.AddField(ServerParams.ACTION_TYPE, "login");
+            json.AddField(ServerParams.USER_ID, 1);
             json.AddField(ServerParams.USER_NAME, userName);
             return new ClientMessage("#" + json + "#");
         }
@@ -24,7 +28,7 @@ namespace Caveman.Network
         public static ClientMessage TickMessage()
         {
             var json = new JSONObject(JSONObject.Type.OBJECT);
-            json.AddField(ServerParams.ACTION_TYPE,"tick");
+            json.AddField(ServerParams.ACTION_TYPE, "tick");
             return new ClientMessage("#" + json + "#");
         }
 
@@ -54,12 +58,5 @@ namespace Caveman.Network
             json.AddField(ServerParams.Y, y);
             return new ClientMessage("#" + json + "#");
         }
-
-
-        private ClientMessage(string content)
-        {
-            Content = content;
-        }
-
     }
 }

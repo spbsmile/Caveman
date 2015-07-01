@@ -1,11 +1,12 @@
-﻿public class SocketMessagePool {
+﻿public class SocketMessagePool
+{
+    private static SocketMessagePool instance;
 
     private SocketMessagePool()
     {
     }
 
-    static private SocketMessagePool instance;
-    static SocketMessagePool Instance
+    private static SocketMessagePool Instance
     {
         get
         {
@@ -14,5 +15,4 @@
             return instance;
         }
     }
-
 }

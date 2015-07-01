@@ -10,9 +10,14 @@ namespace Caveman.Network
 
         private readonly JSONObject contentObject;
 
+        private ServerMessage(JSONObject data)
+        {
+            contentObject = data;
+        }
+
         public static ServerMessage[] MessageListFromStream(StreamReader reader)
         {
-            var buffer = reader.ReadToEnd();
+            string buffer = reader.ReadToEnd();
             Debug.Log(buffer);
 
 
@@ -29,10 +34,13 @@ namespace Caveman.Network
                 string chank = bufferChanks[i];
                 chank = chank.Trim(MESSAGE_MARKER.ToCharArray());
 
-                try{
+                try
+                {
                     var json = new JSONObject(chank);
                     result[i] = new ServerMessage(json);
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     Debug.Log(e.ToString());
                     result[i] = null;
                     break;
@@ -40,11 +48,6 @@ namespace Caveman.Network
             }
 
             return result;
-        }
-
-        private ServerMessage(JSONObject data)
-        {
-            contentObject = data;
         }
 
         public void SendMessageToListener(IServerListener listener)
@@ -69,26 +72,25 @@ namespace Caveman.Network
             }
             else if (actionType.Equals(ServerParams.MOVE_ACTION))
             {
-                var player = contentObject[ServerParams.PLAYER].str;
-                var x = contentObject[ServerParams.X].f;
-                var y = contentObject[ServerParams.Y].f;
+                string player = contentObject[ServerParams.PLAYER].str;
+                float x = contentObject[ServerParams.X].f;
+                float y = contentObject[ServerParams.Y].f;
                 listener.MoveReceived(player, new Vector2(x, y));
             }
             else if (actionType.Equals(ServerParams.PICK_BONUS_ACTION))
             {
-                var player = contentObject[ServerParams.PLAYER].str;
-                var x = contentObject[ServerParams.X].f;
-                var y = contentObject[ServerParams.Y].f;
+                string player = contentObject[ServerParams.PLAYER].str;
+                float x = contentObject[ServerParams.X].f;
+                float y = contentObject[ServerParams.Y].f;
                 listener.PickBonusReceived(player, new Vector2(x, y));
             }
             else if (actionType.Equals(ServerParams.PICK_WEAPON_ACTION))
             {
-                var player = contentObject[ServerParams.PLAYER].str;
-                var x = contentObject[ServerParams.X].f;
-                var y = contentObject[ServerParams.Y].f;
+                string player = contentObject[ServerParams.PLAYER].str;
+                float x = contentObject[ServerParams.X].f;
+                float y = contentObject[ServerParams.Y].f;
                 listener.PickWeaponReceived(player, new Vector2(x, y));
             }
         }
     }
-
 }
