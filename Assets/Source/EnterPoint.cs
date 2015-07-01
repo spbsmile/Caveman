@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Caveman.Bonuses;
 using Caveman.Level;
 using Caveman.Players;
 using Caveman.Setting;
@@ -22,6 +23,8 @@ namespace Caveman
         public Transform prefabPlayer;
         public Transform prefabBot;
         public Transform prefabText;
+        public Transform prefabBonusSpeed;
+        public Transform iconBonus;
 
         private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
 
@@ -62,6 +65,7 @@ namespace Caveman
             poolStones = CreatePool(Settings.PoolCountStones, containerStones, prefabStone, InitStoneModel);
             poolSkulls = CreatePool(Settings.PoolCountSkulls, containerSkulls, prefabSkull, InitSkullModel);
             poolDeathImage = CreatePool(Settings.PoolCountDeathImages, containerDeathImages, prefabDeathImage, null);
+            poolBonusesSpeed = CreatePool(Settings.PoolCountBonusesSpeed, containerBonusesSpeed, prefabBonusSpeed, InitBonusesModel);
 
             poolStones.RelatedPool += () => poolStonesSplash;
 
@@ -73,13 +77,14 @@ namespace Caveman
                 CreatePlayer(new Player(names[i]), true);
             }
 
-            PutWeapons();
-
             humanPlayer.WeaponsCountChanged += WeaponsCountChanged;
             humanPlayer.KillsCountChanged += KillsCountChanged;
 
-            Invoke("PutWeapons", Settings.TimeRespawnWeapon);
+            StartCoroutine(PutWeapons());
+            StartCoroutine(PutBonuses());
         }
+
+       
 
         public void Update()
         {
@@ -100,20 +105,31 @@ namespace Caveman
             }
         }
 
-        private void PutWeapons()
+        private IEnumerator PutBonuses()
+        {
+            for (var i = 0; i < Settings.InitalCountBonusesSpeed; i++)
+            {
+                PutItem(poolBonusesSpeed);
+            }
+            yield return new WaitForSeconds(Settings.TimeRespawnBonuses);
+            StartCoroutine(PutBonuses());
+        }
+
+        private IEnumerator PutWeapons()
         {
             for (var i = 0; i < Settings.InitialLyingWeapons; i++)
             {
-                PutWeapon(poolStones);
+                PutItem(poolStones);
             }
             for (var i = 0; i < Settings.CountLyingSkulls; i++)
             {
-                PutWeapon(poolSkulls);
+                PutItem(poolSkulls);
             }
-            Invoke("PutWeapons", Settings.TimeRespawnWeapon);
+            yield return new WaitForSeconds(Settings.TimeRespawnWeapon);
+            StartCoroutine(PutWeapons());
         }
 
-        private void PutWeapon(ObjectPool pool)
+        private void PutItem(ObjectPool pool)
         {
             var weapon = pool.New();
             StartCoroutine(FadeIn(weapon.GetComponent<SpriteRenderer>()));
@@ -138,6 +154,12 @@ namespace Caveman
             return pool;
         }
 
+        private void InitBonusesModel(GameObject item, ObjectPool pool)
+        {
+            item.GetComponent<BonusBase>().Init(pool, r, iconBonus);
+            //item.GetComponent<BonusBase>().ChangedBonus += transform1 => 
+        }
+        
         private void InitSkullModel(GameObject item, ObjectPool pool)
         {
             item.GetComponent<SkullModel>().SetPool(pool);

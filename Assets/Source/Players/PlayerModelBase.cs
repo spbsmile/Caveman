@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Caveman.Bonuses;
 using Caveman.Setting;
 using Caveman.Utils;
@@ -28,11 +29,13 @@ namespace Caveman.Players
         private WeaponType weaponType;
         private BonusBase bonusType;
         private PlayerModelBase[] players;
+
+        public float Speed { get; set; }
                         
         protected virtual void Start()
         {
             animator = GetComponent<Animator>();
-            Invoke("ThrowOnTimer", Settings.TimeThrowStone);
+            StartCoroutine(ThrowOnTimer());
         }
         
         public void Init(Player player, Vector2 start, Random random, PlayerPool pool)
@@ -45,6 +48,7 @@ namespace Caveman.Players
             players = pool.Players;
             r = random;
             transform.position = start;
+            Speed = Settings.SpeedPlayer;
         }
 
         public void OnTriggerEnter2D(Collider2D other)
@@ -103,7 +107,7 @@ namespace Caveman.Players
             player.Weapons--;
         }
 
-        private void ThrowOnTimer()
+        private IEnumerator ThrowOnTimer()
         {
             if (player.Weapons > 0)
             {
@@ -111,7 +115,8 @@ namespace Caveman.Players
                 //todo ждать конца интервала анимации по карутине
                 Throw(FindClosestPlayer);
             }
-            Invoke("ThrowOnTimer", Settings.TimeThrowStone);
+            yield return new WaitForSeconds(Settings.TimeThrowStone);
+            StartCoroutine(ThrowOnTimer());
         }   
 
         //todo переписать
@@ -119,7 +124,7 @@ namespace Caveman.Players
         {
             protected get
             {
-                if (delta.magnitude > UnityExtensions.ThresholdPosition &&
+                if (Vector2.SqrMagnitude(delta) > UnityExtensions.ThresholdPosition &&
                     Vector2.SqrMagnitude((Vector2) transform.position - target) < UnityExtensions.ThresholdPosition)
                 {
                     animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, 0);
@@ -134,7 +139,7 @@ namespace Caveman.Players
 
         protected void Move()
         {
-            if (delta.magnitude > UnityExtensions.ThresholdPosition)
+            if (Vector2.SqrMagnitude(delta) > UnityExtensions.ThresholdPosition)
             {
                  var position = new Vector3(transform.position.x + delta.x * Time.deltaTime,
                 transform.position.y + delta.y * Time.deltaTime);
@@ -146,13 +151,13 @@ namespace Caveman.Players
         {
             get
             {
-                var minDistance = Settings.BoundaryEndMap;
+                var minDistance = Settings.BoundaryEndMap*Settings.BoundaryEndMap;
                 var nearPosition = Vector2.zero;
 
                 for (var i = 0; i < players.Length; i++)
                 {
                     if (!players[i].gameObject.activeSelf || players[i] == this) continue;
-                    var childDistance = Vector2.Distance(players[i].transform.position, transform.position);
+                    var childDistance = Vector2.SqrMagnitude(players[i].transform.position - transform.position);
                     if (minDistance > childDistance)
                     {
                         minDistance = childDistance;

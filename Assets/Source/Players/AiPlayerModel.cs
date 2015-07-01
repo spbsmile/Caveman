@@ -42,14 +42,14 @@ namespace Caveman.Players
                     {
                         target = RandomPosition;
                     }
-                    delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedPlayer);
-                    animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Settings.SpeedPlayer);
+                    delta = UnityExtensions.CalculateDelta(transform.position, target, Speed);
+                    animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Speed);
                 }
                 else
                 {
                     target = RandomPosition;
-                    delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedPlayer);
-                    animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Settings.SpeedPlayer);
+                    delta = UnityExtensions.CalculateDelta(transform.position, target, Speed);
+                    animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Speed);
                 }
                 InMotion = !InMotion;
             }
@@ -59,13 +59,13 @@ namespace Caveman.Players
         {
             get
             {
-                var minDistance = Settings.BoundaryEndMap;
+                var minDistance = Settings.BoundaryEndMap*Settings.BoundaryEndMap;
                 var nearPosition = Vector2.zero;
 
                 foreach (Transform weapon in weapons)
                 {
                     if (!weapon.gameObject.activeSelf) continue;
-                    var childDistance = Vector2.Distance(weapon.position, transform.position);
+                    var childDistance = Vector2.SqrMagnitude(weapon.position - transform.position);
                     if (minDistance > childDistance)
                     {
                         minDistance = childDistance;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Caveman.Players;
 using Caveman.Setting;
 using Caveman.Utils;
@@ -13,9 +14,10 @@ namespace Caveman.Bonuses
         public Action<Transform> ChangedBonus;
 
         protected Animator animator;
+        protected float duration;
+        protected float value;
+        protected float preValue;
 
-        private float duration;
-        private float value;
         private ObjectPool pool;
         private Random r;
         private Transform icon;
@@ -25,7 +27,7 @@ namespace Caveman.Bonuses
             animator = GetComponent<Animator>();
         }
 
-        public void Init(Random random, ObjectPool pool, Transform icon)
+        public void Init(ObjectPool pool, Random random, Transform icon)
         {
             this.icon = icon;
             this.pool = pool;
@@ -34,6 +36,7 @@ namespace Caveman.Bonuses
 
         public void OnTriggerEnter2D(Collider2D other)
         {
+            if (Time.time < 1) return; // todo подумать. 
             if (other.gameObject.GetComponent<PlayerModelBase>())
             {
                 Effect(other.gameObject.GetComponent<PlayerModelBase>());
@@ -44,10 +47,18 @@ namespace Caveman.Bonuses
             }
         }
 
-        public virtual void Effect(PlayerModelBase playerModel)
+        protected virtual void Effect(PlayerModelBase playerModel)
         {
-            ChangedBonus(icon);
+            //ChangedBonus(icon);
             pool.Store(transform);
+            gameObject.SetActive(true);
+            StartCoroutine(UnEffect(playerModel));
+        }
+
+        protected virtual IEnumerator UnEffect(PlayerModelBase playerModel)
+        {
+            //ChangedBonus(icon);
+            yield return new WaitForSeconds(Settings.DurationBonusSpeed);
         }
     }
 }
