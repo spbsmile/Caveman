@@ -10,7 +10,7 @@ namespace Caveman.Weapons
         Skull
     }
 
-    public  class WeaponModelBase : MonoBehaviour
+    public  class WeaponModelBase : ISupportPool
     {
         public virtual WeaponType Type{ get { return WeaponType.Stone; }}
         protected virtual float Speed{ get { return 1f; }}
@@ -48,7 +48,7 @@ namespace Caveman.Weapons
             delta = UnityExtensions.CalculateDelta(start, aim, Speed);
         }
 
-        public void SetPool(ObjectPool weaponPool)
+        public override void SetPool(ObjectPool weaponPool)
         {
             pool = weaponPool;
         }

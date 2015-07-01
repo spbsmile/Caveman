@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections;
 using Caveman.Players;
-using Caveman.Setting;
 using Caveman.Utils;
 using Caveman.Weapons;
 using UnityEngine;
@@ -8,15 +8,16 @@ using Random = System.Random;
 
 namespace Caveman.Bonuses
 {
-    public class BonusBase : MonoBehaviour
+    public class BonusBase : ISupportPool
     {
         public Action<Transform> ChangedBonus;
 
         protected Animator animator;
-
-        private float duration;
-        private float value;
-        private ObjectPool pool;
+        protected float duration;
+        protected float value;
+        protected float preValue;
+        //todo hack private
+        protected ObjectPool pool;
         private Random r;
         private Transform icon;
 
@@ -25,15 +26,16 @@ namespace Caveman.Bonuses
             animator = GetComponent<Animator>();
         }
 
-        public void Init(Random random, ObjectPool pool, Transform icon)
+        public void Init(ObjectPool poolBonuses, Random random, Transform icon)
         {
             this.icon = icon;
-            this.pool = pool;
+            pool = poolBonuses;
             r = random;
         }
 
         public void OnTriggerEnter2D(Collider2D other)
         {
+            if (Time.time < 1) return; // todo подумать. 
             if (other.gameObject.GetComponent<PlayerModelBase>())
             {
                 Effect(other.gameObject.GetComponent<PlayerModelBase>());
@@ -44,10 +46,23 @@ namespace Caveman.Bonuses
             }
         }
 
-        public virtual void Effect(PlayerModelBase playerModel)
+        public override void SetPool(ObjectPool item)
         {
-            ChangedBonus(icon);
-            pool.Store(transform);
+            pool = item;
+        }
+
+        protected virtual void Effect(PlayerModelBase playerModel)
+        {
+            //ChangedBonus(icon);
+            //todo hack, внедрить систему событий
+            transform.position = new Vector3(100, 100, 100);
+            StartCoroutine(UnEffect(playerModel));
+        }
+
+        protected virtual IEnumerator UnEffect(PlayerModelBase playerModel)
+        {
+            //ChangedBonus(icon);
+            yield return null;
         }
     }
 }

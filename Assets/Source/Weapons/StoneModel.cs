@@ -21,9 +21,9 @@ namespace Caveman.Weapons
 
         public void Update()
         {
-            if (delta.magnitude > UnityExtensions.ThresholdPosition)
+            if (Vector2.SqrMagnitude(delta) > UnityExtensions.ThresholdPosition)
             {
-                if (Vector2.Distance(target, transform.position) > UnityExtensions.ThresholdPosition)
+                if (Vector2.SqrMagnitude(target - (Vector2)transform.position) > UnityExtensions.ThresholdPosition)
                 {
                     transform.position = new Vector2(transform.position.x + delta.x*Time.deltaTime,
                         transform.position.y + delta.y*Time.deltaTime);
