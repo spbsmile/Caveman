@@ -131,9 +131,9 @@ namespace Caveman
 
         private void PutItem(ObjectPool pool)
         {
-            var weapon = pool.New();
-            StartCoroutine(FadeIn(weapon.GetComponent<SpriteRenderer>()));
-            weapon.transform.position = new Vector2(r.Next(-Settings.Br, Settings.Br),
+            var item = pool.New();
+            StartCoroutine(FadeIn(item.GetComponent<SpriteRenderer>()));
+            item.transform.position = new Vector2(r.Next(-Settings.Br, Settings.Br),
                 r.Next(-Settings.Br, Settings.Br));
         }
 

@@ -19,8 +19,8 @@
         public static int MaxCountWeapons = 4;
         public static float HeightCamera = 1;
         public static int CountLyingSkulls = 3;
-        public static int PoolCountBonusesSpeed = 4;
-        public static float TimeRespawnBonuses = 5;
+        public static int PoolCountBonusesSpeed = 6;
+        public static float TimeRespawnBonuses = 10;
         public static int InitalCountBonusesSpeed = 5;
         public static float DurationBonusSpeed = 4;
 

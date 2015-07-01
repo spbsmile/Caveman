@@ -15,7 +15,8 @@ public class SpeedBonus : BonusBase
 
     protected override IEnumerator UnEffect(PlayerModelBase playerModel)
     {
+        yield return new WaitForSeconds(Settings.DurationBonusSpeed);
+        pool.Store(transform);
         playerModel.Speed = preValue;
-        return base.UnEffect(playerModel);
     }
 }
