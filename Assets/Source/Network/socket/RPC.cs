@@ -80,7 +80,7 @@ namespace Caveman.Network
         private void SendTick()
         {
              ClientMessage msg = ClientMessage.TickMessage();
-             WriteString(msg.Content);
+             SendStringToSocket(msg.Content);
         }
 
         void StartSession()
@@ -99,7 +99,7 @@ namespace Caveman.Network
                     var actionParams = new Dictionary<string, string>();
                     actionParams.Add(ServerParams.USER_NAME, "Petya");
                     ClientMessage msg = ClientMessage.LoginMessage(actionParams);
-                    WriteString(msg.Content);
+                    SendStringToSocket(msg.Content);
                 } catch (Exception e) {
                     Debug.Log("Socket error: " + e);
                 }
@@ -123,27 +123,27 @@ namespace Caveman.Network
         {
              ClientMessage msg = ClientMessage.UseWeapon(point.x, point.y);
              if (msg != null)
-                WriteString(msg.Content);
+                SendStringToSocket(msg.Content);
         }
 
         void SendPickWeapon(Vector2 point, int weaponType)
         {
              ClientMessage msg = ClientMessage.PickWeapon(point.x, point.y);
              if (msg != null)
-                WriteString(msg.Content);
+                SendStringToSocket(msg.Content);
         }
 
         void SendPickBonus(Vector2 point, int bonusType)
         {
              ClientMessage msg = ClientMessage.PickBonus(point.x, point.y);
              if (msg != null)
-                WriteString(msg.Content);
+                SendStringToSocket(msg.Content);
         }
 
         // private functions
 
 
-        private void WriteString(string str)
+        private void SendStringToSocket(string str)
         {
              writer.Write(str);
              writer.Flush();
