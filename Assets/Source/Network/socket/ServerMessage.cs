@@ -59,20 +59,34 @@ namespace Caveman.Network
             {
                 float x = contentObject[ServerParams.X].f;
                 float y = contentObject[ServerParams.Y].f;
-                listener.StoneAdded(x, y);
+                listener.StoneAddedReceived(new Vector2(x, y));
             }
             else if (actionType.Equals(ServerParams.STONE_REMOVED_ACTION))
             {
                 float x = contentObject[ServerParams.X].f;
                 float y = contentObject[ServerParams.Y].f;
-                listener.StoneRemoved(x, y);
+                listener.StoneRemovedReceived(new Vector2(x, y));
             }
             else if (actionType.Equals(ServerParams.MOVE_ACTION))
             {
                 var player = contentObject[ServerParams.PLAYER].str;
                 var x = contentObject[ServerParams.X].f;
                 var y = contentObject[ServerParams.Y].f;
-                listener.Move(player, x, y);
+                listener.MoveReceived(player, new Vector2(x, y));
+            }
+            else if (actionType.Equals(ServerParams.PICK_BONUS_ACTION))
+            {
+                var player = contentObject[ServerParams.PLAYER].str;
+                var x = contentObject[ServerParams.X].f;
+                var y = contentObject[ServerParams.Y].f;
+                listener.PickBonusReceived(player, new Vector2(x, y));
+            }
+            else if (actionType.Equals(ServerParams.PICK_WEAPON_ACTION))
+            {
+                var player = contentObject[ServerParams.PLAYER].str;
+                var x = contentObject[ServerParams.X].f;
+                var y = contentObject[ServerParams.Y].f;
+                listener.PickWeaponReceived(player, new Vector2(x, y));
             }
         }
     }

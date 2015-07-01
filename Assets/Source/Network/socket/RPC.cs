@@ -12,9 +12,13 @@ namespace Caveman.Network
 
     public interface IServerListener
     {
-        void StoneAdded(float x, float y);
-        void StoneRemoved(float x, float y);
-        void Move(string player, float x, float y);
+        void StoneAddedReceived(Vector2 point);
+        void StoneRemovedReceived(Vector2 point);
+        void MoveReceived(string player, Vector2 point);
+        void LoginReceived(string player);
+        void PickWeaponReceived(string player, Vector2 point);
+        void PickBonusReceived(string player, Vector2 point);
+        void UseWeaponReceived(string player, Vector2 point);
     }
 
 
@@ -83,6 +87,9 @@ namespace Caveman.Network
              SendStringToSocket(msg.Content);
         }
 
+        /**
+         * Runs session and starts listen to the server
+         * */
         void StartSession()
         {
             if (client == null)
@@ -106,6 +113,9 @@ namespace Caveman.Network
             }
         }
 
+        /**
+         * Stops opened session
+         */
         void stopSession()
         {
             if (client != null)
