@@ -15,6 +15,7 @@ namespace Caveman.Weapons
         public virtual WeaponType Type{ get { return WeaponType.Stone; }}
         protected virtual float Speed{ get { return 1f; }}
 
+        protected Vector2 startPosition;
         protected Vector2 target;
         protected Vector2 delta;
 
@@ -43,6 +44,7 @@ namespace Caveman.Weapons
         public void SetMotion(Player player, Vector3 start, Vector2 aim)
         {
             owner = player;
+            startPosition = start;
             transform.position = start;
             target = aim;
             delta = UnityExtensions.CalculateDelta(start, aim, Speed);

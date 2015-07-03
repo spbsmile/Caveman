@@ -2,11 +2,14 @@
 using Caveman.Setting;
 using Caveman.Utils;
 using UnityEngine;
+using System;
 
 namespace Caveman.Weapons
 {
     public class StoneModel : WeaponModelBase
     {
+        private static float STONE_SPEED = 5;
+
         private ObjectPool poolStonesSplash;
 
         public override WeaponType Type
@@ -19,14 +22,24 @@ namespace Caveman.Weapons
             get { return Settings.SpeedStone; }
         }
 
+        float bezierTime = 0;
+
         public void Update()
         {
             if (Vector2.SqrMagnitude(delta) > UnityExtensions.ThresholdPosition)
             {
                 if (Vector2.SqrMagnitude(target - (Vector2)transform.position) > UnityExtensions.ThresholdPosition)
                 {
-                    transform.position = new Vector2(transform.position.x + delta.x*Time.deltaTime,
-                        transform.position.y + delta.y*Time.deltaTime);
+                    bezierTime += Time.deltaTime / Vector2.Distance(startPosition, target) * STONE_SPEED;
+                    if (bezierTime > 1) bezierTime = 0;
+
+                    Vector2 nextPosition = BezierUtils.Bezier2(startPosition, BezierUtils.ControlPoint(startPosition, target), target, bezierTime);
+
+                    transform.position = nextPosition;
+
+                    //linear moving. can be used for testing
+//                    transform.position = new Vector2(transform.position.x + delta.x * Time.deltaTime,
+//                        transform.position.y + delta.y * Time.deltaTime);
                     transform.Rotate(Vector3.forward, Settings.RotateStoneParameter);
                 }
                 else
@@ -37,13 +50,14 @@ namespace Caveman.Weapons
             }
         }
 
+
         public override void Destroy()
         {
-            CreateStoneFlagment(transform.position);
+            CreateStoneFragments(transform.position);
             base.Destroy();
         }
 
-        private void CreateStoneFlagment(Vector2 position)
+        private void CreateStoneFragments(Vector2 position)
         {
             for (var i = 0; i < 4; i++)
             {

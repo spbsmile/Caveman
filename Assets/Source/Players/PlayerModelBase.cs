@@ -103,7 +103,8 @@ namespace Caveman.Players
 
         private void Throw(Vector2 aim)
         {
-            weaponsPool.New().GetComponent<WeaponModelBase>().SetMotion(player, transform.position, aim);
+            WeaponModelBase weapon = weaponsPool.New().GetComponent<WeaponModelBase>();
+            weapon.SetMotion(player, transform.position, aim);
             player.Weapons--;
         }
 
