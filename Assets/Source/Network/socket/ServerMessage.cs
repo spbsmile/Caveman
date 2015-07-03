@@ -7,6 +7,7 @@ namespace Caveman.Network
     public class ServerMessage
     {
         private const string MESSAGE_MARKER = "#";
+        private const string MESSAGE_DELIMITER = "#&";
 
         private readonly JSONObject contentObject;
 
@@ -25,7 +26,7 @@ namespace Caveman.Network
                 return null;
 
 
-            string[] bufferChanks = buffer.Split((MESSAGE_MARKER + MESSAGE_MARKER).ToCharArray());
+            string[] bufferChanks = buffer.Split((MESSAGE_DELIMITER).ToCharArray());
 
             var result = new ServerMessage[bufferChanks.Length];
 
