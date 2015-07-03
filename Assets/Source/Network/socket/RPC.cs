@@ -41,7 +41,7 @@ namespace Caveman.Network
 
         public IServerListener ServerListener { get; set; }
 
-        private static RPC Instance
+        public static RPC Instance
         {
             get
             {
@@ -58,9 +58,9 @@ namespace Caveman.Network
             Checks if there are messages for client and sends them via listener interface
         */
 
-        private void Update()
+        public void Update()
         {
-            if (Time.timeSinceLevelLoad - lastTimeUpdated > 0.2)
+            if (Time.timeSinceLevelLoad - lastTimeUpdated > SERVER_PINT_TIME)
             {
                 lastTimeUpdated = Time.timeSinceLevelLoad;
                 SendTick();
@@ -68,7 +68,7 @@ namespace Caveman.Network
 
             if (ServerListener != null)
             {
-                ServerMessage message = GetItemFromQueue();
+                var message = GetItemFromQueue();
                 while (message != null)
                 {
                     message.SendMessageToListener(ServerListener);
@@ -79,7 +79,7 @@ namespace Caveman.Network
 
         private void SendTick()
         {
-            ClientMessage msg = ClientMessage.TickMessage();
+            var msg = ClientMessage.TickMessage();
             SendStringToSocket(msg.Content);
         }
 
@@ -87,14 +87,14 @@ namespace Caveman.Network
          * Runs session and starts listen to the server
          * */
 
-        private void StartSession()
+        public void StartSession()
         {
             if (client == null)
             {
                 try
                 {
                     client = new TcpClient(IP, PORT);
-                    Stream stream = client.GetStream();
+                    var stream = client.GetStream();
                     //                 ns.ReadTimeout = 1;
                     reader = new StreamReader(stream);
                     writer = new StreamWriter(stream);
@@ -103,7 +103,7 @@ namespace Caveman.Network
 
                     var actionParams = new Dictionary<string, string>();
                     actionParams.Add(ServerParams.USER_NAME, "Petya");
-                    ClientMessage msg = ClientMessage.LoginMessage(actionParams);
+                    var msg = ClientMessage.LoginMessage(actionParams);
                     SendStringToSocket(msg.Content);
                 }
                 catch (Exception e)
@@ -117,7 +117,7 @@ namespace Caveman.Network
          * Stops opened session
          */
 
-        private void stopSession()
+        public void StopSession()
         {
             if (client != null)
             {
@@ -130,23 +130,23 @@ namespace Caveman.Network
             }
         }
 
-        private void SendUseWeapon(Vector2 point, int weaponType)
+        public void SendUseWeapon(Vector2 point, int weaponType)
         {
-            ClientMessage msg = ClientMessage.UseWeapon(point.x, point.y);
+            var msg = ClientMessage.UseWeapon(point.x, point.y);
             if (msg != null)
                 SendStringToSocket(msg.Content);
         }
 
-        private void SendPickWeapon(Vector2 point, int weaponType)
+        public void SendPickWeapon(Vector2 point, int weaponType)
         {
-            ClientMessage msg = ClientMessage.PickWeapon(point.x, point.y);
+            var msg = ClientMessage.PickWeapon(point.x, point.y);
             if (msg != null)
                 SendStringToSocket(msg.Content);
         }
 
-        private void SendPickBonus(Vector2 point, int bonusType)
+        public void SendPickBonus(Vector2 point, int bonusType)
         {
-            ClientMessage msg = ClientMessage.PickBonus(point.x, point.y);
+            var msg = ClientMessage.PickBonus(point.x, point.y);
             if (msg != null)
                 SendStringToSocket(msg.Content);
         }
