@@ -23,7 +23,7 @@ namespace Caveman.Utils
          *                      if it is 1, then distance between points is used,
          *                      if 2, then half of distance between points, etc.
          */
-        public static Vector2 ControlPoint(Vector2 startPoint, Vector2 endPoint, float offsetRate = 3)
+        public static Vector2 ControlPoint(Vector2 startPoint, Vector2 endPoint, float offsetRate = 2.5f)
         {
             Vector2 result;
             float distance = Vector2.Distance(startPoint, endPoint);

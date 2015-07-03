@@ -26,28 +26,7 @@ namespace Caveman.Weapons
 
         public void Update()
         {
-            if (Vector2.SqrMagnitude(delta) > UnityExtensions.ThresholdPosition)
-            {
-                if (Vector2.SqrMagnitude(target - (Vector2)transform.position) > UnityExtensions.ThresholdPosition)
-                {
-                    bezierTime += Time.deltaTime / Vector2.Distance(startPosition, target) * STONE_SPEED;
-                    if (bezierTime > 1) bezierTime = 0;
-
-                    Vector2 nextPosition = BezierUtils.Bezier2(startPosition, BezierUtils.ControlPoint(startPosition, target), target, bezierTime);
-
-                    transform.position = nextPosition;
-
-                    //linear moving. can be used for testing
-//                    transform.position = new Vector2(transform.position.x + delta.x * Time.deltaTime,
-//                        transform.position.y + delta.y * Time.deltaTime);
-                    transform.Rotate(Vector3.forward, Settings.RotateStoneParameter);
-                }
-                else
-                {
-                    // todo при любом кидании уничтожается - плохо 
-                    Destroy();
-                }
-            }
+            MotionUpdate();
         }
 
 
@@ -69,6 +48,32 @@ namespace Caveman.Weapons
         public void SetPoolSplash(ObjectPool objectPool)
         {
             poolStonesSplash = objectPool;
+        }
+
+        override protected void MotionUpdate()
+        {
+            if (Vector2.SqrMagnitude(delta) > UnityExtensions.ThresholdPosition)
+            {
+                if (Vector2.SqrMagnitude(target - (Vector2)transform.position) > UnityExtensions.ThresholdPosition)
+                {
+                    bezierTime += Time.deltaTime / Vector2.Distance(startPosition, target) * STONE_SPEED;
+                    if (bezierTime > 1) bezierTime = 0;
+
+                    Vector2 nextPosition = BezierUtils.Bezier2(startPosition, BezierUtils.ControlPoint(startPosition, target), target, bezierTime);
+
+                    transform.position = nextPosition;
+
+                    //linear moving. can be used for testing
+                    //                    transform.position = new Vector2(transform.position.x + delta.x * Time.deltaTime,
+                    //                        transform.position.y + delta.y * Time.deltaTime);
+                    transform.Rotate(Vector3.forward, Settings.RotateStoneParameter);
+                }
+                else
+                {
+                    // todo при любом кидании уничтожается - плохо 
+                    Destroy();
+                }
+            }
         }
     }
 }
