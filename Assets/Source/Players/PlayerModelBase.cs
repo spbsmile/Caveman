@@ -103,12 +103,11 @@ namespace Caveman.Players
 
         private void Throw(Vector2 aim)
         {
-            WeaponModelBase weapon = weaponsPool.New().GetComponent<WeaponModelBase>();
-            weapon.SetMotion(player, transform.position, aim);
+            weaponsPool.New().GetComponent<WeaponModelBase>().SetMotion(player, transform.position, aim);
             player.Weapons--;
         }
 
-        private IEnumerator ThrowOnTimer()
+        public IEnumerator ThrowOnTimer()
         {
             if (player.Weapons > 0)
             {
@@ -117,7 +116,7 @@ namespace Caveman.Players
                 Throw(FindClosestPlayer);
             }
             yield return new WaitForSeconds(Settings.TimeThrowStone);
-            StartCoroutine(ThrowOnTimer());
+            if (gameObject.activeSelf) StartCoroutine(ThrowOnTimer());
         }   
 
         //todo переписать

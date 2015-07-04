@@ -251,7 +251,9 @@ namespace Caveman
         private IEnumerator RespawnPlayer(Player player)
         {
             yield return new WaitForSeconds(Settings.TimeRespawnPlayer);
-            poolPlayers.New(player.id).transform.position = new Vector2(r.Next(-Settings.Br, Settings.Br), r.Next(-Settings.Br, Settings.Br));
+            var pl = poolPlayers.New(player.id).GetComponent<PlayerModelBase>();
+            pl.transform.position = new Vector2(r.Next(-Settings.Br, Settings.Br), r.Next(-Settings.Br, Settings.Br));
+            StartCoroutine(pl.ThrowOnTimer());
         }
 
         private void DeathAnimate(Vector2 position)
