@@ -55,7 +55,9 @@ namespace Caveman.Bonuses
         {
             //ChangedBonus(icon);
             //todo hack, внедрить систему событий
-            transform.position = new Vector3(100, 100, 100);
+            if (playerModel.bonusType != null ) return;
+            playerModel.bonusType = this;
+            transform.position = new Vector3(200, 200, 200);
             StartCoroutine(UnEffect(playerModel));
         }
 

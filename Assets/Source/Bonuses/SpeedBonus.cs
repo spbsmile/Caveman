@@ -17,6 +17,7 @@ public class SpeedBonus : BonusBase
     {
         yield return new WaitForSeconds(Settings.DurationBonusSpeed);
         pool.Store(transform);
+        playerModel.bonusType = null;
         playerModel.Speed = preValue;
     }
 }

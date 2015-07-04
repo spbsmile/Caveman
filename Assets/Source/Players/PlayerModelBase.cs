@@ -17,6 +17,7 @@ namespace Caveman.Players
 
         //todo внимательно посмотреть 
         public Player player;
+        public BonusBase bonusType;
         
         protected Vector2 delta;
         protected Animator animator;
@@ -27,11 +28,10 @@ namespace Caveman.Players
         private PlayerPool playersPool;
         private ObjectPool weaponsPool;
         private WeaponType weaponType;
-        private BonusBase bonusType;
         private PlayerModelBase[] players;
 
         public float Speed { get; set; }
-                        
+
         protected virtual void Start()
         {
             animator = GetComponent<Animator>();
