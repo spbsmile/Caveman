@@ -36,9 +36,11 @@ namespace Caveman
             poolStones = CreatePool(Settings.PoolCountStones, containerStones, prefabStone, InitStoneModel);
             poolBonusesSpeed = CreatePool(Settings.PoolCountBonusesSpeed, containerBonusesSpeed, prefabBonusSpeed, InitBonusesModel);
 
-            rpc = RPC.Instance;
+            rpc = new RPC();
             rpc.ServerListener = this;
-            rpc.StartSession();
+            print("device id : " + SystemInfo.deviceUniqueIdentifier);
+            //TODO: replace deviceName with user name from main screen text field
+            rpc.StartSession(SystemInfo.deviceUniqueIdentifier, SystemInfo.deviceName);
         }
 
         public void Update()

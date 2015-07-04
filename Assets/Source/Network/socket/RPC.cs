@@ -34,22 +34,14 @@ namespace Caveman.Network
         private StreamReader reader;
         private StreamWriter writer;
 
-        private RPC()
+        private string clientId;
+
+        public RPC()
         {
             lastTimeUpdated = Time.timeSinceLevelLoad;
         }
 
         public IServerListener ServerListener { get; set; }
-
-        public static RPC Instance
-        {
-            get
-            {
-                if (instance == null)
-                    instance = new RPC();
-                return instance;
-            }
-        }
 
         // API
 
@@ -77,18 +69,14 @@ namespace Caveman.Network
             }
         }
 
-        private void SendTick()
-        {
-            var msg = ClientMessage.TickMessage();
-            SendStringToSocket(msg.Content);
-        }
 
         /**
          * Runs session and starts listen to the server
          * */
 
-        public void StartSession()
+        public void StartSession(string userId, string userName)
         {
+            clientId = userId;
             if (client == null)
             {
                 try
@@ -101,10 +89,7 @@ namespace Caveman.Network
 
                     StartListeningServer();
 
-                    var actionParams = new Dictionary<string, string>();
-                    actionParams.Add(ServerParams.USER_NAME, "Petya");
-                    var msg = ClientMessage.LoginMessage(actionParams);
-                    SendStringToSocket(msg.Content);
+                    SendLogin(userName);
                 }
                 catch (Exception e)
                 {
@@ -132,27 +117,31 @@ namespace Caveman.Network
 
         public void SendUseWeapon(Vector2 point, int weaponType)
         {
-            var msg = ClientMessage.UseWeapon(point.x, point.y);
-            if (msg != null)
-                SendStringToSocket(msg.Content);
+            SendMessageToSocket(ClientMessage.UseWeapon(point.x, point.y));
         }
 
         public void SendPickWeapon(Vector2 point, int weaponType)
         {
-            var msg = ClientMessage.PickWeapon(point.x, point.y);
-            if (msg != null)
-                SendStringToSocket(msg.Content);
+            SendMessageToSocket(ClientMessage.PickWeapon(point.x, point.y));
         }
 
         public void SendPickBonus(Vector2 point, int bonusType)
         {
-            var msg = ClientMessage.PickBonus(point.x, point.y);
-            if (msg != null)
-                SendStringToSocket(msg.Content);
+            SendMessageToSocket(ClientMessage.PickBonus(point.x, point.y));
         }
 
-        // private functions
 
+        // private methods
+
+        private void SendTick()
+        {
+            SendMessageToSocket(ClientMessage.TickMessage());
+        }
+
+        private void SendLogin(string userName)
+        {
+            SendMessageToSocket(ClientMessage.LoginMessage(userName));
+        }
 
         private void SendStringToSocket(string str)
         {
@@ -160,6 +149,14 @@ namespace Caveman.Network
             writer.Flush();
         }
 
+        private void SendMessageToSocket(ClientMessage msg)
+        {
+            if (msg != null)
+            {
+                CompleteClientMessage(msg);
+                SendStringToSocket(msg.Content);
+            }
+        }
 
         /**
             Listens to the server while Reader is not null
@@ -208,6 +205,11 @@ namespace Caveman.Network
             {
                 return messageQueue.Count > 0 ? messageQueue.Dequeue() : null;
             }
+        }
+
+        private void CompleteClientMessage(ClientMessage msg)
+        {
+            msg.addParam(ServerParams.USER_ID, clientId);
         }
     }
 }
