@@ -6,8 +6,8 @@ namespace Caveman.Network
 {
     public class ServerMessage
     {
-        private const string MESSAGE_MARKER = "#";
-        private const string MESSAGE_DELIMITER = "#&";
+        private const string MESSAGE_MARKER_START = "#";
+        private const string MESSAGE_MARKER_END = "&";
 
         private readonly JSONObject contentObject;
 
@@ -26,19 +26,23 @@ namespace Caveman.Network
                 return null;
 
 
-            string[] bufferChanks = buffer.Split((MESSAGE_DELIMITER).ToCharArray());
+            string[] bufferChanks = buffer.Split((MESSAGE_MARKER_START + MESSAGE_MARKER_END).ToCharArray());
 
             var result = new ServerMessage[bufferChanks.Length];
 
             for (int i = 0; i < bufferChanks.Length; ++i)
             {
                 string chank = bufferChanks[i];
-                chank = chank.Trim(MESSAGE_MARKER.ToCharArray());
+                chank = chank.Trim(MESSAGE_MARKER_START.ToCharArray());
+                chank = chank.Trim(MESSAGE_MARKER_END.ToCharArray());
 
                 try
                 {
                     var json = new JSONObject(chank);
-                    result[i] = new ServerMessage(json);
+                    foreach (JSONObject jsonItem in json.list)
+                    {
+                        result[i] = new ServerMessage(jsonItem);
+                    }
                 }
                 catch (Exception e)
                 {

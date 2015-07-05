@@ -145,8 +145,11 @@ namespace Caveman.Network
 
         private void SendStringToSocket(string str)
         {
-            writer.Write(str);
-            writer.Flush();
+            if (writer != null)
+            {
+                writer.Write(str);
+                writer.Flush();
+            }
         }
 
         private void SendMessageToSocket(ClientMessage msg)
@@ -170,6 +173,7 @@ namespace Caveman.Network
                 {
                     try
                     {
+                        Debug.Log("trying to read line");
                         ServerMessage[] msgs = ServerMessage.MessageListFromStream(reader);
                         foreach (ServerMessage msg in msgs)
                         {
