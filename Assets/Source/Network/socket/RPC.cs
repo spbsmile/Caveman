@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
@@ -83,13 +84,13 @@ namespace Caveman.Network
                 {
                     client = new TcpClient(IP, PORT);
                     var stream = client.GetStream();
-                    //                 ns.ReadTimeout = 1;
-                    reader = new StreamReader(stream);
+                    //stream.ReadTimeout = 1;
+                    reader = new StreamReader(stream, Encoding.UTF8);
                     writer = new StreamWriter(stream);
 
+                    SendLogin(userName);
                     StartListeningServer();
 
-                    SendLogin(userName);
                 }
                 catch (Exception e)
                 {
@@ -171,21 +172,28 @@ namespace Caveman.Network
             {
                 while (reader != null)
                 {
-                    try
-                    {
-                        Debug.Log("trying to read line");
-                        ServerMessage[] msgs = ServerMessage.MessageListFromStream(reader);
-                        foreach (ServerMessage msg in msgs)
+                    try{
+                        char[] chars = new char[1024];
+
+                        string result = "";
+                        char currentChar;
+
+                        while ((currentChar = (char)reader.Read()) != '&')
                         {
-                            AddItemToQueue(msg);
+                            if (currentChar != '#')
+                                result += currentChar;
                         }
-                    }
-                    catch (Exception e)
+
+                        ServerMessage msg = new ServerMessage(result);
+                        AddItemToQueue(msg);
+                    } catch (Exception e)
                     {
-                        Debug.Log("ERR " + e);
+                        Debug.Log("socket read error : " + e);
                         break;
                     }
                 }
+
+                Debug.Log("finishing listening socket");
 
                 lock (networkThread)
                 {
