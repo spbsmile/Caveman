@@ -51,6 +51,8 @@ namespace Caveman
         //
         public void StoneAddedReceived(Vector2 point)
         {
+            Debug.Log("stone added : " + point);
+
             poolStones.New().transform.position = point;
         }
         //

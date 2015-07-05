@@ -22,7 +22,7 @@ namespace Caveman.Network
             {
                 foreach (JSONObject jsonItem in contentObject.list)
                 {
-                    string actionType = jsonItem.GetField(ServerParams.ACTION_TYPE).ToString();
+                    string actionType = jsonItem.GetField(ServerParams.ACTION_TYPE).str;
                     SendMessageToListener(listener, jsonItem, actionType);
                 }
             }
