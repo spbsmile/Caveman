@@ -113,8 +113,8 @@ namespace Caveman
 
         private void InitBonusesModel(GameObject item, ObjectPool pool)
         {
-            item.GetComponent<BonusBase>().Init(pool, r, iconBonus);
-            //item.GetComponent<BonusBase>().ChangedBonus += transform1 => 
+            item.GetComponent<BonusBase>().Init(pool, r, 1);
+            //item.GetComponent<BonusBase>().PickupBonus += transform1 => 
         }
     }
 }

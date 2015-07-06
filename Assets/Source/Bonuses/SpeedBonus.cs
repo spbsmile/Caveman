@@ -8,6 +8,7 @@ public class SpeedBonus : BonusBase
 {
     protected override void Effect(PlayerModelBase playerModel)
     {
+        if (playerModel.bonusType != null) return;
         base.Effect(playerModel);
         preValue = playerModel.Speed;
         playerModel.Speed = playerModel.Speed*2;

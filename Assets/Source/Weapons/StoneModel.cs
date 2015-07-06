@@ -2,7 +2,6 @@
 using Caveman.Setting;
 using Caveman.Utils;
 using UnityEngine;
-using System;
 
 namespace Caveman.Weapons
 {

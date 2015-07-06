@@ -5,9 +5,9 @@ namespace Caveman.Players
 {
     public class PlayerModel : PlayerModelBase
     {
-        public void SetJoystick(CNAbstractController movementJoystick)
+        public void Awake()
         {
-            movementJoystick.ControllerMovedEvent += MovePlayer;
+            BattleGui.instance.movementJoystick.ControllerMovedEvent += MovePlayer;
         }
 
         private void MovePlayer(Vector3 movement, CNAbstractController arg2)

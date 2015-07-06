@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace Caveman.Utils
 {
@@ -13,5 +14,34 @@ namespace Caveman.Utils
         }
 
         public const float ThresholdPosition = 0.1f;
+
+        public static IEnumerator FadeOut(SpriteRenderer spriteRenderer)
+        {
+            for (var i = 1f; i > 0; i -= 0.1f)
+            {
+                var c = spriteRenderer.color;
+                c.a = i;
+                spriteRenderer.color = c;
+                yield return null;
+            }
+            
+        }
+
+        public static IEnumerator FadeIn(SpriteRenderer spriteRenderer)
+        {
+            var color = spriteRenderer.color;
+            color.a = 0;
+            spriteRenderer.color = color;
+            for (var i = 0f; i < 1; i += 0.1f)
+            {
+                if (spriteRenderer)
+                {
+                    var c = spriteRenderer.color;
+                    c.a = i;
+                    spriteRenderer.color = c;
+                }
+                yield return null;
+            }
+        }
     }
 }

@@ -8,15 +8,21 @@ using Random = System.Random;
 
 namespace Caveman.Bonuses
 {
+    public enum BonusType
+    {
+        Speed,
+        Shield
+    }
+
     public class BonusBase : ISupportPool
     {
-        public Action<Transform> ChangedBonus;
+        public int duration;
+        public virtual BonusType Type { get { return BonusType.Speed; }}
 
         protected Animator animator;
-        protected float duration;
         protected float value;
         protected float preValue;
-        //todo hack private
+
         protected ObjectPool pool;
         private Random r;
         private Transform icon;
@@ -26,9 +32,9 @@ namespace Caveman.Bonuses
             animator = GetComponent<Animator>();
         }
 
-        public void Init(ObjectPool poolBonuses, Random random, Transform icon)
+        public void Init(ObjectPool poolBonuses, Random random, int duration)
         {
-            this.icon = icon;
+            this.duration = duration;
             pool = poolBonuses;
             r = random;
         }
@@ -53,9 +59,8 @@ namespace Caveman.Bonuses
 
         protected virtual void Effect(PlayerModelBase playerModel)
         {
-            //ChangedBonus(icon);
-            //todo hack, внедрить систему событий
-            if (playerModel.bonusType != null ) return;
+            playerModel.player.PickUpBonus(Type, duration);
+            //todo внедрить систему событий
             playerModel.bonusType = this;
             transform.position = new Vector3(200, 200, 200);
             StartCoroutine(UnEffect(playerModel));
@@ -63,7 +68,6 @@ namespace Caveman.Bonuses
 
         protected virtual IEnumerator UnEffect(PlayerModelBase playerModel)
         {
-            //ChangedBonus(icon);
             yield return null;
         }
     }

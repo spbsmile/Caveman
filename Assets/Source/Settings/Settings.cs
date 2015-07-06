@@ -22,7 +22,7 @@
         public static int PoolCountBonusesSpeed = 6;
         public static float TimeRespawnBonuses = 10;
         public static int InitalCountBonusesSpeed = 5;
-        public static float DurationBonusSpeed = 4;
+        public static int DurationBonusSpeed = 4;
 
         public const int PoolCountStones = 40;
         public const int PoolCountDeathImages = 9;

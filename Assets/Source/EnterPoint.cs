@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using Caveman.Bonuses;
 using Caveman.Level;
 using Caveman.Players;
@@ -8,23 +7,19 @@ using Caveman.Setting;
 using Caveman.Utils;
 using Caveman.Weapons;
 using UnityEngine;
-using UnityEngine.UI;
 using Random = System.Random;
 
 namespace Caveman
 {
     public class EnterPoint : MonoBehaviour
     {
-        public CNAbstractController movementJoystick;
         public Transform prefabSkull;
         public Transform prefabStoneFlagmentInc;
         public Transform prefabStone;
         public Transform prefabDeathImage;
         public Transform prefabPlayer;
         public Transform prefabBot;
-        public Transform prefabText;
         public Transform prefabBonusSpeed;
-        public Transform iconBonus;
 
         private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
 
@@ -38,15 +33,7 @@ namespace Caveman
         public Transform containerBonusesForce;
         public Transform containerBonusesShield;
 
-        public Transform result;
-        public Text roundTime;
-        public Text weapons;
-        public Text killed;
-
-        private Player humanPlayer;
         private Random r;
-        private bool flagEnd;
-
         private ObjectPool poolStones;
         private ObjectPool poolSkulls;
         private ObjectPool poolStonesSplash;
@@ -61,48 +48,44 @@ namespace Caveman
             r = new Random();
             Player.idCounter = 0;
 
+            poolDeathImage = CreatePool(Settings.PoolCountDeathImages, containerDeathImages, prefabDeathImage, null);
             poolStonesSplash = CreatePool(Settings.PoolCountSplashStones, containerSplashStones, prefabStoneFlagmentInc, null);
             poolStones = CreatePool(Settings.PoolCountStones, containerStones, prefabStone, InitStoneModel);
             poolSkulls = CreatePool(Settings.PoolCountSkulls, containerSkulls, prefabSkull, InitSkullModel);
-            poolDeathImage = CreatePool(Settings.PoolCountDeathImages, containerDeathImages, prefabDeathImage, null);
-            poolBonusesSpeed = CreatePool(Settings.PoolCountBonusesSpeed, containerBonusesSpeed, prefabBonusSpeed, InitBonusesModel);
+            poolBonusesSpeed = CreatePool(Settings.PoolCountBonusesSpeed, containerBonusesSpeed, prefabBonusSpeed, InitBonusModel);
 
             poolStones.RelatedPool += () => poolStonesSplash;
 
             poolPlayers = containerPlayers.GetComponent<PlayerPool>();
             poolPlayers.Init(Settings.BotsCount + 1);
-            CreatePlayer(new Player("Zabiyakin"), false);
+            var humanPlayer = new Player("Zabiyakin");
+            BattleGui.instance.SubscribeOnEvents(humanPlayer);
+            CreatePlayer(humanPlayer, false);
             for (var i = 0; i < Settings.BotsCount; i++)
             {
                 CreatePlayer(new Player(names[i]), true);
             }
 
-            humanPlayer.WeaponsCountChanged += WeaponsCountChanged;
-            humanPlayer.KillsCountChanged += KillsCountChanged;
-
             StartCoroutine(PutWeapons());
             StartCoroutine(PutBonuses());
         }
 
-       
-
-        public void Update()
+        private void InitBonusModel(GameObject item, ObjectPool pool)
         {
-            var remainTime = Settings.RoundTime - Math.Floor(Time.timeSinceLevelLoad);
-            var m = Convert.ToInt32(remainTime / 60);
-            var s = Convert.ToInt32(remainTime % 60);
-            if (m < 60)
-            {
-                m = 0;
-            }
-            roundTime.text = m + ":" + s;
-            if (remainTime < 0 && !flagEnd)
-            {
-                flagEnd = true;
-                //todo перенести это в отдельный скрипт гуя
-                result.gameObject.SetActive(true);
-                StartCoroutine(DisplayResult());
-            }
+            var bonusModel = item.GetComponent<BonusBase>();
+            bonusModel.Init(pool, r, Settings.DurationBonusSpeed);
+        }
+
+        private void InitSkullModel(GameObject item, ObjectPool pool)
+        {
+            item.GetComponent<SkullModel>().SetPool(pool);
+        }
+
+        private void InitStoneModel(GameObject item, ObjectPool pool)
+        {
+            var model = item.GetComponent<StoneModel>();
+            model.SetPool(pool);
+            model.SetPoolSplash(poolStonesSplash);
         }
 
         private IEnumerator PutBonuses()
@@ -132,7 +115,7 @@ namespace Caveman
         private void PutItem(ObjectPool pool)
         {
             var item = pool.New();
-            StartCoroutine(FadeIn(item.GetComponent<SpriteRenderer>()));
+            StartCoroutine(UnityExtensions.FadeIn(item.GetComponent<SpriteRenderer>()));
             item.transform.position = new Vector2(r.Next(-Settings.Br, Settings.Br),
                 r.Next(-Settings.Br, Settings.Br));
         }
@@ -154,62 +137,6 @@ namespace Caveman
             return pool;
         }
 
-        private void InitBonusesModel(GameObject item, ObjectPool pool)
-        {
-            item.GetComponent<BonusBase>().Init(pool, r, iconBonus);
-            //item.GetComponent<BonusBase>().ChangedBonus += transform1 => 
-        }
-        
-        private void InitSkullModel(GameObject item, ObjectPool pool)
-        {
-            item.GetComponent<SkullModel>().SetPool(pool);
-        }
-
-        private void InitStoneModel(GameObject item, ObjectPool pool)
-        {
-            var model = item.GetComponent<StoneModel>();
-            model.SetPool(pool);
-            model.SetPoolSplash(poolStonesSplash);
-        }
-
-        private IEnumerator DisplayResult()
-        {
-            yield return new WaitForSeconds(1f);
-            Time.timeScale = 0.00001f;
-
-            var namePlayer = result.GetChild(1);
-            var kills = result.GetChild(2);
-            var deaths = result.GetChild(3);
-            var axisY = -20;
-            const int deltaY = 30;
-            for (var i = 0; i < Settings.BotsCount + 1; i++)
-            {
-                Write(poolPlayers.GetName(i), namePlayer, axisY);
-                Write(poolPlayers.GetKills(i), kills, axisY);
-                Write(poolPlayers.GetDeaths(i), deaths, axisY);
-                axisY -= deltaY;
-            }
-        }
-
-        private void WeaponsCountChanged(int count)
-        {
-            weapons.text = count.ToString();
-        }
-
-        private void KillsCountChanged(int count)
-        {
-            killed.text = count.ToString();
-        }
-
-        private void Write(string value, Transform parent, int axisY)
-        {
-            var goName = Instantiate(prefabText);
-            goName.transform.SetParent(parent);
-            goName.transform.localPosition = new Vector2(-2, axisY);
-            goName.transform.rotation = Quaternion.identity;
-            goName.GetComponent<Text>().text = value;
-        }
-
         private void CreatePlayer(Player player, bool isAiPlayer)
         {
             PlayerModelBase playerModel;
@@ -223,16 +150,14 @@ namespace Caveman
             else
             {
                 var prefab = Instantiate(prefabPlayer);
-                humanPlayer = player;
                 playerModel = prefab.GetComponent<PlayerModel>();
                 smoothCamera.target = prefab.transform;
                 playerModel.Init(player, Vector2.zero, r, poolPlayers);
-                (playerModel as PlayerModel).SetJoystick(movementJoystick);
             }
             poolPlayers.Add(player.id, playerModel);
             playerModel.transform.SetParent(containerPlayers);
             playerModel.Respawn += player1 => StartCoroutine(RespawnPlayer(player));
-            playerModel.Death += DeathAnimate;
+            playerModel.Death += position => StartCoroutine(DeathAnimate(position));
             playerModel.ChangedWeapons += ChangedWeapons;
         }
 
@@ -256,44 +181,16 @@ namespace Caveman
             StartCoroutine(pl.ThrowOnTimer());
         }
 
-        private void DeathAnimate(Vector2 position)
+        private IEnumerator DeathAnimate(Vector2 position)
         {
             var deathImage = poolDeathImage.New();
             deathImage.position = position;
-            var sprite = deathImage.GetComponent<SpriteRenderer>();
-            if (sprite)
+            var spriteRenderer = deathImage.GetComponent<SpriteRenderer>();
+            if (spriteRenderer)
             {
-                StartCoroutine(FadeOut(sprite));
-            }
-        }
-
-        private IEnumerator FadeOut(SpriteRenderer spriteRenderer)
-        {
-            for (var i = 1f; i > 0; i -= 0.1f)
-            {
-                var c = spriteRenderer.color;
-                c.a = i;
-                spriteRenderer.color = c;
-                yield return null;
+                yield return UnityExtensions.FadeOut(spriteRenderer);
             }
             poolDeathImage.Store(spriteRenderer.transform);
-        }
-
-        private IEnumerator FadeIn(SpriteRenderer spriteRenderer)
-        {
-            var color = spriteRenderer.color;
-            color.a = 0;
-            spriteRenderer.color = color;
-            for (var i = 0f; i < 1; i += 0.1f)
-            {
-                if (spriteRenderer)
-                {
-                    var c = spriteRenderer.color;
-                    c.a = i;
-                    spriteRenderer.color = c;
-                }
-                yield return null;
-            }
         }
     }
 }
