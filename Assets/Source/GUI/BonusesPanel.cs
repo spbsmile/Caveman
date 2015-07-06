@@ -27,7 +27,7 @@ public class BonusesPanel : MonoBehaviour
             if (Time.timeSinceLevelLoad - timeLastBonusUpdate > 1)
             {
                 timeLastBonusUpdate = Time.timeSinceLevelLoad;
-                if (durationBonus - 1 > 0)
+                if (durationBonus > 0)
                 {
                     durationBonus -= 1;
                     timerBonus.text = (durationBonus).ToString();
