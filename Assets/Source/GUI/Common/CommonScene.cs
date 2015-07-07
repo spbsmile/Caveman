@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Caveman.GUI
+namespace Caveman.UI
 {
     public class CommonScene : MonoBehaviour
     {

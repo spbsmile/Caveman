@@ -25,7 +25,6 @@ namespace Caveman.Utils
          */
         public static Vector2 ControlPoint(Vector2 startPoint, Vector2 endPoint, float offsetRate = 2.5f)
         {
-            Vector2 result;
             float distance = Vector2.Distance(startPoint, endPoint);
             Vector2 centerPoint = Vector2.Lerp(startPoint, endPoint, 0.5f);
             float r = distance / offsetRate;

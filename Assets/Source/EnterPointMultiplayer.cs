@@ -16,7 +16,6 @@ namespace Caveman
         public Transform prefabStoneFlagmentInc;
         public Transform prefabStone;
         public Transform prefabBonusSpeed;
-        public Transform iconBonus;
 
         public Transform containerStones;
         public Transform containerSplashStones;

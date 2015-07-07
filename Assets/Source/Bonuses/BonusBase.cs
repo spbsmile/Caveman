@@ -24,7 +24,6 @@ namespace Caveman.Bonuses
         protected float preValue;
 
         protected ObjectPool pool;
-        private Random r;
         private Transform icon;
 
         public void Start()
@@ -36,7 +35,6 @@ namespace Caveman.Bonuses
         {
             this.duration = duration;
             pool = poolBonuses;
-            r = random;
         }
 
         public void OnTriggerEnter2D(Collider2D other)

@@ -1,38 +1,43 @@
 ﻿using Caveman.Players;
+using Caveman.UI.Battle;
+using Caveman.UI.Windows;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BattleGui : MonoBehaviour
+namespace Caveman.UI
 {
-    public CNAbstractController movementJoystick;
-    public BonusesPanel bonusesPanel;
-    public MainGameTimer mainGameTimer;
-    public ResultRound resultRound;
-    public Text weapons;
-    public Text killed;
-
-    public static BattleGui instance;
-
-    public void Awake()
+    public class BattleGui : MonoBehaviour
     {
-        instance = this;
-        mainGameTimer.RoundEnded += () => resultRound.gameObject.SetActive(true);
-    }
+        public CNAbstractController movementJoystick;
+        public BonusesPanel bonusesPanel;
+        public MainGameTimer mainGameTimer;
+        public ResultRound resultRound;
+        public Text weapons;
+        public Text killed;
 
-    public void SubscribeOnEvents(Player player)
-    {
-        player.WeaponsCountChanged += WeaponsCountChanged;
-        player.KillsCountChanged += KillsCountChanged;
-        player.Bonus += bonusesPanel.BonusActivated;
-    }
+        public static BattleGui instance;
 
-    private void WeaponsCountChanged(int count)
-    {
-        weapons.text = count.ToString();
-    }
+        public void Awake()
+        {
+            instance = this;
+            mainGameTimer.RoundEnded += () => resultRound.gameObject.SetActive(true);
+        }
 
-    private void KillsCountChanged(int count)
-    {
-        killed.text = count.ToString();
+        public void SubscribeOnEvents(Player player)
+        {
+            player.WeaponsCountChanged += WeaponsCountChanged;
+            player.KillsCountChanged += KillsCountChanged;
+            player.Bonus += bonusesPanel.BonusActivated;
+        }
+
+        private void WeaponsCountChanged(int count)
+        {
+            weapons.text = count.ToString();
+        }
+
+        private void KillsCountChanged(int count)
+        {
+            killed.text = count.ToString();
+        }
     }
 }

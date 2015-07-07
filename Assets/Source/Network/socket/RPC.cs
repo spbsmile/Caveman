@@ -19,7 +19,6 @@ namespace Caveman.Network
         void UseWeaponReceived(string player, Vector2 point);
     }
 
-
     public class RPC
     {
         private const float SERVER_PINT_TIME = 0.2f;
@@ -172,7 +171,8 @@ namespace Caveman.Network
             {
                 while (reader != null)
                 {
-                    try{
+                    try
+                    {
                         char[] chars = new char[1024];
 
                         string result = "";
@@ -184,7 +184,7 @@ namespace Caveman.Network
                                 result += currentChar;
                         }
 
-                        ServerMessage msg = new ServerMessage(result);
+                        var msg = new ServerMessage(result);
                         AddItemToQueue(msg);
                     } catch (Exception e)
                     {

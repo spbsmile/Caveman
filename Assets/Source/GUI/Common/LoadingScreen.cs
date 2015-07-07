@@ -3,7 +3,7 @@ using Caveman.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Caveman.GUI
+namespace Caveman.UI.Common
 {
     public class LoadingScreen : Permanent<LoadingScreen>
     {
@@ -53,8 +53,8 @@ namespace Caveman.GUI
 
             root.gameObject.SetActive(false);
         }
-        
-        
+
+
         public void FadeTo(string name)
         {
             WithFade(Application.LoadLevelAsync(name));
@@ -67,7 +67,7 @@ namespace Caveman.GUI
 
         private void WithFade(AsyncOperation loadLevelAsync)
         {
-            
+
         }
     }
 }

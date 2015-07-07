@@ -1,25 +1,28 @@
 ﻿using UnityEngine;
 
-public class PauseWindow : MonoBehaviour
+namespace Caveman.UI.Windows
 {
-    public Transform window;
-
-    public void ResumeGame()
+    public class PauseWindow : MonoBehaviour
     {
-        Time.timeScale = 1;
-        window.gameObject.SetActive(false);
-    }
+        public Transform window;
 
-    public void PauseGame()
-    {
-        Time.timeScale = 0.000001f;
-        window.gameObject.SetActive(true);
-        //TODO stop all animations
-    }
+        public void ResumeGame()
+        {
+            Time.timeScale = 1;
+            window.gameObject.SetActive(false);
+        }
 
-    public void ExitGame()
-    {
-        Application.LoadLevel(0);
-        Time.timeScale = 1;
+        public void PauseGame()
+        {
+            Time.timeScale = 0.000001f;
+            window.gameObject.SetActive(true);
+            //TODO stop all animations
+        }
+
+        public void ExitGame()
+        {
+            Application.LoadLevel(0);
+            Time.timeScale = 1;
+        }
     }
 }
