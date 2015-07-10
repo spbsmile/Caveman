@@ -5,6 +5,11 @@ namespace Caveman.UI.Menu
 {
     public class Menu : MonoBehaviour
     {
+        public void Start()
+        {
+            Screen.orientation = ScreenOrientation.Landscape;
+        }
+
         public void LoadSingleGame()
         {
             LoadingScreen.instance.ProgressTo(1);
