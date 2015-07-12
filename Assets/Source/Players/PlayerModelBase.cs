@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Caveman.Bonuses;
+using Caveman.Network;
 using Caveman.Setting;
 using Caveman.Utils;
 using Caveman.Weapons;
@@ -12,13 +13,13 @@ namespace Caveman.Players
     public class PlayerModelBase : MonoBehaviour
     {
         public Action<Vector2> Death;
-        public Action<Player> Respawn; 
-        public Func<WeaponType, ObjectPool> ChangedWeapons; 
+        public Action<Player> Respawn;
+        public Func<WeaponType, ObjectPool> ChangedWeapons;
 
         //todo внимательно посмотреть 
         public Player player;
         public BonusBase bonusType;
-        
+
         protected Vector2 delta;
         protected Animator animator;
         protected Vector2 target;
@@ -29,6 +30,7 @@ namespace Caveman.Players
         private ObjectPool weaponsPool;
         private WeaponType weaponType;
         private PlayerModelBase[] players;
+        private ServerConnection serverConnection;
 
         public float Speed { get; set; }
 
@@ -37,9 +39,10 @@ namespace Caveman.Players
             animator = GetComponent<Animator>();
             StartCoroutine(ThrowOnTimer());
         }
-        
-        public void Init(Player player, Vector2 start, Random random, PlayerPool pool)
+
+        public void Init(Player player, Vector2 start, Random random, PlayerPool pool, Network.ServerConnection serverConnection)
         {
+            this.serverConnection = serverConnection;
             name = player.name;
             transform.GetChild(0).GetComponent<TextMesh>().text = name;
             this.player = player;
@@ -76,8 +79,9 @@ namespace Caveman.Players
                     player.deaths++;
                     weapon.Destroy();
                     Death(transform.position);
+                    serverConnection.
                     Respawn(player);
-                    playersPool.Store(this);  
+                    playersPool.Store(this);
                 }
                 else
                 {
@@ -89,6 +93,7 @@ namespace Caveman.Players
 
         private void Pickup(WeaponModelBase weaponModel)
         {
+            serverConnection.SendPickWeapon(transform.position, (int)weaponModel.Type);
             if (player.Weapons > Settings.MaxCountWeapons) return;
             if (weaponsPool == null || weaponModel.Type != weaponType)
             {
@@ -117,7 +122,7 @@ namespace Caveman.Players
             }
             yield return new WaitForSeconds(Settings.TimeThrowStone);
             if (gameObject.activeSelf) StartCoroutine(ThrowOnTimer());
-        }   
+        }
 
         //todo переписать
         public bool InMotion
@@ -125,7 +130,7 @@ namespace Caveman.Players
             protected get
             {
                 if (Vector2.SqrMagnitude(delta) > UnityExtensions.ThresholdPosition &&
-                    Vector2.SqrMagnitude((Vector2) transform.position - target) < UnityExtensions.ThresholdPosition)
+                    Vector2.SqrMagnitude((Vector2)transform.position - target) < UnityExtensions.ThresholdPosition)
                 {
                     animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, 0);
                     delta = Vector2.zero;
@@ -141,8 +146,8 @@ namespace Caveman.Players
         {
             if (Vector2.SqrMagnitude(delta) > UnityExtensions.ThresholdPosition)
             {
-                 var position = new Vector3(transform.position.x + delta.x * Time.deltaTime,
-                transform.position.y + delta.y * Time.deltaTime);
+                var position = new Vector3(transform.position.x + delta.x * Time.deltaTime,
+               transform.position.y + delta.y * Time.deltaTime);
                 transform.position = position;
             }
         }
@@ -151,7 +156,7 @@ namespace Caveman.Players
         {
             get
             {
-                var minDistance = Settings.BoundaryEndMap*Settings.BoundaryEndMap;
+                var minDistance = Settings.BoundaryEndMap * Settings.BoundaryEndMap;
                 var nearPosition = Vector2.zero;
 
                 for (var i = 0; i < players.Length; i++)
