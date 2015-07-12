@@ -1,8 +1,4 @@
-﻿using Caveman.Setting;
-using Caveman.Utils;
-using UnityEngine;
-
-namespace Caveman.Weapons
+﻿namespace Caveman.Weapons
 {
     public class SkullModel : WeaponModelBase
     {
@@ -10,12 +6,7 @@ namespace Caveman.Weapons
         {
             get { return WeaponType.Skull; }
         }
-
-        protected override float Speed
-        {
-            get { return Settings.SpeedSkull; }
-        }
-
+      
         // TODO разные кривые траекторий
         public void Update()
         {

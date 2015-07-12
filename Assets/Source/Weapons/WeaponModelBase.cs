@@ -14,7 +14,8 @@ namespace Caveman.Weapons
     public  class WeaponModelBase : ISupportPool
     {
         public virtual WeaponType Type{ get { return WeaponType.Stone; }}
-        protected virtual float Speed{ get { return 1f; }}
+
+        public float speed;
 
         protected Vector2 startPosition;
         protected Vector2 target;
@@ -48,7 +49,7 @@ namespace Caveman.Weapons
             startPosition = start;
             transform.position = start;
             target = aim;
-            delta = UnityExtensions.CalculateDelta(start, aim, Speed);
+            delta = UnityExtensions.CalculateDelta(start, aim, speed);
         }
 
         public override void SetPool(ObjectPool weaponPool)

@@ -7,8 +7,6 @@ namespace Caveman.Weapons
 {
     public class StoneModel : WeaponModelBase
     {
-        private static float STONE_SPEED = 5;
-
         private ObjectPool poolStonesSplash;
 
         public override WeaponType Type
@@ -16,12 +14,7 @@ namespace Caveman.Weapons
             get { return WeaponType.Stone; }
         }
 
-        protected override float Speed
-        {
-            get { return Settings.SpeedStone; }
-        }
-
-        float bezierTime = 0;
+        float bezierTime;
 
         public void Update()
         {
@@ -55,7 +48,7 @@ namespace Caveman.Weapons
             {
                 if (Vector2.SqrMagnitude(target - (Vector2)transform.position) > UnityExtensions.ThresholdPosition)
                 {
-                    bezierTime += Time.deltaTime / Vector2.Distance(startPosition, target) * STONE_SPEED;
+                    bezierTime += Time.deltaTime / Vector2.Distance(startPosition, target) * speed;
                     if (bezierTime > 1) bezierTime = 0;
 
                     Vector2 nextPosition = BezierUtils.Bezier2(startPosition, BezierUtils.ControlPoint(startPosition, target), target, bezierTime);
