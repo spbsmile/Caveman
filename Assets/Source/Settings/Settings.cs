@@ -5,18 +5,18 @@
         public const int MaxCountPlayers = 10;
         public const int Br = 10;
         public const float BoundaryEndMap = 10;
-        public const int TimeRespawnPlayer = 1;
+        public const int TimeRespawnPlayer = 3;
         public const int RotateStoneParameter = 10; 
 
         public static int RoundTime = 50;
         public static int TimeRespawnWeapon = 14;
-        public static int BotsCount = 4;
-        public static int InitialLyingWeapons = 10;
+        public static int BotsCount = 1;
+        public static int InitialLyingWeapons = 20;
         public static float SpeedStone = 4f;
         public static float SpeedPlayer = 2.5f;
         public static float SpeedSkull = 5f;
-        public static int TimeThrowStone = 3;
-        public static int MaxCountWeapons = 4;
+        public static int TimeThrowStone = 1;
+        public static int MaxCountWeapons = 10;
         public static float HeightCamera = 1;
         public static int CountLyingSkulls = 3;
         public static int PoolCountBonusesSpeed = 6;
