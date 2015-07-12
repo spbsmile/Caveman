@@ -40,6 +40,7 @@ namespace Caveman
             print("device id : " + SystemInfo.deviceUniqueIdentifier);
             //TODO: replace deviceName with user name from main screen text field
             rpc.StartSession(SystemInfo.deviceUniqueIdentifier, SystemInfo.deviceName);
+            rpc.SendRespawn(Vector2.zero);
         }
 
         public void Update()
@@ -51,7 +52,6 @@ namespace Caveman
         public void StoneAddedReceived(Vector2 point)
         {
             Debug.Log("stone added : " + point);
-
             poolStones.New().transform.position = point;
         }
         //
@@ -61,29 +61,34 @@ namespace Caveman
             //poolStones.Store(-);
         }
         //
-        public void MoveReceived(string player, Vector2 point)
+        public void MoveReceived(string playerId, Vector2 point)
         {
-            print(string.Format("MoveReceived {0} by player {1}", point, player));
+            print(string.Format("MoveReceived {0} by playerId {1}", point, playerId));
         }
 
-        public void LoginReceived(string player)
+        public void LoginReceived(string playerId)
         {
-            throw new System.NotImplementedException();
+            print(string.Format("LoginReceived {0} by playerId {1}", playerId));
         }
         //
-        public void PickWeaponReceived(string player, Vector2 point)
+        public void PickWeaponReceived(string playerId, Vector2 point)
         {
-            print(string.Format("PickWeaponReceived {0} by player {1}", point, player));
+            print(string.Format("PickWeaponReceived {0} by playerId {1}", point, playerId));
         }
         //
-        public void PickBonusReceived(string player, Vector2 point)
+        public void PickBonusReceived(string playerId, Vector2 point)
         {
-            print(string.Format("PickBonusReceived {0} by player {1}", point, player));
+            print(string.Format("PickBonusReceived {0} by playerId {1}", point, playerId));
         }
 
-        public void UseWeaponReceived(string player, Vector2 point)
+        public void UseWeaponReceived(string playerId, Vector2 point)
         {
-            throw new System.NotImplementedException();
+            Debug.Log(string.Format("UseWeaponReceived {0} by playerId {1}", point, playerId));
+        }
+
+        public void RespawnReceived(string playerId, Vector2 point)
+        {
+            Debug.Log(string.Format("RespawnReceived {0} by playerId {1}", point, playerId));
         }
 
         private ObjectPool CreatePool(int initialBufferSize, Transform container, Transform prefab, Action<GameObject, ObjectPool> init)

@@ -12,6 +12,7 @@ namespace Caveman.Network
 
         public const string PLAYER = "player";
 
+        public const string RESPAWN_ACTION = "respawn";
         public const string STONE_ADDED_ACTION = "stone_added";
         public const string STONE_REMOVED_ACTION = "stone_removed";
         public const string TIME_ACTION = "time";

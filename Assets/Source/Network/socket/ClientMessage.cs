@@ -72,5 +72,14 @@ namespace Caveman.Network
         {
             return jsonContent != null ? "#" + jsonContent + "#" : "";
         }
+
+        public static ClientMessage Respawn(float x, float y)
+        {
+            var json = new JSONObject(JSONObject.Type.OBJECT);
+            json.AddField(ServerParams.ACTION_TYPE, ServerParams.RESPAWN_ACTION);
+            json.AddField(ServerParams.X, x);
+            json.AddField(ServerParams.Y, y);
+            return new ClientMessage(json);
+        }
     }
 }

@@ -13,6 +13,7 @@ namespace Caveman.Network
 
         public ServerMessage(string content)
         {
+            Debug.Log("from server " + content);
             contentObject = new JSONObject(content);
         }
 

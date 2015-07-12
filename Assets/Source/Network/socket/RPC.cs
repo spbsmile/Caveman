@@ -12,11 +12,12 @@ namespace Caveman.Network
     {
         void StoneAddedReceived(Vector2 point);
         void StoneRemovedReceived(Vector2 point);
-        void MoveReceived(string player, Vector2 point);
-        void LoginReceived(string player);
-        void PickWeaponReceived(string player, Vector2 point);
-        void PickBonusReceived(string player, Vector2 point);
-        void UseWeaponReceived(string player, Vector2 point);
+        void MoveReceived(string playerId, Vector2 point);
+        void LoginReceived(string playerId);
+        void PickWeaponReceived(string playerId, Vector2 point);
+        void PickBonusReceived(string playerId, Vector2 point);
+        void UseWeaponReceived(string playerId, Vector2 point);
+        void RespawnReceived(string playerId, Vector2 point);
     }
 
     public class RPC
@@ -130,6 +131,11 @@ namespace Caveman.Network
             SendMessageToSocket(ClientMessage.PickBonus(point.x, point.y));
         }
 
+        public void SendRespawn(Vector2 point)
+        {
+            SendMessageToSocket(ClientMessage.Respawn(point.x, point.y));
+        }
+
 
         // private methods
 
@@ -173,9 +179,7 @@ namespace Caveman.Network
                 {
                     try
                     {
-                        char[] chars = new char[1024];
-
-                        string result = "";
+                        var result = "";
                         char currentChar;
 
                         while ((currentChar = (char)reader.Read()) != '&')
