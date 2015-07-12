@@ -96,7 +96,7 @@ namespace Caveman.Players
                 weaponsPool = ChangedWeapons(weaponModel.Type);
                 weaponType = weaponModel.Type;
             }
-            player.Weapons++;
+            player.Weapons += 5;
             animator.SetTrigger(Settings.AnimPickup);
             weaponModel.Take();
         }
