@@ -111,9 +111,13 @@ namespace Caveman.Players
         {
             if (player.Weapons > 0)
             {
-                animator.SetTrigger(Settings.AnimThrowF);
                 //todo ждать конца интервала анимации по карутине
-                Throw(FindClosestPlayer);
+                PlayerModelBase victim = FindClosestPlayer();
+                if (victim != null)
+                {
+                    animator.SetTrigger(Settings.AnimThrowF);
+                    Throw(victim.transform.position);
+                }
             }
             yield return new WaitForSeconds(Settings.TimeThrowStone);
             if (gameObject.activeSelf) StartCoroutine(ThrowOnTimer());
@@ -147,25 +151,23 @@ namespace Caveman.Players
             }
         }
 
-        private Vector2 FindClosestPlayer
+        private PlayerModelBase FindClosestPlayer()
         {
-            get
-            {
-                var minDistance = Settings.BoundaryEndMap*Settings.BoundaryEndMap;
-                var nearPosition = Vector2.zero;
+            var minDistance = Settings.BoundaryEndMap*Settings.BoundaryEndMap;
+            PlayerModelBase result = null;
 
-                for (var i = 0; i < players.Length; i++)
+            for (var i = 0; i < players.Length; i++)
+            {
+                if (!players[i].gameObject.activeSelf || players[i] == this ||
+                    !players[i].GetComponent<SpriteRenderer>().isVisible) continue;
+                var childDistance = Vector2.SqrMagnitude(players[i].transform.position - transform.position);
+                if ( minDistance > childDistance)
                 {
-                    if (!players[i].gameObject.activeSelf || players[i] == this) continue;
-                    var childDistance = Vector2.SqrMagnitude(players[i].transform.position - transform.position);
-                    if (minDistance > childDistance)
-                    {
-                        minDistance = childDistance;
-                        nearPosition = players[i].transform.position;
-                    }
+                    result = players[i];
+                    minDistance = childDistance;
                 }
-                return nearPosition;
             }
+            return result;
         }
     }
 }
