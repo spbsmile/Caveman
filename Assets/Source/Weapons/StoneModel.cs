@@ -24,6 +24,7 @@ namespace Caveman.Weapons
 
         public override void Destroy()
         {
+            bezierTime = 0;
             CreateStoneFragments(transform.position);
             base.Destroy();
         }
