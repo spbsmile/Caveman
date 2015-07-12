@@ -84,7 +84,7 @@ namespace Caveman.Network
                 {
                     client = new TcpClient(IP, PORT);
                     var stream = client.GetStream();
-                    //stream.ReadTimeout = 1;
+
                     reader = new StreamReader(stream, Encoding.UTF8);
                     writer = new StreamWriter(stream);
 
@@ -190,7 +190,8 @@ namespace Caveman.Network
 
                         var msg = new ServerMessage(result);
                         AddItemToQueue(msg);
-                    } catch (Exception e)
+                    } 
+                    catch (Exception e)
                     {
                         Debug.Log("socket read error : " + e);
                         break;

@@ -48,19 +48,18 @@ namespace Caveman
             rpc.Update();
         }
         
-        //
         public void StoneAddedReceived(Vector2 point)
         {
             Debug.Log("stone added : " + point);
             poolStones.New().transform.position = point;
         }
-        //
+
         public void StoneRemovedReceived(Vector2 point)
         {
             print(string.Format("StoneRemovedReceived {0}", point));
             //poolStones.Store(-);
         }
-        //
+
         public void MoveReceived(string playerId, Vector2 point)
         {
             print(string.Format("MoveReceived {0} by playerId {1}", point, playerId));
@@ -70,12 +69,12 @@ namespace Caveman
         {
             print(string.Format("LoginReceived {0} by playerId {1}", playerId));
         }
-        //
+
         public void PickWeaponReceived(string playerId, Vector2 point)
         {
             print(string.Format("PickWeaponReceived {0} by playerId {1}", point, playerId));
         }
-        //
+
         public void PickBonusReceived(string playerId, Vector2 point)
         {
             print(string.Format("PickBonusReceived {0} by playerId {1}", point, playerId));
@@ -119,6 +118,11 @@ namespace Caveman
         {
             item.GetComponent<BonusBase>().Init(pool, r, 1);
             //item.GetComponent<BonusBase>().PickupBonus += transform1 => 
+        }
+
+        public void StopSession()
+        {
+            rpc.StopSession();
         }
     }
 }
