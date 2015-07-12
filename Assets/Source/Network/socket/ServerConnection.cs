@@ -10,23 +10,25 @@ namespace Caveman.Network
 {
     public interface IServerListener
     {
-        void StoneAddedReceived(Vector2 point);
-        void StoneRemovedReceived(Vector2 point);
+        void WeaponAddedReceived(Vector2 point);
+        void WeaponRemovedReceived(Vector2 point);
         void MoveReceived(string playerId, Vector2 point);
         void LoginReceived(string playerId);
         void PickWeaponReceived(string playerId, Vector2 point);
         void PickBonusReceived(string playerId, Vector2 point);
         void UseWeaponReceived(string playerId, Vector2 point);
         void RespawnReceived(string playerId, Vector2 point);
+        void BonusAddedReceived(Vector2 point);
+        void PlayerDeadResceived(string playerId, Vector2 point);
     }
 
-    public class RPC
+    public class ServerConnection
     {
         private const float SERVER_PINT_TIME = 0.2f;
 
         private const string IP = "188.166.37.212";
         private const int PORT = 8080;
-        private static RPC instance;
+        private static ServerConnection instance;
         private readonly Queue<ServerMessage> messageQueue = new Queue<ServerMessage>();
 
         private TcpClient client;
@@ -37,7 +39,7 @@ namespace Caveman.Network
 
         private string clientId;
 
-        public RPC()
+        public ServerConnection()
         {
             lastTimeUpdated = Time.timeSinceLevelLoad;
         }
@@ -131,14 +133,17 @@ namespace Caveman.Network
             SendMessageToSocket(ClientMessage.PickBonus(point.x, point.y));
         }
 
-        public void SendRespawn(Vector2 point)
+        public void SendRespawn(string playerId)
         {
-            SendMessageToSocket(ClientMessage.Respawn(point.x, point.y));
+            SendMessageToSocket(ClientMessage.Respawn(playerId));
         }
 
+        public void SendPlayerDead(string playerId)
+        {
+            SendMessageToSocket(ClientMessage.PlayerDead(playerId));
+        }
 
         // private methods
-
         private void SendTick()
         {
             SendMessageToSocket(ClientMessage.TickMessage());
@@ -190,7 +195,7 @@ namespace Caveman.Network
 
                         var msg = new ServerMessage(result);
                         AddItemToQueue(msg);
-                    } 
+                    }
                     catch (Exception e)
                     {
                         Debug.Log("socket read error : " + e);
@@ -226,7 +231,7 @@ namespace Caveman.Network
 
         private void CompleteClientMessage(ClientMessage msg)
         {
-            msg.addParam(ServerParams.USER_ID, clientId);
+            msg.AddParam(ServerParams.USER_ID, clientId);
         }
     }
 }

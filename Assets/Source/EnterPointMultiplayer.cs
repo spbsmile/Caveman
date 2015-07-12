@@ -6,7 +6,6 @@ using Caveman.Setting;
 using Caveman.Utils;
 using Caveman.Weapons;
 using UnityEngine;
-using RPC = Caveman.Network.RPC;
 using Random = System.Random;
 
 namespace Caveman
@@ -20,8 +19,8 @@ namespace Caveman
         public Transform containerStones;
         public Transform containerSplashStones;
         public Transform containerBonusesSpeed;
-        
-        private RPC rpc;
+
+        private ServerConnection serverConnection;
 
         private ObjectPool poolStones;
         private ObjectPool poolStonesSplash;
@@ -35,28 +34,28 @@ namespace Caveman
             poolStones = CreatePool(Settings.PoolCountStones, containerStones, prefabStone, InitStoneModel);
             poolBonusesSpeed = CreatePool(Settings.PoolCountBonusesSpeed, containerBonusesSpeed, prefabBonusSpeed, InitBonusesModel);
 
-            rpc = new RPC();
-            rpc.ServerListener = this;
+            serverConnection = new ServerConnection();
+            serverConnection.ServerListener = this;
             print("device id : " + SystemInfo.deviceUniqueIdentifier);
             //TODO: replace deviceName with user name from main screen text field
-            rpc.StartSession(SystemInfo.deviceUniqueIdentifier, SystemInfo.deviceName);
-            rpc.SendRespawn(Vector2.zero);
+            serverConnection.StartSession(SystemInfo.deviceUniqueIdentifier, SystemInfo.deviceName);
+            serverConnection.SendRespawn(Vector2.zero);
         }
 
         public void Update()
         {
-            rpc.Update();
+            serverConnection.Update();
         }
-        
-        public void StoneAddedReceived(Vector2 point)
+
+        public void WeaponAddedReceived(Vector2 point)
         {
             Debug.Log("stone added : " + point);
             poolStones.New().transform.position = point;
         }
 
-        public void StoneRemovedReceived(Vector2 point)
+        public void WeaponRemovedReceived(Vector2 point)
         {
-            print(string.Format("StoneRemovedReceived {0}", point));
+            print(string.Format("WeaponRemovedReceived {0}", point));
             //poolStones.Store(-);
         }
 
@@ -88,6 +87,16 @@ namespace Caveman
         public void RespawnReceived(string playerId, Vector2 point)
         {
             Debug.Log(string.Format("RespawnReceived {0} by playerId {1}", point, playerId));
+        }
+
+        public void BonusAddedReceived(Vector2 point)
+        {
+            Debug.Log(string.Format("RespawnReceived {0}", point));
+        }
+
+        public void PlayerDeadResceived(string playerId, Vector2 point)
+        {
+
         }
 
         private ObjectPool CreatePool(int initialBufferSize, Transform container, Transform prefab, Action<GameObject, ObjectPool> init)
@@ -122,7 +131,7 @@ namespace Caveman
 
         public void StopSession()
         {
-            rpc.StopSession();
+            serverConnection.StopSession();
         }
     }
 }

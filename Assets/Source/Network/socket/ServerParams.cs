@@ -14,6 +14,9 @@ namespace Caveman.Network
 
         public const string RESPAWN_ACTION = "respawn";
         public const string STONE_ADDED_ACTION = "stone_added";
+        public const string BONUS_ADDED_ACTION = "bonus_added";
+
+
         public const string STONE_REMOVED_ACTION = "stone_removed";
         public const string TIME_ACTION = "time";
         public const string LOGIN_ACTION = "login";
@@ -27,5 +30,6 @@ namespace Caveman.Network
 
         //client side action only
         public const string USE_WEAPON_ACTION = "use_weapon";
+        public const string PLAYER_DEAD_ACTION = "player_dead";
     }
 }

@@ -21,15 +21,15 @@ namespace Caveman.Network
         {
             if (contentObject.IsArray)
             {
-                foreach (JSONObject jsonItem in contentObject.list)
+                foreach (var jsonItem in contentObject.list)
                 {
-                    string actionType = jsonItem.GetField(ServerParams.ACTION_TYPE).str;
+                    var actionType = jsonItem.GetField(ServerParams.ACTION_TYPE).str;
                     SendMessageToListener(listener, jsonItem, actionType);
                 }
             }
             else
             {
-                string actionType = contentObject.GetField(ServerParams.ACTION_TYPE).ToString();
+                var actionType = contentObject.GetField(ServerParams.ACTION_TYPE).ToString();
                 SendMessageToListener(listener, contentObject, actionType);
             }
         }
@@ -38,36 +38,30 @@ namespace Caveman.Network
         {
             if (actionType.Equals(ServerParams.STONE_ADDED_ACTION))
             {
-                float x = action[ServerParams.X].f;
-                float y = action[ServerParams.Y].f;
-                listener.StoneAddedReceived(new Vector2(x, y));
+                listener.WeaponAddedReceived(new Vector2(action[ServerParams.X].f, action[ServerParams.Y].f));
             }
             else if (actionType.Equals(ServerParams.STONE_REMOVED_ACTION))
             {
-                float x = action[ServerParams.X].f;
-                float y = action[ServerParams.Y].f;
-                listener.StoneRemovedReceived(new Vector2(x, y));
+                listener.WeaponRemovedReceived(new Vector2(action[ServerParams.X].f, action[ServerParams.Y].f));
             }
             else if (actionType.Equals(ServerParams.MOVE_ACTION))
             {
-                string player = action[ServerParams.PLAYER].str;
-                float x = action[ServerParams.X].f;
-                float y = action[ServerParams.Y].f;
-                listener.MoveReceived(player, new Vector2(x, y));
+                var player = action[ServerParams.PLAYER].str;
+                listener.MoveReceived(player, new Vector2(action[ServerParams.X].f, action[ServerParams.Y].f));
             }
             else if (actionType.Equals(ServerParams.PICK_BONUS_ACTION))
             {
-                string player = action[ServerParams.PLAYER].str;
-                float x = action[ServerParams.X].f;
-                float y = action[ServerParams.Y].f;
-                listener.PickBonusReceived(player, new Vector2(x, y));
+                var player = action[ServerParams.PLAYER].str;
+                listener.PickBonusReceived(player, new Vector2(action[ServerParams.X].f, action[ServerParams.Y].f));
             }
             else if (actionType.Equals(ServerParams.PICK_WEAPON_ACTION))
             {
-                string player = action[ServerParams.PLAYER].str;
-                float x = action[ServerParams.X].f;
-                float y = action[ServerParams.Y].f;
-                listener.PickWeaponReceived(player, new Vector2(x, y));
+                var player = action[ServerParams.PLAYER].str;
+                listener.PickWeaponReceived(player, new Vector2(action[ServerParams.X].f, action[ServerParams.Y].f));
+            }
+            else if (action.Equals(ServerParams.BONUS_ADDED_ACTION))
+            {
+                listener.BonusAddedReceived(new Vector2(action[ServerParams.X].f, action[ServerParams.Y].f));
             }
         }
     }

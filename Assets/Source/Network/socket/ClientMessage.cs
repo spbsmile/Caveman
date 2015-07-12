@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using UnityEngine;
 
 namespace Caveman.Network
 {
@@ -10,13 +10,11 @@ namespace Caveman.Network
             Content = ContentFromJson();
         }
 
-        public ushort Length { get; set; }
-        public string Content { get; set;}
+        public string Content { get; set; }
 
         private JSONObject jsonContent;
 
-
-        public void addParam(string paramKey, string paramValue)
+        public void AddParam(string paramKey, string paramValue)
         {
             if (jsonContent == null)
             {
@@ -41,8 +39,10 @@ namespace Caveman.Network
             return new ClientMessage(json);
         }
 
-        public static ClientMessage PickWeapon(float x, float y)
+        public static ClientMessage PickWeapon(float x, float y)//string weaponId)
         {
+            //x = 
+            //y = 
             var json = new JSONObject(JSONObject.Type.OBJECT);
             json.AddField(ServerParams.ACTION_TYPE, ServerParams.PICK_WEAPON_ACTION);
             json.AddField(ServerParams.X, x);
@@ -73,12 +73,28 @@ namespace Caveman.Network
             return jsonContent != null ? "#" + jsonContent + "#" : "";
         }
 
-        public static ClientMessage Respawn(float x, float y)
+        public static ClientMessage Respawn(string playerId)
         {
+            var point = GetPointFromId(playerId);
             var json = new JSONObject(JSONObject.Type.OBJECT);
             json.AddField(ServerParams.ACTION_TYPE, ServerParams.RESPAWN_ACTION);
-            json.AddField(ServerParams.X, x);
-            json.AddField(ServerParams.Y, y);
+            json.AddField(ServerParams.X, point.x);
+            json.AddField(ServerParams.Y, point.y);
+            return new ClientMessage(json);
+        }
+
+        private static Vector2 GetPointFromId(string playerId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public static ClientMessage PlayerDead(string playerId)
+        {
+            var point = GetPointFromId(playerId);
+            var json = new JSONObject(JSONObject.Type.OBJECT);
+            json.AddField(ServerParams.ACTION_TYPE, ServerParams.PLAYER_DEAD_ACTION);
+            json.AddField(ServerParams.X, point.x);
+            json.AddField(ServerParams.Y, point.y);
             return new ClientMessage(json);
         }
     }
