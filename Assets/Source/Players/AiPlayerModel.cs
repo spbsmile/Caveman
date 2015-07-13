@@ -22,7 +22,8 @@ namespace Caveman.Players
 
         public void InitAi(Player player, Vector2 start, Random random, PlayerPool pool, Transform allLyingWeapons)
         {
-            Init(player, start, random, pool);
+            //todo ai no in multiplayer
+            Init(player, start, random, pool, null);
             weapons = allLyingWeapons;
         }
 

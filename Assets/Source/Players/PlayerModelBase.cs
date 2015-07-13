@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Caveman.Bonuses;
+using Caveman.Network;
 using Caveman.Setting;
 using Caveman.Utils;
 using Caveman.Weapons;
@@ -12,13 +13,13 @@ namespace Caveman.Players
     public class PlayerModelBase : MonoBehaviour
     {
         public Action<Vector2> Death;
-        public Action<Player> Respawn; 
-        public Func<WeaponType, ObjectPool> ChangedWeapons; 
+        public Action<Player> Respawn;
+        public Func<WeaponType, ObjectPool> ChangedWeapons;
 
         //todo внимательно посмотреть 
         public Player player;
         public BonusBase bonusType;
-        
+
         protected Vector2 delta;
         protected Animator animator;
         protected Vector2 target;
@@ -29,6 +30,8 @@ namespace Caveman.Players
         private ObjectPool weaponsPool;
         private WeaponType weaponType;
         private PlayerModelBase[] players;
+        private ServerConnection serverConnection;
+        private bool multiplayer;
 
         public float Speed { get; set; }
 
@@ -37,9 +40,11 @@ namespace Caveman.Players
             animator = GetComponent<Animator>();
             StartCoroutine(ThrowOnTimer());
         }
-        
-        public void Init(Player player, Vector2 start, Random random, PlayerPool pool)
+
+        public void Init(Player player, Vector2 start, Random random, PlayerPool pool, ServerConnection serverConnection)
         {
+            this.serverConnection = serverConnection;
+            if (serverConnection != null) multiplayer = true;
             name = player.name;
             transform.GetChild(0).GetComponent<TextMesh>().text = name;
             this.player = player;
@@ -55,41 +60,60 @@ namespace Caveman.Players
         {
             if (Time.time < 1) return; // todo подумать. 
             var weapon = other.gameObject.GetComponent<WeaponModelBase>();
-            if (weapon == null) return;
-            if (weapon.owner == null)
+            if (weapon)
             {
-                switch (weapon.Type)
+                if (weapon.owner == null)
                 {
-                    case WeaponType.Stone:
-                        Pickup(other.gameObject.GetComponent<StoneModel>());
-                        break;
-                    case WeaponType.Skull:
-                        Pickup(other.gameObject.GetComponent<SkullModel>());
-                        break;
-                }
-            }
-            else
-            {
-                if (weapon.owner != player)
-                {
-                    weapon.owner.Kills++;
-                    player.deaths++;
-                    weapon.Destroy();
-                    Death(transform.position);
-                    Respawn(player);
-                    playersPool.Store(this);  
+                    switch (weapon.Type)
+                    {
+                        case WeaponType.Stone:
+                            PickupWeapon(other.gameObject.GetComponent<StoneModel>());
+                            break;
+                        case WeaponType.Skull:
+                            PickupWeapon(other.gameObject.GetComponent<SkullModel>());
+                            break;
+                    }
                 }
                 else
                 {
-                    // for check temp
-                    print(" weapon.owner == player");
+                    if (weapon.owner != player)
+                    {
+                        weapon.owner.Kills++;
+                        player.deaths++;
+                        weapon.Destroy();
+                        Death(transform.position);
+                        //todo id if multiplayer
+                        if (multiplayer) serverConnection.SendPlayerDead(name);
+                        Respawn(player);
+                        playersPool.Store(this);
+                    }
+                    else
+                    {
+                        // for check temp
+                        print(" weapon.owner == player");
+                    }
+                }
+            }
+            else 
+            {
+                var bonus = other.gameObject.GetComponent<BonusBase>();
+                if (bonus)
+                {
+                    PickupBonus(bonus);
                 }
             }
         }
 
-        private void Pickup(WeaponModelBase weaponModel)
+        private void PickupBonus(BonusBase bonus)
+        {
+            if (multiplayer) serverConnection.SendPickBonus(transform.position, (int)bonus.Type);
+            bonus.Effect(this);
+        }
+
+        private void PickupWeapon(WeaponModelBase weaponModel)
         {
             if (player.Weapons > Settings.MaxCountWeapons) return;
+            if (multiplayer) serverConnection.SendPickWeapon(transform.position, (int)weaponModel.Type);
             if (weaponsPool == null || weaponModel.Type != weaponType)
             {
                 player.Weapons = 0;
@@ -103,6 +127,7 @@ namespace Caveman.Players
 
         private void Throw(Vector2 aim)
         {
+            if (multiplayer) serverConnection.SendUseWeapon(aim, (int)weaponType);
             weaponsPool.New().GetComponent<WeaponModelBase>().SetMotion(player, transform.position, aim);
             player.Weapons--;
         }
@@ -121,7 +146,7 @@ namespace Caveman.Players
             }
             yield return new WaitForSeconds(Settings.TimeThrowStone);
             if (gameObject.activeSelf) StartCoroutine(ThrowOnTimer());
-        }   
+        }
 
         //todo переписать
         public bool InMotion
@@ -129,7 +154,7 @@ namespace Caveman.Players
             protected get
             {
                 if (Vector2.SqrMagnitude(delta) > UnityExtensions.ThresholdPosition &&
-                    Vector2.SqrMagnitude((Vector2) transform.position - target) < UnityExtensions.ThresholdPosition)
+                    Vector2.SqrMagnitude((Vector2)transform.position - target) < UnityExtensions.ThresholdPosition)
                 {
                     animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, 0);
                     delta = Vector2.zero;
@@ -145,16 +170,23 @@ namespace Caveman.Players
         {
             if (Vector2.SqrMagnitude(delta) > UnityExtensions.ThresholdPosition)
             {
-                 var position = new Vector3(transform.position.x + delta.x * Time.deltaTime,
-                transform.position.y + delta.y * Time.deltaTime);
+                var position = new Vector3(transform.position.x + delta.x * Time.deltaTime,
+               transform.position.y + delta.y * Time.deltaTime);
                 transform.position = position;
             }
         }
 
         private PlayerModelBase FindClosestPlayer()
         {
+<<<<<<< HEAD
             var minDistance = Settings.BoundaryEndMap*Settings.BoundaryEndMap;
             PlayerModelBase result = null;
+=======
+            get
+            {
+                var minDistance = Settings.BoundaryEndMap * Settings.BoundaryEndMap;
+                var nearPosition = Vector2.zero;
+>>>>>>> ImplementationRPC
 
             for (var i = 0; i < players.Length; i++)
             {

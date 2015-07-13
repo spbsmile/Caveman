@@ -1,14 +1,9 @@
-using System;
-using System.IO;
 using UnityEngine;
 
 namespace Caveman.Network
 {
     public class ServerMessage
     {
-        private const string MESSAGE_MARKER_START = "#";
-        private const string MESSAGE_MARKER_END = "&";
-
         private readonly JSONObject contentObject;
 
         public ServerMessage(string content)
@@ -21,53 +16,62 @@ namespace Caveman.Network
         {
             if (contentObject.IsArray)
             {
-                foreach (JSONObject jsonItem in contentObject.list)
+                foreach (var jsonItem in contentObject.list)
                 {
-                    string actionType = jsonItem.GetField(ServerParams.ACTION_TYPE).str;
-                    SendMessageToListener(listener, jsonItem, actionType);
+                    SendMessageToListener(listener, jsonItem, jsonItem.GetField(ServerParams.ActionType).str);
                 }
             }
             else
             {
-                string actionType = contentObject.GetField(ServerParams.ACTION_TYPE).ToString();
-                SendMessageToListener(listener, contentObject, actionType);
+                SendMessageToListener(listener, contentObject, contentObject.GetField(ServerParams.ActionType).ToString());
             }
         }
 
-        public void SendMessageToListener(IServerListener listener, JSONObject action, string actionType)
+
+        private void SendMessageToListener(IServerListener listener, JSONObject action, string type)
         {
-            if (actionType.Equals(ServerParams.STONE_ADDED_ACTION))
+            var point = new Vector2(action[ServerParams.X].f, action[ServerParams.Y].f);
+            var playerId = action[ServerParams.Player]!= null ?action[ServerParams.Player].str: null;
+            if (type.Equals(ServerParams.StoneAddedAction))
             {
-                float x = action[ServerParams.X].f;
-                float y = action[ServerParams.Y].f;
-                listener.StoneAddedReceived(new Vector2(x, y));
+                listener.WeaponAddedReceived(point);
             }
-            else if (actionType.Equals(ServerParams.STONE_REMOVED_ACTION))
+            else if (type.Equals(ServerParams.StoneRemovedAction))
             {
-                float x = action[ServerParams.X].f;
-                float y = action[ServerParams.Y].f;
-                listener.StoneRemovedReceived(new Vector2(x, y));
+                listener.WeaponRemovedReceived(point);
             }
-            else if (actionType.Equals(ServerParams.MOVE_ACTION))
+            else if (type.Equals(ServerParams.MoveAction))
             {
-                string player = action[ServerParams.PLAYER].str;
-                float x = action[ServerParams.X].f;
-                float y = action[ServerParams.Y].f;
-                listener.MoveReceived(player, new Vector2(x, y));
+                listener.MoveReceived(playerId, point);
             }
-            else if (actionType.Equals(ServerParams.PICK_BONUS_ACTION))
+            else if (type.Equals(ServerParams.PickWeaponAction))
             {
-                string player = action[ServerParams.PLAYER].str;
-                float x = action[ServerParams.X].f;
-                float y = action[ServerParams.Y].f;
-                listener.PickBonusReceived(player, new Vector2(x, y));
+                listener.PickWeaponReceived(playerId, point);
             }
-            else if (actionType.Equals(ServerParams.PICK_WEAPON_ACTION))
+            else if (type.Equals(ServerParams.BonusAddedAction))
             {
-                string player = action[ServerParams.PLAYER].str;
-                float x = action[ServerParams.X].f;
-                float y = action[ServerParams.Y].f;
-                listener.PickWeaponReceived(player, new Vector2(x, y));
+                listener.BonusAddedReceived(point);
+            }
+            else if (type.Equals(ServerParams.PickBonusAction))
+            {
+                listener.PickBonusReceived(playerId, point);
+            }
+            else if (type.Equals(ServerParams.UseWeaponAction))
+            {
+                listener.UseWeaponReceived(playerId, point);
+            }
+            else if (type.Equals(ServerParams.RespawnAction))
+            {
+                listener.RespawnReceived(playerId, point);
+            } 
+            //todo ServerParams.LoginAction LogoutAction &
+            else if (type.Equals(ServerParams.LoginAction))
+            {
+                listener.LoginReceived(playerId);
+            }
+            else if (type.Equals(ServerParams.PlayerDeadAction))
+            {
+                listener.PlayerDeadResceived(playerId, point);
             }
         }
     }

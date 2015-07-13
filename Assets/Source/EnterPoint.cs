@@ -2,6 +2,7 @@
 using System.Collections;
 using Caveman.Bonuses;
 using Caveman.Level;
+using Caveman.Network;
 using Caveman.Players;
 using Caveman.Setting;
 using Caveman.UI;
@@ -34,8 +35,8 @@ namespace Caveman
         public Transform containerBonusesForce;
         public Transform containerBonusesShield;
 
-        private Random r;
-        private ObjectPool poolStones;
+        protected Random r;
+        protected ObjectPool poolStones;
         private ObjectPool poolSkulls;
         private ObjectPool poolStonesSplash;
         private ObjectPool poolDeathImage;
@@ -44,7 +45,9 @@ namespace Caveman
         private ObjectPool poolBonusesForce;
         private ObjectPool poolBonusesShield;
 
-        public void Start()
+        protected ServerConnection serverConnection;
+
+        public virtual void Start()
         {
             r = new Random();
             Player.idCounter = 0;
@@ -60,15 +63,18 @@ namespace Caveman
             poolPlayers = containerPlayers.GetComponent<PlayerPool>();
             poolPlayers.Init(Settings.BotsCount + 1);
             var humanPlayer = new Player("Zabiyakin");
-            BattleGui.instance.SubscribeOnEvents(humanPlayer);
+            BattleGui.instance.SubscribeOnEvents(humanPlayer, serverConnection);
             CreatePlayer(humanPlayer, false);
             for (var i = 0; i < Settings.BotsCount; i++)
             {
                 CreatePlayer(new Player(names[i]), true);
             }
 
-            StartCoroutine(PutWeapons());
-            StartCoroutine(PutBonuses());
+            if (serverConnection == null)
+            {
+                StartCoroutine(PutWeapons());
+                StartCoroutine(PutBonuses());
+            }
         }
 
         private void InitBonusModel(GameObject item, ObjectPool pool)
@@ -153,7 +159,7 @@ namespace Caveman
                 var prefab = Instantiate(prefabPlayer);
                 playerModel = prefab.GetComponent<PlayerModel>();
                 smoothCamera.target = prefab.transform;
-                playerModel.Init(player, Vector2.zero, r, poolPlayers);
+                playerModel.Init(player, Vector2.zero, r, poolPlayers, serverConnection);
             }
             poolPlayers.Add(player.id, playerModel);
             playerModel.transform.SetParent(containerPlayers);
@@ -173,7 +179,7 @@ namespace Caveman
             }
             return null;
         }
-
+        
         private IEnumerator RespawnPlayer(Player player)
         {
             yield return new WaitForSeconds(Settings.TimeRespawnPlayer);
@@ -182,6 +188,7 @@ namespace Caveman
             StartCoroutine(pl.ThrowOnTimer());
         }
 
+        //todo вынести два метода и есть бага у этого метода
         private IEnumerator DeathAnimate(Vector2 position)
         {
             var deathImage = poolDeathImage.New();
