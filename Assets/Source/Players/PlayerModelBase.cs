@@ -31,6 +31,7 @@ namespace Caveman.Players
         private WeaponType weaponType;
         private PlayerModelBase[] players;
         private ServerConnection serverConnection;
+        private bool multiplayer;
 
         public float Speed { get; set; }
 
@@ -40,9 +41,10 @@ namespace Caveman.Players
             StartCoroutine(ThrowOnTimer());
         }
 
-        public void Init(Player player, Vector2 start, Random random, PlayerPool pool, Network.ServerConnection serverConnection)
+        public void Init(Player player, Vector2 start, Random random, PlayerPool pool, ServerConnection serverConnection)
         {
             this.serverConnection = serverConnection;
+            if (serverConnection != null) multiplayer = true;
             name = player.name;
             transform.GetChild(0).GetComponent<TextMesh>().text = name;
             this.player = player;
@@ -58,43 +60,60 @@ namespace Caveman.Players
         {
             if (Time.time < 1) return; // todo подумать. 
             var weapon = other.gameObject.GetComponent<WeaponModelBase>();
-            if (weapon == null) return;
-            if (weapon.owner == null)
+            if (weapon)
             {
-                switch (weapon.Type)
+                if (weapon.owner == null)
                 {
-                    case WeaponType.Stone:
-                        Pickup(other.gameObject.GetComponent<StoneModel>());
-                        break;
-                    case WeaponType.Skull:
-                        Pickup(other.gameObject.GetComponent<SkullModel>());
-                        break;
-                }
-            }
-            else
-            {
-                if (weapon.owner != player)
-                {
-                    weapon.owner.Kills++;
-                    player.deaths++;
-                    weapon.Destroy();
-                    Death(transform.position);
-                    serverConnection.
-                    Respawn(player);
-                    playersPool.Store(this);
+                    switch (weapon.Type)
+                    {
+                        case WeaponType.Stone:
+                            PickupWeapon(other.gameObject.GetComponent<StoneModel>());
+                            break;
+                        case WeaponType.Skull:
+                            PickupWeapon(other.gameObject.GetComponent<SkullModel>());
+                            break;
+                    }
                 }
                 else
                 {
-                    // for check temp
-                    print(" weapon.owner == player");
+                    if (weapon.owner != player)
+                    {
+                        weapon.owner.Kills++;
+                        player.deaths++;
+                        weapon.Destroy();
+                        Death(transform.position);
+                        //todo id if multiplayer
+                        if (multiplayer) serverConnection.SendPlayerDead(name);
+                        Respawn(player);
+                        playersPool.Store(this);
+                    }
+                    else
+                    {
+                        // for check temp
+                        print(" weapon.owner == player");
+                    }
+                }
+            }
+            else 
+            {
+                var bonus = other.gameObject.GetComponent<BonusBase>();
+                if (bonus)
+                {
+                    PickupBonus(bonus);
                 }
             }
         }
 
-        private void Pickup(WeaponModelBase weaponModel)
+        private void PickupBonus(BonusBase bonus)
         {
-            serverConnection.SendPickWeapon(transform.position, (int)weaponModel.Type);
+            if (multiplayer) serverConnection.SendPickBonus(transform.position, (int)bonus.Type);
+            bonus.Effect(this);
+        }
+
+        private void PickupWeapon(WeaponModelBase weaponModel)
+        {
             if (player.Weapons > Settings.MaxCountWeapons) return;
+            if (multiplayer) serverConnection.SendPickWeapon(transform.position, (int)weaponModel.Type);
             if (weaponsPool == null || weaponModel.Type != weaponType)
             {
                 player.Weapons = 0;
@@ -108,6 +127,7 @@ namespace Caveman.Players
 
         private void Throw(Vector2 aim)
         {
+            if (multiplayer) serverConnection.SendUseWeapon(aim, (int)weaponType);
             weaponsPool.New().GetComponent<WeaponModelBase>().SetMotion(player, transform.position, aim);
             player.Weapons--;
         }

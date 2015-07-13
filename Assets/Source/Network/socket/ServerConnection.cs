@@ -24,10 +24,10 @@ namespace Caveman.Network
 
     public class ServerConnection
     {
-        private const float SERVER_PINT_TIME = 0.2f;
+        private const float ServerPingTime = 0.2f;
+        private const string Ip = "188.166.37.212";
+        private const int Port = 8080;
 
-        private const string IP = "188.166.37.212";
-        private const int PORT = 8080;
         private static ServerConnection instance;
         private readonly Queue<ServerMessage> messageQueue = new Queue<ServerMessage>();
 
@@ -36,7 +36,6 @@ namespace Caveman.Network
         private Thread networkThread;
         private StreamReader reader;
         private StreamWriter writer;
-
         private string clientId;
 
         public ServerConnection()
@@ -44,7 +43,7 @@ namespace Caveman.Network
             lastTimeUpdated = Time.timeSinceLevelLoad;
         }
 
-        public IServerListener ServerListener { get; set; }
+        public IServerListener ServerListener { private get; set; }
 
         // API
 
@@ -55,7 +54,7 @@ namespace Caveman.Network
 
         public void Update()
         {
-            if (Time.timeSinceLevelLoad - lastTimeUpdated > SERVER_PINT_TIME)
+            if (Time.timeSinceLevelLoad - lastTimeUpdated > ServerPingTime)
             {
                 lastTimeUpdated = Time.timeSinceLevelLoad;
                 SendTick();
@@ -84,7 +83,7 @@ namespace Caveman.Network
             {
                 try
                 {
-                    client = new TcpClient(IP, PORT);
+                    client = new TcpClient(Ip, Port);
                     var stream = client.GetStream();
 
                     reader = new StreamReader(stream, Encoding.UTF8);
@@ -92,7 +91,6 @@ namespace Caveman.Network
 
                     SendLogin(userName);
                     StartListeningServer();
-
                 }
                 catch (Exception e)
                 {
@@ -100,10 +98,6 @@ namespace Caveman.Network
                 }
             }
         }
-
-        /**
-         * Stops opened session
-         */
 
         public void StopSession()
         {
@@ -143,7 +137,6 @@ namespace Caveman.Network
             SendMessageToSocket(ClientMessage.PlayerDead(playerId));
         }
 
-        // private methods
         private void SendTick()
         {
             SendMessageToSocket(ClientMessage.TickMessage());
@@ -192,9 +185,7 @@ namespace Caveman.Network
                             if (currentChar != '#')
                                 result += currentChar;
                         }
-
-                        var msg = new ServerMessage(result);
-                        AddItemToQueue(msg);
+                        AddItemToQueue(new ServerMessage(result));
                     }
                     catch (Exception e)
                     {
@@ -202,9 +193,7 @@ namespace Caveman.Network
                         break;
                     }
                 }
-
                 Debug.Log("finishing listening socket");
-
                 lock (networkThread)
                 {
                     networkThread = null;
@@ -231,7 +220,7 @@ namespace Caveman.Network
 
         private void CompleteClientMessage(ClientMessage msg)
         {
-            msg.AddParam(ServerParams.USER_ID, clientId);
+            msg.AddParam(ServerParams.UserId, clientId);
         }
     }
 }

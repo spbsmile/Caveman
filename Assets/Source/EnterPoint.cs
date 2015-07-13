@@ -13,10 +13,8 @@ using Random = System.Random;
 
 namespace Caveman
 {
-    public class EnterPoint : MonoBehaviour, IServerListener
+    public class EnterPoint : MonoBehaviour
     {
-        public bool multiplayer;
-
         public Transform prefabSkull;
         public Transform prefabStoneFlagmentInc;
         public Transform prefabStone;
@@ -37,8 +35,8 @@ namespace Caveman
         public Transform containerBonusesForce;
         public Transform containerBonusesShield;
 
-        private Random r;
-        private ObjectPool poolStones;
+        protected Random r;
+        protected ObjectPool poolStones;
         private ObjectPool poolSkulls;
         private ObjectPool poolStonesSplash;
         private ObjectPool poolDeathImage;
@@ -47,22 +45,12 @@ namespace Caveman
         private ObjectPool poolBonusesForce;
         private ObjectPool poolBonusesShield;
 
-        ServerConnection serverConnection;
+        protected ServerConnection serverConnection;
 
-        public void Start()
+        public virtual void Start()
         {
             r = new Random();
             Player.idCounter = 0;
-
-
-            if (multiplayer)
-            {
-                serverConnection = new ServerConnection();
-                serverConnection.ServerListener = this;
-                serverConnection.StartSession(SystemInfo.deviceUniqueIdentifier, SystemInfo.deviceName);
-                //todo valid value!!
-                serverConnection.SendRespawn(Vector2.zero);
-            }
 
             poolDeathImage = CreatePool(Settings.PoolCountDeathImages, containerDeathImages, prefabDeathImage, null);
             poolStonesSplash = CreatePool(Settings.PoolCountSplashStones, containerSplashStones, prefabStoneFlagmentInc, null);
@@ -75,14 +63,14 @@ namespace Caveman
             poolPlayers = containerPlayers.GetComponent<PlayerPool>();
             poolPlayers.Init(Settings.BotsCount + 1);
             var humanPlayer = new Player("Zabiyakin");
-            BattleGui.instance.SubscribeOnEvents(humanPlayer);
+            BattleGui.instance.SubscribeOnEvents(humanPlayer, serverConnection);
             CreatePlayer(humanPlayer, false);
             for (var i = 0; i < Settings.BotsCount; i++)
             {
                 CreatePlayer(new Player(names[i]), true);
             }
 
-            if (!multiplayer)
+            if (serverConnection == null)
             {
                 StartCoroutine(PutWeapons());
                 StartCoroutine(PutBonuses());
@@ -191,9 +179,7 @@ namespace Caveman
             }
             return null;
         }
-
-
-        // todo вынести из файла!
+        
         private IEnumerator RespawnPlayer(Player player)
         {
             yield return new WaitForSeconds(Settings.TimeRespawnPlayer);
@@ -202,6 +188,7 @@ namespace Caveman
             StartCoroutine(pl.ThrowOnTimer());
         }
 
+        //todo вынести два метода и есть бага у этого метода
         private IEnumerator DeathAnimate(Vector2 position)
         {
             var deathImage = poolDeathImage.New();
@@ -212,60 +199,6 @@ namespace Caveman
                 yield return UnityExtensions.FadeOut(spriteRenderer);
             }
             poolDeathImage.Store(spriteRenderer.transform);
-        }
-
-        // todo multiplayer
-        public void WeaponAddedReceived(Vector2 point)
-        {
-            Debug.Log("stone added : " + point);
-            //todo var value size map 
-            poolStones.New().transform.position = new Vector2(r.Next(-Settings.Br, Settings.Br), r.Next(-Settings.Br, Settings.Br));
-        }
-
-        public void BonusAddedReceived(Vector2 point)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void PlayerDeadResceived(string playerId, Vector2 point)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void WeaponRemovedReceived(Vector2 point)
-        {
-            print(string.Format("WeaponRemovedReceived {0}", point));
-            //poolStones.Store(-);
-        }
-
-        public void MoveReceived(string playerId, Vector2 point)
-        {
-            print(string.Format("MoveReceived {0} by playerId {1}", point, playerId));
-        }
-
-        public void LoginReceived(string playerId)
-        {
-            print(string.Format("LoginReceived {0} by playerId {1}", playerId));
-        }
-
-        public void PickWeaponReceived(string playerId, Vector2 point)
-        {
-            print(string.Format("PickWeaponReceived {0} by playerId {1}", point, playerId));
-        }
-
-        public void PickBonusReceived(string playerId, Vector2 point)
-        {
-            print(string.Format("PickBonusReceived {0} by playerId {1}", point, playerId));
-        }
-
-        public void UseWeaponReceived(string playerId, Vector2 point)
-        {
-            Debug.Log(string.Format("UseWeaponReceived {0} by playerId {1}", point, playerId));
-        }
-
-        public void RespawnReceived(string playerId, Vector2 point)
-        {
-            Debug.Log(string.Format("RespawnReceived {0} by playerId {1}", point, playerId));
         }
     }
 }
