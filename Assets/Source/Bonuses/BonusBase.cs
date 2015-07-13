@@ -55,7 +55,7 @@ namespace Caveman.Bonuses
             pool = item;
         }
 
-        protected virtual void Effect(PlayerModelBase playerModel)
+        public virtual void Effect(PlayerModelBase playerModel)
         {
             playerModel.player.PickUpBonus(Type, duration);
             //todo внедрить систему событий

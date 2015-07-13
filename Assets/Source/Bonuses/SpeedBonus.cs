@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class SpeedBonus : BonusBase 
 {
-    protected override void Effect(PlayerModelBase playerModel)
+    public override void Effect(PlayerModelBase playerModel)
     {
         if (playerModel.bonusType != null) return;
         base.Effect(playerModel);
