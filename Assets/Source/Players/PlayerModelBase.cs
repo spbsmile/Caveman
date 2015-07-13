@@ -24,6 +24,7 @@ namespace Caveman.Players
         protected Animator animator;
         protected Vector2 target;
         protected Random r;
+        protected SpriteRenderer renderer;
 
         private bool inMotion;
         private PlayerPool playersPool;
@@ -54,6 +55,7 @@ namespace Caveman.Players
             r = random;
             transform.position = start;
             Speed = Settings.SpeedPlayer;
+            renderer = GetComponent<SpriteRenderer>();
         }
 
         public void OnTriggerEnter2D(Collider2D other)
@@ -137,7 +139,7 @@ namespace Caveman.Players
             if (player.Weapons > 0)
             {
                 //todo ждать конца интервала анимации по карутине
-                PlayerModelBase victim = FindClosestPlayer();
+                var victim = FindClosestPlayer();
                 if (victim != null)
                 {
                     animator.SetTrigger(Settings.AnimThrowF);
@@ -178,22 +180,15 @@ namespace Caveman.Players
 
         private PlayerModelBase FindClosestPlayer()
         {
-<<<<<<< HEAD
-            var minDistance = Settings.BoundaryEndMap*Settings.BoundaryEndMap;
+            var minDistance = Settings.BoundaryEndMap * Settings.BoundaryEndMap;
             PlayerModelBase result = null;
-=======
-            get
-            {
-                var minDistance = Settings.BoundaryEndMap * Settings.BoundaryEndMap;
-                var nearPosition = Vector2.zero;
->>>>>>> ImplementationRPC
 
             for (var i = 0; i < players.Length; i++)
             {
                 if (!players[i].gameObject.activeSelf || players[i] == this ||
-                    !players[i].GetComponent<SpriteRenderer>().isVisible) continue;
+                    !players[i].renderer.isVisible) continue;
                 var childDistance = Vector2.SqrMagnitude(players[i].transform.position - transform.position);
-                if ( minDistance > childDistance)
+                if (minDistance > childDistance)
                 {
                     result = players[i];
                     minDistance = childDistance;
