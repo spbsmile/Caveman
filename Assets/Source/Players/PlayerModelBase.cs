@@ -16,7 +16,6 @@ namespace Caveman.Players
         public Action<Player> Respawn;
         public Func<WeaponType, ObjectPool> ChangedWeapons;
 
-        //todo внимательно посмотреть 
         public Player player;
         public BonusBase bonusType;
 
@@ -24,14 +23,14 @@ namespace Caveman.Players
         protected Animator animator;
         protected Vector2 target;
         protected Random r;
-        protected SpriteRenderer renderer;
+        protected ServerConnection serverConnection;
 
+        private SpriteRenderer renderer;
         private bool inMotion;
         private PlayerPool playersPool;
         private ObjectPool weaponsPool;
         private WeaponType weaponType;
         private PlayerModelBase[] players;
-        private ServerConnection serverConnection;
         private bool multiplayer;
 
         public float Speed { get; set; }

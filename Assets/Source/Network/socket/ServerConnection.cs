@@ -71,7 +71,6 @@ namespace Caveman.Network
             }
         }
 
-
         /**
          * Runs session and starts listen to the server
          * */
@@ -135,6 +134,11 @@ namespace Caveman.Network
         public void SendPlayerDead(string playerId)
         {
             SendMessageToSocket(ClientMessage.PlayerDead(playerId));
+        }
+
+        public void SendMove(Vector2 point)
+        {
+            SendMessageToSocket(ClientMessage.Move(point.x, point.y));
         }
 
         private void SendTick()
