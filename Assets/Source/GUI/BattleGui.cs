@@ -1,5 +1,4 @@
-﻿using Caveman.Network;
-using Caveman.Players;
+﻿using Caveman.Players;
 using Caveman.UI.Battle;
 using Caveman.UI.Windows;
 using UnityEngine;
@@ -18,17 +17,14 @@ namespace Caveman.UI
 
         public static BattleGui instance;
 
-        private ServerConnection serverConnection;
-
         public void Awake()
         {
             instance = this;
             mainGameTimer.RoundEnded += () => resultRound.gameObject.SetActive(true);
         }
 
-        public void SubscribeOnEvents(Player player, ServerConnection serverConnection)
+        public void SubscribeOnEvents(Player player)
         {
-            this.serverConnection = serverConnection;
             player.WeaponsCountChanged += WeaponsCountChanged;
             player.KillsCountChanged += KillsCountChanged;
             player.Bonus += bonusesPanel.BonusActivated;
@@ -42,14 +38,6 @@ namespace Caveman.UI
         private void KillsCountChanged(int count)
         {
             killed.text = count.ToString();
-        }
-
-        public void StopSession()
-        {
-            if (serverConnection != null)
-            {
-                serverConnection.StopSession();
-            }
         }
     }
 }
