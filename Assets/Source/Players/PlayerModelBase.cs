@@ -24,6 +24,7 @@ namespace Caveman.Players
         protected Vector2 target;
         protected Random r;
         protected ServerConnection serverConnection;
+        protected bool multiplayer;
 
         private SpriteRenderer renderer;
         private bool inMotion;
@@ -31,7 +32,6 @@ namespace Caveman.Players
         private ObjectPool weaponsPool;
         private WeaponType weaponType;
         private PlayerModelBase[] players;
-        private bool multiplayer;
 
         public float Speed { get; set; }
 
