@@ -66,7 +66,7 @@ namespace Caveman.Players
             {
                 if (weapon.owner == null)
                 {
-                    switch (weapon.Type)
+                    switch (weapon.type)
                     {
                         case WeaponType.Stone:
                             PickupWeapon(other.gameObject.GetComponent<StoneModel>());
@@ -115,12 +115,12 @@ namespace Caveman.Players
         private void PickupWeapon(WeaponModelBase weaponModel)
         {
             if (player.Weapons > Settings.MaxCountWeapons) return;
-            if (multiplayer) serverConnection.SendPickWeapon(transform.position, (int)weaponModel.Type);
-            if (weaponsPool == null || weaponModel.Type != weaponType)
+            if (multiplayer) serverConnection.SendPickWeapon(transform.position, (int)weaponModel.type);
+            if (weaponsPool == null || weaponModel.type != weaponType)
             {
                 player.Weapons = 0;
-                weaponsPool = ChangedWeapons(weaponModel.Type);
-                weaponType = weaponModel.Type;
+                weaponsPool = ChangedWeapons(weaponModel.type);
+                weaponType = weaponModel.type;
             }
             player.Weapons += 5;
             animator.SetTrigger(Settings.AnimPickup);

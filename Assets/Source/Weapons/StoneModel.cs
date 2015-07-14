@@ -8,19 +8,12 @@ namespace Caveman.Weapons
     public class StoneModel : WeaponModelBase
     {
         private ObjectPool poolStonesSplash;
-
-        public override WeaponType Type
-        {
-            get { return WeaponType.Stone; }
-        }
-
-        float bezierTime;
+        private float bezierTime;
 
         public void Update()
         {
             MotionUpdate();
         }
-
 
         public override void Destroy()
         {
@@ -51,10 +44,7 @@ namespace Caveman.Weapons
                 {
                     bezierTime += Time.deltaTime / Vector2.Distance(startPosition, target) * speed;
                     if (bezierTime > 1) bezierTime = 0;
-
-                    Vector2 nextPosition = BezierUtils.Bezier2(startPosition, BezierUtils.ControlPoint(startPosition, target), target, bezierTime);
-
-                    transform.position = nextPosition;
+                    transform.position = BezierUtils.Bezier2(startPosition, BezierUtils.ControlPoint(startPosition, target), target, bezierTime);
 
                     //linear moving. can be used for testing
                     //                    transform.position = new Vector2(transform.position.x + delta.x * Time.deltaTime,

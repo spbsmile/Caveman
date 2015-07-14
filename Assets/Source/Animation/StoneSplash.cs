@@ -6,6 +6,8 @@ namespace Caveman.Animation
 {
     public class StoneSplash : MonoBehaviour
     {
+        public float speed;
+
         private Vector2 delta;
         private Vector2 target;
 
@@ -24,14 +26,14 @@ namespace Caveman.Animation
                 }
                 else
                 {
-                    pool.Store(transform);
+                    Destroy();
                 }
             }
             else
             {
                 if (afterInit)
                 {
-                    pool.Store(transform);
+                    Destroy();
                 }
             }
         }
@@ -57,7 +59,13 @@ namespace Caveman.Animation
                 target = position - (0.5f)*Vector2.up;
             }
             afterInit = true;
-            delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedStone);
+            delta = UnityExtensions.CalculateDelta(transform.position, target, speed);
+        }
+
+        private void Destroy()
+        {
+            delta = Vector2.zero;
+            pool.Store(transform);
         }
     }
 }

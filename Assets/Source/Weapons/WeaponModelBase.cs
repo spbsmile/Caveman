@@ -13,8 +13,7 @@ namespace Caveman.Weapons
 
     public  class WeaponModelBase : ISupportPool
     {
-        public virtual WeaponType Type{ get { return WeaponType.Stone; }}
-
+        public WeaponType type;
         public float speed;
 
         protected Vector2 startPosition;
