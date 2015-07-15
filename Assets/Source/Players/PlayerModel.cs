@@ -17,7 +17,8 @@ namespace Caveman.Players
             var position = new Vector3(transform.position.x + movement.x * Time.deltaTime * Speed,
                transform.position.y + movement.y * Time.deltaTime * Speed);
             transform.position = position;
-            animator.SetFloat(movement.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Speed);
+
+            animator.SetTrigger(movement.y > 0 ? Settings.AnimRunB : Settings.AnimRunF);
         }
     }
 }
