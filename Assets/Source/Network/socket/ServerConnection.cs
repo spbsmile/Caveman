@@ -126,14 +126,14 @@ namespace Caveman.Network
             SendMessageToSocket(ClientMessage.PickBonus(point.x, point.y));
         }
 
-        public void SendRespawn(string playerId)
+        public void SendRespawn(Vector2 point)
         {
-            SendMessageToSocket(ClientMessage.Respawn(playerId));
+            SendMessageToSocket(ClientMessage.Respawn(point.x, point.y));
         }
 
-        public void SendPlayerDead(string playerId)
+        public void SendPlayerDead()
         {
-            SendMessageToSocket(ClientMessage.PlayerDead(playerId));
+            SendMessageToSocket(ClientMessage.PlayerDead());
         }
 
         public void SendMove(Vector2 point)

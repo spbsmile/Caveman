@@ -23,8 +23,6 @@ namespace Caveman
         public Transform prefabBot;
         public Transform prefabBonusSpeed;
 
-        private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
-
         public SmoothCamera smoothCamera;
         public Transform containerStones;
         public Transform containerSplashStones;
@@ -37,15 +35,16 @@ namespace Caveman
 
         protected Random r;
         protected ObjectPool poolStones;
+        protected PlayerPool poolPlayers;
+        protected ObjectPool poolBonusesSpeed;
+        protected ServerConnection serverConnection;
+
         private ObjectPool poolSkulls;
         private ObjectPool poolStonesSplash;
         private ObjectPool poolDeathImage;
-        private PlayerPool poolPlayers;
-        private ObjectPool poolBonusesSpeed;
         private ObjectPool poolBonusesForce;
         private ObjectPool poolBonusesShield;
-
-        protected ServerConnection serverConnection;
+        private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
 
         public virtual void Start()
         {

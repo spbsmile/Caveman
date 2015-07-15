@@ -1,20 +1,19 @@
 ﻿using Caveman;
 using Caveman.Network;
-using Caveman.Setting;
+using Caveman.Utils;
 using UnityEngine;
 
 public class Multiplayer : EnterPoint, IServerListener
 {
-    private const float WidthMapServer = 1350;
-    private const float HeigthMapServer = 1350;
+    public const float WidthMapServer = 1350;
+    public const float HeigthMapServer = 1350;
     
     public override void Start () 
     {
         serverConnection = new ServerConnection { ServerListener = this };
         serverConnection.StartSession(SystemInfo.deviceUniqueIdentifier, SystemInfo.deviceName);
-        //todo valid value!! id!! // in base Start
-        serverConnection.SendRespawn(name);
         base.Start();
+        serverConnection.SendRespawn(poolPlayers.Players[0].transform.position);
 	}
 
     public void Update()
@@ -25,7 +24,7 @@ public class Multiplayer : EnterPoint, IServerListener
     public void WeaponAddedReceived(Vector2 point)
     {
         Debug.Log("stone added : " + point);
-        poolStones.New().transform.position = ConvectorCoordinate(point);
+        poolStones.New().transform.position = UnityExtensions.ConvectorCoordinate(point);
     }
 
     public void BonusAddedReceived(Vector2 point)
@@ -37,12 +36,25 @@ public class Multiplayer : EnterPoint, IServerListener
     {
         print(string.Format("PlayerDeadResceived {0}", point));
     }
-
+    /// <summary>
+    /// удалять по индификатору, по ключу, ключ приходит в ядро игры
+    /// ключ формируется по координатам
+    /// оружие 
+    /// действия:лежит - подобрали - несли - кинули
+    /// 
+    /// </summary>
+    /// <param name="point"></param>
     public void WeaponRemovedReceived(Vector2 point)
     {
         print(string.Format("WeaponRemovedReceived {0}", point));
     }
 
+    /// <summary>
+    /// должен вызываться, когда меняется траектория , вызываться на fireclick
+    /// 
+    /// </summary>
+    /// <param name="playerId"></param>
+    /// <param name="point"></param>
     public void MoveReceived(string playerId, Vector2 point)
     {
         print(string.Format("MoveReceived {0} by playerId {1}", point, playerId));
@@ -76,12 +88,5 @@ public class Multiplayer : EnterPoint, IServerListener
     public void OnDestroy()
     {
         serverConnection.StopSession();
-    }
-
-    private Vector2 ConvectorCoordinate(Vector2 point)
-    {
-        var x = (point.x/HeigthMapServer)*Settings.HeightMap;
-        var y = (point.y/WidthMapServer)*Settings.WidthMap;
-        return new Vector2(x, y);
     }
 }

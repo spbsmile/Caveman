@@ -68,23 +68,19 @@ namespace Caveman.Network
             return new ClientMessage(json);
         }
 
-        public static ClientMessage Respawn(string playerId)
+        public static ClientMessage Respawn(float x, float y)
         {
-            var point = GetPointFromId(playerId);
             var json = new JSONObject(JSONObject.Type.OBJECT);
             json.AddField(ServerParams.ActionType, ServerParams.RespawnAction);
-            json.AddField(ServerParams.X, point.x);
-            json.AddField(ServerParams.Y, point.y);
+            json.AddField(ServerParams.X, x);
+            json.AddField(ServerParams.Y, y);
             return new ClientMessage(json);
         }
 
-        public static ClientMessage PlayerDead(string playerId)
+        public static ClientMessage PlayerDead()
         {
-            var point = GetPointFromId(playerId);
             var json = new JSONObject(JSONObject.Type.OBJECT);
             json.AddField(ServerParams.ActionType, ServerParams.PlayerDeadAction);
-            json.AddField(ServerParams.X, point.x);
-            json.AddField(ServerParams.Y, point.y);
             return new ClientMessage(json);
         }
 
@@ -101,13 +97,5 @@ namespace Caveman.Network
         {
             return jsonContent != null ? "#" + jsonContent + "#" : "";
         }
-
-        private static Vector2 GetPointFromId(string playerId)
-        {
-            // 
-            return Vector2.zero;
-        }
-
-       
     }
 }

@@ -84,7 +84,7 @@ namespace Caveman.Players
                         weapon.Destroy();
                         Death(transform.position);
                         //todo id if multiplayer
-                        if (multiplayer) serverConnection.SendPlayerDead(name);
+                        if (multiplayer) serverConnection.SendPlayerDead();
                         Respawn(player);
                         playersPool.Store(this);
                     }
