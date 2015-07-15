@@ -24,7 +24,7 @@ namespace Caveman.Setting
             speedWeapon.text = Settings.SpeedStone.ToString();
             timeThrow.text = Settings.TimeThrowStone.ToString();
             initialCountWeapons.text = Settings.InitialLyingWeapons.ToString();
-            countMaxWeapons.text = Settings.MaxCountWeapons.ToString();
+//            countMaxWeapons.text = Settings.MaxCountWeapons.ToString();
         }
 
         public void SetRoundTime(string value)

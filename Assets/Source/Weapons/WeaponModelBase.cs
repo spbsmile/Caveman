@@ -31,6 +31,11 @@ namespace Caveman.Weapons
             pool.Store(transform);
         }
 
+        public void Awake()
+        {
+            speed = Settings.SpeedStone;
+        }
+
         public void Take()
         {
             pool.Store(transform);    

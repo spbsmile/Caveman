@@ -11,7 +11,7 @@
         public static int TimeRespawnWeapon = 30;
         public static int BotsCount = 2;
         public static int InitialLyingWeapons = 20;
-        public static float SpeedStone = 50f;
+        public static float SpeedStone = 5f;
         public static float SpeedPlayer = 2.5f;
         public static int TimeThrowStone = 1;
         public static int MaxCountWeapons = 10;
