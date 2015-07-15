@@ -18,7 +18,7 @@ namespace Caveman.Players
                transform.position.y + movement.y * Time.deltaTime * Speed);
             transform.position = position;
 
-            animator.SetTrigger(movement.y > 0 ? Settings.AnimRunB : Settings.AnimRunF);
+            animator.SetFloat(movement.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Speed);
         }
     }
 }
