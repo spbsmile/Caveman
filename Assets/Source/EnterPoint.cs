@@ -63,6 +63,7 @@ namespace Caveman
             poolPlayers.Init(Settings.BotsCount + 1);
             var humanPlayer = new Player("Zabiyakin");
             BattleGui.instance.SubscribeOnEvents(humanPlayer);
+            BattleGui.instance.resultRound.SetPlayerPool(poolPlayers);
             CreatePlayer(humanPlayer, false);
             for (var i = 0; i < Settings.BotsCount; i++)
             {
