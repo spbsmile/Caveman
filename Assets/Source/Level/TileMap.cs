@@ -1,55 +1,51 @@
-﻿using UnityEngine;
+﻿using Caveman.Setting;
+using UnityEngine;
 using Random = System.Random;
 
 namespace Caveman.Level
 {
     public class TileMap : MonoBehaviour
     {
-        public int widthTile = 15;
-        public int heightTile = 15;
-
-        private float tileSize = 1.5f;
-        private const string TilePath = "Map/ground1";
-        private const string PoolPath = "Map/pool";
-        private const string DotPath = "Map/dot";
-        private const int DotCount = 30;
-        private const int PoolCount = 3;
-
-        private float width;
-        private float heigth;
-
-        private Random random;
+        public int widthMap = 24;
+        public int heightMap = 24;
+        public int dotCount = 30;
+        public int poolCount = 3;
+        public Transform prefabDot;
+        public Transform prefabPool;
+        public Transform prefabGround;
 
         public void Start()
         {
-            random = new Random();
-            width = widthTile*tileSize;
-            heigth = heightTile*tileSize;
-            var positionStart = new Vector2(-width/2, -heigth/2);
-            for (var i = 0; i < widthTile; i++)
+            var r = new Random();
+            var tileSize = Instantiate(prefabGround).GetComponent<SpriteRenderer>().bounds.size;
+            Settings.HeightMap = heightMap - (int)tileSize.x;
+            var tilesOnWidth = widthMap/tileSize.x;
+            var tilesOnHeight = heightMap/tileSize.y;
+
+            for (var i = 0; i < tilesOnWidth; i++)
             {
-                for (var j = 0; j < heightTile; j++)
+                for (var j = 0; j < tilesOnHeight; j++)
                 {
-                    var gameObject = Instantiate(Resources.Load(TilePath, typeof (GameObject)) as GameObject);
+                    var gameObject = Instantiate(prefabGround);
                     gameObject.transform.SetParent(transform);
-                    gameObject.transform.position = positionStart + new Vector2(i*tileSize, j*tileSize);
+                    gameObject.transform.position = new Vector2(i*tileSize.x, j*tileSize.y);
                 }
             }
 
-            for (var i = 0; i < DotCount; i++)
+            for (var i = 0; i < dotCount; i++)
             {
-                var gameObject = Instantiate(Resources.Load(DotPath, typeof (GameObject)) as GameObject);
+                var gameObject = Instantiate(prefabDot);
                 gameObject.transform.SetParent(transform);
-                gameObject.transform.position = new Vector2(random.Next((int) (-width/2), (int) (width/2)),
-                    random.Next((int) (-heigth/2), (int) (heigth/2)));
+                gameObject.transform.position = new Vector2(r.Next(widthMap),
+                    r.Next(heightMap));
             }
 
-            for (var i = 0; i < PoolCount; i++)
+            for (var i = 0; i < poolCount; i++)
             {
-                var gameObject = Instantiate(Resources.Load(PoolPath, typeof (GameObject)) as GameObject);
+                var gameObject = Instantiate(prefabPool);
                 gameObject.transform.SetParent(transform);
-                gameObject.transform.position = new Vector2(random.Next((int) (-width/3), (int) (width/3)),
-                    random.Next((int) (-heigth/3), (int) (heigth/3)));
+                gameObject.transform.position = new Vector2(r.Next(widthMap),
+                    r.Next(heightMap));
             }
         }
     }

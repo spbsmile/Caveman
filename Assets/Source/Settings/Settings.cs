@@ -2,22 +2,19 @@
 {
     public class Settings
     {
-        public const int MaxCountPlayers = 10;
-        public const int Br = 10;
-        public const float BoundaryEndMap = 10;
         public const int TimeRespawnPlayer = 1;
-        public const int RotateStoneParameter = 10; 
+        public const int RotateStoneParameter = 10;
 
+        public static int WidthMap = 24;
+        public static int HeightMap = 24;
         public static int RoundTime = 70;
-        public static int TimeRespawnWeapon = 14;
+        public static int TimeRespawnWeapon = 30;
         public static int BotsCount = 2;
         public static int InitialLyingWeapons = 20;
         public static float SpeedStone = 50f;
         public static float SpeedPlayer = 2.5f;
-        public static float SpeedSkull = 10f;
         public static int TimeThrowStone = 1;
         public static int MaxCountWeapons = 10;
-        public static float HeightCamera = 1;
         public static int CountLyingSkulls = 3;
         public static int PoolCountBonusesSpeed = 6;
         public static float TimeRespawnBonuses = 10;

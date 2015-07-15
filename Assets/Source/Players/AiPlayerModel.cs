@@ -60,7 +60,7 @@ namespace Caveman.Players
         {
             get
             {
-                var minDistance = Settings.BoundaryEndMap*Settings.BoundaryEndMap;
+                var minDistance = (float)Settings.HeightMap*Settings.WidthMap;
                 var nearPosition = Vector2.zero;
 
                 foreach (Transform weapon in weapons)
@@ -79,7 +79,7 @@ namespace Caveman.Players
 
         private Vector2 RandomPosition
         {
-            get { return new Vector2(r.Next(-Settings.Br, Settings.Br), r.Next(-Settings.Br, Settings.Br)); }
+            get { return new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)); }
         }
     }
 }

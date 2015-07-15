@@ -1,29 +1,29 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using Caveman.Setting;
 
 namespace Caveman.Level
 {
     public class SmoothCamera : MonoBehaviour
     {
-        private const float DampTime = 0.15f;
-        
         public Transform target;
 
+        private const float DampTime = 0.15f;
+        
         private Vector3 velocity = Vector3.zero;
         private float criticalX;
         private float criticalY;
+        private Vector2 section;
 
         public void Start()
         {
-            var section = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 10));
-            criticalX = Settings.BoundaryEndMap - section.x;
-            criticalY = Settings.BoundaryEndMap - section.y;
+            section = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 10));
+            criticalX = (Settings.WidthMap - section.x);
+            criticalY = (Settings.HeightMap - section.y);
         }
 
         public void Update()
         {
-            if (target)
+            if (target && target.gameObject.activeSelf)
             {
                 var point = Camera.main.WorldToViewportPoint(target.position);
                 var delta = Vector3.zero;
@@ -32,28 +32,68 @@ namespace Caveman.Level
                 var currX = target.position.x;
                 var currY = target.position.y;
 
-                if (Math.Abs(currX) > criticalX && Math.Abs(currY) > criticalY)
+                if (currX> criticalX && currY > criticalY)
                 {
-                    delta = new Vector3(Math.Sign(currX)*criticalX, Math.Sign(currY)*criticalY)
+                    delta = new Vector3(criticalX, criticalY)
                             - indent;
                 }
                 else
                 {
-                    if (Math.Abs(currX) > criticalX)
+                    if (currX < section.x && currY < section.y)
                     {
-                        delta = new Vector3(Math.Sign(currX) * criticalX, currY)
-                           - indent;
+                        delta = new Vector3(section.x, section.y)
+                            - indent; 
                     }
                     else
                     {
-                        if (Math.Abs(currY) > criticalY)
+                        if (currX < section.x && currY > criticalY)
                         {
-                            delta = new Vector3(currX, Math.Sign(currY)*criticalY)
-                           - indent;
+                            delta = new Vector3(section.x, criticalY)
+                                    - indent;
                         }
                         else
                         {
-                            delta = target.position - indent;
+                            if (currX > criticalX && currY < section.y)
+                            {
+                                delta = new Vector3(criticalX  , section.y)
+                                - indent;
+                            }
+                            else
+                            {
+                                if (currX < section.x)
+                                {
+                                    delta = new Vector3(section.x, currY)
+                                            - indent;
+                                }
+                                else
+                                {
+                                    if (currX > criticalX)
+                                    {
+                                        delta = new Vector3(criticalX , currY)
+                                          - indent;
+                                    }
+                                    else
+                                    {
+                                        if (currY < section.y)
+                                        {
+                                            delta = new Vector3(currX, section.y)
+                                                    - indent;
+                                        }
+                                        else
+                                        {
+                                            if (currY > criticalY)
+                                            {
+                                                delta = new Vector3(currX, criticalY )
+                                                    - indent;
+                                            }
+                                            else
+                                            {
+                                                delta = target.position - indent;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -65,19 +105,19 @@ namespace Caveman.Level
         //private void OnDrawGizmos()
         //{
         //    Gizmos.color = Color.yellow;
-        //    Gizmos.DrawSphere(new Vector3(Settings.BoundaryEndMap, 0, 0), 0.5f);
+        //    Gizmos.DrawSphere(new Vector3(Settings.HeightMap, 0, 0), 0.5f);
 
         //    Gizmos.color = Color.red;
         //    Gizmos.DrawSphere(new Vector3(criticalX, 0, 0), 0.5f);
 
         //    Gizmos.color = Color.yellow;
-        //    Gizmos.DrawSphere(new Vector3(0, Settings.BoundaryEndMap, 0), 0.5f);
+        //    Gizmos.DrawSphere(new Vector3(0, Settings.HeightMap, 0), 0.5f);
 
         //    Gizmos.color = Color.red;
         //    Gizmos.DrawSphere(new Vector3(0, criticalY, 0), 0.5f);
 
-        //    Gizmos.color = Color.yellow;
-        //    Gizmos.DrawSphere(new Vector3(-Settings.BoundaryEndMap, 0, 0), 0.5f);
+        //    //Gizmos.color = Color.yellow;
+        //    //Gizmos.DrawSphere(new Vector3(-Settings.BoundaryEndMap, 0, 0), 0.5f);
 
         //    Gizmos.color = Color.red;
         //    Gizmos.DrawSphere(new Vector3(-criticalX, 0, 0), 0.5f);

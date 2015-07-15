@@ -121,7 +121,7 @@ namespace Caveman.Players
                 weaponsPool = ChangedWeapons(weaponModel.type);
                 weaponType = weaponModel.type;
             }
-            player.Weapons += 5;
+            player.Weapons += 1;
             animator.SetTrigger(Settings.AnimPickup);
             weaponModel.Take();
         }
@@ -179,9 +179,8 @@ namespace Caveman.Players
 
         private PlayerModelBase FindClosestPlayer()
         {
-            var minDistance = Settings.BoundaryEndMap * Settings.BoundaryEndMap;
+            var minDistance = (float)Settings.HeightMap * Settings.WidthMap;
             PlayerModelBase result = null;
-
             for (var i = 0; i < players.Length; i++)
             {
                 if (!players[i].gameObject.activeSelf || players[i] == this ||

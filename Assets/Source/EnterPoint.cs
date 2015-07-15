@@ -123,8 +123,8 @@ namespace Caveman
         {
             var item = pool.New();
             StartCoroutine(UnityExtensions.FadeIn(item.GetComponent<SpriteRenderer>()));
-            item.transform.position = new Vector2(r.Next(-Settings.Br, Settings.Br),
-                r.Next(-Settings.Br, Settings.Br));
+            item.transform.position = new Vector2(r.Next(Settings.WidthMap),
+                r.Next(Settings.HeightMap));
         }
 
         private ObjectPool CreatePool(int initialBufferSize, Transform container, Transform prefab, Action<GameObject, ObjectPool> init)
@@ -152,14 +152,14 @@ namespace Caveman
                 var prefab = Instantiate(prefabBot);
                 playerModel = prefab.GetComponent<AiPlayerModel>();
                 (playerModel as AiPlayerModel).InitAi(player,
-                new Vector2(r.Next(-Settings.Br, Settings.Br), r.Next(-Settings.Br, Settings.Br)), r, poolPlayers, containerStones);
+                new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)), r, poolPlayers, containerStones);
             }
             else
             {
                 var prefab = Instantiate(prefabPlayer);
                 playerModel = prefab.GetComponent<PlayerModel>();
                 smoothCamera.target = prefab.transform;
-                playerModel.Init(player, Vector2.zero, r, poolPlayers, serverConnection);
+                playerModel.Init(player, new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)), r, poolPlayers, serverConnection);
             }
             poolPlayers.Add(player.id, playerModel);
             playerModel.transform.SetParent(containerPlayers);
@@ -184,7 +184,7 @@ namespace Caveman
         {
             yield return new WaitForSeconds(Settings.TimeRespawnPlayer);
             var pl = poolPlayers.New(player.id).GetComponent<PlayerModelBase>();
-            pl.transform.position = new Vector2(r.Next(-Settings.Br, Settings.Br), r.Next(-Settings.Br, Settings.Br));
+            pl.transform.position = new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap));
             StartCoroutine(pl.ThrowOnTimer());
         }
 

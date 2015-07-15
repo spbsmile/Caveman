@@ -80,8 +80,8 @@ public class Multiplayer : EnterPoint, IServerListener
 
     private Vector2 ConvectorCoordinate(Vector2 point)
     {
-        var x = (point.x/HeigthMapServer)*Settings.BoundaryEndMap;
-        var y = (point.y/WidthMapServer)*Settings.BoundaryEndMap;
+        var x = (point.x/HeigthMapServer)*Settings.HeightMap;
+        var y = (point.y/WidthMapServer)*Settings.WidthMap;
         return new Vector2(x, y);
     }
 }
