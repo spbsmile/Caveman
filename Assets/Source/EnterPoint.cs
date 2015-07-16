@@ -130,7 +130,7 @@ namespace Caveman
         private ObjectPool CreatePool(int initialBufferSize, Transform container, Transform prefab, Action<GameObject, ObjectPool> init)
         {
             var pool = container.GetComponent<ObjectPool>();
-            pool.CreatePool(prefab, initialBufferSize);
+            pool.CreatePool(prefab, initialBufferSize, serverConnection != null);
             for (var i = 0; i < initialBufferSize; i++)
             {
                 var item = Instantiate(prefab);
