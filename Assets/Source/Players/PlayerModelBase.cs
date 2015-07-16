@@ -114,6 +114,7 @@ namespace Caveman.Players
         private void PickupWeapon(WeaponModelBase weaponModel)
         {
             if (player.Weapons > Settings.MaxCountWeapons) return;
+            print("PickupWeapon");
             if (multiplayer) serverConnection.SendPickWeapon(transform.position, (int)weaponModel.type);
             if (weaponsPool == null || weaponModel.type != weaponType)
             {

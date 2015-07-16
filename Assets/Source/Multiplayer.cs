@@ -24,7 +24,8 @@ public class Multiplayer : EnterPoint, IServerListener
     public void WeaponAddedReceived(Vector2 point)
     {
         Debug.Log("stone added : " + point);
-        poolStones.New().transform.position = UnityExtensions.ConvectorCoordinate(point);
+        var item = poolStones.New(point);
+        item.transform.position = UnityExtensions.ConvectorCoordinate(point);
     }
 
     public void BonusAddedReceived(Vector2 point)
@@ -36,16 +37,10 @@ public class Multiplayer : EnterPoint, IServerListener
     {
         print(string.Format("PlayerDeadResceived {0}", point));
     }
-    /// <summary>
-    /// удалять по индификатору, по ключу, ключ приходит в ядро игры
-    /// ключ формируется по координатам
-    /// оружие 
-    /// действия:лежит - подобрали - несли - кинули
-    /// 
-    /// </summary>
-    /// <param name="point"></param>
+  
     public void WeaponRemovedReceived(Vector2 point)
     {
+        poolStones.Store(point);
         print(string.Format("WeaponRemovedReceived {0}", point));
     }
 

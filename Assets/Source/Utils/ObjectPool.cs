@@ -71,7 +71,14 @@ namespace Caveman.Utils
             var key = GenerateKey(point);
             var item = New();
             item.GetComponent<ASupportPool>().Id = key;
-            poolServer.Add(key, item);
+            if (!poolServer.ContainsKey(key))
+            {
+                poolServer.Add(key, item);
+            }
+            else
+            {
+                Debug.LogWarning(key + " An element with the same key already exists in the dictionary.");
+            }
             return item;
         }
 
