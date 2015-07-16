@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Caveman.Utils
 {
-    public abstract class ISupportPool : MonoBehaviour
+    public abstract class ASupportPool : MonoBehaviour
     {
         public abstract void SetPool(ObjectPool item);
         public string Id;
@@ -33,26 +33,24 @@ namespace Caveman.Utils
         /// <returns></returns>
         public Transform New()
         {
-            var item = GetItem();
-            item.gameObject.SetActive(true);
-            return item;
-        }
-
-        private Transform GetItem()
-        {
+            Transform item;
             if (stack.Count > 0)
             {
-                return stack.Pop();
+                item = stack.Pop();
             }
-            var item = Instantiate(prefab);
-            if (item.GetComponent<ISupportPool>())
+            else
             {
-                item.GetComponent<ISupportPool>().SetPool(this);
+                item = Instantiate(prefab);
+                if (item.GetComponent<ASupportPool>())
+                {
+                    item.GetComponent<ASupportPool>().SetPool(this);
+                }
+                if (RelatedPool != null && item.GetComponent<StoneModel>())
+                {
+                    item.GetComponent<StoneModel>().SetPoolSplash(RelatedPool());
+                }
             }
-            if (RelatedPool != null && item.GetComponent<StoneModel>())
-            {
-                item.GetComponent<StoneModel>().SetPoolSplash(RelatedPool());
-            }
+            item.gameObject.SetActive(true);
             return item;
         }
 
@@ -70,9 +68,9 @@ namespace Caveman.Utils
         /// <returns></returns>
         public Transform New(Vector2 point)
         {
-            var key = point.x + ":" + point.y;
-            var item = GetItem();
-            item.GetComponent<ISupportPool>().Id = key;
+            var key = GenerateKey(point);
+            var item = New();
+            item.GetComponent<ASupportPool>().Id = key;
             poolServer.Add(key, item);
             return item;
         }
@@ -84,17 +82,22 @@ namespace Caveman.Utils
         /// <returns></returns>
         public void Store(Vector2 point)
         {
-            var key = point.x + ":" + point.y;
+            var key = GenerateKey(point);
             Transform value;
             if (poolServer.TryGetValue(key, out value))
             {
-                
+                Store(value);
+                poolServer.Remove(key);
             }
             else
             {
-                Debug.LogWarning(key + " not found in Dictionary");
+                Debug.LogWarning(key + " key not found in Dictionary");
             }
-            Store(value);
+        }
+
+        private string GenerateKey(Vector2 point)
+        {
+            return point.x + ":" + point.y; 
         }
     }
 }

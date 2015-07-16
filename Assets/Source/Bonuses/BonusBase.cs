@@ -14,7 +14,7 @@ namespace Caveman.Bonuses
         Shield
     }
 
-    public class BonusBase : ISupportPool
+    public class BonusBase : ASupportPool
     {
         public int duration;
         public virtual BonusType Type { get { return BonusType.Speed; }}

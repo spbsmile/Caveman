@@ -11,7 +11,7 @@ namespace Caveman.Weapons
         Skull
     }
 
-    public  class WeaponModelBase : ISupportPool
+    public  class WeaponModelBase : ASupportPool
     {
         public WeaponType type;
         public float speed;
