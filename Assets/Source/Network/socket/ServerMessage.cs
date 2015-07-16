@@ -33,7 +33,9 @@ namespace Caveman.Network
 
         private void SendMessageToListener(IServerListener listener, JSONObject action, string type)
         {
-            var point = new Vector2(action[ServerParams.X].f, action[ServerParams.Y].f);
+            var point = (action[ServerParams.X] != null && action[ServerParams.Y] != null)
+                ? new Vector2(action[ServerParams.X].f, action[ServerParams.Y].f)
+                : Vector2.zero;
             var playerId = action[ServerParams.Player]!= null ?action[ServerParams.Player].str: null;
             if (type.Equals(ServerParams.StoneAddedAction))
             {
