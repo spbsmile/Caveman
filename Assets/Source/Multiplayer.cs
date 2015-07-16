@@ -1,5 +1,6 @@
 ﻿using Caveman;
 using Caveman.Network;
+using Caveman.Players;
 using Caveman.Utils;
 using UnityEngine;
 
@@ -57,7 +58,9 @@ public class Multiplayer : EnterPoint, IServerListener
 
     public void LoginReceived(string playerId)
     {
-        print(string.Format("LoginReceived {0} by playerId {1}", playerId));
+        //CreatePlayer(playerId);
+
+        print(string.Format("LoginReceived {0} by playerId", playerId));
     }
 
     public void PickWeaponReceived(string playerId, Vector2 point)
@@ -78,6 +81,7 @@ public class Multiplayer : EnterPoint, IServerListener
     public void RespawnReceived(string playerId, Vector2 point)
     {
         Debug.Log(string.Format("RespawnReceived {0} by playerId {1}", point, playerId));
+        //CreatePlayer(new Player("sdf"), false);
     }
 
     public void OnDestroy()
