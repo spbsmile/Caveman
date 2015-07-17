@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Caveman.Setting;
+﻿using Caveman.Setting;
 using Caveman.Utils;
 using UnityEngine;
 using Random = System.Random;

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Caveman.Bonuses;
 using Caveman.Network;
 using Caveman.Setting;
@@ -12,7 +14,6 @@ namespace Caveman.Players
     public class PlayerModelBase : MonoBehaviour
     {
         public Action<Vector2> Death;
-        public Action<Player> Respawn;
         public Func<WeaponType, ObjectPool> ChangedWeapons;
 
         public Player player;
@@ -24,15 +25,15 @@ namespace Caveman.Players
         protected Random r;
         protected ServerConnection serverConnection;
         protected bool multiplayer;
+        protected WeaponType weaponType;
+        protected List<PlayerModelBase> players;
 
-        protected SpriteRenderer renderer;
         private bool inMotion;
-        protected PlayerPool playersPool;
-        private ObjectPool weaponsPool;
-        private WeaponType weaponType;
-        protected PlayerModelBase[] players;
+        protected PlayerPool poolPlayers;
+        private ObjectPool poolWeapons;
 
         public float Speed { get; set; }
+        public SpriteRenderer spriteRenderer;
 
         protected virtual void Start()
         {
@@ -46,42 +47,46 @@ namespace Caveman.Players
             name = player.name;
             transform.GetChild(0).GetComponent<TextMesh>().text = name;
             this.player = player;
-            playersPool = pool;
-            // todo при сервере подписки на добавление удаление игроков
+            poolPlayers = pool;
             players = pool.Players;
             r = random;
             transform.position = start;
             Speed = Settings.SpeedPlayer;
-            renderer = GetComponent<SpriteRenderer>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
         }
 
-        protected void PickupBonus(BonusBase bonus)
+        public virtual void PickupBonus(BonusBase bonus)
         {
-            if (multiplayer) serverConnection.SendPickBonus(transform.position, (int)bonus.Type);
             bonus.Effect(this);
         }
 
-        protected void PickupWeapon(WeaponModelBase weaponModel)
+        public virtual bool PickupWeapon(WeaponModelBase weaponModel)
         {
-            if (player.Weapons > Settings.MaxCountWeapons) return;
-            print("PickupWeapon");
-            if (multiplayer) serverConnection.SendPickWeapon(transform.position, (int)weaponModel.type);
-            if (weaponsPool == null || weaponModel.type != weaponType)
+            if (player.Weapons > Settings.MaxCountWeapons) return false;
+            if (poolWeapons == null || weaponModel.type != weaponType)
             {
                 player.Weapons = 0;
-                weaponsPool = ChangedWeapons(weaponModel.type);
+                poolWeapons = ChangedWeapons(weaponModel.type);
                 weaponType = weaponModel.type;
             }
             player.Weapons += 1;
             animator.SetTrigger(Settings.AnimPickup);
             weaponModel.Take();
+            return true;
         }
 
-        protected void Throw(Vector2 aim)
+        public virtual void Throw(Vector2 aim)
         {
-            if (multiplayer) serverConnection.SendUseWeapon(aim, (int)weaponType);
-            weaponsPool.New().GetComponent<WeaponModelBase>().SetMotion(player, transform.position, aim);
+            poolWeapons.New().GetComponent<WeaponModelBase>().SetMotion(player, transform.position, aim);
             player.Weapons--;
+        }
+
+        public IEnumerator Respawn()
+        {
+            yield return new WaitForSeconds(Settings.TimeRespawnPlayer);
+            var pl = poolPlayers.New(player.id).GetComponent<PlayerModelBase>();
+            pl.transform.position = new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap));
+           // StartCoroutine(ThrowOnTimer());
         }
 
         //todo переписать

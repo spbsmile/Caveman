@@ -1,11 +1,12 @@
-﻿using Caveman.Players;
+﻿using System.Collections.Generic;
+using Caveman.Players;
 using UnityEngine;
 
 namespace Caveman.Utils
 {
     public class PlayerPool : MonoBehaviour
     {
-        private PlayerModelBase[] players;
+        private List<PlayerModelBase> players = new List<PlayerModelBase>();
 
         public void Store(PlayerModelBase player)
         {
@@ -19,13 +20,7 @@ namespace Caveman.Utils
             players[id].gameObject.SetActive(true);
             return players[id];
         }
-
-        //TODO подумать над разумностью 
-        public void Init(int count)
-        {
-            players = new PlayerModelBase[count];
-        }
-
+       
         public void Add(int id, PlayerModelBase model)
         {
             model.InMotion = true;
@@ -48,7 +43,7 @@ namespace Caveman.Utils
             return players[id].player.deaths.ToString();
         }
 
-        public PlayerModelBase[] Players
+        public List<PlayerModelBase> Players
         {
             get { return players; }
         }

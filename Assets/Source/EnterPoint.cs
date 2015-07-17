@@ -60,18 +60,17 @@ namespace Caveman
             poolStones.RelatedPool += () => poolStonesSplash;
 
             poolPlayers = containerPlayers.GetComponent<PlayerPool>();
-            poolPlayers.Init(Settings.BotsCount + 1);
             var humanPlayer = new Player("Zabiyakin");
             BattleGui.instance.SubscribeOnEvents(humanPlayer);
             BattleGui.instance.resultRound.SetPlayerPool(poolPlayers);
             CreatePlayer(humanPlayer, false);
-            for (var i = 0; i < Settings.BotsCount; i++)
-            {
-                CreatePlayer(new Player(names[i]), true);
-            }
-
+            
             if (serverConnection == null)
             {
+                for (var i = 0; i < Settings.BotsCount; i++)
+                {
+                    CreatePlayer(new Player(names[i]), true);
+                }
                 StartCoroutine(PutWeapons());
                 StartCoroutine(PutBonuses());
             }
@@ -157,13 +156,12 @@ namespace Caveman
             else
             {
                 var prefab = Instantiate(prefabPlayer);
-                playerModel = prefab.GetComponent<PlayerModel>();
+                playerModel = prefab.GetComponent<HumanPlayerModel>();
                 smoothCamera.target = prefab.transform;
                 playerModel.Init(player, new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)), r, poolPlayers, serverConnection);
             }
             poolPlayers.Add(player.id, playerModel);
             playerModel.transform.SetParent(containerPlayers);
-            playerModel.Respawn += player1 => StartCoroutine(RespawnPlayer(player));
             playerModel.Death += position => StartCoroutine(DeathAnimate(position));
             playerModel.ChangedWeapons += ChangedWeapons;
         }
@@ -178,14 +176,6 @@ namespace Caveman
                     return poolSkulls;
             }
             return null;
-        }
-        
-        private IEnumerator RespawnPlayer(Player player)
-        {
-            yield return new WaitForSeconds(Settings.TimeRespawnPlayer);
-            var pl = poolPlayers.New(player.id).GetComponent<PlayerModelBase>();
-            pl.transform.position = new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap));
-            StartCoroutine(pl.ThrowOnTimer());
         }
 
         //todo вынести два метода и есть бага у этого метода

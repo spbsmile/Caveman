@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Caveman.Players
 {
-    public class PlayerModel : PlayerModelBase
+    public class HumanPlayerModel : PlayerModelBase
     {
         public void Awake()
         {
