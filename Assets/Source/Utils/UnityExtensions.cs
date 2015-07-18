@@ -51,5 +51,10 @@ namespace Caveman.Utils
             var y = (point.y / Multiplayer.WidthMapServer) * Settings.WidthMap;
             return new Vector2(x, y);
         }
+
+        public static string GenerateKey(Vector2 point)
+        {
+            return point.x + ":" + point.y;
+        }
     }
 }

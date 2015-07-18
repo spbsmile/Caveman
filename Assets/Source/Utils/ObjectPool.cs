@@ -1,76 +1,77 @@
 ﻿using System;
 using System.Collections.Generic;
+using Caveman.Animation;
 using Caveman.Weapons;
 using UnityEngine;
 
 namespace Caveman.Utils
 {
-    public abstract class ASupportPool : MonoBehaviour
+    public abstract class ASupportPool<T> : MonoBehaviour where T : Component
     {
-        public abstract void SetPool(ObjectPool item);
+        public abstract void SetPool(ObjectPool<T> item);
         public string Id;
     }
 
-    public class ObjectPool : MonoBehaviour
+    public class ObjectPool<T> : MonoBehaviour where T : Component
     {
-        public Func<ObjectPool> RelatedPool;
+        public Func<ObjectPool<StoneSplash>> RelatedPool;
 
-        private Stack<Transform> stack;
-        private Transform prefab;
+        private Stack<T> stack;
+        private T prefab;
 
-        private Dictionary<string, Transform> poolServer;
+        private Dictionary<string, T> poolServer;
 
-        public void CreatePool(Transform prefab, int initialBufferSize, bool multiplayer)
+        public void CreatePool(T prefab, int initialBufferSize, bool multiplayer)
         {
-            stack = new Stack<Transform>(initialBufferSize);
+            if (multiplayer)
+            {
+                poolServer = new Dictionary<string, T>();
+            }
+            stack = new Stack<T>(initialBufferSize);
             this.prefab = prefab;
-            if (multiplayer) poolServer = new Dictionary<string, Transform>();
         }
 
-        /// <summary>
-        /// when single game mode
-        /// </summary>
-        /// <returns></returns>
-        public Transform New()
+        public T New()
         {
-            Transform item;
-            if (stack.Count > 0)
-            {
-                item = stack.Pop();
-            }
-            else
-            {
-                item = Instantiate(prefab);
-                if (item.GetComponent<ASupportPool>())
-                {
-                    item.GetComponent<ASupportPool>().SetPool(this);
-                }
-                if (RelatedPool != null && item.GetComponent<StoneModel>())
-                {
-                    item.GetComponent<StoneModel>().SetPoolSplash(RelatedPool());
-                }
-            }
+            var item = GetItem();
             item.gameObject.SetActive(true);
             return item;
         }
 
-        public void Store(Transform obj)
+        private T GetItem()
+        {
+            if (stack.Count > 0)
+            {
+                return stack.Pop();
+            }
+            var item = Instantiate(prefab);
+            if (item.GetComponent<ASupportPool<T>>())
+            {
+                item.GetComponent<ASupportPool<T>>().SetPool(this);
+            }
+            if (RelatedPool != null && item.GetComponent<StoneModel>())
+            {
+                item.GetComponent<StoneModel>().SetPoolSplash(RelatedPool());
+            }
+            return item;
+        }
+
+        public void Store(T obj)
         {
             obj.gameObject.SetActive(false);
             obj.gameObject.transform.position = new Vector3(100, 100, 100);
             stack.Push(obj);            
         }
 
-        /// <summary>
-        /// when multiplayer game mode
-        /// </summary>
-        /// <param name="point"></param>
-        /// <returns></returns>
-        public Transform New(Vector2 point)
+        public T New(Vector2 point)
         {
-            var key = GenerateKey(point);
-            var item = New();
-            item.GetComponent<ASupportPool>().Id = key;
+            var key = UnityExtensions.GenerateKey(point);
+            var item = GetItem();
+            while (!string.IsNullOrEmpty(item.GetComponent<ASupportPool<T>>().Id))
+            {
+                item = GetItem();
+            }
+            item.GetComponent<ASupportPool<T>>().Id = key;
             if (!poolServer.ContainsKey(key))
             {
                 poolServer.Add(key, item);
@@ -79,18 +80,14 @@ namespace Caveman.Utils
             {
                 Debug.LogWarning(key + " An element with the same key already exists in the dictionary.");
             }
+            item.gameObject.SetActive(true);
             return item;
         }
 
-        /// <summary>
-        /// when multiplayer game mode
-        /// </summary>
-        /// <param name="point"></param>
-        /// <returns></returns>
         public void Store(Vector2 point)
         {
-            var key = GenerateKey(point);
-            Transform value;
+            var key = UnityExtensions.GenerateKey(point);
+            T value;
             if (poolServer.TryGetValue(key, out value))
             {
                 Store(value);
@@ -102,9 +99,14 @@ namespace Caveman.Utils
             }
         }
 
-        private string GenerateKey(Vector2 point)
+        public T this[string key]
         {
-            return point.x + ":" + point.y; 
+            get
+            {
+                return poolServer[key];
+            }
         }
+
+       
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Caveman.Players;
 using Caveman.Utils;
 using Caveman.Weapons;
@@ -14,7 +13,7 @@ namespace Caveman.Bonuses
         Shield
     }
 
-    public class BonusBase : ASupportPool
+    public class BonusBase : ASupportPool<BonusBase>
     {
         public int duration;
         public virtual BonusType Type { get { return BonusType.Speed; }}
@@ -23,7 +22,7 @@ namespace Caveman.Bonuses
         protected float value;
         protected float preValue;
 
-        protected ObjectPool pool;
+        protected ObjectPool<BonusBase> pool;
         private Transform icon;
 
         public void Start()
@@ -31,7 +30,7 @@ namespace Caveman.Bonuses
             animator = GetComponent<Animator>();
         }
 
-        public void Init(ObjectPool poolBonuses, Random random, int duration)
+        public void Init(ObjectPool<BonusBase> poolBonuses, Random random, int duration)
         {
             this.duration = duration;
             pool = poolBonuses;
@@ -46,11 +45,11 @@ namespace Caveman.Bonuses
             }
             if (other.gameObject.GetComponent<WeaponModelBase>())
             {
-                pool.Store(transform);
+                pool.Store(this);
             }
         }
 
-        public override void SetPool(ObjectPool item)
+        public override void SetPool(ObjectPool<BonusBase> item)
         {
             pool = item;
         }

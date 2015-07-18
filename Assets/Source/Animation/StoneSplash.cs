@@ -12,7 +12,7 @@ namespace Caveman.Animation
         private Vector2 target;
 
         private bool afterInit;
-        private ObjectPool pool;
+        private ObjectPool<StoneSplash> pool;
 
         public void Update()
         {
@@ -38,7 +38,7 @@ namespace Caveman.Animation
             }
         }
 
-        public void Init(int i, Vector2 position, ObjectPool pool)
+        public void Init(int i, Vector2 position, ObjectPool<StoneSplash> pool)
         {
             this.pool = pool;
             transform.position = position;
@@ -65,7 +65,7 @@ namespace Caveman.Animation
         private void Destroy()
         {
             delta = Vector2.zero;
-            pool.Store(transform);
+            pool.Store(this);
         }
     }
 }

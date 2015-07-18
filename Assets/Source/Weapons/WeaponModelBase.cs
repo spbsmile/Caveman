@@ -11,7 +11,7 @@ namespace Caveman.Weapons
         Skull
     }
 
-    public  class WeaponModelBase : ASupportPool
+    public  class WeaponModelBase : ASupportPool<WeaponModelBase>
     {
         public WeaponType type;
         public float speed;
@@ -22,13 +22,13 @@ namespace Caveman.Weapons
 
         public Player owner;
 
-        private ObjectPool pool;
+        private ObjectPool<WeaponModelBase> pool;
 
         public virtual void Destroy()
         {
             owner = null;
             delta = Vector2.zero;
-            pool.Store(transform);
+            pool.Store(this);
         }
 
         public void Awake()
@@ -38,7 +38,7 @@ namespace Caveman.Weapons
 
         public void Take()
         {
-            pool.Store(transform);    
+            pool.Store(this);    
         }
 
         public void UnTake(Vector2 position)
@@ -56,7 +56,7 @@ namespace Caveman.Weapons
             delta = UnityExtensions.CalculateDelta(start, aim, speed);
         }
 
-        public override void SetPool(ObjectPool weaponPool)
+        public override void SetPool(ObjectPool<WeaponModelBase> weaponPool)
         {
             pool = weaponPool;
         }

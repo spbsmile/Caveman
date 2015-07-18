@@ -5,7 +5,7 @@ using Random = System.Random;
 
 namespace Caveman.Players
 {
-    public class AiPlayerModel : PlayerModelBase
+    public class AiPlayerModel : PlayerModelClient
     {
         private Transform weapons;
 
@@ -21,7 +21,6 @@ namespace Caveman.Players
 
         public void InitAi(Player player, Vector2 start, Random random, PlayerPool pool, Transform allLyingWeapons)
         {
-            //todo ai no in multiplayer
             Init(player, start, random, pool, null);
             weapons = allLyingWeapons;
         }

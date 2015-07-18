@@ -6,46 +6,46 @@ namespace Caveman.Utils
 {
     public class PlayerPool : MonoBehaviour
     {
-        private List<PlayerModelBase> players = new List<PlayerModelBase>();
+        private Dictionary<string, PlayerModelBase> pool;
+        private PlayerModelBase prefab;
+
+        public void Init(PlayerModelBase prefab)
+        {
+            pool = new Dictionary<string, PlayerModelBase>();
+            this.prefab = prefab;
+        }
+
+        public void Add(string Id, PlayerModelBase item)
+        {
+            item.Id = Id;
+            pool.Add(Id, item);
+        }
 
         public void Store(PlayerModelBase player)
         {
-            //todo при смерти скидывать ли камни ?
-            player.InMotion = false;
             player.gameObject.SetActive(false);
         }
 
-        public PlayerModelBase New(int id)
+        public PlayerModelBase New(string id)
         {
-            players[id].gameObject.SetActive(true);
-            return players[id];
-        }
-       
-        public void Add(int id, PlayerModelBase model)
-        {
-            model.InMotion = true;
-            players[id] = model;
-        }
-
-        // todo сомнительно
-        public string GetName(int id)
-        {
-            return players[id].player.name;
+            PlayerModelBase item;
+            if (pool.TryGetValue(id, out item))
+            {
+                return item;
+            }
+            item = Instantiate(prefab);
+            item.Id = id;
+            item.SetPool(this);
+            pool.Add(id, item);
+            return item;
         }
 
-        public string GetKills(int id)
+        public PlayerModelBase this[string key]
         {
-            return players[id].player.Kills.ToString();
-        }
-
-        public string GetDeaths(int id)
-        {
-            return players[id].player.deaths.ToString();
-        }
-
-        public List<PlayerModelBase> Players
-        {
-            get { return players; }
+            get
+            {
+                return pool[key];
+            }
         }
     }
 }

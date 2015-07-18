@@ -1,11 +1,12 @@
 ﻿using Caveman;
 using Caveman.Network;
-using Caveman.Players;
 using Caveman.Utils;
 using UnityEngine;
 
 public class Multiplayer : EnterPoint, IServerListener
 {
+    public Transform prefabServerPlayer;
+
     public const float WidthMapServer = 1350;
     public const float HeigthMapServer = 1350;
     
@@ -14,7 +15,7 @@ public class Multiplayer : EnterPoint, IServerListener
         serverConnection = new ServerConnection { ServerListener = this };
         serverConnection.StartSession(SystemInfo.deviceUniqueIdentifier, SystemInfo.deviceName);
         base.Start();
-        serverConnection.SendRespawn(poolPlayers.Players[0].transform.position);
+        serverConnection.SendRespawn(poolPlayers[IdHostPlayer].transform.position);
 	}
 
     public void Update()
@@ -25,8 +26,7 @@ public class Multiplayer : EnterPoint, IServerListener
     public void WeaponAddedReceived(Vector2 point)
     {
         Debug.Log("stone added : " + point);
-        var item = poolStones.New(point);
-        item.transform.position = UnityExtensions.ConvectorCoordinate(point);
+        poolStones.New(point).transform.position = UnityExtensions.ConvectorCoordinate(point);
     }
 
     public void BonusAddedReceived(Vector2 point)
@@ -36,6 +36,7 @@ public class Multiplayer : EnterPoint, IServerListener
 
     public void PlayerDeadResceived(string playerId, Vector2 point)
     {
+        //todo нужна команды умереть 
         print(string.Format("PlayerDeadResceived {0}", point));
     }
   
@@ -45,12 +46,6 @@ public class Multiplayer : EnterPoint, IServerListener
         print(string.Format("WeaponRemovedReceived {0}", point));
     }
 
-    /// <summary>
-    /// должен вызываться, когда меняется траектория , вызываться на fireclick
-    /// 
-    /// </summary>
-    /// <param name="playerId"></param>
-    /// <param name="point"></param>
     public void MoveReceived(string playerId, Vector2 point)
     {
         print(string.Format("MoveReceived {0} by playerId {1}", point, playerId));
@@ -58,30 +53,32 @@ public class Multiplayer : EnterPoint, IServerListener
 
     public void LoginReceived(string playerId)
     {
-        //CreatePlayer(playerId);
-
         print(string.Format("LoginReceived {0} by playerId", playerId));
     }
 
     public void PickWeaponReceived(string playerId, Vector2 point)
     {
+        //todo тип оружия ???
+       // poolPlayers[playerId].PickupWeapon()
         print(string.Format("PickWeaponReceived {0} by playerId {1}", point, playerId));
     }
 
     public void PickBonusReceived(string playerId, Vector2 point)
     {
+        poolPlayers[playerId].PickupBonus(poolBonusesSpeed[UnityExtensions.GenerateKey(point)]);
         print(string.Format("PickBonusReceived {0} by playerId {1}", point, playerId));
     }
 
     public void UseWeaponReceived(string playerId, Vector2 point)
     {
+        poolPlayers[playerId].Throw(point);
         Debug.Log(string.Format("UseWeaponReceived {0} by playerId {1}", point, playerId));
     }
 
     public void RespawnReceived(string playerId, Vector2 point)
     {
         Debug.Log(string.Format("RespawnReceived {0} by playerId {1}", point, playerId));
-        //CreatePlayer(new Player("sdf"), false);
+        poolPlayers.New(playerId).transform.position = point;
     }
 
     public void OnDestroy()

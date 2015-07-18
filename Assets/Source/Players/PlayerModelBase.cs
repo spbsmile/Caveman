@@ -14,10 +14,13 @@ namespace Caveman.Players
     public class PlayerModelBase : MonoBehaviour
     {
         public Action<Vector2> Death;
-        public Func<WeaponType, ObjectPool> ChangedWeapons;
+        public Func<WeaponType, ObjectPool<WeaponModelBase>> ChangedWeapons;
 
         public Player player;
         public BonusBase bonusType;
+        public string Id;
+        public float Speed { get; set; }
+        public SpriteRenderer spriteRenderer;
 
         protected Vector2 delta;
         protected Animator animator;
@@ -30,10 +33,7 @@ namespace Caveman.Players
 
         private bool inMotion;
         protected PlayerPool poolPlayers;
-        private ObjectPool poolWeapons;
-
-        public float Speed { get; set; }
-        public SpriteRenderer spriteRenderer;
+        private ObjectPool<WeaponModelBase> poolWeapons;
 
         protected virtual void Start()
         {
@@ -48,7 +48,6 @@ namespace Caveman.Players
             transform.GetChild(0).GetComponent<TextMesh>().text = name;
             this.player = player;
             poolPlayers = pool;
-            players = pool.Players;
             r = random;
             transform.position = start;
             Speed = Settings.SpeedPlayer;
@@ -81,12 +80,11 @@ namespace Caveman.Players
             player.Weapons--;
         }
 
-        public IEnumerator Respawn()
+        public virtual IEnumerator Respawn()
         {
             yield return new WaitForSeconds(Settings.TimeRespawnPlayer);
-            var pl = poolPlayers.New(player.id).GetComponent<PlayerModelBase>();
+            var pl = poolPlayers.New(Id).GetComponent<PlayerModelBase>();
             pl.transform.position = new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap));
-           // StartCoroutine(ThrowOnTimer());
         }
 
         //todo переписать
@@ -115,6 +113,11 @@ namespace Caveman.Players
                transform.position.y + delta.y * Time.deltaTime);
                 transform.position = position;
             }
+        }
+
+        public void SetPool(PlayerPool pool)
+        {
+            poolPlayers = pool;
         }
     }
 }

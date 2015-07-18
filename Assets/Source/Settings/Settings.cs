@@ -9,7 +9,7 @@
         public static int HeightMap = 24;
         public static int RoundTime = 70;
         public static int TimeRespawnWeapon = 30;
-        public static int BotsCount = 0;
+        public static int BotsCount = 3;
         public static int InitialLyingWeapons = 20;
         public static float SpeedStone = 5f;
         public static float SpeedPlayer = 2.5f;

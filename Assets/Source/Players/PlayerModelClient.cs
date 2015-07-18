@@ -33,6 +33,12 @@ namespace Caveman.Players
             base.Throw(aim);
         }
 
+        public override IEnumerator Respawn()
+        {
+            base.Respawn();
+            return (ThrowOnTimer());
+        }
+
         private IEnumerator ThrowOnTimer()
         {
             if (player.Weapons > 0)
@@ -50,7 +56,7 @@ namespace Caveman.Players
 
         public void OnTriggerEnter2D(Collider2D other)
         {
-            if (Time.time < 1) return; // todo подумать. 
+            if (Time.time < 1) return;
             var weapon = other.gameObject.GetComponent<WeaponModelBase>();
             if (weapon)
             {
@@ -74,7 +80,6 @@ namespace Caveman.Players
                         player.deaths++;
                         weapon.Destroy();
                         Death(transform.position);
-                        //todo id if multiplayer
                         if (multiplayer) serverConnection.SendPlayerDead();
                         Respawn();
                         poolPlayers.Store(this);

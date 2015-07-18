@@ -35,9 +35,9 @@ namespace Caveman.UI.Windows
             const int deltaY = 30;
             for (var i = 0; i < Settings.BotsCount + 1; i++)
             {
-                Write(poolPlayers.GetName(i), namePlayer, axisY);
-                Write(poolPlayers.GetKills(i), kills, axisY);
-                Write(poolPlayers.GetDeaths(i), deaths, axisY);
+                //Write(poolPlayers.GetName(i), namePlayer, axisY);
+                //Write(poolPlayers.GetKills(i), kills, axisY);
+                //Write(poolPlayers.GetDeaths(i), deaths, axisY);
                 axisY -= deltaY;
             }
         }
