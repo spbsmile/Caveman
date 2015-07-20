@@ -14,7 +14,7 @@ namespace Caveman.Utils
 
     public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour
     {
-        public Func<ObjectPool<StoneSplash>> RelatedPool;
+        public Func<ObjectPool<EffectBase>> RelatedPool;
 
         private Stack<T> stack;
         private T prefab;
@@ -106,7 +106,5 @@ namespace Caveman.Utils
                 return poolServer[key];
             }
         }
-
-       
     }
 }

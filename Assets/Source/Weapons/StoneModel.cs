@@ -7,7 +7,7 @@ namespace Caveman.Weapons
 {
     public class StoneModel : WeaponModelBase
     {
-        private ObjectPool<StoneSplash> poolStonesSplash;
+        private ObjectPool<EffectBase> poolStonesSplash;
         private float bezierTime;
 
         public void Update()
@@ -31,7 +31,7 @@ namespace Caveman.Weapons
             }
         }
 
-        public void SetPoolSplash(ObjectPool<StoneSplash> objectPool)
+        public void SetPoolSplash(ObjectPool<EffectBase> objectPool)
         {
             poolStonesSplash = objectPool;
         }

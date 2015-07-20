@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Caveman.Players;
 using UnityEngine;
 
 namespace Caveman.Utils
 {
-    public class PlayerPool : MonoBehaviour
+    public class  PlayerPool : MonoBehaviour
     {
+        public Action<PlayerModelBase> AddedPlayer;
+
         private Dictionary<string, PlayerModelBase> pool= new Dictionary<string, PlayerModelBase>();
         private PlayerModelBase prefab;
         
@@ -18,7 +21,16 @@ namespace Caveman.Utils
         public void Add(string Id, PlayerModelBase item)
         {
             item.Id = Id;
+            if (AddedPlayer != null)
+            {
+                AddedPlayer(item);
+            }
             pool.Add(Id, item);
+        }
+
+        public Dictionary<string, PlayerModelBase>.ValueCollection GetCurrentPlayers()
+        {
+            return pool.Values;
         }
 
         public void Store(PlayerModelBase player)
@@ -31,12 +43,12 @@ namespace Caveman.Utils
             PlayerModelBase item;
             if (pool.TryGetValue(id, out item))
             {
+                item.gameObject.SetActive(true);
                 return item;
             }
             item = Instantiate(prefab);
-            item.Id = id;
             item.SetPool(this);
-            pool.Add(id, item);
+            Add(id, item);
             return item;
         }
 

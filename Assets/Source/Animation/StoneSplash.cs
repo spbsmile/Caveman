@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Caveman.Animation
 {
-    public class StoneSplash : MonoBehaviour
+    public class StoneSplash : EffectBase
     {
         public float speed;
 
@@ -12,7 +12,7 @@ namespace Caveman.Animation
         private Vector2 target;
 
         private bool afterInit;
-        private ObjectPool<StoneSplash> pool;
+        private ObjectPool<EffectBase> pool;
 
         public void Update()
         {
@@ -38,7 +38,7 @@ namespace Caveman.Animation
             }
         }
 
-        public void Init(int i, Vector2 position, ObjectPool<StoneSplash> pool)
+        public void Init(int i, Vector2 position, ObjectPool<EffectBase> pool)
         {
             this.pool = pool;
             transform.position = position;

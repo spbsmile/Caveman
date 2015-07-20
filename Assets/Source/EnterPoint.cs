@@ -22,9 +22,9 @@ namespace Caveman
         public Transform prefabAiPlayer;
 
         public SkullModel prefabSkull;
-        public StoneSplash prefabStoneFlagmentInc;
         public StoneModel prefabStone;
-        public Transform prefabDeathImage;
+        public StoneSplash prefabStoneFlagmentInc;
+        public EffectBase prefabDeathImage;
         public SpeedBonus prefabBonusSpeed;
 
         public SmoothCamera smoothCamera;
@@ -34,8 +34,6 @@ namespace Caveman
         public Transform containerDeathImages;
         public Transform containerPlayers;
         public Transform containerBonusesSpeed;
-        public Transform containerBonusesForce;
-        public Transform containerBonusesShield;
 
         protected Random r;
         protected ServerConnection serverConnection;
@@ -43,8 +41,8 @@ namespace Caveman
         protected ObjectPool<WeaponModelBase> poolStones;
         protected ObjectPool<WeaponModelBase> poolSkulls;
         protected ObjectPool<BonusBase> poolBonusesSpeed;
-        protected ObjectPool<StoneSplash> poolStonesSplash;
-        //protected ObjectPool<Transform> poolDeathImage;
+        protected ObjectPool<EffectBase> poolStonesSplash;
+        protected ObjectPool<EffectBase> poolDeathImage;
         
         private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
 
@@ -52,8 +50,8 @@ namespace Caveman
         {
             r = new Random();
 
-            poolStonesSplash = CreatePool<StoneSplash>(Settings.PoolCountSplashStones, containerSplashStones, prefabStoneFlagmentInc, null);
-            //poolDeathImage = CreatePool<Transform>(Settings.PoolCountDeathImages, containerDeathImages, prefabDeathImage, null);
+            poolStonesSplash = CreatePool<EffectBase>(Settings.PoolCountSplashStones, containerSplashStones, prefabStoneFlagmentInc, null);
+            poolDeathImage = CreatePool<EffectBase>(Settings.PoolCountDeathImages, containerDeathImages, prefabDeathImage, null);
             poolStones = CreatePool<WeaponModelBase>(Settings.PoolCountStones, containerStones, prefabStone, InitStoneModel);
             poolSkulls = CreatePool<WeaponModelBase>(Settings.PoolCountSkulls, containerSkulls, prefabSkull, InitSkullModel);
             poolBonusesSpeed = CreatePool<BonusBase>(Settings.PoolCountBonusesSpeed, containerBonusesSpeed, prefabBonusSpeed, InitBonusModel);
@@ -61,7 +59,6 @@ namespace Caveman
             poolStones.RelatedPool += () => poolStonesSplash;
 
             poolPlayers = containerPlayers.GetComponent<PlayerPool>();
-          //  poolPlayers.Init();
             var humanPlayer = new Player("Zabiyakin");
             BattleGui.instance.SubscribeOnEvents(humanPlayer);
             BattleGui.instance.resultRound.SetPlayerPool(poolPlayers);
@@ -69,7 +66,7 @@ namespace Caveman
             
             if (serverConnection == null)
             {
-                for (var i = 0; i < Settings.BotsCount; i++)
+                for (var i = 1; i < Settings.BotsCount + 1; i++)
                 {
                     CreatePlayer(new Player(names[i]), true, i.ToString());
                 }
@@ -164,7 +161,8 @@ namespace Caveman
             }
             poolPlayers.Add(id, playerModel);
             playerModel.transform.SetParent(containerPlayers);
-            //playerModel.Death += position => StartCoroutine(DeathAnimate(position));
+            //todo перенести в отдельный скрипт смерти
+            playerModel.Death += position => StartCoroutine(DeathAnimate(position));
             playerModel.ChangedWeapons += ChangedWeapons;
         }
 
@@ -180,17 +178,17 @@ namespace Caveman
             return null;
         }
 
-        ////todo вынести два метода и есть бага у этого метода
-        //private IEnumerator DeathAnimate(Vector2 position)
-        //{
-        //    var deathImage = poolDeathImage.New();
-        //    deathImage.transform.position = position;
-        //    var spriteRenderer = deathImage.GetComponent<SpriteRenderer>();
-        //    if (spriteRenderer)
-        //    {
-        //        yield return UnityExtensions.FadeOut(spriteRenderer);
-        //    }
-        //    poolDeathImage.Store(spriteRenderer.transform);
-        //}
+        //todo вынести два метода и есть бага у этого метода
+        private IEnumerator DeathAnimate(Vector2 position)
+        {
+            var deathImage = poolDeathImage.New();
+            deathImage.transform.position = position;
+            var spriteRenderer = deathImage.GetComponent<SpriteRenderer>();
+            if (spriteRenderer)
+            {
+                yield return UnityExtensions.FadeOut(spriteRenderer);
+            }
+            poolDeathImage.Store(deathImage);
+        }
     }
 }

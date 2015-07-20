@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Caveman.Bonuses;
 using Caveman.Network;
@@ -29,6 +28,7 @@ namespace Caveman.Players
         protected ServerConnection serverConnection;
         protected bool multiplayer;
         protected WeaponType weaponType;
+        //todo переделать под массив
         protected List<PlayerModelBase> players;
 
         private bool inMotion;
@@ -48,6 +48,9 @@ namespace Caveman.Players
             transform.GetChild(0).GetComponent<TextMesh>().text = name;
             this.player = player;
             poolPlayers = pool;
+            players = new List<PlayerModelBase>();
+            players.AddRange(poolPlayers.GetCurrentPlayers());
+            poolPlayers.AddedPlayer += @base => players.Add(@base);
             r = random;
             transform.position = start;
             Speed = Settings.SpeedPlayer;
@@ -57,6 +60,11 @@ namespace Caveman.Players
         public virtual void PickupBonus(BonusBase bonus)
         {
             bonus.Effect(this);
+        }
+
+        public virtual void Die()
+        {
+            Death(transform.position);
         }
 
         public virtual bool PickupWeapon(WeaponModelBase weaponModel)
@@ -80,11 +88,15 @@ namespace Caveman.Players
             player.Weapons--;
         }
 
-        public virtual IEnumerator Respawn()
+        public virtual void Respawn()
         {
-            yield return new WaitForSeconds(Settings.TimeRespawnPlayer);
-            var pl = poolPlayers.New(Id).GetComponent<PlayerModelBase>();
-            pl.transform.position = new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap));
+            print("Respawn Base");
+            Invoke("Birth", Settings.TimeRespawnPlayer);
+        }
+
+        public void Birth()
+        {
+            poolPlayers.New(Id).transform.position = new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)); 
         }
 
         //todo переписать
