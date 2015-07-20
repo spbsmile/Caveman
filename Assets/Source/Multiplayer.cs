@@ -1,11 +1,12 @@
 ﻿using Caveman;
 using Caveman.Network;
+using Caveman.Players;
 using Caveman.Utils;
 using UnityEngine;
 
 public class Multiplayer : EnterPoint, IServerListener
 {
-    public Transform prefabServerPlayer;
+    public PlayerModelBase prefabServerPlayer;
 
     public const float WidthMapServer = 1350;
     public const float HeigthMapServer = 1350;
@@ -16,6 +17,7 @@ public class Multiplayer : EnterPoint, IServerListener
         serverConnection.StartSession(SystemInfo.deviceUniqueIdentifier, SystemInfo.deviceName);
         base.Start();
         serverConnection.SendRespawn(poolPlayers[IdHostPlayer].transform.position);
+        poolPlayers.SetPrefab(prefabServerPlayer);
 	}
 
     public void Update()

@@ -3,12 +3,8 @@ using UnityEngine;
 
 namespace Caveman.Utils
 {
-    public class BezierUtils
+    public static class BezierUtils
     {
-        public BezierUtils()
-        {
-        }
-
         /**
          * Calculates bezier position value according given start and and point, using time t
          */
@@ -25,13 +21,13 @@ namespace Caveman.Utils
          */
         public static Vector2 ControlPoint(Vector2 startPoint, Vector2 endPoint, float offsetRate = 2.5f)
         {
-            float distance = Vector2.Distance(startPoint, endPoint);
-            Vector2 centerPoint = Vector2.Lerp(startPoint, endPoint, 0.5f);
-            float r = distance / offsetRate;
-            double angle = Math.Atan((endPoint.y - startPoint.y) / (endPoint.x - startPoint.x));
+            var distance = Vector2.Distance(startPoint, endPoint);
+            var centerPoint = Vector2.Lerp(startPoint, endPoint, 0.5f);
+            var r = distance / offsetRate;
+            var angle = Math.Atan((endPoint.y - startPoint.y) / (endPoint.x - startPoint.x));
 
-            float desiredX = r * (float)Math.Cos(angle + Math.PI / 2);
-            float desiredY = r * (float)Math.Sin(angle + Math.PI / 2);
+            var desiredX = r * (float)Math.Cos(angle + Math.PI / 2);
+            var desiredY = r * (float)Math.Sin(angle + Math.PI / 2);
 
             desiredX += centerPoint.x;
             desiredY += centerPoint.y;

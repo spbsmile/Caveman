@@ -6,13 +6,13 @@ using UnityEngine;
 
 namespace Caveman.Utils
 {
-    public abstract class ASupportPool<T> : MonoBehaviour where T : Component
+    public abstract class ASupportPool<T> : MonoBehaviour where T : MonoBehaviour
     {
         public abstract void SetPool(ObjectPool<T> item);
         public string Id;
     }
 
-    public class ObjectPool<T> : MonoBehaviour where T : Component
+    public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour
     {
         public Func<ObjectPool<StoneSplash>> RelatedPool;
 

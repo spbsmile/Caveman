@@ -44,7 +44,7 @@ namespace Caveman
         protected ObjectPool<WeaponModelBase> poolSkulls;
         protected ObjectPool<BonusBase> poolBonusesSpeed;
         protected ObjectPool<StoneSplash> poolStonesSplash;
-        protected ObjectPool<Transform> poolDeathImage;
+        //protected ObjectPool<Transform> poolDeathImage;
         
         private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
 
@@ -53,7 +53,7 @@ namespace Caveman
             r = new Random();
 
             poolStonesSplash = CreatePool<StoneSplash>(Settings.PoolCountSplashStones, containerSplashStones, prefabStoneFlagmentInc, null);
-            poolDeathImage = CreatePool<Transform>(Settings.PoolCountDeathImages, containerDeathImages, prefabDeathImage, null);
+            //poolDeathImage = CreatePool<Transform>(Settings.PoolCountDeathImages, containerDeathImages, prefabDeathImage, null);
             poolStones = CreatePool<WeaponModelBase>(Settings.PoolCountStones, containerStones, prefabStone, InitStoneModel);
             poolSkulls = CreatePool<WeaponModelBase>(Settings.PoolCountSkulls, containerSkulls, prefabSkull, InitSkullModel);
             poolBonusesSpeed = CreatePool<BonusBase>(Settings.PoolCountBonusesSpeed, containerBonusesSpeed, prefabBonusSpeed, InitBonusModel);
@@ -61,6 +61,7 @@ namespace Caveman
             poolStones.RelatedPool += () => poolStonesSplash;
 
             poolPlayers = containerPlayers.GetComponent<PlayerPool>();
+          //  poolPlayers.Init();
             var humanPlayer = new Player("Zabiyakin");
             BattleGui.instance.SubscribeOnEvents(humanPlayer);
             BattleGui.instance.resultRound.SetPlayerPool(poolPlayers);
@@ -119,7 +120,7 @@ namespace Caveman
             StartCoroutine(PutWeapons());
         }
 
-        private void PutItem<T>(ObjectPool<T> pool) where T : Component
+        private void PutItem<T>(ObjectPool<T> pool) where T : MonoBehaviour
         {
             var item = pool.New();
             StartCoroutine(UnityExtensions.FadeIn(item.GetComponent<SpriteRenderer>()));
@@ -127,7 +128,7 @@ namespace Caveman
                 r.Next(Settings.HeightMap));
         }
 
-        private ObjectPool<T> CreatePool<T>(int initialBufferSize, Transform container, T prefab, Action<GameObject, ObjectPool<T>> init) where T : Component
+        private ObjectPool<T> CreatePool<T>(int initialBufferSize, Transform container, T prefab, Action<GameObject, ObjectPool<T>> init) where T : MonoBehaviour
         {
             var pool = container.GetComponent<ObjectPool<T>>();
             pool.CreatePool(prefab, initialBufferSize, serverConnection != null);
@@ -163,7 +164,7 @@ namespace Caveman
             }
             poolPlayers.Add(id, playerModel);
             playerModel.transform.SetParent(containerPlayers);
-            playerModel.Death += position => StartCoroutine(DeathAnimate(position));
+            //playerModel.Death += position => StartCoroutine(DeathAnimate(position));
             playerModel.ChangedWeapons += ChangedWeapons;
         }
 
@@ -179,17 +180,17 @@ namespace Caveman
             return null;
         }
 
-        //todo вынести два метода и есть бага у этого метода
-        private IEnumerator DeathAnimate(Vector2 position)
-        {
-            var deathImage = poolDeathImage.New();
-            deathImage.transform.position = position;
-            var spriteRenderer = deathImage.GetComponent<SpriteRenderer>();
-            if (spriteRenderer)
-            {
-                yield return UnityExtensions.FadeOut(spriteRenderer);
-            }
-            poolDeathImage.Store(spriteRenderer.transform);
-        }
+        ////todo вынести два метода и есть бага у этого метода
+        //private IEnumerator DeathAnimate(Vector2 position)
+        //{
+        //    var deathImage = poolDeathImage.New();
+        //    deathImage.transform.position = position;
+        //    var spriteRenderer = deathImage.GetComponent<SpriteRenderer>();
+        //    if (spriteRenderer)
+        //    {
+        //        yield return UnityExtensions.FadeOut(spriteRenderer);
+        //    }
+        //    poolDeathImage.Store(spriteRenderer.transform);
+        //}
     }
 }

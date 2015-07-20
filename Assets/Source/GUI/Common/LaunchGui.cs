@@ -1,4 +1,6 @@
-﻿namespace Caveman.UI.Common
+﻿using Caveman.Utils;
+
+namespace Caveman.UI.Common
 {
     public class LaunchGui : AdditiveScene
     {

@@ -6,12 +6,12 @@ namespace Caveman.Utils
 {
     public class PlayerPool : MonoBehaviour
     {
-        private Dictionary<string, PlayerModelBase> pool;
+        private Dictionary<string, PlayerModelBase> pool= new Dictionary<string, PlayerModelBase>();
         private PlayerModelBase prefab;
-
-        public void Init(PlayerModelBase prefab)
+        
+        //todo в зависимости от разных игроков разные одежки 
+        public void SetPrefab(PlayerModelBase prefab)
         {
-            pool = new Dictionary<string, PlayerModelBase>();
             this.prefab = prefab;
         }
 

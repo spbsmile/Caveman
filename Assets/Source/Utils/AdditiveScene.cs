@@ -1,26 +1,29 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class AdditiveScene : MonoBehaviour
+namespace Caveman.Utils
 {
-    public abstract string scene { get; }
-
-    protected virtual bool BeforeLoad()
+    public abstract class AdditiveScene : MonoBehaviour
     {
-        return true;
-    }
+        public abstract string scene { get; }
 
-    protected virtual void AfterLoad()
-    {
-        Destroy(this);
-    }
-
-    public virtual IEnumerator Start()
-    {
-        if (BeforeLoad())
+        protected virtual bool BeforeLoad()
         {
-            yield return Application.LoadLevelAdditiveAsync(scene);
-            AfterLoad();
+            return true;
+        }
+
+        protected virtual void AfterLoad()
+        {
+            Destroy(this);
+        }
+
+        public virtual IEnumerator Start()
+        {
+            if (BeforeLoad())
+            {
+                yield return Application.LoadLevelAdditiveAsync(scene);
+                AfterLoad();
+            }
         }
     }
 }

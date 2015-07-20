@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Caveman.Network
 {
     public class ClientMessage
