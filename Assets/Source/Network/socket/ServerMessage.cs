@@ -36,6 +36,10 @@ namespace Caveman.Network
             var point = (action[ServerParams.X] != null && action[ServerParams.Y] != null)
                 ? new Vector2(action[ServerParams.X].f, action[ServerParams.Y].f)
                 : Vector2.zero;
+            if (action[ServerParams.Player]!= null)
+            {
+                Debug.Log(action[ServerParams.Player].str + "ServerParams.Player");    
+            }
             var playerId = action[ServerParams.Player]!= null ?action[ServerParams.Player].str: null;
             if (type.Equals(ServerParams.StoneAddedAction))
             {
