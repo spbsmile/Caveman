@@ -38,6 +38,9 @@ namespace Caveman.Players
         protected virtual void Start()
         {
             animator = GetComponent<Animator>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            players = new List<PlayerModelBase>();
+            Speed = Settings.SpeedPlayer;
         }
 
         public void Init(Player player, Vector2 start, Random random, PlayerPool pool, ServerConnection serverConnection)
@@ -48,13 +51,10 @@ namespace Caveman.Players
             transform.GetChild(0).GetComponent<TextMesh>().text = name;
             this.player = player;
             poolPlayers = pool;
-            players = new List<PlayerModelBase>();
             players.AddRange(poolPlayers.GetCurrentPlayers());
             poolPlayers.AddedPlayer += @base => players.Add(@base);
             r = random;
             transform.position = start;
-            Speed = Settings.SpeedPlayer;
-            spriteRenderer = GetComponent<SpriteRenderer>();
         }
 
         public virtual void PickupBonus(BonusBase bonus)

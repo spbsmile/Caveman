@@ -28,7 +28,7 @@ namespace Caveman.Utils
             pool.Add(Id, item);
         }
 
-        public Dictionary<string, PlayerModelBase>.ValueCollection GetCurrentPlayers()
+        public IEnumerable<PlayerModelBase> GetCurrentPlayers()
         {
             return pool.Values;
         }
