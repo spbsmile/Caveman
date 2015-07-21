@@ -39,7 +39,6 @@ namespace Caveman.Players
         {
             animator = GetComponent<Animator>();
             spriteRenderer = GetComponent<SpriteRenderer>();
-            players = new List<PlayerModelBase>();
             Speed = Settings.SpeedPlayer;
         }
 
@@ -51,6 +50,7 @@ namespace Caveman.Players
             transform.GetChild(0).GetComponent<TextMesh>().text = name;
             this.player = player;
             poolPlayers = pool;
+            players = new List<PlayerModelBase>();
             players.AddRange(poolPlayers.GetCurrentPlayers());
             poolPlayers.AddedPlayer += @base => players.Add(@base);
             r = random;
