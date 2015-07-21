@@ -41,13 +41,8 @@ namespace Caveman.Players
                         weapon.Destroy();
                         Die();
                         if (multiplayer) serverConnection.SendPlayerDead();
-                        Respawn();
+                        StartCoroutine(Respawn());
                         poolPlayers.Store(this);
-                    }
-                    else
-                    {
-                        // for check temp
-                        // print(" weapon.owner == player");
                     }
                 }
             }
@@ -59,6 +54,12 @@ namespace Caveman.Players
                     PickupBonus(bonus);
                 }
             }
+        }
+
+        public override IEnumerator Respawn()
+        {
+            yield return StartCoroutine(base.Respawn());
+            StartCoroutine(ThrowOnTimer());
         }
 
         public override void PickupBonus(BonusBase bonus)
@@ -80,14 +81,9 @@ namespace Caveman.Players
             base.Throw(aim);
         }
 
-        public override void Respawn()
-        {
-            print("Respawn On Client");
-            base.Respawn();
-        }
-
         private IEnumerator ThrowOnTimer()
         {
+            yield return new WaitForSeconds(Settings.TimeThrowStone);
             if (player.Weapons > 0)
             {
                 var victim = FindClosestPlayer();
@@ -97,11 +93,8 @@ namespace Caveman.Players
                     Throw(victim.transform.position);
                 }
             }
-            yield return new WaitForSeconds(Settings.TimeThrowStone);
             if (gameObject.activeSelf) StartCoroutine(ThrowOnTimer());
         }
-
-        
 
         private PlayerModelBase FindClosestPlayer()
         {
@@ -119,11 +112,6 @@ namespace Caveman.Players
                 }
             }
             return result;
-        }
-
-        public void OnEnable()
-        {
-            StartCoroutine(ThrowOnTimer());
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     public class Settings
     {
-        public const int TimeRespawnPlayer = 1;
+        public const int TimeRespawnPlayer = 2;
         public const int RotateStoneParameter = 10;
 
         public static int WidthMap = 24;

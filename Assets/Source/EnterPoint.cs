@@ -161,7 +161,6 @@ namespace Caveman
             }
             poolPlayers.Add(id, playerModel);
             playerModel.transform.SetParent(containerPlayers);
-            //todo перенести в отдельный скрипт смерти
             playerModel.Death += position => StartCoroutine(DeathAnimate(position));
             playerModel.ChangedWeapons += ChangedWeapons;
         }
@@ -178,7 +177,7 @@ namespace Caveman
             return null;
         }
 
-        //todo вынести два метода и есть бага у этого метода
+        //todo вынести , есть бага 
         private IEnumerator DeathAnimate(Vector2 position)
         {
             var deathImage = poolDeathImage.New();

@@ -1,4 +1,5 @@
-﻿using Caveman.Setting;
+﻿using System.Collections;
+using Caveman.Setting;
 using Caveman.Utils;
 using UnityEngine;
 using Random = System.Random;
@@ -9,14 +10,23 @@ namespace Caveman.Players
     {
         private Transform weapons;
 
+        public void OnDisable()
+        {
+            StandStill();
+        }
+
+        public override IEnumerator Respawn()
+        {
+            SetRandomMove();
+            return base.Respawn();
+        }
+
         protected override void Start()
         {
             base.Start();
             GetComponent<SpriteRenderer>().color = new Color32((byte) r.Next(255), (byte) r.Next(255),
                 (byte) r.Next(255), 255);
-            target = RandomPosition;
-            delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedPlayer);
-            animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Settings.SpeedPlayer);
+            SetRandomMove();
         }
 
         public void InitAi(Player player, Vector2 start, Random random, PlayerPool pool, Transform allLyingWeapons)
@@ -25,10 +35,10 @@ namespace Caveman.Players
             weapons = allLyingWeapons;
         }
 
-        //todo переписать   
         public void Update()
         {
-            if (InMotion)
+            if ((Vector2.SqrMagnitude(delta) > UnityExtensions.ThresholdPosition &&
+                    Vector2.SqrMagnitude((Vector2)transform.position - target) > UnityExtensions.ThresholdPosition))
             {
                 Move();
             }
@@ -50,7 +60,6 @@ namespace Caveman.Players
                     delta = UnityExtensions.CalculateDelta(transform.position, target, Speed);
                     animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Speed);
                 }
-                InMotion = !InMotion;
             }
         }
 
@@ -73,6 +82,13 @@ namespace Caveman.Players
                 }
                 return nearPosition;
             }
+        }
+
+        private void SetRandomMove()
+        {
+            target = RandomPosition;
+            delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedPlayer);
+            animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Settings.SpeedPlayer);
         }
 
         private Vector2 RandomPosition

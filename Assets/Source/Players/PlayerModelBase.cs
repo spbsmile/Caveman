@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Caveman.Bonuses;
 using Caveman.Network;
@@ -31,7 +32,6 @@ namespace Caveman.Players
         //todo переделать под массив
         protected List<PlayerModelBase> players;
 
-        private bool inMotion;
         protected PlayerPool poolPlayers;
         private ObjectPool<WeaponModelBase> poolWeapons;
 
@@ -84,47 +84,26 @@ namespace Caveman.Players
 
         public virtual void Throw(Vector2 aim)
         {
-            poolWeapons.New().GetComponent<WeaponModelBase>().SetMotion(player, transform.position, aim);
+            poolWeapons.New().SetMotion(player, transform.position, aim);
             player.Weapons--;
         }
 
-        public virtual void Respawn()
+        public virtual IEnumerator Respawn()
         {
-            print("Respawn Base");
-            Invoke("Birth", Settings.TimeRespawnPlayer);
+            yield return new WaitForSeconds(Settings.TimeRespawnPlayer);
+            poolPlayers.New(Id).transform.position = new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap));
         }
 
-        public void Birth()
+        public virtual void StandStill()
         {
-            poolPlayers.New(Id).transform.position = new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)); 
-        }
-
-        //todo переписать
-        public bool InMotion
-        {
-            protected get
-            {
-                if (Vector2.SqrMagnitude(delta) > UnityExtensions.ThresholdPosition &&
-                    Vector2.SqrMagnitude((Vector2)transform.position - target) < UnityExtensions.ThresholdPosition)
-                {
-                    animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, 0);
-                    delta = Vector2.zero;
-                    inMotion = false;
-                    return inMotion;
-                }
-                return inMotion;
-            }
-            set { inMotion = value; }
+            animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, 0);
+            delta = Vector2.zero;
         }
 
         protected void Move()
         {
-            if (Vector2.SqrMagnitude(delta) > UnityExtensions.ThresholdPosition)
-            {
-                var position = new Vector3(transform.position.x + delta.x * Time.deltaTime,
-               transform.position.y + delta.y * Time.deltaTime);
-                transform.position = position;
-            }
+            transform.position = new Vector3(transform.position.x + delta.x*Time.deltaTime,
+                transform.position.y + delta.y*Time.deltaTime);
         }
 
         public void SetPool(PlayerPool pool)

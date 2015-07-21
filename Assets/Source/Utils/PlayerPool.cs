@@ -35,7 +35,8 @@ namespace Caveman.Utils
 
         public void Store(PlayerModelBase player)
         {
-            player.gameObject.SetActive(false);
+            player.enabled = false;
+            player.transform.position = new Vector3(100,100,100);
         }
 
         public PlayerModelBase New(string id)
@@ -43,7 +44,7 @@ namespace Caveman.Utils
             PlayerModelBase item;
             if (pool.TryGetValue(id, out item))
             {
-                item.gameObject.SetActive(true);
+                item.enabled = true;
                 return item;
             }
             item = Instantiate(prefab);

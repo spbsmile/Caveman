@@ -76,7 +76,6 @@ namespace Caveman.Weapons
                     Destroy();
                 }
             }
-
         }
     }
 }
