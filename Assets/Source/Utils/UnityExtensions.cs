@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using Caveman.Network;
-using Caveman.Setting;
 using UnityEngine;
 
 namespace Caveman.Utils
@@ -44,18 +42,6 @@ namespace Caveman.Utils
                 }
                 yield return null;
             }
-        }
-
-        public static Vector2 ConvectorCoordinate(Vector2 point)
-        {
-            var x = (point.x / Multiplayer.HeigthMapServer) * Settings.HeightMap;
-            var y = (point.y / Multiplayer.WidthMapServer) * Settings.WidthMap;
-            return new Vector2(x, y);
-        }
-
-        public static string GenerateKey(Vector2 point)
-        {
-            return point.x + ":" + point.y;
         }
     }
 }

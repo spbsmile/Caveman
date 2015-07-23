@@ -10,16 +10,16 @@ namespace Caveman.Network
 {
     public interface IServerListener
     {
-        void WeaponAddedReceived(Vector2 point);
-        void WeaponRemovedReceived(Vector2 point);
+        void WeaponAddedReceived(string key, Vector2 point);
+        void WeaponRemovedReceived(string key);
         void MoveReceived(string playerId, Vector2 point);
         void LoginReceived(string playerId);
-        void PickWeaponReceived(string playerId, Vector2 point);
-        void PickBonusReceived(string playerId, Vector2 point);
-        void UseWeaponReceived(string playerId, Vector2 point);
+        void PickWeaponReceived(string playerId, string key);
+        void PickBonusReceived(string playerId, string key);
+        void UseWeaponReceived(string playerId, Vector2 aim);
         void RespawnReceived(string playerId, Vector2 point);
-        void BonusAddedReceived(Vector2 point);
-        void PlayerDeadResceived(string playerId, Vector2 point);
+        void BonusAddedReceived(string key, Vector2 point);
+        void PlayerDeadResceived(string playerId);
     }
 
     public class ServerConnection

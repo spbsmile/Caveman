@@ -1,3 +1,4 @@
+using Caveman.Setting;
 using UnityEngine;
 
 namespace Caveman.Network
@@ -33,17 +34,19 @@ namespace Caveman.Network
 
         private void SendMessageToListener(IServerListener listener, JSONObject action, string type)
         {
-            var point = (action[ServerParams.X] != null && action[ServerParams.Y] != null)
+            var pointServer = (action[ServerParams.X] != null && action[ServerParams.Y] != null)
                 ? new Vector2(action[ServerParams.X].f, action[ServerParams.Y].f)
                 : Vector2.zero;
+            var point = Convector(pointServer);
+            var key = GenerateKey(point);
             var playerId = action[ServerParams.UserId]!= null ?action[ServerParams.UserId].str: null;
             if (type.Equals(ServerParams.StoneAddedAction))
             {
-                listener.WeaponAddedReceived(point);
+                listener.WeaponAddedReceived(key, point);
             }
             else if (type.Equals(ServerParams.StoneRemovedAction))
             {
-                listener.WeaponRemovedReceived(point);
+                listener.WeaponRemovedReceived(key);
             }
             else if (type.Equals(ServerParams.MoveAction))
             {
@@ -51,18 +54,18 @@ namespace Caveman.Network
             }
             else if (type.Equals(ServerParams.PickWeaponAction))
             {
-                listener.PickWeaponReceived(playerId, point);
+                listener.PickWeaponReceived(playerId, key);
             }
             else if (type.Equals(ServerParams.BonusAddedAction))
             {
-                listener.BonusAddedReceived(point);
+                listener.BonusAddedReceived(key, point);
             }
             else if (type.Equals(ServerParams.PickBonusAction))
             {
-                listener.PickBonusReceived(playerId, point);
+                listener.PickBonusReceived(playerId, key);
             }
             else if (type.Equals(ServerParams.UseWeaponAction))
-            {
+            {                                        //aim
                 listener.UseWeaponReceived(playerId, point);
             }
             else if (type.Equals(ServerParams.RespawnAction))
@@ -76,8 +79,20 @@ namespace Caveman.Network
             }
             else if (type.Equals(ServerParams.PlayerDeadAction))
             {
-                listener.PlayerDeadResceived(playerId, point);
+                listener.PlayerDeadResceived(playerId);
             }
+        }
+
+        private string GenerateKey(Vector2 point)
+        {
+            return point.x + ":" + point.y;
+        }
+
+        private Vector2 Convector(Vector2 point)
+        {
+            var x = (point.x / Multiplayer.HeigthMapServer) * Settings.HeightMap;
+            var y = (point.y / Multiplayer.WidthMapServer) * Settings.WidthMap;
+            return new Vector2(x, y);
         }
     }
 }

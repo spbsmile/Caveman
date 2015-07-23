@@ -63,9 +63,8 @@ namespace Caveman.Utils
             stack.Push(obj);            
         }
 
-        public T New(Vector2 point)
+        public T New(string key)
         {
-            var key = UnityExtensions.GenerateKey(point);
             var item = GetItem();
             while (!string.IsNullOrEmpty(item.GetComponent<ASupportPool<T>>().Id))
             {
@@ -84,9 +83,8 @@ namespace Caveman.Utils
             return item;
         }
 
-        public void Store(Vector2 point)
+        public void Store(string key)
         {
-            var key = UnityExtensions.GenerateKey(point);
             T value;
             if (poolServer.TryGetValue(key, out value))
             {
@@ -103,7 +101,16 @@ namespace Caveman.Utils
         {
             get
             {
-                return poolServer[key];
+                if (poolServer.ContainsKey(key))
+                {
+                    return poolServer[key];    
+                }
+                print(key + " requare key");
+                foreach (var tkey in poolServer.Keys)
+                {
+                    print(tkey + "contain key");
+                }
+                return null;
             }
         }
     }

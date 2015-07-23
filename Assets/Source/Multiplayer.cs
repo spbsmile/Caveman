@@ -1,5 +1,4 @@
 ﻿using Caveman.Players;
-using Caveman.Utils;
 using UnityEngine;
 
 namespace Caveman.Network
@@ -25,25 +24,25 @@ namespace Caveman.Network
             serverConnection.Update();
         }
 
-        public void WeaponAddedReceived(Vector2 point)
+        public void WeaponAddedReceived(string key, Vector2 point)
         {
-            poolStones.New(point).transform.position = UnityExtensions.ConvectorCoordinate(point); Debug.Log("stone added : " + point);
+            poolStones.New(key).transform.position = point; Debug.Log("stone added : " + key);
         }
 
-        public void BonusAddedReceived(Vector2 point)
+        public void BonusAddedReceived(string key, Vector2 point)
         {
-            print(string.Format("BonusAddedReceived {0}", point));
+            print(string.Format("BonusAddedReceived {0}", key));
         }
 
-        public void PlayerDeadResceived(string playerId, Vector2 point)
+        public void PlayerDeadResceived(string playerId)
         {
             //todo нужна команды умереть 
-            print(string.Format("PlayerDeadResceived {0}", point));
+            print(string.Format("PlayerDeadResceived {0}", playerId));
         }
 
-        public void WeaponRemovedReceived(Vector2 point)
+        public void WeaponRemovedReceived(string key)
         {
-            poolStones.Store(point); print(string.Format("WeaponRemovedReceived {0}", point));
+            poolStones.Store(key); print(string.Format("WeaponRemovedReceived {0}", key));
         }
 
         public void MoveReceived(string playerId, Vector2 point)
@@ -56,20 +55,20 @@ namespace Caveman.Network
             print(string.Format("LoginReceived {0} by playerId", playerId));
         }
 
-        public void PickWeaponReceived(string playerId, Vector2 point)
+        public void PickWeaponReceived(string playerId, string key)
         {
             //todo только один тип - камни 
-            poolPlayers[playerId].PickupWeapon(poolStones[UnityExtensions.GenerateKey(point)]); print(string.Format("PickWeaponReceived {0} by playerId {1}", point, playerId));
+            poolPlayers[playerId].PickupWeapon(poolStones[key]); print(string.Format("PickWeaponReceived {0} by playerId {1}", key, playerId));
         }
 
-        public void PickBonusReceived(string playerId, Vector2 point)
+        public void PickBonusReceived(string playerId, string key)
         {
-            poolPlayers[playerId].PickupBonus(poolBonusesSpeed[UnityExtensions.GenerateKey(point)]); print(string.Format("PickBonusReceived {0} by playerId {1}", point, playerId));
+            poolPlayers[playerId].PickupBonus(poolBonusesSpeed[key]); print(string.Format("PickBonusReceived {0} by playerId {1}", key, playerId));
         }
 
-        public void UseWeaponReceived(string playerId, Vector2 point)
+        public void UseWeaponReceived(string playerId, Vector2 aim)
         {
-            poolPlayers[playerId].Throw(point); Debug.Log(string.Format("UseWeaponReceived {0} by playerId {1}", point, playerId));
+            poolPlayers[playerId].Throw(aim); Debug.Log(string.Format("UseWeaponReceived aim {0} by playerId {1}", aim, playerId));
         }
 
         public void RespawnReceived(string playerId, Vector2 point)
