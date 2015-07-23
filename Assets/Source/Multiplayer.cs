@@ -74,9 +74,7 @@ namespace Caveman.Network
 
         public void RespawnReceived(string playerId, Vector2 point)
         {
-            //todo playerId null
-            var hack = "123";
-            poolPlayers.New(hack).transform.position = point; Debug.Log(string.Format("RespawnReceived {0} by playerId {1}", point, playerId));
+            poolPlayers.New(playerId).transform.position = point; Debug.Log(string.Format("RespawnReceived {0} by playerId {1}", point, playerId));
         }
 
         public void OnDestroy()

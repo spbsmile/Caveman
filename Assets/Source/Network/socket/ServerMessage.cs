@@ -21,12 +21,12 @@ namespace Caveman.Network
             {
                 foreach (var jsonItem in contentObject.list)
                 {
-                    SendMessageToListener(listener, jsonItem, jsonItem.GetField(ServerParams.ActionType).str);
+                    SendMessageToListener(listener, jsonItem, jsonItem[ServerParams.ActionType].str);
                 }
             }
             else
             {
-                SendMessageToListener(listener, contentObject, contentObject.GetField(ServerParams.ActionType).ToString());
+                SendMessageToListener(listener, contentObject, contentObject[ServerParams.ActionType].str);
             }
         }
 
@@ -36,11 +36,7 @@ namespace Caveman.Network
             var point = (action[ServerParams.X] != null && action[ServerParams.Y] != null)
                 ? new Vector2(action[ServerParams.X].f, action[ServerParams.Y].f)
                 : Vector2.zero;
-            if (action[ServerParams.Player]!= null)
-            {
-                Debug.Log(action[ServerParams.Player].str + "ServerParams.Player");    
-            }
-            var playerId = action[ServerParams.Player]!= null ?action[ServerParams.Player].str: null;
+            var playerId = action[ServerParams.UserId]!= null ?action[ServerParams.UserId].str: null;
             if (type.Equals(ServerParams.StoneAddedAction))
             {
                 listener.WeaponAddedReceived(point);
