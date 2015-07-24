@@ -13,6 +13,7 @@ namespace Caveman.Players
             base.Start();
             StartCoroutine(ThrowOnTimer());
             ChangedWeapons += () => player.Weapons = 0;
+            print("hello subscribe ChangedWeapons" + name);
         }
 
         public void OnTriggerEnter2D(Collider2D other)

@@ -12,6 +12,7 @@ namespace Caveman.Players
         {
             base.Start();
             ChangedWeapons += () => weapons = 0;
+            print("hello subscribe ChangedWeapons" + name);
         }
 
         public override void PickupWeapon(WeaponModelBase weaponModel)

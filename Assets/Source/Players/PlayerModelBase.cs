@@ -75,7 +75,14 @@ namespace Caveman.Players
             {
                 poolWeapons = ChangedWeaponsPool(weaponModel.type);
                 weaponType = weaponModel.type;
-                ChangedWeapons();
+                if (ChangedWeapons != null)
+                {
+                    ChangedWeapons();    
+                }
+                else
+                {
+                    print("ChangedWeapons null" + name);
+                }
             }
             animator.SetTrigger(Settings.AnimPickup);
             weaponModel.Take();

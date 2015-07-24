@@ -49,9 +49,9 @@ namespace Caveman.Network
             print(string.Format("MoveReceived {0} by playerId {1}", point, playerId));
         }
 
-        public void LoginReceived(string playerId)
+        public void LoginReceived(string playerId, string name)
         {
-            CreatePlayer(new Player("server"), playerId, false, true, prefabServerPlayer);
+            CreatePlayer(new Player(name), playerId, false, true, prefabServerPlayer);
             //print(string.Format("LoginReceived {0} by playerId", playerId));
         }
 

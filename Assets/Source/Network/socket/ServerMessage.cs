@@ -39,7 +39,7 @@ namespace Caveman.Network
                 : Vector2.zero;
             var key = GenerateKey(pointServer);
             var pointClient = Convector(pointServer);
-            Debug.Log(pointServer + " pointServer");
+            //Debug.Log(pointServer + " pointServer");
             var playerId = action[ServerParams.UserId]!= null ?action[ServerParams.UserId].str: null;
             if (type.Equals(ServerParams.StoneAddedAction))
             {
@@ -76,8 +76,7 @@ namespace Caveman.Network
             else if (type.Equals(ServerParams.LoginAction))
             {
                 var playerName = action[ServerParams.UserName].str;
-                Debug.Log(playerName + "LoginReseived");
-                listener.LoginReceived(playerId);
+                listener.LoginReceived(playerId, playerName);
             }
             else if (type.Equals(ServerParams.PlayerDeadAction))
             {
