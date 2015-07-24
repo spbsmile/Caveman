@@ -37,9 +37,9 @@ namespace Caveman.Network
             var pointServer = (action[ServerParams.X] != null && action[ServerParams.Y] != null)
                 ? new Vector2(action[ServerParams.X].f, action[ServerParams.Y].f)
                 : Vector2.zero;
+            var key = GenerateKey(pointServer);
             var pointClient = Convector(pointServer);
             Debug.Log(pointServer + " pointServer");
-            var key = GenerateKey(pointClient);
             var playerId = action[ServerParams.UserId]!= null ?action[ServerParams.UserId].str: null;
             if (type.Equals(ServerParams.StoneAddedAction))
             {

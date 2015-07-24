@@ -1,3 +1,7 @@
+using System;
+using Caveman.Setting;
+using UnityEngine;
+
 namespace Caveman.Network
 {
     public class ClientMessage
@@ -37,15 +41,29 @@ namespace Caveman.Network
             return new ClientMessage(json);
         }
 
-        public static ClientMessage PickWeapon(float x, float y)//string weaponId)
+        public static ClientMessage PickWeapon(string weaponId)
         {
-            //x = 
-            //y = 
+            var pointServer = InverseIdToPoint(weaponId);
             var json = new JSONObject(JSONObject.Type.OBJECT);
             json.AddField(ServerParams.ActionType, ServerParams.PickWeaponAction);
-            json.AddField(ServerParams.X, x);
-            json.AddField(ServerParams.Y, y);
+            json.AddField(ServerParams.X, pointServer.x);
+            json.AddField(ServerParams.Y, pointServer.y);
             return new ClientMessage(json);
+        }
+
+        private  static Vector2 InverseIdToPoint(string id)
+        {
+            var index = id.IndexOf(":");
+            var x = id.Substring(0, index);
+            var y = id.Substring(index + 1);
+            return new Vector2(Convert.ToInt32(x),Convert.ToInt32(y));
+        }
+
+        private static Vector2 GetServerPoint(Vector2 pointClient)
+        {
+            var x = (pointClient.x / Settings.WidthMap) * Multiplayer.WidthMapServer;
+            var y = (pointClient.y / Settings.HeightMap) * Multiplayer.HeigthMapServer;
+            return new Vector2(x, y);
         }
 
         public static ClientMessage UseWeapon(float x, float y)
@@ -57,21 +75,24 @@ namespace Caveman.Network
             return new ClientMessage(json);
         }
 
-        public static ClientMessage PickBonus(float x, float y)
+        public static ClientMessage PickBonus(string bonusId)
         {
+            var pointServer = InverseIdToPoint(bonusId);
             var json = new JSONObject(JSONObject.Type.OBJECT);
             json.AddField(ServerParams.ActionType, ServerParams.PickBonusAction);
-            json.AddField(ServerParams.X, x);
-            json.AddField(ServerParams.Y, y);
+            json.AddField(ServerParams.X, pointServer.x);
+            json.AddField(ServerParams.Y, pointServer.y);
             return new ClientMessage(json);
         }
 
-        public static ClientMessage Respawn(float x, float y)
+        public static ClientMessage Respawn(string playerId, Vector2 pointClient)
         {
+            var pointServer = GetServerPoint(pointClient);
             var json = new JSONObject(JSONObject.Type.OBJECT);
             json.AddField(ServerParams.ActionType, ServerParams.RespawnAction);
-            json.AddField(ServerParams.X, x);
-            json.AddField(ServerParams.Y, y);
+            json.AddField(ServerParams.X, pointServer.x);
+            json.AddField(ServerParams.Y, pointServer.y);
+            json.AddField(ServerParams.UserId, playerId);
             return new ClientMessage(json);
         }
 

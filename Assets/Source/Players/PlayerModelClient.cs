@@ -64,7 +64,7 @@ namespace Caveman.Players
 
         public override void PickupBonus(BonusBase bonus)
         {
-            if (multiplayer) serverConnection.SendPickBonus(transform.position, (int) bonus.Type);
+            if (multiplayer) serverConnection.SendPickBonus(bonus.Id, (int) bonus.Type);
             base.PickupBonus(bonus);
         }
 
@@ -73,7 +73,7 @@ namespace Caveman.Players
             if (player.Weapons > Settings.MaxCountWeapons) return;
             base.PickupWeapon(weaponModel);
             player.Weapons += 1;
-            if (multiplayer) serverConnection.SendPickWeapon(transform.position, (int) weaponModel.type);
+            if (multiplayer) serverConnection.SendPickWeapon(weaponModel.Id, (int)weaponModel.type);
         }
 
         public override void Throw(Vector2 aim)

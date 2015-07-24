@@ -114,26 +114,22 @@ namespace Caveman.Network
 
         public void SendUseWeapon(Vector2 point, int weaponType)
         {
-            var serverPoint = Convector(point);
-            SendMessageToSocket(ClientMessage.UseWeapon(serverPoint.x, serverPoint.y));
+            SendMessageToSocket(ClientMessage.UseWeapon(point.x, point.y));
         }
 
-        public void SendPickWeapon(Vector2 point, int weaponType)
+        public void SendPickWeapon(string weaponId, int weaponType)
         {
-            var serverPoint = Convector(point);
-            SendMessageToSocket(ClientMessage.PickWeapon(serverPoint.x, serverPoint.y));
+            SendMessageToSocket(ClientMessage.PickWeapon(weaponId));
         }
 
-        public void SendPickBonus(Vector2 point, int bonusType)
+        public void SendPickBonus(string bonusId, int bonusType)
         {
-            var serverPoint = Convector(point);
-            SendMessageToSocket(ClientMessage.PickBonus(serverPoint.x, serverPoint.y));
+            SendMessageToSocket(ClientMessage.PickBonus(bonusId));
         }
 
-        public void SendRespawn(Vector2 point)
+        public void SendRespawn(string playerId, Vector2 point)
         {
-            var serverPoint = Convector(point);
-            SendMessageToSocket(ClientMessage.Respawn(serverPoint.x, serverPoint.y));
+            SendMessageToSocket(ClientMessage.Respawn(playerId, point));
         }
 
         public void SendPlayerDead()
@@ -143,16 +139,10 @@ namespace Caveman.Network
 
         public void SendMove(Vector2 point)
         {
-            var serverPoint = Convector(point);
-            SendMessageToSocket(ClientMessage.Move(serverPoint.x, serverPoint.y));
+            SendMessageToSocket(ClientMessage.Move(point.x, point.y));
         }
 
-        private Vector2 Convector(Vector2 pointClient)
-        {
-            var x = (pointClient.x / Settings.WidthMap) * Multiplayer.WidthMapServer;
-            var y = (pointClient.y / Settings.HeightMap) * Multiplayer.HeigthMapServer;
-            return new Vector2(x, y);
-        }
+        
 
         private void SendTick()
         {

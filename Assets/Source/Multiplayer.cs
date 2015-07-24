@@ -15,7 +15,7 @@ namespace Caveman.Network
             serverConnection = new ServerConnection {ServerListener = this};
             serverConnection.StartSession(SystemInfo.deviceUniqueIdentifier, SystemInfo.deviceName);
             base.Start();
-            serverConnection.SendRespawn(poolPlayers[IdHostPlayer].transform.position);
+            serverConnection.SendRespawn(IdHostPlayer, poolPlayers[IdHostPlayer].transform.position);
             poolPlayers.SetPrefab(prefabServerPlayer);
         }
 
