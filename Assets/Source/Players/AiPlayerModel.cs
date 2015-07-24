@@ -2,7 +2,6 @@
 using Caveman.Setting;
 using Caveman.Utils;
 using UnityEngine;
-using Random = System.Random;
 
 namespace Caveman.Players
 {
@@ -27,12 +26,6 @@ namespace Caveman.Players
             GetComponent<SpriteRenderer>().color = new Color32((byte) r.Next(255), (byte) r.Next(255),
                 (byte) r.Next(255), 255);
             SetMove(RandomPosition);
-        }
-
-        public void InitAi(Player player, Vector2 start, Random random, PlayerPool pool, Transform allLyingWeapons)
-        {
-            Init(player, start, random, pool, null);
-            weapons = allLyingWeapons;
         }
 
         public void Update()
@@ -95,7 +88,7 @@ namespace Caveman.Players
 
         public void SetWeapons(Transform containerStones)
         {
-            throw new System.NotImplementedException();
+            weapons = containerStones;
         }
     }
 }
