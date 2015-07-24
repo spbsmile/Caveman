@@ -90,10 +90,10 @@ namespace Caveman.Network
             return point.x + ":" + point.y;
         }
 
-        private Vector2 Convector(Vector2 point)
+        private Vector2 Convector(Vector2 pointServer)
         {
-            var x = (point.x / Multiplayer.HeigthMapServer) * Settings.HeightMap;
-            var y = (point.y / Multiplayer.WidthMapServer) * Settings.WidthMap;
+            var x = (pointServer.x / Multiplayer.WidthMapServer) * Settings.WidthMap;
+            var y = (pointServer.y / Multiplayer.HeigthMapServer) * Settings.HeightMap;
             return new Vector2(x, y);
         }
     }

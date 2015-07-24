@@ -147,10 +147,10 @@ namespace Caveman.Network
             SendMessageToSocket(ClientMessage.Move(serverPoint.x, serverPoint.y));
         }
 
-        private Vector2 Convector(Vector2 point)
+        private Vector2 Convector(Vector2 pointClient)
         {
-            var x = (point.x / Settings.HeightMap) * Multiplayer.HeigthMapServer;
-            var y = (point.y / Settings.WidthMap) * Multiplayer.WidthMapServer;
+            var x = (pointClient.x / Settings.WidthMap) * Multiplayer.WidthMapServer;
+            var y = (pointClient.y / Settings.HeightMap) * Multiplayer.HeigthMapServer;
             return new Vector2(x, y);
         }
 
