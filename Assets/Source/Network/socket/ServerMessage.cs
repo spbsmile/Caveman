@@ -37,12 +37,13 @@ namespace Caveman.Network
             var pointServer = (action[ServerParams.X] != null && action[ServerParams.Y] != null)
                 ? new Vector2(action[ServerParams.X].f, action[ServerParams.Y].f)
                 : Vector2.zero;
-            var point = Convector(pointServer);
-            var key = GenerateKey(point);
+            var pointClient = Convector(pointServer);
+            Debug.Log(pointServer + " pointServer");
+            var key = GenerateKey(pointClient);
             var playerId = action[ServerParams.UserId]!= null ?action[ServerParams.UserId].str: null;
             if (type.Equals(ServerParams.StoneAddedAction))
             {
-                listener.WeaponAddedReceived(key, point);
+                listener.WeaponAddedReceived(key, pointClient);
             }
             else if (type.Equals(ServerParams.StoneRemovedAction))
             {
@@ -50,7 +51,7 @@ namespace Caveman.Network
             }
             else if (type.Equals(ServerParams.MoveAction))
             {
-                listener.MoveReceived(playerId, point);
+                listener.MoveReceived(playerId, pointClient);
             }
             else if (type.Equals(ServerParams.PickWeaponAction))
             {
@@ -58,7 +59,7 @@ namespace Caveman.Network
             }
             else if (type.Equals(ServerParams.BonusAddedAction))
             {
-                listener.BonusAddedReceived(key, point);
+                listener.BonusAddedReceived(key, pointClient);
             }
             else if (type.Equals(ServerParams.PickBonusAction))
             {
@@ -66,11 +67,11 @@ namespace Caveman.Network
             }
             else if (type.Equals(ServerParams.UseWeaponAction))
             {                                        //aim
-                listener.UseWeaponReceived(playerId, point);
+                listener.UseWeaponReceived(playerId, pointClient);
             }
             else if (type.Equals(ServerParams.RespawnAction))
             {
-                listener.RespawnReceived(playerId, point);
+                listener.RespawnReceived(playerId, pointClient);
             } 
             else if (type.Equals(ServerParams.LoginAction))
             {
