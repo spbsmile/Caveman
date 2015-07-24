@@ -16,8 +16,6 @@ namespace Caveman
 {
     public class EnterPoint : MonoBehaviour
     {
-        protected const string IdHostPlayer = "0";
-
         public Transform prefabHumanPlayer;
         public Transform prefabAiPlayer;
 
@@ -62,7 +60,7 @@ namespace Caveman
             var humanPlayer = new Player("Zabiyakin");
             BattleGui.instance.SubscribeOnEvents(humanPlayer);
             BattleGui.instance.resultRound.SetPlayerPool(poolPlayers);
-            CreatePlayer(humanPlayer, IdHostPlayer, false, false, prefabHumanPlayer);
+            CreatePlayer(humanPlayer, SystemInfo.deviceUniqueIdentifier, false, false, prefabHumanPlayer);
             
             if (serverConnection == null)
             {

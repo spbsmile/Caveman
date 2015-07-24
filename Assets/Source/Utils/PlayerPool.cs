@@ -10,13 +10,6 @@ namespace Caveman.Utils
         public Action<PlayerModelBase> AddedPlayer;
 
         private Dictionary<string, PlayerModelBase> pool= new Dictionary<string, PlayerModelBase>();
-        private PlayerModelBase prefab;
-        
-        //todo в зависимости от разных игроков разные одежки ,/ deleted
-        public void SetPrefab(Transform prefab)
-        {
-            this.prefab = prefab.GetComponent<PlayerModelBase>();
-        }
 
         public void Add(string Id, PlayerModelBase item)
         {
@@ -42,14 +35,8 @@ namespace Caveman.Utils
         public PlayerModelBase New(string id)
         {
             PlayerModelBase item;
-            if (pool.TryGetValue(id, out item))
-            {
-                item.enabled = true;
-                return item;
-            }
-            item = Instantiate(prefab);
-            item.SetPool(this);
-            Add(id, item);
+            if (!pool.TryGetValue(id, out item)) return null;
+            item.enabled = true;
             return item;
         }
 

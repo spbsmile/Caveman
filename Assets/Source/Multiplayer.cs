@@ -15,8 +15,7 @@ namespace Caveman.Network
             serverConnection = new ServerConnection {ServerListener = this};
             serverConnection.StartSession(SystemInfo.deviceUniqueIdentifier, SystemInfo.deviceName);
             base.Start();
-            serverConnection.SendRespawn(IdHostPlayer, poolPlayers[IdHostPlayer].transform.position);
-            poolPlayers.SetPrefab(prefabServerPlayer);
+            //serverConnection.SendRespawn(IdHostPlayer, poolPlayers[IdHostPlayer].transform.position);
         }
 
         public void Update()
@@ -36,12 +35,14 @@ namespace Caveman.Network
 
         public void PlayerDeadResceived(string playerId)
         {
-            poolPlayers[playerId].Die(); print(string.Format("PlayerDeadResceived {0}", playerId));
+            poolPlayers[playerId].Die();
+            print(string.Format("PlayerDeadResceived {0}", playerId));
         }
 
         public void WeaponRemovedReceived(string key)
         {
-            //poolStones.Store(key); print(string.Format("WeaponRemovedReceived {0}", key));
+            poolStones.Store(key);
+            //print(string.Format("WeaponRemovedReceived {0}", key));
         }
 
         public void MoveReceived(string playerId, Vector2 point)
@@ -49,9 +50,9 @@ namespace Caveman.Network
             print(string.Format("MoveReceived {0} by playerId {1}", point, playerId));
         }
 
-        public void LoginReceived(string playerId, string name)
+        public void LoginReceived(string playerId, string playerName)
         {
-            CreatePlayer(new Player(name), playerId, false, true, prefabServerPlayer);
+            CreatePlayer(new Player(playerName), playerId, false, true, prefabServerPlayer);
             //print(string.Format("LoginReceived {0} by playerId", playerId));
         }
 
