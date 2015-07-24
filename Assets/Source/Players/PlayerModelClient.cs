@@ -12,6 +12,7 @@ namespace Caveman.Players
         {
             base.Start();
             StartCoroutine(ThrowOnTimer());
+            ChangedWeapons += () => player.Weapons = 0;
         }
 
         public void OnTriggerEnter2D(Collider2D other)
@@ -42,7 +43,6 @@ namespace Caveman.Players
                         Die();
                         if (multiplayer) serverConnection.SendPlayerDead();
                         StartCoroutine(Respawn());
-                        poolPlayers.Store(this);
                     }
                 }
             }
@@ -68,17 +68,19 @@ namespace Caveman.Players
             base.PickupBonus(bonus);
         }
 
-        public override bool PickupWeapon(WeaponModelBase weaponModel)
+        public override void PickupWeapon(WeaponModelBase weaponModel)
         {
-            if (!base.PickupWeapon(weaponModel)) return false;
+            if (player.Weapons > Settings.MaxCountWeapons) return;
+            base.PickupWeapon(weaponModel);
+            player.Weapons += 1;
             if (multiplayer) serverConnection.SendPickWeapon(transform.position, (int) weaponModel.type);
-            return true;
         }
 
         public override void Throw(Vector2 aim)
         {
             if (multiplayer) serverConnection.SendUseWeapon(aim, (int) weaponType);
             base.Throw(aim);
+            player.Weapons--;
         }
 
         private IEnumerator ThrowOnTimer()
@@ -93,7 +95,7 @@ namespace Caveman.Players
                     Throw(victim.transform.position);
                 }
             }
-            if (gameObject.activeSelf) StartCoroutine(ThrowOnTimer());
+            StartCoroutine(ThrowOnTimer());
         }
 
         private PlayerModelBase FindClosestPlayer()

@@ -36,8 +36,7 @@ namespace Caveman.Network
 
         public void PlayerDeadResceived(string playerId)
         {
-            //todo нужна команды умереть 
-            print(string.Format("PlayerDeadResceived {0}", playerId));
+            poolPlayers[playerId].Die(); print(string.Format("PlayerDeadResceived {0}", playerId));
         }
 
         public void WeaponRemovedReceived(string key)
@@ -57,7 +56,6 @@ namespace Caveman.Network
 
         public void PickWeaponReceived(string playerId, string key)
         {
-            //todo только один тип - камни 
             poolPlayers[playerId].PickupWeapon(poolStones[key]); print(string.Format("PickWeaponReceived {0} by playerId {1}", key, playerId));
         }
 

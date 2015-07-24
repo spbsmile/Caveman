@@ -14,7 +14,7 @@ namespace Caveman.Players
     public class PlayerModelBase : MonoBehaviour
     {
         public Action<Vector2> Death;
-        public Func<WeaponType, ObjectPool<WeaponModelBase>> ChangedWeapons;
+        public Func<WeaponType, ObjectPool<WeaponModelBase>> ChangedWeaponsPool;
 
         public Player player;
         public BonusBase bonusType;
@@ -22,6 +22,7 @@ namespace Caveman.Players
         public float Speed { get; set; }
         public SpriteRenderer spriteRenderer;
 
+        protected Action ChangedWeapons;
         protected Vector2 delta;
         protected Animator animator;
         protected Vector2 target;
@@ -32,7 +33,7 @@ namespace Caveman.Players
         //todo переделать под массив
         protected List<PlayerModelBase> players;
 
-        protected PlayerPool poolPlayers;
+        private PlayerPool poolPlayers;
         private ObjectPool<WeaponModelBase> poolWeapons;
 
         protected virtual void Start()
@@ -42,7 +43,7 @@ namespace Caveman.Players
             Speed = Settings.SpeedPlayer;
         }
 
-        public void Init(Player player, Vector2 start, Random random, PlayerPool pool, ServerConnection serverConnection)
+        public virtual void Init(Player player, Vector2 start, Random random, PlayerPool pool, ServerConnection serverConnection)
         {
             this.serverConnection = serverConnection;
             if (serverConnection != null) multiplayer = true;
@@ -64,28 +65,25 @@ namespace Caveman.Players
 
         public virtual void Die()
         {
+            poolPlayers.Store(this);
             Death(transform.position);
         }
 
-        public virtual bool PickupWeapon(WeaponModelBase weaponModel)
+        public virtual void PickupWeapon(WeaponModelBase weaponModel)
         {
-            if (player.Weapons > Settings.MaxCountWeapons) return false;
             if (poolWeapons == null || weaponModel.type != weaponType)
             {
-                player.Weapons = 0;
-                poolWeapons = ChangedWeapons(weaponModel.type);
+                poolWeapons = ChangedWeaponsPool(weaponModel.type);
                 weaponType = weaponModel.type;
+                ChangedWeapons();
             }
-            player.Weapons += 1;
             animator.SetTrigger(Settings.AnimPickup);
             weaponModel.Take();
-            return true;
         }
 
         public virtual void Throw(Vector2 aim)
         {
             poolWeapons.New().SetMotion(player, transform.position, aim);
-            player.Weapons--;
         }
 
         public virtual IEnumerator Respawn()

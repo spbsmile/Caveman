@@ -162,7 +162,7 @@ namespace Caveman
             poolPlayers.Add(id, playerModel);
             playerModel.transform.SetParent(containerPlayers);
             playerModel.Death += position => StartCoroutine(DeathAnimate(position));
-            playerModel.ChangedWeapons += ChangedWeapons;
+            playerModel.ChangedWeaponsPool += ChangedWeapons;
         }
 
         private ObjectPool<WeaponModelBase> ChangedWeapons(WeaponType weaponType)

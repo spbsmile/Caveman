@@ -72,9 +72,10 @@ namespace Caveman.Network
             {
                 listener.RespawnReceived(playerId, point);
             } 
-            //todo ServerParams.LoginAction LogoutAction &
             else if (type.Equals(ServerParams.LoginAction))
             {
+
+
                 listener.LoginReceived(playerId);
             }
             else if (type.Equals(ServerParams.PlayerDeadAction))

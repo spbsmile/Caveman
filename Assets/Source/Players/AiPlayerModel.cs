@@ -17,7 +17,7 @@ namespace Caveman.Players
 
         public override IEnumerator Respawn()
         {
-            SetRandomMove();
+            SetMove(RandomPosition);
             return base.Respawn();
         }
 
@@ -26,7 +26,7 @@ namespace Caveman.Players
             base.Start();
             GetComponent<SpriteRenderer>().color = new Color32((byte) r.Next(255), (byte) r.Next(255),
                 (byte) r.Next(255), 255);
-            SetRandomMove();
+            SetMove(RandomPosition);
         }
 
         public void InitAi(Player player, Vector2 start, Random random, PlayerPool pool, Transform allLyingWeapons)
@@ -51,14 +51,11 @@ namespace Caveman.Players
                     {
                         target = RandomPosition;
                     }
-                    delta = UnityExtensions.CalculateDelta(transform.position, target, Speed);
-                    animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Speed);
+                    SetMove(target);
                 }
                 else
                 {
-                    target = RandomPosition;
-                    delta = UnityExtensions.CalculateDelta(transform.position, target, Speed);
-                    animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Speed);
+                    SetMove(RandomPosition);
                 }
             }
         }
@@ -84,9 +81,9 @@ namespace Caveman.Players
             }
         }
 
-        private void SetRandomMove()
+        private void SetMove(Vector2 target)
         {
-            target = RandomPosition;
+            this.target = target;
             delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedPlayer);
             animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Settings.SpeedPlayer);
         }
