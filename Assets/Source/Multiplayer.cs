@@ -5,7 +5,7 @@ namespace Caveman.Network
 {
     public class Multiplayer : EnterPoint, IServerListener
     {
-        public PlayerModelBase prefabServerPlayer;
+        public Transform prefabServerPlayer;
 
         public const float WidthMapServer = 1350;
         public const float HeigthMapServer = 1350;
@@ -51,6 +51,7 @@ namespace Caveman.Network
 
         public void LoginReceived(string playerId)
         {
+            CreatePlayer(new Player("server"), playerId, false, true, prefabServerPlayer);
             print(string.Format("LoginReceived {0} by playerId", playerId));
         }
 
@@ -71,7 +72,9 @@ namespace Caveman.Network
 
         public void RespawnReceived(string playerId, Vector2 point)
         {
-            poolPlayers.New(playerId).transform.position = point; Debug.Log(string.Format("RespawnReceived {0} by playerId {1}", point, playerId));
+            StartCoroutine(poolPlayers[playerId].Respawn());
+            poolPlayers[playerId].transform.position = point;
+            //poolPlayers.New(playerId).transform.position = point; Debug.Log(string.Format("RespawnReceived {0} by playerId {1}", point, playerId));
         }
 
         public void OnDestroy()

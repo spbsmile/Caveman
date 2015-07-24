@@ -62,13 +62,13 @@ namespace Caveman
             var humanPlayer = new Player("Zabiyakin");
             BattleGui.instance.SubscribeOnEvents(humanPlayer);
             BattleGui.instance.resultRound.SetPlayerPool(poolPlayers);
-            CreatePlayer(humanPlayer, false, IdHostPlayer);
+            CreatePlayer(humanPlayer, IdHostPlayer, false, false, prefabHumanPlayer);
             
             if (serverConnection == null)
             {
                 for (var i = 1; i < Settings.BotsCount + 1; i++)
                 {
-                    CreatePlayer(new Player(names[i]), true, i.ToString());
+                    CreatePlayer(new Player(names[i]), i.ToString(), true, false, prefabAiPlayer);
                 }
                 StartCoroutine(PutWeapons());
                 StartCoroutine(PutBonuses());
@@ -142,23 +142,22 @@ namespace Caveman
             return pool;
         }
 
-        private void CreatePlayer(Player player, bool isAiPlayer, string id)
+        protected void CreatePlayer(Player player, string id, bool isAiPlayer, bool isServerPlayer, Transform prefabModel)
         {
-            PlayerModelBase playerModel;
-            if (isAiPlayer)
+            var prefab = Instantiate(prefabModel);
+            var playerModel = prefab.GetComponent<PlayerModelBase>();
+            if (!isServerPlayer)
             {
-                var prefab = Instantiate(prefabAiPlayer);
-                playerModel = prefab.GetComponent<AiPlayerModel>();
-                (playerModel as AiPlayerModel).InitAi(player,
-                new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)), r, poolPlayers, containerStones);
+                if (isAiPlayer)
+                {
+                    (playerModel as AiPlayerModel).SetWeapons(containerStones);
+                }
+                else
+                {
+                    smoothCamera.target = prefab.transform;
+                }
             }
-            else
-            {
-                var prefab = Instantiate(prefabHumanPlayer);
-                playerModel = prefab.GetComponent<HumanPlayerModel>();
-                smoothCamera.target = prefab.transform;
-                playerModel.Init(player, new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)), r, poolPlayers, serverConnection);
-            }
+            playerModel.Init(player, new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)), r, poolPlayers, serverConnection);
             poolPlayers.Add(id, playerModel);
             playerModel.transform.SetParent(containerPlayers);
             playerModel.Death += position => StartCoroutine(DeathAnimate(position));

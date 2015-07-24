@@ -92,6 +92,11 @@ namespace Caveman.Players
         {
             get { return new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)); }
         }
+
+        public void SetWeapons(Transform containerStones)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
 

@@ -12,10 +12,10 @@ namespace Caveman.Utils
         private Dictionary<string, PlayerModelBase> pool= new Dictionary<string, PlayerModelBase>();
         private PlayerModelBase prefab;
         
-        //todo в зависимости от разных игроков разные одежки 
-        public void SetPrefab(PlayerModelBase prefab)
+        //todo в зависимости от разных игроков разные одежки ,/ deleted
+        public void SetPrefab(Transform prefab)
         {
-            this.prefab = prefab;
+            this.prefab = prefab.GetComponent<PlayerModelBase>();
         }
 
         public void Add(string Id, PlayerModelBase item)

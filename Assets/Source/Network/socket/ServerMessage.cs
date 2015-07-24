@@ -74,8 +74,8 @@ namespace Caveman.Network
             } 
             else if (type.Equals(ServerParams.LoginAction))
             {
-
-
+                var playerName = action[ServerParams.UserName].str;
+                Debug.Log(playerName + "LoginReseived");
                 listener.LoginReceived(playerId);
             }
             else if (type.Equals(ServerParams.PlayerDeadAction))
