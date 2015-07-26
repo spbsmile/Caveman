@@ -138,6 +138,11 @@ namespace Caveman.Network
             SendMessageToSocket(ClientMessage.PlayerDead());
         }
 
+        public void SendLogout(string playerId)
+        {
+            SendMessageToSocket(ClientMessage.Logout(playerId));
+        }
+
         public void SendMove(Vector2 point)
         {
             SendMessageToSocket(ClientMessage.Move(point.x, point.y));

@@ -97,6 +97,14 @@ namespace Caveman.Network
             return new ClientMessage(json);
         }
 
+        public static ClientMessage Logout(string playerId)
+        {
+            var json = new JSONObject(JSONObject.Type.OBJECT);
+            json.AddField(ServerParams.ActionType, ServerParams.LogoutAction);
+            json.AddField(ServerParams.UserId, playerId);
+            return new ClientMessage(json);
+        }
+
         private string ContentFromJson()
         {
             return jsonContent != null ? "#" + jsonContent + "#" : "";
