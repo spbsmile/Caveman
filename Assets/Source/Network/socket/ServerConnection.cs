@@ -1,10 +1,9 @@
 using System;
-using System.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
-using Caveman.Setting;
 using UnityEngine;
 
 namespace Caveman.Network
@@ -21,6 +20,8 @@ namespace Caveman.Network
         void RespawnReceived(string playerId, Vector2 point);
         void BonusAddedReceived(string key, Vector2 point);
         void PlayerDeadResceived(string playerId);
+        void Time(string time);
+        void Player(string player);
     }
 
     public class ServerConnection
@@ -141,8 +142,6 @@ namespace Caveman.Network
         {
             SendMessageToSocket(ClientMessage.Move(point.x, point.y));
         }
-
-        
 
         private void SendTick()
         {

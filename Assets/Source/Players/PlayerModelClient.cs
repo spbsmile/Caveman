@@ -43,7 +43,7 @@ namespace Caveman.Players
                         weapon.Destroy();
                         Die();
                         if (multiplayer) serverConnection.SendPlayerDead();
-                        StartCoroutine(Respawn());
+                        StartCoroutine(Respawn(new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap))));
                     }
                 }
             }
@@ -57,9 +57,10 @@ namespace Caveman.Players
             }
         }
 
-        public override IEnumerator Respawn()
+        public override IEnumerator Respawn(Vector2 point)
         {
-            yield return StartCoroutine(base.Respawn());
+            if (multiplayer) serverConnection.SendRespawn(Id, point);
+            yield return StartCoroutine(base.Respawn(point));
             StartCoroutine(ThrowOnTimer());
         }
 

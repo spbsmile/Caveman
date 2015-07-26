@@ -43,27 +43,12 @@ namespace Caveman.Network
 
         public static ClientMessage PickWeapon(string weaponId)
         {
-            var pointServer = InverseIdToPoint(weaponId);
+            var pointServer = GetServerPoint(weaponId);
             var json = new JSONObject(JSONObject.Type.OBJECT);
             json.AddField(ServerParams.ActionType, ServerParams.PickWeaponAction);
             json.AddField(ServerParams.X, pointServer.x);
             json.AddField(ServerParams.Y, pointServer.y);
             return new ClientMessage(json);
-        }
-
-        private  static Vector2 InverseIdToPoint(string id)
-        {
-            var index = id.IndexOf(":");
-            var x = id.Substring(0, index);
-            var y = id.Substring(index + 1);
-            return new Vector2(Convert.ToInt32(x),Convert.ToInt32(y));
-        }
-
-        private static Vector2 GetServerPoint(Vector2 pointClient)
-        {
-            var x = (pointClient.x / Settings.WidthMap) * Multiplayer.WidthMapServer;
-            var y = (pointClient.y / Settings.HeightMap) * Multiplayer.HeigthMapServer;
-            return new Vector2(x, y);
         }
 
         public static ClientMessage UseWeapon(float x, float y)
@@ -77,7 +62,7 @@ namespace Caveman.Network
 
         public static ClientMessage PickBonus(string bonusId)
         {
-            var pointServer = InverseIdToPoint(bonusId);
+            var pointServer = GetServerPoint(bonusId);
             var json = new JSONObject(JSONObject.Type.OBJECT);
             json.AddField(ServerParams.ActionType, ServerParams.PickBonusAction);
             json.AddField(ServerParams.X, pointServer.x);
@@ -115,6 +100,21 @@ namespace Caveman.Network
         private string ContentFromJson()
         {
             return jsonContent != null ? "#" + jsonContent + "#" : "";
+        }
+
+        private static Vector2 GetServerPoint(string id)
+        {
+            var index = id.IndexOf(":");
+            var x = id.Substring(0, index);
+            var y = id.Substring(index + 1);
+            return new Vector2(Convert.ToInt32(x), Convert.ToInt32(y));
+        }
+
+        private static Vector2 GetServerPoint(Vector2 pointClient)
+        {
+            var x = (pointClient.x / Settings.WidthMap) * Multiplayer.WidthMapServer;
+            var y = (pointClient.y / Settings.HeightMap) * Multiplayer.HeigthMapServer;
+            return new Vector2(x, y);
         }
     }
 }

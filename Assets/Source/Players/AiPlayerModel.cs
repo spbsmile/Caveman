@@ -14,10 +14,10 @@ namespace Caveman.Players
             StandStill();
         }
 
-        public override IEnumerator Respawn()
+        public override IEnumerator Respawn(Vector2 point)
         {
             SetMove(RandomPosition);
-            return base.Respawn();
+            return base.Respawn(point);
         }
 
         protected override void Start()

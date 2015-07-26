@@ -82,6 +82,11 @@ namespace Caveman.Network
             {
                 listener.PlayerDeadResceived(playerId);
             }
+            else if (type.Equals(ServerParams.TimeAction))
+            {
+                var time = action[ServerParams.TimeAction].str;
+                listener.Time(time);
+            }
         }
 
         private string GenerateKey(Vector2 point)

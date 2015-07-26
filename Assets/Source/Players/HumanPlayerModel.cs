@@ -13,12 +13,16 @@ namespace Caveman.Players
 
         private void MovePlayer(Vector3 movement, CNAbstractController arg2)
         {
-           // if (multiplayer) serverConnection.SendMove(movement);
             var position = new Vector3(transform.position.x + movement.x * Time.deltaTime * Speed,
                transform.position.y + movement.y * Time.deltaTime * Speed);
             transform.position = position;
 
             animator.SetFloat(movement.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Speed);
         }
+
+        //public void FixedUpdated()
+        //{
+        //    if (multiplayer) serverConnection.SendMove(movement);
+        //}
     }
 }

@@ -93,10 +93,10 @@ namespace Caveman.Players
             poolWeapons.New().SetMotion(player, transform.position, aim);
         }
 
-        public virtual IEnumerator Respawn()
+        public virtual IEnumerator Respawn(Vector2 point)
         {
             yield return new WaitForSeconds(Settings.TimeRespawnPlayer);
-            poolPlayers.New(Id).transform.position = new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap));
+            poolPlayers.New(Id).transform.position = point;
         }
 
         public virtual void StandStill()
@@ -109,11 +109,6 @@ namespace Caveman.Players
         {
             transform.position = new Vector3(transform.position.x + delta.x*Time.deltaTime,
                 transform.position.y + delta.y*Time.deltaTime);
-        }
-
-        public void SetPool(PlayerPool pool)
-        {
-            poolPlayers = pool;
         }
     }
 }
