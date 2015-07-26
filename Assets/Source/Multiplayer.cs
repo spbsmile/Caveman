@@ -66,6 +66,11 @@ namespace Caveman.Network
             //print(string.Format("LoginReceived {0} by playerId", playerId));
         }
 
+        public void LogoutReceived(string playerId)
+        {
+            poolPlayers.Remove(playerId);
+        }
+
         public void PickWeaponReceived(string playerId, string key)
         {
             poolPlayers[playerId].PickupWeapon(poolStones[key]);

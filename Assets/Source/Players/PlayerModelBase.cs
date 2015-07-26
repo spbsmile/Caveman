@@ -54,6 +54,7 @@ namespace Caveman.Players
             players = new List<PlayerModelBase>();
             players.AddRange(poolPlayers.GetCurrentPlayers());
             poolPlayers.AddedPlayer += @base => players.Add(@base);
+            poolPlayers.RemovePlayer += @base => players.Remove(@base);
             r = random;
             transform.position = start;
         }
