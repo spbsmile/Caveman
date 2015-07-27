@@ -63,6 +63,7 @@ namespace Caveman.Network
         public void LoginReceived(string playerId, string playerName)
         {
             CreatePlayer(new Player(playerName), playerId, false, true, prefabServerPlayer);
+            serverConnection.SendRespawn(SystemInfo.deviceUniqueIdentifier, poolPlayers[SystemInfo.deviceUniqueIdentifier].transform.position);            
             //print(string.Format("LoginReceived {0} by playerId", playerId));
         }
 
@@ -91,8 +92,16 @@ namespace Caveman.Network
 
         public void RespawnReceived(string playerId, Vector2 point)
         {
-            StartCoroutine(poolPlayers[playerId].Respawn(point));
-            Debug.Log(string.Format("RespawnReceived {0} by playerId {1}", point, playerId));
+            if (poolPlayers[playerId] == null)
+            {
+                CreatePlayer(new Player("No Name"), playerId, false, true, prefabServerPlayer);
+                poolPlayers[playerId].transform.position = point;
+            }
+            else
+            {
+                StartCoroutine(poolPlayers[playerId].Respawn(point));
+                Debug.Log(string.Format("RespawnReceived {0} by playerId {1}", point, playerId));    
+            }
         }
 
         public void OnDestroy()
