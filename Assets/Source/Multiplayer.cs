@@ -15,6 +15,7 @@ namespace Caveman.Network
             serverConnection = new ServerConnection {ServerListener = this};
             serverConnection.StartSession(SystemInfo.deviceUniqueIdentifier, SystemInfo.deviceName);
             base.Start();
+            //serverConnection.SendLogin();
         }
 
         public void Update()
@@ -92,7 +93,7 @@ namespace Caveman.Network
 
         public void RespawnReceived(string playerId, Vector2 point)
         {
-            if (poolPlayers.ContainsKey(playerId))
+            if (!poolPlayers.ContainsKey(playerId))
             {
                 CreatePlayer(new Player("No Name"), playerId, false, true, prefabServerPlayer);
                 poolPlayers[playerId].transform.position = point;
@@ -106,7 +107,7 @@ namespace Caveman.Network
 
         public void OnDestroy()
         {
-            serverConnection.SendLogout(SystemInfo.deviceUniqueIdentifier);
+            //serverConnection.SendLogout(SystemInfo.deviceUniqueIdentifier);
             serverConnection.StopSession();
         }
     }

@@ -91,7 +91,7 @@ namespace Caveman.Network
                     reader = new StreamReader(stream, Encoding.UTF8);
                     writer = new StreamWriter(stream);
 
-                    SendLogin(userName);
+                    //SendLogin(userName);
                     StartListeningServer();
                 }
                 catch (Exception e)
@@ -154,7 +154,7 @@ namespace Caveman.Network
             SendMessageToSocket(ClientMessage.TickMessage());
         }
 
-        private void SendLogin(string userName)
+        public void SendLogin(string userName)
         {
             SendMessageToSocket(ClientMessage.LoginMessage(userName));
         }
