@@ -92,7 +92,7 @@ namespace Caveman.Network
 
         public void RespawnReceived(string playerId, Vector2 point)
         {
-            if (poolPlayers[playerId] == null)
+            if (poolPlayers.ContainsKey(playerId))
             {
                 CreatePlayer(new Player("No Name"), playerId, false, true, prefabServerPlayer);
                 poolPlayers[playerId].transform.position = point;

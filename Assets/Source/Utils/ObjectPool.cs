@@ -101,16 +101,7 @@ namespace Caveman.Utils
         {
             get
             {
-                if (poolServer.ContainsKey(key))
-                {
-                    return poolServer[key];    
-                }
-                print(key + " requare key");
-                foreach (var tkey in poolServer.Keys)
-                {
-                    print(tkey + "contain key");
-                }
-                return null;
+                return poolServer[key];
             }
         }
     }

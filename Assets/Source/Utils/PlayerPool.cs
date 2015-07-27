@@ -57,5 +57,10 @@ namespace Caveman.Utils
                 return pool[key];
             }
         }
+
+        public bool ContainsKey(string playerId)
+        {
+            return pool.ContainsKey(playerId);
+        }
     }
 }
