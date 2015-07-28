@@ -154,9 +154,9 @@ namespace Caveman.Network
             SendMessageToSocket(ClientMessage.TickMessage());
         }
 
-        public void SendLogin(string userName, string playerId, Vector2 position)
+        private void SendLogin(string userName, string playerId)
         {
-            SendMessageToSocket(ClientMessage.LoginMessage(userName, playerId, position));
+            SendMessageToSocket(ClientMessage.LoginMessage(userName, playerId));
         }
 
         private void SendStringToSocket(string str)

@@ -15,7 +15,8 @@ namespace Caveman.Network
             serverConnection = new ServerConnection {ServerListener = this};
             serverConnection.StartSession(SystemInfo.deviceUniqueIdentifier, SystemInfo.deviceName);
             base.Start();
-            serverConnection.SendLogin(SystemInfo.deviceName, SystemInfo.deviceUniqueIdentifier, poolPlayers[SystemInfo.deviceUniqueIdentifier].transform.position);
+            //serverConnection.SendLogin(SystemInfo.deviceName, SystemInfo.deviceUniqueIdentifier);
+            serverConnection.SendRespawn(SystemInfo.deviceUniqueIdentifier, poolPlayers[SystemInfo.deviceUniqueIdentifier].transform.position);
         }
 
         public void Update()
@@ -71,7 +72,9 @@ namespace Caveman.Network
 
         public void LogoutReceived(string playerId)
         {
+            var gameObject = poolPlayers[playerId].gameObject;
             poolPlayers.Remove(playerId);
+            Destroy(gameObject);
         }
 
         public void PickWeaponReceived(string playerId, string key)
