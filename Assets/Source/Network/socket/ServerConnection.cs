@@ -91,7 +91,7 @@ namespace Caveman.Network
                     reader = new StreamReader(stream, Encoding.UTF8);
                     writer = new StreamWriter(stream);
 
-                    //SendLogin(userName);
+                    SendLogin(userId,userName);
                     StartListeningServer();
                 }
                 catch (Exception e)
