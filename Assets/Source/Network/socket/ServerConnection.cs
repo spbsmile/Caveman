@@ -146,7 +146,7 @@ namespace Caveman.Network
 
         public void SendMove(Vector2 point)
         {
-            SendMessageToSocket(ClientMessage.Move(point.x, point.y));
+            SendMessageToSocket(ClientMessage.Move(point));
         }
 
         private void SendTick()
