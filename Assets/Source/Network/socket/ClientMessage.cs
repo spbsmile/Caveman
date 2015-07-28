@@ -26,7 +26,7 @@ namespace Caveman.Network
             Content = ContentFromJson();
         }
 
-        public static ClientMessage LoginMessage(string userName)
+        public static ClientMessage LoginMessage(string userName, string playerId, Vector2 position)
         {
             var json = new JSONObject(JSONObject.Type.OBJECT);
             json.AddField(ServerParams.ActionType, "login");

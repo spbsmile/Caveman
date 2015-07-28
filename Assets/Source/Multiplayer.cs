@@ -15,7 +15,7 @@ namespace Caveman.Network
             serverConnection = new ServerConnection {ServerListener = this};
             serverConnection.StartSession(SystemInfo.deviceUniqueIdentifier, SystemInfo.deviceName);
             base.Start();
-            //serverConnection.SendLogin();
+            serverConnection.SendLogin(SystemInfo.deviceName, SystemInfo.deviceUniqueIdentifier, Vector2.down);
         }
 
         public void Update()
