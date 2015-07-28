@@ -15,7 +15,7 @@ namespace Caveman.Network
             serverConnection = new ServerConnection {ServerListener = this};
             serverConnection.StartSession(SystemInfo.deviceUniqueIdentifier, SystemInfo.deviceName);
             base.Start();
-            serverConnection.SendLogin(SystemInfo.deviceName, SystemInfo.deviceUniqueIdentifier, Vector2.down);
+            serverConnection.SendLogin(SystemInfo.deviceName, SystemInfo.deviceUniqueIdentifier, poolPlayers[SystemInfo.deviceUniqueIdentifier].transform.position);
         }
 
         public void Update()
@@ -61,9 +61,10 @@ namespace Caveman.Network
             print(string.Format("MoveReceived {0} by playerId {1}", point, playerId));
         }
 
-        public void LoginReceived(string playerId, string playerName)
+        public void LoginReceived(string playerId, string playerName, Vector2 position)
         {
             CreatePlayer(new Player(playerName), playerId, false, true, prefabServerPlayer);
+            poolPlayers[playerId].transform.position = position;
             serverConnection.SendRespawn(SystemInfo.deviceUniqueIdentifier, poolPlayers[SystemInfo.deviceUniqueIdentifier].transform.position);            
             //print(string.Format("LoginReceived {0} by playerId", playerId));
         }
