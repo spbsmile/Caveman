@@ -83,6 +83,7 @@ namespace Caveman.Utils
             if (poolServer.TryGetValue(key, out value))
             {
                 Store(value);
+                poolServer[key].name = "item";
                 poolServer.Remove(key);
             }
             else

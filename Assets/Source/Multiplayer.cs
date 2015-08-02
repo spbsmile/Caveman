@@ -65,7 +65,15 @@ namespace Caveman.Network
 
         public void MoveReceived(string playerId, Vector2 point)
         {
-            poolPlayers[playerId].transform.position = point;
+            if (poolPlayers.ContainsKey(playerId))
+            {
+                poolPlayers[playerId].transform.position = point;    
+            }
+            else
+            {
+                Debug.LogWarning("Player null, but move received invoke");
+            }
+            
         }
 
         public void LoginReceived(string playerId, string playerName, Vector2 position)
