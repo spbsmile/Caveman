@@ -26,8 +26,14 @@ namespace Caveman.Network
 
         public void WeaponAddedReceived(string key, Vector2 point)
         {
-            poolStones.New(key).transform.position = point; 
-            //Debug.Log("stone added : " + key);
+            if (!poolStones.ContainsKey(key))
+            {
+                poolStones.New(key).transform.position = point;     
+            }
+            else
+            {
+                Debug.LogWarning(key + " An element with the same key already exists in the dictionary.");
+            }
         }
 
         public void BonusAddedReceived(string key, Vector2 point)

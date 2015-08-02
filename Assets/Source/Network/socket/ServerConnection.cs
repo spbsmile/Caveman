@@ -116,7 +116,7 @@ namespace Caveman.Network
 
         public void SendUseWeapon(Vector2 point, int weaponType)
         {
-            SendMessageToSocket(ClientMessage.UseWeapon(point.x, point.y));
+            SendMessageToSocket(ClientMessage.UseWeapon(point));
         }
 
         public void SendPickWeapon(string weaponId, int weaponType)

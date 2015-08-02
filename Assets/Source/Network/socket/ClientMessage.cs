@@ -51,12 +51,13 @@ namespace Caveman.Network
             return new ClientMessage(json);
         }
 
-        public static ClientMessage UseWeapon(float x, float y)
+        public static ClientMessage UseWeapon(Vector2 pointClient)
         {
+            var pointServer = GetServerPoint(pointClient);
             var json = new JSONObject(JSONObject.Type.OBJECT);
             json.AddField(ServerParams.ActionType, ServerParams.UseWeaponAction);
-            json.AddField(ServerParams.X, x);
-            json.AddField(ServerParams.Y, y);
+            json.AddField(ServerParams.X, pointServer.x);
+            json.AddField(ServerParams.Y, pointServer.y);
             return new ClientMessage(json);
         }
 

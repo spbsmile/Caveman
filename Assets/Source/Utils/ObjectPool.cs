@@ -71,14 +71,7 @@ namespace Caveman.Utils
                 item = GetItem();
             }
             item.GetComponent<ASupportPool<T>>().Id = key;
-            if (!poolServer.ContainsKey(key))
-            {
-                poolServer.Add(key, item);
-            }
-            else
-            {
-                Debug.LogWarning(key + " An element with the same key already exists in the dictionary.");
-            }
+            poolServer.Add(key, item);
             item.gameObject.SetActive(true);
             return item;
         }
@@ -95,6 +88,11 @@ namespace Caveman.Utils
             {
                 Debug.LogWarning(key + " key not found in Dictionary");
             }
+        }
+
+        public bool ContainsKey(string key)
+        {
+            return poolServer.ContainsKey(key);
         }
 
         public T this[string key]
