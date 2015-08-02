@@ -6,14 +6,20 @@ namespace Caveman.Level
 {
     public class TileMap : MonoBehaviour
     {
-        public int widthMap = 24;
-        public int heightMap = 24;
+        public int widthMap = 12;
+        public int heightMap = 12;
         public int dotCount = 30;
         public int poolCount = 3;
         public Transform prefabDot;
         public Transform prefabPool;
         public Transform prefabGround;
         public bool multiplayer;
+
+        public void Awake()
+        {
+            Settings.HeightMap = heightMap;
+            Settings.WidthMap = widthMap;
+        }
 
         public void Start()
         {
