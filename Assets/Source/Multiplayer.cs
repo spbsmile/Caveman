@@ -66,7 +66,6 @@ namespace Caveman.Network
         public void MoveReceived(string playerId, Vector2 point)
         {
             poolPlayers[playerId].transform.position = point;
-            print(string.Format("MoveReceived {0} by playerId {1}", point, playerId));
         }
 
         public void LoginReceived(string playerId, string playerName, Vector2 position)

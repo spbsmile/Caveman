@@ -9,10 +9,10 @@ namespace Caveman.Network
 
         public ServerMessage(string content)
         {
-            if (content != "[]")
-            {
-                Debug.Log("from server " + content);    
-            }
+            //if (content != "[]")
+            //{
+            //    Debug.Log("from server " + content);    
+            //}
             contentObject = new JSONObject(content);
         }
 
@@ -22,6 +22,10 @@ namespace Caveman.Network
             {
                 foreach (var jsonItem in contentObject.list)
                 {
+                    if (jsonItem[ServerParams.ActionType].str != "move")
+                    {
+                        Debug.Log(contentObject.ToString());
+                    }
                     SendMessageToListener(listener, jsonItem, jsonItem[ServerParams.ActionType].str);
                 }
             }
