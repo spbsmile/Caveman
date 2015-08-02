@@ -71,6 +71,7 @@ namespace Caveman.Utils
                 item = GetItem();
             }
             item.GetComponent<ASupportPool<T>>().Id = key;
+            item.name = item.name + key;
             poolServer.Add(key, item);
             item.gameObject.SetActive(true);
             return item;
