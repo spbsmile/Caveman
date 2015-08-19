@@ -98,11 +98,6 @@ namespace Caveman.Players
         {
             yield return new WaitForSeconds(Settings.TimeRespawnPlayer);
             poolPlayers.New(Id).transform.position = point;
-        }
-
-        public virtual void StandStill()
-        {
-            animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, 0);
             delta = Vector2.zero;
         }
 

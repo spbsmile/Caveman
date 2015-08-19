@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Caveman.Setting;
+﻿using Caveman.Setting;
 using Caveman.Utils;
 using UnityEngine;
 
@@ -8,17 +7,6 @@ namespace Caveman.Players
     public class AiPlayerModel : PlayerModelClient
     {
         private Transform weapons;
-
-        public void OnDisable()
-        {
-            StandStill();
-        }
-
-        public override IEnumerator Respawn(Vector2 point)
-        {
-            SetMove(RandomPosition);
-            return base.Respawn(point);
-        }
 
         protected override void Start()
         {
