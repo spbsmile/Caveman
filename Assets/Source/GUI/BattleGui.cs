@@ -12,6 +12,7 @@ namespace Caveman.UI
         public BonusesPanel bonusesPanel;
         public MainGameTimer mainGameTimer;
         public ResultRound resultRound;
+        public WaitForResp waitForResp;
         public Text weapons;
         public Text killed;
 
@@ -29,6 +30,11 @@ namespace Caveman.UI
             player.KillsCountChanged += KillsCountChanged;
             player.Bonus += bonusesPanel.BonusActivated;
         }
+
+        //public void SubscribeOnEvents(PlayerModelBase playerModelBase)
+        //{
+        //    playerModelBase.Death += vector2 => resultRound.gameObject.SetActive(true);
+        //}
 
         private void WeaponsCountChanged(int count)
         {

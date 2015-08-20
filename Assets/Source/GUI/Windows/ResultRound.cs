@@ -1,8 +1,6 @@
-﻿using Caveman.Setting;
+﻿using System.Collections;
 using Caveman.Utils;
 using UnityEngine;
-using System.Collections;
-using System.Linq;
 using UnityEngine.UI;
 
 namespace Caveman.UI.Windows
@@ -30,19 +28,21 @@ namespace Caveman.UI.Windows
             yield return new WaitForSeconds(1f);
             Time.timeScale = 0.00001f;
             var players = poolPlayers.GetCurrentPlayers();
-            //for (var i = 0; i < players.Count(); i++)
-            //{
-            //    players[i].
-            //}
-          
+            var index = 0;
+            foreach (var playerModelBase in players)
+            {
+                Write(playerModelBase.player.name, names, index);
+                Write(playerModelBase.player.deaths.ToString(), deaths, index);
+                Write(playerModelBase.player.Kills.ToString(), kills, index);
+                index++;
+            }
         }
 
-        //private void Write(string value, Transform parent)
-        //{
-        //    goName.transform.SetParent(parent);
-        //    goName.transform.localPosition = new Vector2(-2, axisY);
-        //    goName.transform.rotation = Quaternion.identity;
-        //    goName.GetComponent<Text>().text = value;
-        //}
+        private void Write(string value, Transform parent, int index)
+        {
+            var item = parent.GetChild(index);
+            item.GetComponent<Text>().text = value;
+            item.gameObject.SetActive(true);
+        }
     }
 }
