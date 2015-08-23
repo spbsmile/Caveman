@@ -1,8 +1,10 @@
 ﻿using Caveman.Players;
+using Caveman.Setting;
 using Caveman.UI.Battle;
 using Caveman.UI.Windows;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = System.Random;
 
 namespace Caveman.UI
 {
@@ -18,8 +20,11 @@ namespace Caveman.UI
 
         public static BattleGui instance;
 
+        private System.Random r;
+
         public void Awake()
         {
+            r = new Random();
             instance = this;
             mainGameTimer.RoundEnded += () => resultRound.gameObject.SetActive(true);
         }
@@ -31,10 +36,17 @@ namespace Caveman.UI
             player.Bonus += bonusesPanel.BonusActivated;
         }
 
-        //public void SubscribeOnEvents(PlayerModelBase playerModelBase)
-        //{
-        //    playerModelBase.Death += vector2 => resultRound.gameObject.SetActive(true);
-        //}
+        public void SubscribeOnEvents(PlayerModelBase playerModelBase)
+        {
+            playerModelBase.Death += vector2 => waitForResp.gameObject.SetActive(true);
+            playerModelBase.RespawnGUI += () => waitForResp.gameObject.SetActive(false);
+            waitForResp.buttonRespawn.onClick.AddListener(delegate
+            {
+                playerModelBase.Birth(RandomPosition);
+                playerModelBase.StopCoroutine("Respawn");
+                waitForResp.gameObject.SetActive(false);
+            });
+        }
 
         private void WeaponsCountChanged(int count)
         {
@@ -44,6 +56,11 @@ namespace Caveman.UI
         private void KillsCountChanged(int count)
         {
             killed.text = count.ToString();
+        }
+       
+        private Vector2 RandomPosition
+        {
+            get { return new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)); }
         }
     }
 }

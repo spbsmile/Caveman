@@ -2,12 +2,12 @@
 {
     public class Settings
     {
-        public const int TimeRespawnPlayer = 2;
+        public const int TimeRespawnPlayer = 3;
         public const int RotateStoneParameter = 10;
 
         public static int WidthMap = 24;
         public static int HeightMap = 24;
-        public static int RoundTime = 10;
+        public static int RoundTime = 30;
         public static int TimeRespawnWeapon = 30;
         public static int BotsCount = 3;
         public static int InitialLyingWeapons = 20;

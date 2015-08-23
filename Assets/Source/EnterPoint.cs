@@ -152,6 +152,7 @@ namespace Caveman
                 }
                 else
                 {
+                    BattleGui.instance.SubscribeOnEvents(playerModel);
                     smoothCamera.target = prefab.transform;
                 }
             }

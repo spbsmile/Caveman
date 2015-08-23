@@ -3,6 +3,7 @@ using Caveman.Bonuses;
 using Caveman.Setting;
 using Caveman.Weapons;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Caveman.Players
 {
