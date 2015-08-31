@@ -125,7 +125,6 @@ namespace Caveman.Network
 
         public void OnDestroy()
         {
-            //serverConnection.SendLogout(SystemInfo.deviceUniqueIdentifier);
             serverConnection.StopSession();
         }
     }

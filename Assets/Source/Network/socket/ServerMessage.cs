@@ -9,10 +9,10 @@ namespace Caveman.Network
 
         public ServerMessage(string content)
         {
-            //if (content != "[]")
-            //{
-            //    Debug.Log("from server " + content);    
-            //}
+            if (content != "[]")
+            {
+                Debug.Log("from server " + content);
+            }
             contentObject = new JSONObject(content);
         }
 
@@ -22,10 +22,10 @@ namespace Caveman.Network
             {
                 foreach (var jsonItem in contentObject.list)
                 {
-                    if (jsonItem[ServerParams.ActionType].str != "move")
-                    {
-                        Debug.Log(contentObject.ToString());
-                    }
+                    //if (jsonItem[ServerParams.ActionType].str != "move")
+                    //{
+                    //    Debug.Log(contentObject.ToString());
+                    //}
                     SendMessageToListener(listener, jsonItem, jsonItem[ServerParams.ActionType].str);
                 }
             }
@@ -79,7 +79,9 @@ namespace Caveman.Network
             } 
             else if (type.Equals(ServerParams.LoginAction))
             {
+                Debug.Log("sfsfsdfdf");
                 var playerName = action[ServerParams.UserName].str;
+                //Debug.Log(action[ServerParams.TimeAction].str);
                 listener.LoginReceived(playerId, playerName, pointClient);
             }
             else if (type.Equals(ServerParams.PlayerDeadAction))
@@ -88,6 +90,7 @@ namespace Caveman.Network
             }
             else if (type.Equals(ServerParams.TimeAction))
             {
+                Debug.Log("TIME");
                 var time = action[ServerParams.TimeAction].str;
                 listener.Time(time);
             }

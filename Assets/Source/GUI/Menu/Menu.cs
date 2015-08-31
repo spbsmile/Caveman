@@ -35,5 +35,10 @@ namespace Caveman.UI.Menu
         {
             Application.LoadLevel(2);
         }
+
+        public void LoadProfile()
+        {
+            Application.LoadLevel(6);
+        }
     }
 }
