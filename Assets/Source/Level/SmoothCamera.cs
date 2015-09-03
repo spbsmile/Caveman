@@ -24,7 +24,7 @@ namespace Caveman.Level
             player = target.GetComponent<PlayerModelBase>();
         }
 
-        public void Update()
+        public void LateUpdate()
         {
             if (target && player.enabled)
             {
