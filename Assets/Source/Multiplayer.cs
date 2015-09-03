@@ -47,7 +47,7 @@ namespace Caveman.Network
             print(string.Format("PlayerDeadResceived {0}", playerId));
         }
 
-        public void Time(string time)
+        public void Time(float time)
         {
             print(time);
         }

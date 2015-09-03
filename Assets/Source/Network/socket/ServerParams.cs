@@ -9,6 +9,7 @@ namespace Caveman.Network
         public const string Y = "y";
         public const string WeaponType = "weapon_type";
         public const string BonusType = "bonus_type";
+        public const string TimeLeft = "time_left";
 
         public const string Player = "player";
 

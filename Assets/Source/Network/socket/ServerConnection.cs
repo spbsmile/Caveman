@@ -21,7 +21,7 @@ namespace Caveman.Network
         void RespawnReceived(string playerId, Vector2 point);
         void BonusAddedReceived(string key, Vector2 point);
         void PlayerDeadResceived(string playerId);
-        void Time(string time);
+        void Time(float time);
         void Player(string player);
     }
 

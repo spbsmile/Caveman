@@ -79,9 +79,7 @@ namespace Caveman.Network
             } 
             else if (type.Equals(ServerParams.LoginAction))
             {
-                Debug.Log("sfsfsdfdf");
                 var playerName = action[ServerParams.UserName].str;
-                //Debug.Log(action[ServerParams.TimeAction].str);
                 listener.LoginReceived(playerId, playerName, pointClient);
             }
             else if (type.Equals(ServerParams.PlayerDeadAction))
@@ -90,9 +88,7 @@ namespace Caveman.Network
             }
             else if (type.Equals(ServerParams.TimeAction))
             {
-                Debug.Log("TIME");
-                var time = action[ServerParams.TimeAction].str;
-                listener.Time(time);
+                listener.Time(action[ServerParams.TimeLeft].f);
             }
             else if (type.Equals(ServerParams.LogoutAction))
             {
