@@ -7,13 +7,13 @@
 
         public static int WidthMap = 24;
         public static int HeightMap = 24;
-        public static int RoundTime = 30;
-        public static int TimeRespawnWeapon = 30;
+        public static int RoundTime = 60;
+        public static int TimeRespawnWeapon = 20;
         public static int BotsCount = 3;
-        public static int InitialLyingWeapons = 20;
+        public static int InitialLyingWeapons = 10;
         public static float SpeedStone = 5f;
         public static float SpeedPlayer = 2.5f;
-        public static int TimeThrowStone = 2;
+        public static int TimeThrowWeapon = 2;
         public static int MaxCountWeapons = 10;
         public static int CountLyingSkulls = 3;
         public static int PoolCountBonusesSpeed = 6;

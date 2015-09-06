@@ -46,7 +46,7 @@ namespace Caveman.UI
             playerModelBase.RespawnGUIDisabled += () => waitForResp.gameObject.SetActive(false);
             waitForResp.buttonRespawn.onClick.AddListener(delegate
             {
-                playerModelBase.StopCoroutine("Respawn");
+                playerModelBase.StopAllCoroutines();
                 playerModelBase.Birth(RandomPosition);
                 waitForResp.gameObject.SetActive(false);
             });

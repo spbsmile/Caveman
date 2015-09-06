@@ -22,7 +22,7 @@ namespace Caveman.Setting
             botsCount.text = Settings.BotsCount.ToString();
             speedPlayer.text = Settings.SpeedPlayer.ToString();
             speedWeapon.text = Settings.SpeedStone.ToString();
-            timeThrow.text = Settings.TimeThrowStone.ToString();
+            timeThrow.text = Settings.TimeThrowWeapon.ToString();
             initialCountWeapons.text = Settings.InitialLyingWeapons.ToString();
 //            countMaxWeapons.text = Settings.MaxCountWeapons.ToString();
         }
@@ -44,7 +44,7 @@ namespace Caveman.Setting
 
         public void SetTimeThrow()
         {
-            Settings.TimeThrowStone = Convert.ToInt32(timeThrow.text);
+            Settings.TimeThrowWeapon = Convert.ToInt32(timeThrow.text);
         }
 
         public void SetInitialCountWeapons()

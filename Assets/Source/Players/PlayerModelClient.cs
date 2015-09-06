@@ -8,8 +8,6 @@ namespace Caveman.Players
 {
     public class PlayerModelClient : PlayerModelBase
     {
-        private IEnumerator coroutineThrowOnTimer;
-
         protected override void Start()
         {
             base.Start();
@@ -42,6 +40,7 @@ namespace Caveman.Players
                         weapon.owner.Kills++;
                         player.deaths++;
                         weapon.Destroy();
+                        StopAllCoroutines();
                         Die();
                         if (multiplayer) serverConnection.SendPlayerDead();
                         StartCoroutine(Respawn(new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap))));
@@ -62,7 +61,6 @@ namespace Caveman.Players
         {
             if (multiplayer) serverConnection.SendRespawn(Id, point);
             yield return StartCoroutine(base.Respawn(point));
-            StartCoroutine(ThrowOnTimer());
         }
 
         public override void PickupBonus(BonusBase bonus)
@@ -88,7 +86,7 @@ namespace Caveman.Players
 
         private IEnumerator ThrowOnTimer()
         {
-            yield return new WaitForSeconds(Settings.TimeThrowStone);
+            yield return new WaitForSeconds(Settings.TimeThrowWeapon);
             if (player.Weapons > 0)
             {
                 var victim = FindClosestPlayer();
@@ -118,16 +116,10 @@ namespace Caveman.Players
             }
             return result;
         }
-
-        public void OnDisable()
-        {
-           StopCoroutine(coroutineThrowOnTimer);
-        }
-
+     
         public void OnEnable()
         {
-            if (coroutineThrowOnTimer == null) coroutineThrowOnTimer = ThrowOnTimer();
-            StartCoroutine(coroutineThrowOnTimer);
+            StartCoroutine(ThrowOnTimer());
         }
     }
 }
