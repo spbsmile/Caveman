@@ -13,12 +13,14 @@ namespace Caveman.UI.Battle
         private bool timeBonus;
         private float timeLastBonusUpdate;
         private float durationBonus;
-
+        private CanvasGroup canvasGroup;
 
         public void Start()
         {
             timerBonus.text = "";
             iconSpeedBonus.gameObject.SetActive(false);
+            canvasGroup = GetComponent<CanvasGroup>();
+            canvasGroup.alpha = 0;
         }
 
         //todo все переделать на события 
@@ -39,6 +41,7 @@ namespace Caveman.UI.Battle
                         iconCurrentBonus.gameObject.SetActive(false);
                         timerBonus.text = "";
                         timeBonus = false;
+                        canvasGroup.alpha = 0;
                     }
                 }
             }
@@ -55,6 +58,7 @@ namespace Caveman.UI.Battle
                     break;
             }
             iconCurrentBonus.gameObject.SetActive(true);
+            canvasGroup.alpha = 1;
             timeBonus = true;
             durationBonus = duration;
         }

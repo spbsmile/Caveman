@@ -7,7 +7,6 @@ using Caveman.Setting;
 using Caveman.Utils;
 using Caveman.Weapons;
 using UnityEngine;
-using UnityEngine.Events;
 using Random = System.Random;
 
 namespace Caveman.Players
@@ -15,7 +14,7 @@ namespace Caveman.Players
     public class PlayerModelBase : MonoBehaviour
     {
         public Action<Vector2> Death;
-        public Action RespawnGUI; 
+        public Action RespawnGUIDisabled; 
         public Func<WeaponType, ObjectPool<WeaponModelBase>> ChangedWeaponsPool;
 
         public Player player;
@@ -37,14 +36,12 @@ namespace Caveman.Players
 
         private PlayerPool poolPlayers;
         private ObjectPool<WeaponModelBase> poolWeapons;
-        //private IEnumerator coroutineRespawn = null;
 
         protected virtual void Start()
         {
             animator = GetComponent<Animator>();
             spriteRenderer = GetComponent<SpriteRenderer>();
             Speed = Settings.SpeedPlayer;
-          //  coroutineRespawn = Respawn()
         }
 
         public virtual void Init(Player player, Vector2 start, Random random, PlayerPool pool, ServerConnection serverConnection)
@@ -70,8 +67,8 @@ namespace Caveman.Players
 
         public virtual void Die()
         {
-            poolPlayers.Store(this);
             Death(transform.position);
+            poolPlayers.Store(this);
         }
 
         public virtual void PickupWeapon(WeaponModelBase weaponModel)
@@ -103,7 +100,7 @@ namespace Caveman.Players
             yield return new WaitForSeconds(Settings.TimeRespawnPlayer);
             Birth(point);
             delta = Vector2.zero;
-            if (RespawnGUI != null) RespawnGUI();
+            if (RespawnGUIDisabled != null) RespawnGUIDisabled();
         }
 
         public void Birth(Vector2 position)

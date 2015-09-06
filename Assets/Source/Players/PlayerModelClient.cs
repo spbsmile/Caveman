@@ -3,16 +3,16 @@ using Caveman.Bonuses;
 using Caveman.Setting;
 using Caveman.Weapons;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Caveman.Players
 {
     public class PlayerModelClient : PlayerModelBase
     {
+        private IEnumerator coroutineThrowOnTimer;
+
         protected override void Start()
         {
             base.Start();
-            StartCoroutine(ThrowOnTimer());
             ChangedWeapons += () => player.Weapons = 0;
             print("hello subscribe ChangedWeapons" + name);
         }
@@ -117,6 +117,17 @@ namespace Caveman.Players
                 }
             }
             return result;
+        }
+
+        public void OnDisable()
+        {
+           StopCoroutine(coroutineThrowOnTimer);
+        }
+
+        public void OnEnable()
+        {
+            if (coroutineThrowOnTimer == null) coroutineThrowOnTimer = ThrowOnTimer();
+            StartCoroutine(coroutineThrowOnTimer);
         }
     }
 }

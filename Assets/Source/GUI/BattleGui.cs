@@ -26,24 +26,28 @@ namespace Caveman.UI
         {
             r = new Random();
             instance = this;
-            mainGameTimer.RoundEnded += () => resultRound.gameObject.SetActive(true);
+            mainGameTimer.RoundEnded += () =>
+            {
+                resultRound.gameObject.SetActive(true);
+                waitForResp.gameObject.SetActive(false);
+            };
         }
 
         public void SubscribeOnEvents(Player player)
         {
             player.WeaponsCountChanged += WeaponsCountChanged;
             player.KillsCountChanged += KillsCountChanged;
-            player.Bonus += bonusesPanel.BonusActivated;
+            player.BonusActivated += bonusesPanel.BonusActivated;
         }
 
         public void SubscribeOnEvents(PlayerModelBase playerModelBase)
         {
             playerModelBase.Death += vector2 => waitForResp.gameObject.SetActive(true);
-            playerModelBase.RespawnGUI += () => waitForResp.gameObject.SetActive(false);
+            playerModelBase.RespawnGUIDisabled += () => waitForResp.gameObject.SetActive(false);
             waitForResp.buttonRespawn.onClick.AddListener(delegate
             {
-                playerModelBase.Birth(RandomPosition);
                 playerModelBase.StopCoroutine("Respawn");
+                playerModelBase.Birth(RandomPosition);
                 waitForResp.gameObject.SetActive(false);
             });
         }

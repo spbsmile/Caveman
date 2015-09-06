@@ -13,7 +13,7 @@
         public static int InitialLyingWeapons = 20;
         public static float SpeedStone = 5f;
         public static float SpeedPlayer = 2.5f;
-        public static int TimeThrowStone = 1;
+        public static int TimeThrowStone = 2;
         public static int MaxCountWeapons = 10;
         public static int CountLyingSkulls = 3;
         public static int PoolCountBonusesSpeed = 6;

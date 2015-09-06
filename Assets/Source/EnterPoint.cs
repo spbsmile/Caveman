@@ -175,7 +175,6 @@ namespace Caveman
             return null;
         }
 
-        //todo вынести , есть бага 
         private IEnumerator DeathAnimate(Vector2 position)
         {
             var deathImage = poolDeathImage.New();
@@ -183,7 +182,13 @@ namespace Caveman
             var spriteRenderer = deathImage.GetComponent<SpriteRenderer>();
             if (spriteRenderer)
             {
-                yield return UnityExtensions.FadeOut(spriteRenderer);
+                for (var i = 1f; i > 0; i -= 0.1f)
+                {
+                    var c = spriteRenderer.color;
+                    c.a = i;
+                    spriteRenderer.color = c;
+                    yield return new WaitForSeconds(0.1f);
+                }
             }
             poolDeathImage.Store(deathImage);
         }

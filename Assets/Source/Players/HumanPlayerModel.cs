@@ -29,6 +29,10 @@ namespace Caveman.Players
         {
             var position = new Vector3(transform.position.x + movement.x * Time.deltaTime * Speed,
                transform.position.y + movement.y * Time.deltaTime * Speed);
+
+            if (position.x < 0.01f || position.y < 0.01) return;
+            if (position.x > Settings.WidthMap - 0.01f || position.y > Settings.HeightMap) return;
+
             transform.position = position;
 
             animator.SetFloat(movement.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Speed);

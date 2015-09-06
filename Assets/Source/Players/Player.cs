@@ -7,7 +7,7 @@ namespace Caveman.Players
     {
         public Action<int> WeaponsCountChanged;
         public Action<int> KillsCountChanged;
-        public Action<BonusType, int> Bonus;
+        public Action<BonusType, int> BonusActivated;
         public int deaths;
         public readonly string name;
         private int weapons;
@@ -52,9 +52,9 @@ namespace Caveman.Players
 
         public void PickUpBonus(BonusType type, int duration)
         {
-            if (Bonus != null)
+            if (BonusActivated != null)
             {
-                Bonus(type, duration);
+                BonusActivated(type, duration);
             }
         }
     }

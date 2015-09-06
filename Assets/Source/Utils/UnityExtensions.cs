@@ -24,7 +24,6 @@ namespace Caveman.Utils
                 spriteRenderer.color = c;
                 yield return null;
             }
-            
         }
 
         public static IEnumerator FadeIn(SpriteRenderer spriteRenderer)
