@@ -99,7 +99,7 @@ namespace Caveman.Players
         {
             yield return new WaitForSeconds(Settings.TimeRespawnPlayer);
             Birth(point);
-            delta = Vector2.zero;
+            StopMove();
             if (RespawnGUIDisabled != null) RespawnGUIDisabled();
         }
 
@@ -126,6 +126,11 @@ namespace Caveman.Players
             this.target = target;
             delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedPlayer);
             animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Settings.SpeedPlayer);
+        }
+
+        public void StopMove()
+        {
+            delta = Vector2.zero;
         }
     }
 }

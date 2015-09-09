@@ -1,4 +1,5 @@
 ﻿using Caveman.Players;
+using Caveman.Utils;
 using UnityEngine;
 
 namespace Caveman.Network
@@ -60,22 +61,28 @@ namespace Caveman.Network
         public void WeaponRemovedReceived(string key)
         {
             poolStones.Store(key);
-            //print(string.Format("WeaponRemovedReceived {0}", key));
         }
 
         public void MoveReceived(string playerId, Vector2 point)
         {
+           
             if (poolPlayers.ContainsKey(playerId))
             {
-                //how ai . serverclient move
-                 //poolPlayers[playerId].SetMove(point);
-                poolPlayers[playerId].transform.position = point;    
+                var playerServer = poolPlayers[playerId];
+                print(Vector2.SqrMagnitude((Vector2)playerServer.transform.position - point));
+                if (Vector2.SqrMagnitude((Vector2)playerServer.transform.position - point) < UnityExtensions.ThresholdPosition)
+                {
+                    playerServer.StopMove();
+                }
+                else
+                {
+                    playerServer.SetMove(point);
+                }
             }
             else
             {
                 Debug.LogWarning("Player null, but move received invoke");
             }
-            
         }
 
         public void LoginReceived(string playerId, string playerName, Vector2 position)
