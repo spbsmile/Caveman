@@ -44,7 +44,7 @@ namespace Caveman.Players
             Speed = Settings.SpeedPlayer;
         }
 
-        public virtual void Init(Player player, Vector2 start, Random random, PlayerPool pool, ServerConnection serverConnection)
+        public void Init(Player player, Vector2 start, Random random, PlayerPool pool, ServerConnection serverConnection)
         {
             this.serverConnection = serverConnection;
             if (serverConnection != null) multiplayer = true;
@@ -108,10 +108,24 @@ namespace Caveman.Players
             poolPlayers.New(Id).transform.position = position;
         }
 
+        /// <summary>
+        /// linear motion
+        /// </summary>
         protected void Move()
         {
             transform.position = new Vector3(transform.position.x + delta.x*Time.deltaTime,
                 transform.position.y + delta.y*Time.deltaTime);
+        }
+
+        /// <summary>
+        /// set delta - direction of motion
+        /// </summary>
+        /// <param name="target"></param>
+        public void SetMove(Vector2 target)
+        {
+            this.target = target;
+            delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedPlayer);
+            animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Settings.SpeedPlayer);
         }
     }
 }

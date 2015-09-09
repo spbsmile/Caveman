@@ -33,5 +33,11 @@ namespace Caveman.Players
             base.Throw(aim);
             weapons--;
         }
+
+        //todo move to target .target from server
+        public void Update()
+        {
+            Move();
+        }
     }
 }

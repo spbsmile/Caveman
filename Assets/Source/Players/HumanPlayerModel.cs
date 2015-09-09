@@ -20,7 +20,7 @@ namespace Caveman.Players
 
         private IEnumerator SendMove()
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1f);
             serverConnection.SendMove(transform.position);
             StartCoroutine(SendMove());
         }

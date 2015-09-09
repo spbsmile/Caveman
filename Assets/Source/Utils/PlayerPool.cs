@@ -39,7 +39,7 @@ namespace Caveman.Utils
         public void Store(PlayerModelBase player)
         {
             player.enabled = false;
-            player.transform.position = new Vector3(100,100,100);
+            player.transform.position = new Vector3(100, 100, 100);
         }
 
         public PlayerModelBase New(string id)

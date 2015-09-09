@@ -62,13 +62,6 @@ namespace Caveman.Players
             }
         }
 
-        private void SetMove(Vector2 target)
-        {
-            this.target = target;
-            delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedPlayer);
-            animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Settings.SpeedPlayer);
-        }
-
         private Vector2 RandomPosition
         {
             get { return new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)); }
