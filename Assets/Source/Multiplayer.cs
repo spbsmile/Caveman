@@ -68,8 +68,8 @@ namespace Caveman.Network
             if (poolPlayers.ContainsKey(playerId))
             {
                 //how ai . serverclient move
-                 poolPlayers[playerId].SetMove(point);
-                //poolPlayers[playerId].transform.position = point;    
+                 //poolPlayers[playerId].SetMove(point);
+                poolPlayers[playerId].transform.position = point;    
             }
             else
             {
