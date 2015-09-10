@@ -34,10 +34,9 @@ namespace Caveman.Players
             weapons--;
         }
 
-        ////todo move to target .target from server
-        //public void Update()
-        //{
-        //    Move();
-        //}
+        public void Update()
+        {
+            Move();
+        }
     }
 }

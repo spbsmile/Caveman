@@ -82,7 +82,6 @@ namespace Caveman.Network
             if (poolPlayers.ContainsKey(playerId))
             {
                 var playerServer = poolPlayers[playerId];
-                print(Vector2.SqrMagnitude((Vector2)playerServer.transform.position - point));
                 if (Vector2.SqrMagnitude((Vector2)playerServer.transform.position - point) < UnityExtensions.ThresholdPosition)
                 {
                     playerServer.StopMove();
