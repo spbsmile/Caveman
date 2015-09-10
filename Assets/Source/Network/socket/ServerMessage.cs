@@ -42,9 +42,10 @@ namespace Caveman.Network
                 ? new Vector2(action[ServerParams.X].f, action[ServerParams.Y].f)
                 : Vector2.zero;
             var key = GenerateKey(pointServer);
+            
             var pointClient = Convector(pointServer);
-            //Debug.Log(pointServer + " pointServer");
             var playerId = action[ServerParams.UserId]!= null ?action[ServerParams.UserId].str: null;
+           
             if (type.Equals(ServerParams.StoneAddedAction))
             {
                 listener.WeaponAddedReceived(key, pointClient);
@@ -84,15 +85,23 @@ namespace Caveman.Network
             }
             else if (type.Equals(ServerParams.PlayerDeadAction))
             {
-                listener.PlayerDeadResceived(playerId);
+                listener.PlayerDeadReceived(playerId);
             }
             else if (type.Equals(ServerParams.TimeAction))
             {
-                listener.Time(action[ServerParams.TimeLeft].f);
+                listener.TimeReceived(action[ServerParams.TimeLeft].f);
             }
             else if (type.Equals(ServerParams.LogoutAction))
             {
                 listener.LogoutReceived(playerId);
+            }
+            else if (type.Equals(ServerParams.ResultAction))
+            {
+                Debug.Log(action[ServerParams.Player].str);
+                Debug.Log(action[ServerParams.UserName].str);
+                Debug.Log(action[ServerParams.ResultAction].str);
+
+                listener.ResultReceived(" ResultReceived");
             }
         }
 

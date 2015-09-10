@@ -21,7 +21,7 @@ namespace Caveman.Level
             section = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 10));
             criticalX = (Settings.WidthMap - section.x);
             criticalY = (Settings.HeightMap - section.y);
-            player = target.GetComponent<PlayerModelBase>();
+            if (target != null) player = target.GetComponent<PlayerModelBase>();
         }
 
         public void LateUpdate()
@@ -35,7 +35,7 @@ namespace Caveman.Level
                 var currX = target.position.x;
                 var currY = target.position.y;
 
-                if (currX> criticalX && currY > criticalY)
+                if (currX > criticalX && currY > criticalY)
                 {
                     delta = new Vector3(criticalX, criticalY)
                             - indent;
@@ -45,7 +45,7 @@ namespace Caveman.Level
                     if (currX < section.x && currY < section.y)
                     {
                         delta = new Vector3(section.x, section.y)
-                            - indent; 
+                                - indent;
                     }
                     else
                     {
@@ -58,8 +58,8 @@ namespace Caveman.Level
                         {
                             if (currX > criticalX && currY < section.y)
                             {
-                                delta = new Vector3(criticalX  , section.y)
-                                - indent;
+                                delta = new Vector3(criticalX, section.y)
+                                        - indent;
                             }
                             else
                             {
@@ -72,8 +72,8 @@ namespace Caveman.Level
                                 {
                                     if (currX > criticalX)
                                     {
-                                        delta = new Vector3(criticalX , currY)
-                                          - indent;
+                                        delta = new Vector3(criticalX, currY)
+                                                - indent;
                                     }
                                     else
                                     {
@@ -86,8 +86,8 @@ namespace Caveman.Level
                                         {
                                             if (currY > criticalY)
                                             {
-                                                delta = new Vector3(currX, criticalY )
-                                                    - indent;
+                                                delta = new Vector3(currX, criticalY)
+                                                        - indent;
                                             }
                                             else
                                             {
@@ -101,9 +101,14 @@ namespace Caveman.Level
                     }
                 }
                 var destination = transform.position + delta;
-            transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, DampTime);
+                transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, DampTime);
+            }
         }
-    }
+
+        public void SetPlayer(PlayerModelBase player)
+        {
+            this.player = player;
+        }
 
         //private void OnDrawGizmos()
         //{

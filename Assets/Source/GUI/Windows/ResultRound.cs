@@ -15,7 +15,10 @@ namespace Caveman.UI.Windows
 
         public void OnEnable()
         {
-            StartCoroutine(DisplayResult());
+            if (!Setting.Settings.multiplayerMode)
+            {
+                StartCoroutine(DisplayResult());    
+            }
         }
 
         public void SetPlayerPool(PlayerPool pool)
@@ -38,7 +41,7 @@ namespace Caveman.UI.Windows
             }
         }
 
-        private void Write(string value, Transform parent, int index)
+        public void Write(string value, Transform parent, int index)
         {
             var item = parent.GetChild(index);
             item.GetComponent<Text>().text = value;

@@ -21,6 +21,8 @@
         public static int InitalCountBonusesSpeed = 5;
         public static int DurationBonusSpeed = 4;
 
+        public static bool multiplayerMode;
+
         public const int PoolCountStones = 40;
         public const int PoolCountDeathImages = 9;
         public const int PoolCountSkulls = 30;

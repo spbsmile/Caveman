@@ -57,6 +57,8 @@ namespace Caveman
             poolStones.RelatedPool += () => poolStonesSplash;
 
             poolPlayers = containerPlayers.GetComponent<PlayerPool>();
+
+            //todo !name
             var humanPlayer = new Player("Zabiyakin");
             BattleGui.instance.SubscribeOnEvents(humanPlayer);
             BattleGui.instance.resultRound.SetPlayerPool(poolPlayers);
@@ -154,6 +156,7 @@ namespace Caveman
                 {
                     BattleGui.instance.SubscribeOnEvents(playerModel);
                     smoothCamera.target = prefab.transform;
+                    smoothCamera.SetPlayer(prefab.GetComponent<PlayerModelBase>());
                 }
             }
             playerModel.Init(player, new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)), r, poolPlayers, serverConnection);

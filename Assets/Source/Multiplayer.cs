@@ -1,4 +1,5 @@
 ﻿using Caveman.Players;
+using Caveman.UI;
 using Caveman.Utils;
 using UnityEngine;
 
@@ -10,6 +11,11 @@ namespace Caveman.Network
 
         public const float WidthMapServer = 1350;
         public const float HeigthMapServer = 1350;
+
+        public void Awake()
+        {
+            Setting.Settings.multiplayerMode = true;
+        }
 
         public override void Start()
         {
@@ -39,18 +45,25 @@ namespace Caveman.Network
 
         public void BonusAddedReceived(string key, Vector2 point)
         {
-            //print(string.Format("BonusAddedReceived {0}", key));
+
         }
 
-        public void PlayerDeadResceived(string playerId)
+        public void PlayerDeadReceived(string playerId)
         {
             poolPlayers[playerId].Die();
-            print(string.Format("PlayerDeadResceived {0}", playerId));
         }
 
-        public void Time(float time)
+        public void ResultReceived(string result)
         {
-            print(time);
+            var resultRound = BattleGui.instance.resultRound;
+            resultRound.gameObject.SetActive(true);
+            //todo
+            resultRound.Write("sfsdf", resultRound.deaths, 1);
+        }
+
+        public void TimeReceived(float time)
+        {
+            StartCoroutine(BattleGui.instance.mainGameTimer.UpdateTime((int)time));
         }
 
         public void Player(string player)
@@ -89,8 +102,8 @@ namespace Caveman.Network
         {
             CreatePlayer(new Player(playerName), playerId, false, true, prefabServerPlayer);
             poolPlayers[playerId].transform.position = position;
-            serverConnection.SendRespawn(SystemInfo.deviceUniqueIdentifier, poolPlayers[SystemInfo.deviceUniqueIdentifier].transform.position);            
-            //print(string.Format("LoginReceived {0} by playerId", playerId));
+            serverConnection.SendRespawn(SystemInfo.deviceUniqueIdentifier,
+                poolPlayers[SystemInfo.deviceUniqueIdentifier].transform.position);
         }
 
         public void LogoutReceived(string playerId)
@@ -103,19 +116,16 @@ namespace Caveman.Network
         public void PickWeaponReceived(string playerId, string key)
         {
             poolPlayers[playerId].PickupWeapon(poolStones[key]);
-            //print(string.Format("PickWeaponReceived {0} by playerId {1}", key, playerId));
         }
 
         public void PickBonusReceived(string playerId, string key)
         {
             poolPlayers[playerId].PickupBonus(poolBonusesSpeed[key]);
-            //print(string.Format("PickBonusReceived {0} by playerId {1}", key, playerId));
         }
 
         public void UseWeaponReceived(string playerId, Vector2 aim)
         {
             poolPlayers[playerId].Throw(aim);
-            //Debug.Log(string.Format("UseWeaponReceived aim {0} by playerId {1}", aim, playerId));
         }
 
         public void RespawnReceived(string playerId, Vector2 point)
