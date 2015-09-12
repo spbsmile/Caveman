@@ -21,7 +21,7 @@ namespace Caveman.Network
         public override void Start()
         {
             serverConnection = new ServerConnection {ServerListener = this};
-            serverConnection.StartSession(SystemInfo.deviceUniqueIdentifier, SystemInfo.deviceName);
+            serverConnection.StartSession(SystemInfo.deviceUniqueIdentifier, PlayerPrefs.GetString(AccountManager.KeyNickname));
             base.Start();
             //serverConnection.SendLogin(SystemInfo.deviceName, SystemInfo.deviceUniqueIdentifier);
             serverConnection.SendRespawn(SystemInfo.deviceUniqueIdentifier, poolPlayers[SystemInfo.deviceUniqueIdentifier].transform.position);

@@ -9,8 +9,8 @@ namespace Caveman.Utils
         {
             var dx = target.x - position.x;
             var dy = target.y - position.y;
-            var d = Mathf.Sqrt(dx * dx + dy * dy);
-            return d != 0 ? new Vector2((dx / d) * speed, (dy / d) * speed) : Vector2.zero;
+            var d = Mathf.Sqrt(dx*dx + dy*dy);
+            return d != 0 ? new Vector2((dx/d)*speed, (dy/d)*speed) : Vector2.zero;
         }
 
         public const float ThresholdPosition = 0.1f;
@@ -41,6 +41,17 @@ namespace Caveman.Utils
                 }
                 yield return null;
             }
+        }
+
+        public static IEnumerator FadeOut(this CanvasGroup canvasGroup)
+        {
+            canvasGroup.alpha = 1;
+            for (var i = 1f; i > 0; i -= 0.1f)
+            {
+                canvasGroup.alpha = i;
+                yield return null;
+            }
+            canvasGroup.alpha = 0;
         }
     }
 }

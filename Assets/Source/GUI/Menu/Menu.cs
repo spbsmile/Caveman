@@ -1,10 +1,17 @@
-﻿using Caveman.UI.Common;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Caveman.UI.Common;
+using Caveman.Utils;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Caveman.UI.Menu
 {
     public class Menu : MonoBehaviour
     {
+        public CanvasGroup tooltipNickname;
+        public InputField inputNickname;
+
         public void Start()
         {
             Screen.orientation = ScreenOrientation.Landscape;
@@ -12,12 +19,26 @@ namespace Caveman.UI.Menu
 
         public void LoadSingleGame()
         {
-            LoadingScreen.instance.ProgressTo(1);
+            if (string.IsNullOrEmpty(inputNickname.text))
+            {
+                StartCoroutine(FadeOutTooltip());
+            }
+            else
+            {
+                LoadingScreen.instance.ProgressTo(1);
+            }
         }
 
         public void LoadMultiplayGame()
         {
-            Application.LoadLevel(4);
+            if (string.IsNullOrEmpty(inputNickname.text))
+            {
+                StartCoroutine(FadeOutTooltip());
+            }
+            else
+            {
+                Application.LoadLevel(4);
+            }
         }
 
         public void LoadMenu()
@@ -39,6 +60,13 @@ namespace Caveman.UI.Menu
         public void LoadProfile()
         {
             Application.LoadLevel(6);
+        }
+
+        private IEnumerator FadeOutTooltip()
+        {
+            tooltipNickname.alpha = 1;
+            yield return new WaitForSeconds(2f);
+            StartCoroutine(tooltipNickname.FadeOut());
         }
     }
 }

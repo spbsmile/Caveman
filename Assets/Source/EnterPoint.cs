@@ -64,7 +64,7 @@ namespace Caveman
             poolPlayers = containerPlayers.GetComponent<PlayerPool>();
 
             //todo !name
-            var humanPlayer = new Player("Zabiyakin");
+            var humanPlayer = new Player(PlayerPrefs.GetString(AccountManager.KeyNickname));
             BattleGui.instance.SubscribeOnEvents(humanPlayer);
             BattleGui.instance.resultRound.SetPlayerPool(poolPlayers);
             CreatePlayer(humanPlayer, SystemInfo.deviceUniqueIdentifier, false, false, prefabHumanPlayer);
