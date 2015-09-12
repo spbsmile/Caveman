@@ -44,6 +44,11 @@ namespace Caveman
         
         private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
 
+        public virtual void Awake()
+        {
+            Settings.multiplayerMode = false;
+        }
+
         public virtual void Start()
         {
             r = new Random();

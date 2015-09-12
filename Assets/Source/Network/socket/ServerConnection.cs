@@ -21,7 +21,7 @@ namespace Caveman.Network
         void RespawnReceived(string playerId, Vector2 point);
         void BonusAddedReceived(string key, Vector2 point);
         void PlayerDeadReceived(string playerId);
-        void ResultReceived(string result);
+        void ResultReceived(List<JSONObject> data);
         void TimeReceived(float time);
         void Player(string player);
     }

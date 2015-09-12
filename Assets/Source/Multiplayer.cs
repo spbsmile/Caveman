@@ -1,4 +1,5 @@
-﻿using Caveman.Players;
+﻿using System.Collections.Generic;
+using Caveman.Players;
 using Caveman.UI;
 using Caveman.Utils;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace Caveman.Network
         public const float WidthMapServer = 1350;
         public const float HeigthMapServer = 1350;
 
-        public void Awake()
+        public override void Awake()
         {
             Setting.Settings.multiplayerMode = true;
         }
@@ -53,12 +54,18 @@ namespace Caveman.Network
             poolPlayers[playerId].Die();
         }
 
-        public void ResultReceived(string result)
+        public void ResultReceived(List<JSONObject> data)
         {
             var resultRound = BattleGui.instance.resultRound;
             resultRound.gameObject.SetActive(true);
-            //todo
-            resultRound.Write("sfsdf", resultRound.deaths, 1);
+            var lineIndex = 0;
+            foreach (var jsonObject in data)
+            {
+                resultRound.Write(jsonObject[ServerParams.UserName].str, resultRound.names, lineIndex);
+                resultRound.Write(jsonObject[ServerParams.Kills].n.ToString(), resultRound.kills, lineIndex);
+                resultRound.Write(jsonObject[ServerParams.Deaths].n.ToString(), resultRound.deaths, lineIndex);
+                lineIndex++;
+            }
         }
 
         public void TimeReceived(float time)

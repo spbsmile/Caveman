@@ -27,6 +27,9 @@ namespace Caveman.Network
         public const string PickBonusAction = "pick_bonus";
         public const string DeadAction = "dead";
         public const string ResultAction = "result";
+        public const string Data = "data";
+        public const string Kills = "kills";
+        public const string Deaths = "deaths";
 
         //client side action only
         public const string UseWeaponAction = "use_weapon";
