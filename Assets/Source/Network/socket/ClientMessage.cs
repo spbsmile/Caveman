@@ -86,7 +86,6 @@ namespace Caveman.Network
         public static ClientMessage PlayerDead()
         {
             var json = new JSONObject(JSONObject.Type.OBJECT);
-            //todo
             json.AddField(ServerParams.ActionType, ServerParams.PlayerDeadAction);
             return new ClientMessage(json);
         }
