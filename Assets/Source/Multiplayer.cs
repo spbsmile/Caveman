@@ -104,7 +104,6 @@ namespace Caveman.Network
         public void LoginReceived(string playerId, string playerName, Vector2 position)
         {
             CreatePlayer(new Player(playerName), playerId, false, true, prefabServerPlayer);
-            poolPlayers[playerId].transform.position = position;
             serverConnection.SendRespawn(OwnId,
                 poolPlayers[OwnId].transform.position);
         }
@@ -136,6 +135,11 @@ namespace Caveman.Network
             if (!poolPlayers.ContainsKey(playerId))
             {
                 CreatePlayer(new Player("No Name"), playerId, false, true, prefabServerPlayer);
+                poolPlayers[playerId].transform.position = point;
+            }
+            else if (!poolPlayers[playerId].inGame)
+            {
+                poolPlayers[playerId].inGame = true;
                 poolPlayers[playerId].transform.position = point;
             }
             else

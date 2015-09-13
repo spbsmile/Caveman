@@ -22,6 +22,8 @@ namespace Caveman.Players
         public string Id;
         public float Speed { get; set; }
         public SpriteRenderer spriteRenderer;
+        //todo hack
+        public bool inGame;
 
         protected Action ChangedWeapons;
         protected Vector2 delta;
