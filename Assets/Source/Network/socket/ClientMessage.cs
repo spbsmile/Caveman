@@ -26,10 +26,11 @@ namespace Caveman.Network
             Content = ContentFromJson();
         }
 
-        public static ClientMessage LoginMessage(string userName, string playerId)
+        public static ClientMessage LoginMessage(string playerId, string userName)
         {
             var json = new JSONObject(JSONObject.Type.OBJECT);
-            json.AddField(ServerParams.ActionType, "login");
+            json.AddField(ServerParams.ActionType, ServerParams.LoginAction);
+            json.AddField(ServerParams.UserId, playerId);
             json.AddField(ServerParams.UserName, userName);
             return new ClientMessage(json);
         }
@@ -85,6 +86,7 @@ namespace Caveman.Network
         public static ClientMessage PlayerDead()
         {
             var json = new JSONObject(JSONObject.Type.OBJECT);
+            //todo
             json.AddField(ServerParams.ActionType, ServerParams.PlayerDeadAction);
             return new ClientMessage(json);
         }

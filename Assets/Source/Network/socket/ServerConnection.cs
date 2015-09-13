@@ -23,7 +23,6 @@ namespace Caveman.Network
         void PlayerDeadReceived(string playerId);
         void ResultReceived(List<JSONObject> data);
         void TimeReceived(float time);
-        void Player(string player);
     }
 
     public class ServerConnection
@@ -92,7 +91,7 @@ namespace Caveman.Network
                     reader = new StreamReader(stream, Encoding.UTF8);
                     writer = new StreamWriter(stream);
 
-                    SendLogin(userId,userName);
+                    SendLogin(userId, userName);
                     StartListeningServer();
                 }
                 catch (Exception e)

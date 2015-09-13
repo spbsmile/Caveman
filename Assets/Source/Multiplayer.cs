@@ -12,6 +12,7 @@ namespace Caveman.Network
 
         public const float WidthMapServer = 1350;
         public const float HeigthMapServer = 1350;
+        private static string OwnId;
 
         public override void Awake()
         {
@@ -20,11 +21,13 @@ namespace Caveman.Network
 
         public override void Start()
         {
+            OwnId = SystemInfo.deviceUniqueIdentifier;
             serverConnection = new ServerConnection {ServerListener = this};
-            serverConnection.StartSession(SystemInfo.deviceUniqueIdentifier, PlayerPrefs.GetString(AccountManager.KeyNickname));
+            serverConnection.StartSession(OwnId,
+                PlayerPrefs.GetString(AccountManager.KeyNickname));
             base.Start();
-            //serverConnection.SendLogin(SystemInfo.deviceName, SystemInfo.deviceUniqueIdentifier);
-            serverConnection.SendRespawn(SystemInfo.deviceUniqueIdentifier, poolPlayers[SystemInfo.deviceUniqueIdentifier].transform.position);
+            serverConnection.SendRespawn(OwnId,
+                poolPlayers[OwnId].transform.position);
         }
 
         public void Update()
@@ -73,11 +76,6 @@ namespace Caveman.Network
             StartCoroutine(BattleGui.instance.mainGameTimer.UpdateTime((int)time));
         }
 
-        public void Player(string player)
-        {
-            print(player + "player");            
-        }
-
         public void WeaponRemovedReceived(string key)
         {
             poolStones.Store(key);
@@ -85,7 +83,6 @@ namespace Caveman.Network
 
         public void MoveReceived(string playerId, Vector2 point)
         {
-           
             if (poolPlayers.ContainsKey(playerId))
             {
                 var playerServer = poolPlayers[playerId];
@@ -108,8 +105,8 @@ namespace Caveman.Network
         {
             CreatePlayer(new Player(playerName), playerId, false, true, prefabServerPlayer);
             poolPlayers[playerId].transform.position = position;
-            serverConnection.SendRespawn(SystemInfo.deviceUniqueIdentifier,
-                poolPlayers[SystemInfo.deviceUniqueIdentifier].transform.position);
+            serverConnection.SendRespawn(OwnId,
+                poolPlayers[OwnId].transform.position);
         }
 
         public void LogoutReceived(string playerId)
@@ -144,7 +141,6 @@ namespace Caveman.Network
             else
             {
                 StartCoroutine(poolPlayers[playerId].Respawn(point));
-                Debug.Log(string.Format("RespawnReceived {0} by playerId {1}", point, playerId));    
             }
         }
 
