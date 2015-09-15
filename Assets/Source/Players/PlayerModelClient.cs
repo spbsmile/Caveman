@@ -59,7 +59,7 @@ namespace Caveman.Players
 
         public override IEnumerator Respawn(Vector2 point)
         {
-            if (multiplayer) serverConnection.SendRespawn(Id, point);
+            if (multiplayer) serverConnection.SendRespawn(point);
             yield return StartCoroutine(base.Respawn(point));
         }
 

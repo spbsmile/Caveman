@@ -91,7 +91,7 @@ namespace Caveman.Network
                     reader = new StreamReader(stream, Encoding.UTF8);
                     writer = new StreamWriter(stream);
 
-                    SendLogin(userId, userName);
+                    SendLogin(userName);
                     StartListeningServer();
                 }
                 catch (Exception e)
@@ -129,9 +129,9 @@ namespace Caveman.Network
             SendMessageToSocket(ClientMessage.PickBonus(bonusId));
         }
 
-        public void SendRespawn(string playerId, Vector2 point)
+        public void SendRespawn(Vector2 point)
         {
-            SendMessageToSocket(ClientMessage.Respawn(playerId, point));
+            SendMessageToSocket(ClientMessage.Respawn(point));
         }
 
         public void SendPlayerDead()
@@ -139,9 +139,9 @@ namespace Caveman.Network
             SendMessageToSocket(ClientMessage.PlayerDead());
         }
 
-        public void SendLogout(string playerId)
+        public void SendLogout()
         {
-            SendMessageToSocket(ClientMessage.Logout(playerId));
+            SendMessageToSocket(ClientMessage.Logout());
         }
 
         public void SendMove(Vector2 point)
@@ -154,9 +154,9 @@ namespace Caveman.Network
             SendMessageToSocket(ClientMessage.TickMessage());
         }
 
-        private void SendLogin(string userName, string playerId)
+        private void SendLogin(string userName)
         {
-            SendMessageToSocket(ClientMessage.LoginMessage(userName, playerId));
+            SendMessageToSocket(ClientMessage.LoginMessage(userName));
         }
 
         private void SendStringToSocket(string str)

@@ -26,8 +26,7 @@ namespace Caveman.Network
             serverConnection.StartSession(OwnId,
                 PlayerPrefs.GetString(AccountManager.KeyNickname));
             base.Start();
-            serverConnection.SendRespawn(OwnId,
-                poolPlayers[OwnId].transform.position);
+            serverConnection.SendRespawn(poolPlayers[OwnId].transform.position);
         }
 
         public void Update()
@@ -104,8 +103,7 @@ namespace Caveman.Network
         public void LoginReceived(string playerId, string playerName, Vector2 position)
         {
             CreatePlayer(new Player(playerName), playerId, false, true, prefabServerPlayer);
-            serverConnection.SendRespawn(OwnId,
-                poolPlayers[OwnId].transform.position);
+            serverConnection.SendRespawn(poolPlayers[OwnId].transform.position);
         }
 
         public void LogoutReceived(string playerId)
