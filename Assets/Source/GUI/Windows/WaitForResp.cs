@@ -12,7 +12,7 @@ namespace Caveman.UI.Windows
 
         public void OnEnable()
         {
-            var timeRespawn = Settings.TimeRespawnPlayer;
+            var timeRespawn = Settings.PlayerTimeRespawn;
             StartCoroutine(WithProgress(timeRespawn));
         }
 

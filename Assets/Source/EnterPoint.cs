@@ -57,7 +57,7 @@ namespace Caveman
             poolDeathImage = CreatePool<EffectBase>(Settings.PoolCountDeathImages, containerDeathImages, prefabDeathImage, null);
             poolStones = CreatePool<WeaponModelBase>(Settings.PoolCountStones, containerStones, prefabStone, InitStoneModel);
             poolSkulls = CreatePool<WeaponModelBase>(Settings.PoolCountSkulls, containerSkulls, prefabSkull, InitSkullModel);
-            poolBonusesSpeed = CreatePool<BonusBase>(Settings.PoolCountBonusesSpeed, containerBonusesSpeed, prefabBonusSpeed, InitBonusModel);
+            poolBonusesSpeed = CreatePool<BonusBase>(Settings.BonusSpeedPoolCount, containerBonusesSpeed, prefabBonusSpeed, InitBonusModel);
 
             poolStones.RelatedPool += () => poolStonesSplash;
 
@@ -83,7 +83,7 @@ namespace Caveman
         private void InitBonusModel(GameObject item, ObjectPool<BonusBase> pool)
         {
             var bonusModel = item.GetComponent<BonusBase>();
-            bonusModel.Init(pool, r, Settings.DurationBonusSpeed);
+            bonusModel.Init(pool, r, Settings.BonusSpeedDuration);
         }
 
         private void InitSkullModel(GameObject item, ObjectPool<WeaponModelBase> pool) 
@@ -100,17 +100,17 @@ namespace Caveman
 
         private IEnumerator PutBonuses()
         {
-            for (var i = 0; i < Settings.InitalCountBonusesSpeed; i++)
+            for (var i = 0; i < Settings.BonusSpeedInitialCount; i++)
             {
                 PutItem(poolBonusesSpeed);
             }
-            yield return new WaitForSeconds(Settings.TimeRespawnBonuses);
+            yield return new WaitForSeconds(Settings.BonusTimeRespawn);
             StartCoroutine(PutBonuses());
         }
 
         private IEnumerator PutWeapons()
         {
-            for (var i = 0; i < Settings.InitialLyingWeapons; i++)
+            for (var i = 0; i < Settings.WeaponInitialLying; i++)
             {
                 PutItem(poolStones);
             }
@@ -118,7 +118,7 @@ namespace Caveman
             {
                 PutItem(poolSkulls);
             }
-            yield return new WaitForSeconds(Settings.TimeRespawnWeapon);
+            yield return new WaitForSeconds(Settings.WeaponTimeRespawn);
             StartCoroutine(PutWeapons());
         }
 

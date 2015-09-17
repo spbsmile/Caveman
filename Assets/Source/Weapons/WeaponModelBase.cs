@@ -33,7 +33,7 @@ namespace Caveman.Weapons
 
         public void Awake()
         {
-            speed = Settings.SpeedStone;
+            speed = Settings.StoneSpeed;
         }
 
         public void Take()
@@ -69,7 +69,7 @@ namespace Caveman.Weapons
                 {
                     transform.position = new Vector2(transform.position.x + delta.x * Time.deltaTime,
                         transform.position.y + delta.y * Time.deltaTime);
-                    transform.Rotate(Vector3.forward, Settings.RotateStoneParameter);
+                    transform.Rotate(Vector3.forward, Settings.StoneRotateParameter);
                 }
                 else
                 {

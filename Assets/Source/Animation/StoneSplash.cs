@@ -22,7 +22,7 @@ namespace Caveman.Animation
                 {
                     transform.position = new Vector2(transform.position.x + delta.x*Time.deltaTime,
                         transform.position.y + delta.y*Time.deltaTime);
-                    transform.Rotate(Vector3.forward, Settings.RotateStoneParameter);
+                    transform.Rotate(Vector3.forward, Settings.StoneRotateParameter);
                 }
                 else
                 {

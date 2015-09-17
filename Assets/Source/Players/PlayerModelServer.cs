@@ -17,7 +17,7 @@ namespace Caveman.Players
 
         public override void PickupWeapon(WeaponModelBase weaponModel)
         {
-            if (weapons > Settings.MaxCountWeapons) return;
+            if (weapons > Settings.WeaponsMaxOnPlayer) return;
             base.PickupWeapon(weaponModel);
             weapons++;
         }

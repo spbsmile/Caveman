@@ -2,24 +2,30 @@
 {
     public class Settings
     {
-        public const int TimeRespawnPlayer = 3;
-        public const int RotateStoneParameter = 10;
-
         public static int WidthMap = 24;
         public static int HeightMap = 24;
         public static int RoundTime = 60;
-        public static int TimeRespawnWeapon = 20;
+
         public static int BotsCount = 3;
-        public static int InitialLyingWeapons = 10;
-        public static float SpeedStone = 5f;
-        public static float SpeedPlayer = 2.5f;
-        public static int TimeThrowWeapon = 2;
-        public static int MaxCountWeapons = 10;
+        public static float PlayerSpeed = 2.5f;
+        public const int PlayerTimeRespawn = 3;
+        public static float StoneSpeed = 5f;
+        public const int StoneRotateParameter = 10;
+        public static int WeaponTimeRespawn = 20;
+        public static int WeaponTimerThrow = 2;
+        public static int WeaponsMaxOnPlayer = 10;
+        public static int WeaponInitialLying = 10;
+        public static int WeaponCountPickup = 1;
+        
+        //todo rename all weapon
         public static int CountLyingSkulls = 3;
-        public static int PoolCountBonusesSpeed = 6;
-        public static float TimeRespawnBonuses = 10;
-        public static int InitalCountBonusesSpeed = 5;
-        public static int DurationBonusSpeed = 4;
+
+        public static float BonusTimeRespawn = 10;
+        public static int BonusSpeedInitialCount = 5;
+        //todo created on requirement
+        public static int BonusSpeedPoolCount = 6;
+        public static int BonusSpeedDuration = 4;
+        public static int BonusSpeedMaxCount = 6;
 
         public static bool multiplayerMode;
 

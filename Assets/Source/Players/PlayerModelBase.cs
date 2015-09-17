@@ -43,7 +43,7 @@ namespace Caveman.Players
         {
             animator = GetComponent<Animator>();
             spriteRenderer = GetComponent<SpriteRenderer>();
-            Speed = Settings.SpeedPlayer;
+            Speed = Settings.PlayerSpeed;
         }
 
         public void Init(Player player, Vector2 start, Random random, PlayerPool pool, ServerConnection serverConnection)
@@ -99,7 +99,7 @@ namespace Caveman.Players
 
         public virtual IEnumerator Respawn(Vector2 point)
         {
-            yield return new WaitForSeconds(Settings.TimeRespawnPlayer);
+            yield return new WaitForSeconds(Settings.PlayerTimeRespawn);
             Birth(point);
             StopMove();
             if (RespawnGUIDisabled != null) RespawnGUIDisabled();
@@ -126,8 +126,8 @@ namespace Caveman.Players
         public void SetMove(Vector2 target)
         {
             this.target = target;
-            delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.SpeedPlayer);
-            animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Settings.SpeedPlayer);
+            delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.PlayerSpeed);
+            animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Settings.PlayerSpeed);
         }
 
         public void StopMove()

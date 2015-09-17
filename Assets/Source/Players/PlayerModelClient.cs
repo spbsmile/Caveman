@@ -71,7 +71,7 @@ namespace Caveman.Players
 
         public override void PickupWeapon(WeaponModelBase weaponModel)
         {
-            if (player.Weapons > Settings.MaxCountWeapons) return;
+            if (player.Weapons > Settings.WeaponsMaxOnPlayer) return;
             base.PickupWeapon(weaponModel);
             player.Weapons += 1;
             if (multiplayer) serverConnection.SendPickWeapon(weaponModel.Id, (int)weaponModel.type);
@@ -86,7 +86,7 @@ namespace Caveman.Players
 
         private IEnumerator ThrowOnTimer()
         {
-            yield return new WaitForSeconds(Settings.TimeThrowWeapon);
+            yield return new WaitForSeconds(Settings.WeaponTimerThrow);
             if (player.Weapons > 0)
             {
                 var victim = FindClosestPlayer();
