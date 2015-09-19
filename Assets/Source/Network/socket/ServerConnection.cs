@@ -11,7 +11,7 @@ namespace Caveman.Network
     public interface IServerListener
     {
         void WeaponAddedReceived(string key, Vector2 point);
-        void WeaponRemovedReceived(string key);
+        //void WeaponRemovedReceived(string key);
         void MoveReceived(string playerId, Vector2 point);
         void LoginReceived(string playerId, string playerName);
         void LogoutReceived(string playerId);

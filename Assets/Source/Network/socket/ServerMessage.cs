@@ -50,10 +50,10 @@ namespace Caveman.Network
             {
                 listener.WeaponAddedReceived(key, pointClient);
             }
-            else if (type.Equals(ServerParams.StoneRemovedAction))
-            {
-                listener.WeaponRemovedReceived(key);
-            }
+            //else if (type.Equals(ServerParams.StoneRemovedAction))
+            //{
+            //    listener.WeaponRemovedReceived(key);
+            //}
             else if (type.Equals(ServerParams.MoveAction))
             {
                 listener.MoveReceived(playerId, pointClient);

@@ -46,6 +46,11 @@ namespace Caveman.Network
             }
         }
 
+        //public void WeaponRemovedReceived(string key)
+        //{
+        //    poolStones.Store(key);
+        //}
+
         public void BonusAddedReceived(string key, Vector2 point)
         {
 
@@ -73,11 +78,6 @@ namespace Caveman.Network
         public void TimeReceived(float time)
         {
             StartCoroutine(BattleGui.instance.mainGameTimer.UpdateTime((int)time));
-        }
-
-        public void WeaponRemovedReceived(string key)
-        {
-            poolStones.Store(key);
         }
 
         public void MoveReceived(string playerId, Vector2 point)
