@@ -18,13 +18,12 @@ namespace Caveman.Players
         public Func<WeaponType, ObjectPool<WeaponModelBase>> ChangedWeaponsPool;
 
         public Player player;
-        public BonusBase bonusType;
         public string Id;
         public float Speed { get; set; }
-        public SpriteRenderer spriteRenderer;
-        [HideInInspector]
-        public bool firstRespawn= true;
-
+        [HideInInspector] public BonusBase bonusType;
+        [HideInInspector] public SpriteRenderer spriteRenderer;
+        [HideInInspector] public bool firstRespawn = true;
+        
         protected Action ChangedWeapons;
         protected Vector2 delta;
         protected Animator animator;

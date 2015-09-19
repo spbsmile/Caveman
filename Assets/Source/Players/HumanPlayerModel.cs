@@ -12,12 +12,6 @@ namespace Caveman.Players
             BattleGui.instance.movementJoystick.ControllerMovedEvent += MovePlayer;
         }
 
-        protected override void Start()
-        {
-            base.Start();
-            if (multiplayer) StartCoroutine(SendMove());
-        }
-
         private IEnumerator SendMove()
         {
             yield return new WaitForSeconds(0.3f);
@@ -36,6 +30,12 @@ namespace Caveman.Players
             transform.position = position;
 
             animator.SetFloat(movement.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Speed);
+        }
+
+        public override void OnEnable()
+        {
+            base.OnEnable();
+            if (multiplayer) StartCoroutine(SendMove());
         }
     }
 }

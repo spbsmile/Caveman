@@ -117,7 +117,7 @@ namespace Caveman.Players
             return result;
         }
      
-        public void OnEnable()
+        public virtual void OnEnable()
         {
             StartCoroutine(ThrowOnTimer());
         }
