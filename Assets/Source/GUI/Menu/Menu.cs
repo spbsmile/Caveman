@@ -22,7 +22,7 @@ namespace Caveman.UI.Menu
             if (string.IsNullOrEmpty(inputNickname.text))
             {
                 StartCoroutine(FadeOutTooltip());
-            }
+            } 
             else
             {
                 LoadingScreen.instance.ProgressTo(1);
@@ -37,7 +37,7 @@ namespace Caveman.UI.Menu
             }
             else
             {
-                Application.LoadLevel(4);
+                LoadingScreen.instance.ProgressTo(4);
             }
         }
 
