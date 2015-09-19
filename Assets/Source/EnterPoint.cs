@@ -164,11 +164,12 @@ namespace Caveman
                     smoothCamera.SetPlayer(prefab.GetComponent<PlayerModelBase>());
                 }
             }
-            playerModel.Init(player, new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)), r, poolPlayers, serverConnection);
+            playerModel.Init(player, r, poolPlayers, serverConnection);
             poolPlayers.Add(id, playerModel);
             playerModel.transform.SetParent(containerPlayers);
             playerModel.Death += position => StartCoroutine(DeathAnimate(position));
             playerModel.ChangedWeaponsPool += ChangedWeapons;
+            playerModel.Birth(new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)));
         }
 
         private ObjectPool<WeaponModelBase> ChangedWeapons(WeaponType weaponType)

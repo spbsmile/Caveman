@@ -9,6 +9,7 @@
         public static int BotsCount = 3;
         public static float PlayerSpeed = 2.5f;
         public const int PlayerTimeRespawn = 3;
+        public const float PlayerTimeInvulnerability = 2;
         public static float StoneSpeed = 5f;
         public const int StoneRotateParameter = 10;
         public static int WeaponTimeRespawn = 20;

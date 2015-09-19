@@ -22,8 +22,8 @@ namespace Caveman.Players
         public string Id;
         public float Speed { get; set; }
         public SpriteRenderer spriteRenderer;
-        //todo hack
-        public bool inGame;
+        [HideInInspector]
+        public bool firstRespawn= true;
 
         protected Action ChangedWeapons;
         protected Vector2 delta;
@@ -33,6 +33,7 @@ namespace Caveman.Players
         protected ServerConnection serverConnection;
         protected bool multiplayer;
         protected WeaponType weaponType;
+        protected internal bool invulnerability;
         //todo переделать под массив
         protected List<PlayerModelBase> players;
 
@@ -46,7 +47,7 @@ namespace Caveman.Players
             Speed = Settings.PlayerSpeed;
         }
 
-        public void Init(Player player, Vector2 start, Random random, PlayerPool pool, ServerConnection serverConnection)
+        public void Init(Player player, Random random, PlayerPool pool, ServerConnection serverConnection)
         {
             this.serverConnection = serverConnection;
             if (serverConnection != null) multiplayer = true;
@@ -59,7 +60,6 @@ namespace Caveman.Players
             poolPlayers.AddedPlayer += @base => players.Add(@base);
             poolPlayers.RemovePlayer += @base => players.Remove(@base);
             r = random;
-            transform.position = start;
         }
 
         public virtual void PickupBonus(BonusBase bonus)
@@ -108,6 +108,23 @@ namespace Caveman.Players
         public void Birth(Vector2 position)
         {
             poolPlayers.New(Id).transform.position = position;
+            invulnerability = true;
+            StartCoroutine(ProggressInvulnerability(Settings.PlayerTimeInvulnerability));
+        }
+
+        private IEnumerator ProggressInvulnerability(float playerTimeInvulnerability)
+        {
+            var startTime = Time.time;
+            var render = spriteRenderer ? spriteRenderer : GetComponent<SpriteRenderer>();
+            while (Time.time  < startTime + playerTimeInvulnerability)
+            {
+                render.enabled = false;
+                yield return new WaitForSeconds(0.1f);
+                render.enabled = true;
+                yield return new WaitForSeconds(0.1f);
+            }
+            render.enabled = true;
+            invulnerability = false;
         }
 
         /// <summary>

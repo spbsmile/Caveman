@@ -106,7 +106,7 @@ namespace Caveman.Players
             for (var i = 0; i < players.Count; i++)
             {
                 if (!players[i].gameObject.activeSelf || players[i] == this ||
-                    !players[i].spriteRenderer.isVisible) continue;
+                    !players[i].spriteRenderer.isVisible || players[i].invulnerability) continue;
                 var childDistance = Vector2.SqrMagnitude(players[i].transform.position - transform.position);
                 if (minDistance > childDistance)
                 {
