@@ -12,6 +12,12 @@ namespace Caveman.Players
             BattleGui.instance.movementJoystick.ControllerMovedEvent += MovePlayer;
         }
 
+        protected override void Start()
+        {
+            base.Start();
+            if (multiplayer) StartCoroutine(SendMove());
+        }
+
         private IEnumerator SendMove()
         {
             yield return new WaitForSeconds(0.3f);
