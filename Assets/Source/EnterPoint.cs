@@ -163,6 +163,7 @@ namespace Caveman
                     BattleGui.instance.SubscribeOnEvents(playerModel);
                     smoothCamera.target = prefab.transform;
                     smoothCamera.SetPlayer(prefab.GetComponent<PlayerModelBase>());
+                    playerModel.GetComponent<SpriteRenderer>().material.color = Color.red;
                 }
             }
             playerModel.Init(player, r, poolPlayers, serverConnection);
