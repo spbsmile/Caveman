@@ -73,7 +73,7 @@ namespace Caveman.Players
         {
             if (player.Weapons > Settings.WeaponsMaxOnPlayer) return;
             base.PickupWeapon(weaponModel);
-            player.Weapons += 1;
+            player.Weapons += Settings.WeaponCountPickup;
             if (multiplayer) serverConnection.SendPickWeapon(weaponModel.Id, (int)weaponModel.type);
         }
 
