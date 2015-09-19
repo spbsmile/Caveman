@@ -67,6 +67,7 @@ namespace Caveman
             var humanPlayer = new Player(PlayerPrefs.GetString(AccountManager.KeyNickname));
             BattleGui.instance.SubscribeOnEvents(humanPlayer);
             BattleGui.instance.resultRound.SetPlayerPool(poolPlayers);
+            BattleGui.instance.waitForResp.SetPlayerPool(poolPlayers);
             CreatePlayer(humanPlayer, SystemInfo.deviceUniqueIdentifier, false, false, prefabHumanPlayer);
             
             if (serverConnection == null)

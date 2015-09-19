@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Caveman.UI.Windows
 {
-    public class WaitForResp : MonoBehaviour
+    public class WaitForResp : Result
     {
         public Button buttonRespawn;
         public Slider progress;
@@ -14,11 +14,18 @@ namespace Caveman.UI.Windows
         {
             var timeRespawn = Settings.PlayerTimeRespawn;
             StartCoroutine(WithProgress(timeRespawn));
+            StartCoroutine(DisplayResult());
         }
 
         public void OnDisable()
         {
             progress.value = 0;
+        }
+
+        protected override IEnumerator DisplayResult()
+        {
+            yield return StartCoroutine(base.DisplayResult());
+            yield return StartCoroutine(DisplayResult());
         }
 
         private IEnumerator WithProgress(int timeRespawn)

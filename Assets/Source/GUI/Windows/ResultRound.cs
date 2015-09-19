@@ -1,18 +1,10 @@
 ﻿using System.Collections;
-using Caveman.Utils;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Caveman.UI.Windows
 {
-    public class ResultRound : MonoBehaviour
+    public class ResultRound : Result
     {
-        public Transform names;
-        public Transform kills;
-        public Transform deaths;
-
-        private PlayerPool poolPlayers;
-
         public void OnEnable()
         {
             if (!Setting.Settings.multiplayerMode)
@@ -21,31 +13,10 @@ namespace Caveman.UI.Windows
             }
         }
 
-        public void SetPlayerPool(PlayerPool pool)
+        protected override IEnumerator DisplayResult()
         {
-            poolPlayers = pool;
-        }
-
-        private IEnumerator DisplayResult()
-        {
-            yield return new WaitForSeconds(1f);
             Time.timeScale = 0.00001f;
-            var players = poolPlayers.GetCurrentPlayers();
-            var lineIndex = 0;
-            foreach (var playerModelBase in players)
-            {
-                Write(playerModelBase.player.name, names, lineIndex);
-                Write(playerModelBase.player.deaths.ToString(), deaths, lineIndex);
-                Write(playerModelBase.player.Kills.ToString(), kills, lineIndex);
-                lineIndex++;
-            }
-        }
-
-        public void Write(string value, Transform parent, int lineIndex)
-        {
-            var item = parent.GetChild(lineIndex);
-            item.GetComponent<Text>().text = value;
-            item.gameObject.SetActive(true);
+            yield return StartCoroutine(base.DisplayResult());
         }
     }
 }
