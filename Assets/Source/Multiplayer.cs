@@ -13,6 +13,7 @@ namespace Caveman.Network
         public const float WidthMapServer = 1350;
         public const float HeigthMapServer = 1350;
         private static string OwnId;
+        private bool resultReceived;
 
         public override void Awake()
         {
@@ -31,7 +32,7 @@ namespace Caveman.Network
 
         public void Update()
         {
-            serverConnection.Update();
+            if (!resultReceived) serverConnection.Update();
         }
 
         public void WeaponAddedReceived(string key, Vector2 point)
@@ -73,6 +74,7 @@ namespace Caveman.Network
                 resultRound.Write(jsonObject[ServerParams.Deaths].n.ToString(), resultRound.deaths, lineIndex);
                 lineIndex++;
             }
+            resultReceived = true;
         }
 
         public void TimeReceived(float time)
