@@ -45,7 +45,7 @@ namespace Caveman.Network
         {
             var pointServer = GetServerPoint(weaponId);
             var json = new JSONObject(JSONObject.Type.OBJECT);
-            json.AddField(ServerParams.ActionType, ServerParams.PickWeaponAction);
+            json.AddField(ServerParams.ActionType, ServerParams.WeaponPickAction);
             json.AddField(ServerParams.X, pointServer.x);
             json.AddField(ServerParams.Y, pointServer.y);
             return new ClientMessage(json);
@@ -65,7 +65,7 @@ namespace Caveman.Network
         {
             var pointServer = GetServerPoint(bonusId);
             var json = new JSONObject(JSONObject.Type.OBJECT);
-            json.AddField(ServerParams.ActionType, ServerParams.PickBonusAction);
+            json.AddField(ServerParams.ActionType, ServerParams.BonusPickAction);
             json.AddField(ServerParams.X, pointServer.x);
             json.AddField(ServerParams.Y, pointServer.y);
             return new ClientMessage(json);
@@ -75,7 +75,7 @@ namespace Caveman.Network
         {
             var pointServer = GetServerPoint(pointClient);
             var json = new JSONObject(JSONObject.Type.OBJECT);
-            json.AddField(ServerParams.ActionType, ServerParams.RespawnAction);
+            json.AddField(ServerParams.ActionType, ServerParams.PlayerRespawnAction);
             json.AddField(ServerParams.X, pointServer.x);
             json.AddField(ServerParams.Y, pointServer.y);
             return new ClientMessage(json);
@@ -92,7 +92,7 @@ namespace Caveman.Network
         {
             var pointServer = GetServerPoint(pointClient);
             var json = new JSONObject(JSONObject.Type.OBJECT);
-            json.AddField(ServerParams.ActionType, ServerParams.MoveAction);
+            json.AddField(ServerParams.ActionType, ServerParams.PlayerMoveAction);
             json.AddField(ServerParams.X, pointServer.x);
             json.AddField(ServerParams.Y, pointServer.y);
             return new ClientMessage(json);

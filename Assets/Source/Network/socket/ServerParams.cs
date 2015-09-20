@@ -9,27 +9,30 @@ namespace Caveman.Network
         public const string Y = "y";
         public const string WeaponType = "weapon_type";
         public const string BonusType = "bonus_type";
-        public const string TimeLeft = "time_left";
-
         public const string Player = "player";
 
-        public const string RespawnAction = "respawn";
-        public const string StoneAddedAction = "stone_added";
-        public const string BonusAddedAction = "bonus_added";
+        public const string GameTimeAction = "time";
+        public const string GameResultAction = "result";
+        public const string GameTimeLeft = "time_left";
 
+        public const string PlayerMoveAction = "move";
+        public const string PlayerRespawnAction = "respawn";
+
+        public const string WeaponPickAction = "pick_weapon";
+        public const string StoneAddedAction = "stone_added";
         public const string StoneRemovedAction = "stone_removed";
-        public const string TimeAction = "time";
-        public const string LoginAction = "login";
-        public const string LogoutAction = "logout";
-        public const string PingAction = "ping";
-        public const string MoveAction = "move";
-        public const string PickWeaponAction = "pick_weapon";
-        public const string PickBonusAction = "pick_bonus";
+
+        public const string BonusPickAction = "pick_bonus";
+        public const string BonusAddedAction = "bonus_added";
         public const string DeadAction = "dead";
-        public const string ResultAction = "result";
+       
         public const string Data = "data";
         public const string Kills = "kills";
         public const string Deaths = "deaths";
+
+        public const string LoginAction = "login";
+        public const string LogoutAction = "logout";
+        public const string PingAction = "ping";
 
         //client side action only
         public const string UseWeaponAction = "use_weapon";

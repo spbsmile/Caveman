@@ -52,9 +52,43 @@ namespace Caveman.Network
         //    poolStones.Store(key);
         //}
 
+        public void WeaponPickReceived(string playerId, string key)
+        {
+            poolPlayers[playerId].PickupWeapon(poolStones[key]);
+        }
+
+        public void WeaponUseReceived(string playerId, Vector2 aim)
+        {
+            poolPlayers[playerId].Throw(aim);
+        }
+
         public void BonusAddedReceived(string key, Vector2 point)
         {
 
+        }
+
+        public void BonusPickReceived(string playerId, string key)
+        {
+            poolPlayers[playerId].PickupBonus(poolBonusesSpeed[key]);
+        }
+
+        public void PlayerRespawnReceived(string playerId, Vector2 point)
+        {
+            if (!poolPlayers.ContainsKey(playerId))
+            {
+                CreatePlayer(new Player("No Name"), playerId, false, true, prefabServerPlayer);
+                poolPlayers[playerId].transform.position = point;
+                poolPlayers[playerId].firstRespawn = false;
+            }
+            else if (poolPlayers[playerId].firstRespawn)
+            {
+                poolPlayers[playerId].firstRespawn = false;
+                poolPlayers[playerId].transform.position = point;
+            }
+            else
+            {
+                StartCoroutine(poolPlayers[playerId].Respawn(point));
+            }
         }
 
         public void PlayerDeadReceived(string playerId)
@@ -62,27 +96,7 @@ namespace Caveman.Network
             poolPlayers[playerId].Die();
         }
 
-        public void ResultReceived(List<JSONObject> data)
-        {
-            var resultRound = BattleGui.instance.resultRound;
-            resultRound.gameObject.SetActive(true);
-            var lineIndex = 0;
-            foreach (var jsonObject in data)
-            {
-                resultRound.Write(jsonObject[ServerParams.UserName].str, resultRound.names, lineIndex);
-                resultRound.Write(jsonObject[ServerParams.Kills].n.ToString(), resultRound.kills, lineIndex);
-                resultRound.Write(jsonObject[ServerParams.Deaths].n.ToString(), resultRound.deaths, lineIndex);
-                lineIndex++;
-            }
-            resultReceived = true;
-        }
-
-        public void TimeReceived(float time)
-        {
-            StartCoroutine(BattleGui.instance.mainGameTimer.UpdateTime((int)time));
-        }
-
-        public void MoveReceived(string playerId, Vector2 point)
+        public void PlayerMoveReceived(string playerId, Vector2 point)
         {
             if (poolPlayers.ContainsKey(playerId))
             {
@@ -102,6 +116,26 @@ namespace Caveman.Network
             }
         }
 
+        public void GameTimeReceived(float time)
+        {
+            StartCoroutine(BattleGui.instance.mainGameTimer.UpdateTime((int)time));
+        }
+
+        public void GameResultReceived(List<JSONObject> data)
+        {
+            var resultRound = BattleGui.instance.resultRound;
+            resultRound.gameObject.SetActive(true);
+            var lineIndex = 0;
+            foreach (var jsonObject in data)
+            {
+                resultRound.Write(jsonObject[ServerParams.UserName].str, resultRound.names, lineIndex);
+                resultRound.Write(jsonObject[ServerParams.Kills].n.ToString(), resultRound.kills, lineIndex);
+                resultRound.Write(jsonObject[ServerParams.Deaths].n.ToString(), resultRound.deaths, lineIndex);
+                lineIndex++;
+            }
+            resultReceived = true;
+        }
+
         public void LoginReceived(string playerId, string playerName)
         {
             CreatePlayer(new Player(playerName), playerId, false, true, prefabServerPlayer);
@@ -113,40 +147,6 @@ namespace Caveman.Network
             var gameObject = poolPlayers[playerId].gameObject;
             poolPlayers.Remove(playerId);
             Destroy(gameObject);
-        }
-
-        public void PickWeaponReceived(string playerId, string key)
-        {
-            poolPlayers[playerId].PickupWeapon(poolStones[key]);
-        }
-
-        public void PickBonusReceived(string playerId, string key)
-        {
-            poolPlayers[playerId].PickupBonus(poolBonusesSpeed[key]);
-        }
-
-        public void UseWeaponReceived(string playerId, Vector2 aim)
-        {
-            poolPlayers[playerId].Throw(aim);
-        }
-
-        public void RespawnReceived(string playerId, Vector2 point)
-        {
-            if (!poolPlayers.ContainsKey(playerId))
-            {
-                CreatePlayer(new Player("No Name"), playerId, false, true, prefabServerPlayer);
-                poolPlayers[playerId].transform.position = point;
-                poolPlayers[playerId].firstRespawn = false;
-            }
-            else if (poolPlayers[playerId].firstRespawn)
-            {
-                poolPlayers[playerId].firstRespawn = false;
-                poolPlayers[playerId].transform.position = point;
-            }
-            else
-            {
-                StartCoroutine(poolPlayers[playerId].Respawn(point));
-            }
         }
 
         public void OnDestroy()

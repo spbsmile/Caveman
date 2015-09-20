@@ -63,7 +63,6 @@ namespace Caveman
 
             poolPlayers = containerPlayers.GetComponent<PlayerPool>();
 
-            //todo !name
             var humanPlayer = new Player(PlayerPrefs.GetString(AccountManager.KeyNickname));
             BattleGui.instance.SubscribeOnEvents(humanPlayer);
             BattleGui.instance.resultRound.SetPlayerPool(poolPlayers);
@@ -163,7 +162,7 @@ namespace Caveman
                     BattleGui.instance.SubscribeOnEvents(playerModel);
                     smoothCamera.target = prefab.transform;
                     smoothCamera.SetPlayer(prefab.GetComponent<PlayerModelBase>());
-                    playerModel.GetComponent<SpriteRenderer>().material.color = Color.red;
+                    if (serverConnection != null) playerModel.GetComponent<SpriteRenderer>().material.color = Color.red;
                 }
             }
             playerModel.Init(player, r, poolPlayers, serverConnection);

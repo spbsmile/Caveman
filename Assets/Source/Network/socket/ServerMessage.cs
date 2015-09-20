@@ -54,29 +54,29 @@ namespace Caveman.Network
             //{
             //    listener.WeaponRemovedReceived(key);
             //}
-            else if (type.Equals(ServerParams.MoveAction))
+            else if (type.Equals(ServerParams.PlayerMoveAction))
             {
-                listener.MoveReceived(playerId, pointClient);
+                listener.PlayerMoveReceived(playerId, pointClient);
             }
-            else if (type.Equals(ServerParams.PickWeaponAction))
+            else if (type.Equals(ServerParams.WeaponPickAction))
             {
-                listener.PickWeaponReceived(playerId, key);
+                listener.WeaponPickReceived(playerId, key);
             }
             else if (type.Equals(ServerParams.BonusAddedAction))
             {
                 listener.BonusAddedReceived(key, pointClient);
             }
-            else if (type.Equals(ServerParams.PickBonusAction))
+            else if (type.Equals(ServerParams.BonusPickAction))
             {
-                listener.PickBonusReceived(playerId, key);
+                listener.BonusPickReceived(playerId, key);
             }
             else if (type.Equals(ServerParams.UseWeaponAction))
             {                                        //aim
-                listener.UseWeaponReceived(playerId, pointClient);
+                listener.WeaponUseReceived(playerId, pointClient);
             }
-            else if (type.Equals(ServerParams.RespawnAction))
+            else if (type.Equals(ServerParams.PlayerRespawnAction))
             {
-                listener.RespawnReceived(playerId, pointClient);
+                listener.PlayerRespawnReceived(playerId, pointClient);
             } 
             else if (type.Equals(ServerParams.LoginAction))
             {
@@ -87,17 +87,17 @@ namespace Caveman.Network
             {
                 listener.PlayerDeadReceived(playerId);
             }
-            else if (type.Equals(ServerParams.TimeAction))
+            else if (type.Equals(ServerParams.GameTimeAction))
             {
-                listener.TimeReceived(action[ServerParams.TimeLeft].f);
+                listener.GameTimeReceived(action[ServerParams.GameTimeLeft].f);
             }
             else if (type.Equals(ServerParams.LogoutAction))
             {
                 listener.LogoutReceived(playerId);
             }
-            else if (type.Equals(ServerParams.ResultAction))
+            else if (type.Equals(ServerParams.GameResultAction))
             {
-                listener.ResultReceived(action[ServerParams.Data].list);
+                listener.GameResultReceived(action[ServerParams.Data].list);
             }
         }
 
