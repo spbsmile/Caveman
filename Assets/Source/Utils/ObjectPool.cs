@@ -29,12 +29,14 @@ namespace Caveman.Utils
             }
             stack = new Stack<T>(initialBufferSize);
             this.prefab = prefab;
+            GetActivedCount = initialBufferSize;
         }
 
         public T New()
         {
             var item = GetItem();
             item.gameObject.SetActive(true);
+            GetActivedCount++;
             return item;
         }
 
@@ -47,6 +49,7 @@ namespace Caveman.Utils
             var item = Instantiate(prefab);
             if (item.GetComponent<ASupportPool<T>>())
             {
+                item.transform.SetParent(transform);
                 item.GetComponent<ASupportPool<T>>().SetPool(this);
             }
             if (RelatedPool != null && item.GetComponent<StoneModel>())
@@ -58,6 +61,7 @@ namespace Caveman.Utils
 
         public void Store(T obj)
         {
+            GetActivedCount--;
             obj.gameObject.SetActive(false);
             obj.gameObject.transform.position = new Vector3(100, 100, 100);
             stack.Push(obj);            
@@ -104,5 +108,7 @@ namespace Caveman.Utils
                 return poolServer[key];
             }
         }
+
+        public int GetActivedCount { private set; get; }
     }
 }

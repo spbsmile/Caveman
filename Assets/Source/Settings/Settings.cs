@@ -22,7 +22,6 @@
         public static int CountLyingSkulls = 3;
 
         public static float BonusTimeRespawn = 10;
-        public static int BonusSpeedInitialCount = 5;
         //todo created on requirement
         public static int BonusSpeedPoolCount = 6;
         public static int BonusSpeedDuration = 4;

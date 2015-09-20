@@ -83,7 +83,7 @@ namespace Caveman
         private void InitBonusModel(GameObject item, ObjectPool<BonusBase> pool)
         {
             var bonusModel = item.GetComponent<BonusBase>();
-            bonusModel.Init(pool, r, Settings.BonusSpeedDuration);
+            bonusModel.Init(pool, Settings.BonusSpeedDuration);
         }
 
         private void InitSkullModel(GameObject item, ObjectPool<WeaponModelBase> pool) 
@@ -100,7 +100,8 @@ namespace Caveman
 
         private IEnumerator PutBonuses()
         {
-            for (var i = 0; i < Settings.BonusSpeedInitialCount; i++)
+            var bound = Settings.BonusSpeedMaxCount - poolBonusesSpeed.GetActivedCount; 
+            for (var i = 0; i < bound; i++)
             {
                 PutItem(poolBonusesSpeed);
             }

@@ -3,7 +3,6 @@ using Caveman.Players;
 using Caveman.Utils;
 using Caveman.Weapons;
 using UnityEngine;
-using Random = System.Random;
 
 namespace Caveman.Bonuses
 {
@@ -30,7 +29,7 @@ namespace Caveman.Bonuses
             animator = GetComponent<Animator>();
         }
 
-        public void Init(ObjectPool<BonusBase> poolBonuses, Random random, int duration)
+        public void Init(ObjectPool<BonusBase> poolBonuses, int duration)
         {
             this.duration = duration;
             pool = poolBonuses;
