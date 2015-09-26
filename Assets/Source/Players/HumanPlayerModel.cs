@@ -10,6 +10,7 @@ namespace Caveman.Players
         public void Awake()
         {
             BattleGui.instance.movementJoystick.ControllerMovedEvent += MovePlayer;
+            BattleGui.instance.movementJoystick.FingerLiftedEvent += controller => StopMove();
         }
 
         protected override void Start()
@@ -25,17 +26,21 @@ namespace Caveman.Players
             StartCoroutine(SendMove());
         }
 
-        private void MovePlayer(Vector3 movement, CNAbstractController arg2)
+        private void MovePlayer(Vector3 direction, CNAbstractController arg2)
         {
-            var position = new Vector3(transform.position.x + movement.x * Time.deltaTime * Speed,
-               transform.position.y + movement.y * Time.deltaTime * Speed);
+            delta = direction*Speed;
+            Move();
+        }
 
+        protected override void Move()
+        {
+            var position = new Vector3(transform.position.x + delta.x * Time.deltaTime,
+                transform.position.y + delta.y * Time.deltaTime);
             if (position.x < 0.01f || position.y < 0.01) return;
             if (position.x > Settings.WidthMap - 0.01f || position.y > Settings.HeightMap) return;
-
             transform.position = position;
 
-            animator.SetFloat(movement.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Speed);
+            playerAnimation.SetMoving(delta.y < 0);
         }
 
         public override void OnEnable()

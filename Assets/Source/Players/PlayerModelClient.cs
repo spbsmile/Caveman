@@ -92,7 +92,6 @@ namespace Caveman.Players
                 var victim = FindClosestPlayer();
                 if (victim != null)
                 {
-                    animator.SetTrigger(Settings.AnimThrowF);
                     Throw(victim.transform.position);
                 }
             }

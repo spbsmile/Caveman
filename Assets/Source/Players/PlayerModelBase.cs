@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Caveman.Bonuses;
+using Caveman.CustomAnimation;
 using Caveman.Network;
 using Caveman.Setting;
 using Caveman.Utils;
@@ -33,6 +34,7 @@ namespace Caveman.Players
         protected bool multiplayer;
         protected WeaponType weaponType;
         protected internal bool invulnerability;
+        protected PlayerAnimation playerAnimation;
         //todo переделать под массив
         protected List<PlayerModelBase> players;
 
@@ -44,6 +46,7 @@ namespace Caveman.Players
             animator = GetComponent<Animator>();
             spriteRenderer = GetComponent<SpriteRenderer>();
             Speed = Settings.PlayerSpeed;
+            playerAnimation = new PlayerAnimation(animator);
         }
 
         public void Init(Player player, Random random, PlayerPool pool, ServerConnection serverConnection)
@@ -87,12 +90,13 @@ namespace Caveman.Players
                     print("ChangedWeapons null" + name);
                 }
             }
-            animator.SetTrigger(Settings.AnimPickup);
+            playerAnimation.Pickup();
             weaponModel.Take();
         }
 
         public virtual void Throw(Vector2 aim)
         {
+            playerAnimation.Throw();
             poolWeapons.New().SetMotion(player, transform.position, aim);
         }
 
@@ -129,10 +133,11 @@ namespace Caveman.Players
         /// <summary>
         /// linear motion
         /// </summary>
-        protected void Move()
+        protected virtual void Move()
         {
             transform.position = new Vector3(transform.position.x + delta.x*Time.deltaTime,
                 transform.position.y + delta.y*Time.deltaTime);
+            playerAnimation.SetMoving(delta.y < 0);
         }
 
         /// <summary>
@@ -143,12 +148,13 @@ namespace Caveman.Players
         {
             this.target = target;
             delta = UnityExtensions.CalculateDelta(transform.position, target, Settings.PlayerSpeed);
-            animator.SetFloat(delta.y > 0 ? Settings.AnimRunB : Settings.AnimRunF, Settings.PlayerSpeed);
         }
 
         public void StopMove()
         {
             delta = Vector2.zero;
+            playerAnimation.IsMoving_B = false;
+            playerAnimation.IsMoving_F = false;
         }
     }
 }
