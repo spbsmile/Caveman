@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Caveman.Animation;
+using Caveman.CustomAnimation;
 using Caveman.Weapons;
 using UnityEngine;
 

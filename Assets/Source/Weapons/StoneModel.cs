@@ -1,4 +1,4 @@
-﻿using Caveman.Animation;
+﻿using Caveman.CustomAnimation;
 using Caveman.Setting;
 using Caveman.Utils;
 using UnityEngine;

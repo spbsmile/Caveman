@@ -1,7 +1,7 @@
 ﻿
 using UnityEngine;
 
-namespace Caveman.Animation
+namespace Caveman.CustomAnimation
 {
     public class EffectBase : MonoBehaviour
     {

@@ -2,7 +2,7 @@
 using Caveman.Utils;
 using UnityEngine;
 
-namespace Caveman.Animation
+namespace Caveman.CustomAnimation
 {
     public class StoneSplash : EffectBase
     {

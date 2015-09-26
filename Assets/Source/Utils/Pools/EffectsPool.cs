@@ -1,4 +1,4 @@
-﻿using Caveman.Animation;
+﻿using Caveman.CustomAnimation;
 
 namespace Caveman.Utils
 {

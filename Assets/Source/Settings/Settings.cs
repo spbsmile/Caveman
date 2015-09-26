@@ -40,6 +40,6 @@
         public const string AnimThrowB = "throw_b";
         public const string AnimStayB = "stay_b";
         public const string AnimStayF = "stay_f";
-        public const string AnimPickup = "pickup";
+        public const string AnimPickup = "Pickup";
     }
 }
