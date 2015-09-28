@@ -137,7 +137,7 @@ namespace Caveman.Players
         {
             transform.position = new Vector3(transform.position.x + delta.x*Time.deltaTime,
                 transform.position.y + delta.y*Time.deltaTime);
-            playerAnimation.SetMoving(delta.y < 0);
+            playerAnimation.SetMoving(delta.y < 0, delta.x > 0);
         }
 
         /// <summary>

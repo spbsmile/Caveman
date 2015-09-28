@@ -1,14 +1,19 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Caveman.CustomAnimation
 {
     public class PlayerAnimation
     {
         private Animator animator;
+        private Transform transform;
+        private Transform name;
 
         public PlayerAnimation(Animator animator)
         {
             this.animator = animator;
+            transform = animator.GetComponent<Transform>();
+            name = transform.GetChild(0);
         }
 
         public bool IsMoving_F
@@ -34,8 +39,19 @@ namespace Caveman.CustomAnimation
             animator.SetTrigger(IsMoving_F ? "pickup_f" : "pickup_f");
         }
 
-        public void SetMoving(bool front)
+        public void SetMoving(bool front, bool directionRight)
         {
+            if (directionRight && Math.Abs(transform.eulerAngles.y - 180) > 0.1)
+            {
+                transform.eulerAngles = new Vector3(0, 180, 0);
+                name.localEulerAngles = new Vector3(0, 180, 0);
+            }
+            if (!directionRight && Math.Abs(transform.eulerAngles.y) > 0.1)
+            {
+                transform.eulerAngles = Vector3.zero;
+                name.eulerAngles = Vector3.zero;
+            }
+            
             if (IsMoving_B && front)
             {
                 IsMoving_B = false;

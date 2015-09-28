@@ -40,7 +40,7 @@ namespace Caveman.Players
             if (position.x > Settings.WidthMap - 0.01f || position.y > Settings.HeightMap) return;
             transform.position = position;
 
-            playerAnimation.SetMoving(delta.y < 0);
+            playerAnimation.SetMoving(delta.y < 0, delta.x > 0);
         }
 
         public override void OnEnable()
