@@ -1,7 +1,12 @@
-﻿namespace Caveman.Setting
+﻿using UnityEngine;
+
+namespace Caveman.Setting
 {
     public class Settings
     {
+        private static string KeySettings = "Settings";
+
+
         public static int WidthMap = 24;
         public static int HeightMap = 24;
         public static int RoundTime = 60;
@@ -34,5 +39,31 @@
         public const int PoolCountDeathImages = 9;
         public const int PoolCountSkulls = 30;
         public const int PoolCountSplashStones = 30;
+
+
+        /**
+         * Load saved settings or init them with default values
+         */
+        public static void InitSettings()
+        {
+            var settings = PlayerPrefs. GetString(KeySettings);
+
+            if (settings == null)
+            {
+                //loading from json text asset (maybe need to rename file for .txt extension)
+            }
+
+            //setting data from the settings dictionary
+            //WidthMap = settings["WidthMap"];
+        }
+
+        //this is a temp method
+        static JSONObject ProcessInboundData(string data)
+        {
+            JSONObject json = new JSONObject(data);
+            return json;
+        }
+
     }
+
 }
