@@ -64,7 +64,7 @@ namespace Caveman.Network
 
         public void BonusAddedReceived(string key, Vector2 point)
         {
-
+            poolBonusesSpeed.New(key).transform.position = point;
         }
 
         public void BonusPickReceived(string playerId, string key)
