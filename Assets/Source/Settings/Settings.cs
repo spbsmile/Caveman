@@ -28,6 +28,7 @@
         public static int BonusSpeedMaxCount = 6;
 
         public static bool multiplayerMode;
+        public static float ServerPingTime = 0.2f;
 
         public const int PoolCountStones = 40;
         public const int PoolCountDeathImages = 9;

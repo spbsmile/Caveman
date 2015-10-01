@@ -4,6 +4,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using Caveman.Setting;
 using UnityEngine;
 
 namespace Caveman.Network
@@ -31,7 +32,7 @@ namespace Caveman.Network
 
     public class ServerConnection
     {
-        private const float ServerPingTime = 0.2f;
+        //"127.0.0.1";
         private const string Ip = "188.166.37.212";
         private const int Port = 8080;
 
@@ -61,7 +62,7 @@ namespace Caveman.Network
 
         public void Update()
         {
-            if (Time.timeSinceLevelLoad - lastTimeUpdated > ServerPingTime)
+            if (Time.timeSinceLevelLoad - lastTimeUpdated > Settings.ServerPingTime)
             {
                 lastTimeUpdated = Time.timeSinceLevelLoad;
                 SendTick();

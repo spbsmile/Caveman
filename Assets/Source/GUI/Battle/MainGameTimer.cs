@@ -27,16 +27,11 @@ namespace Caveman.UI.Battle
 
         public IEnumerator UpdateTime(int roundTime)
         {
+            if (roundTime <= 0) yield break;
             yield return  new WaitForSeconds(1);
             var remainTime = roundTime - 1;
-            var m = Convert.ToInt32(remainTime / 60);
-            var s = Convert.ToInt32(remainTime % 60);
-            if (m < 60)
-            {
-                m = 0;
-            }
-            value.text = m + ":" + s;
-            if (remainTime < 0 && RoundEnded != null && !Settings.multiplayerMode)
+            value.text = remainTime/60 + ":" +  remainTime%60;
+            if (remainTime <= 0 && RoundEnded != null && !Settings.multiplayerMode)
             {
                 RoundEnded();
                 StopAllCoroutines();

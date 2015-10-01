@@ -21,6 +21,8 @@ namespace Caveman.Setting
         public InputField botsCount;
         public InputField playerSpeed;
 
+        public InputField serverPingTime;
+
         public void Start()
         {
             roundTime.text = Settings.RoundTime.ToString();
@@ -34,6 +36,7 @@ namespace Caveman.Setting
             bonusSpeedMaxCount.text = Settings.BonusSpeedMaxCount.ToString();
             bonusSpeedTimeRespawn.text = Settings.BonusTimeRespawn.ToString();
             weaponsMaxOnPlayer.text = Settings.WeaponsMaxOnPlayer.ToString();
+            serverPingTime.text = Settings.ServerPingTime.ToString();
 
             roundTime.onEndEdit.AddListener(delegate
             {
@@ -78,6 +81,10 @@ namespace Caveman.Setting
             bonusSpeedTimeRespawn.onEndEdit.AddListener(delegate
             {
                 Settings.BonusTimeRespawn = Convert.ToInt32(bonusSpeedTimeRespawn.text);
+            });
+            serverPingTime.onEndEdit.AddListener(delegate
+            {
+                Settings.ServerPingTime = Convert.ToInt32(serverPingTime.text);
             });
         }
 
