@@ -46,6 +46,7 @@ namespace Caveman
 
         public virtual void Awake()
         {
+            Settings.InitSettings();
             Settings.multiplayerMode = false;
         }
 

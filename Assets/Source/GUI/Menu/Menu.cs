@@ -21,7 +21,7 @@ namespace Caveman.UI.Menu
         {
             if (string.IsNullOrEmpty(inputNickname.text))
             {
-                StartCoroutine(FadeOutTooltip());
+                ShowNoNameAlert();
             } 
             else
             {
@@ -60,6 +60,11 @@ namespace Caveman.UI.Menu
         public void LoadProfile()
         {
             Application.LoadLevel(6);
+        }
+
+        private void ShowNoNameAlert()
+        {
+            StartCoroutine(FadeOutTooltip());
         }
 
         private IEnumerator FadeOutTooltip()
