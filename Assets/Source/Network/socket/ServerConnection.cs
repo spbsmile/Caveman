@@ -23,7 +23,7 @@ namespace Caveman.Network
         void BonusPickReceived(string playerId, string key);
         void BonusAddedReceived(string key, Vector2 point);
 
-        void GameResultReceived(List<JSONObject> data);
+        void GameResultReceived(IEnumerable<JSONObject> data);
         void GameTimeReceived(float time);
 
         void LoginReceived(string playerId, string playerName);

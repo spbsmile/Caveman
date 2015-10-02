@@ -121,7 +121,7 @@ namespace Caveman.Network
             StartCoroutine(BattleGui.instance.mainGameTimer.UpdateTime((int)time));
         }
 
-        public void GameResultReceived(List<JSONObject> data)
+        public void GameResultReceived(IEnumerable<JSONObject> data)
         {
             var resultRound = BattleGui.instance.resultRound;
             resultRound.gameObject.SetActive(true);
