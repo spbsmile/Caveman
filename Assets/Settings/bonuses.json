@@ -12,7 +12,7 @@
 		"maxCountOnMap" : 6
 	},
 	{
-		"name" : "vacuum—leaner",
+		"name" : "vacuumCleaner",
 		"timeRespawn" : 10,
 		"duration" : 4,
 		"maxCountOnMap" : 6
