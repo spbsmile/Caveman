@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using Caveman.Setting;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Caveman.Network
@@ -23,7 +24,7 @@ namespace Caveman.Network
         void BonusPickReceived(string playerId, string key);
         void BonusAddedReceived(string key, Vector2 point);
 
-        void GameResultReceived(IEnumerable<JSONObject> data);
+        void GameResultReceived(JEnumerable<JObject> data);
         void GameTimeReceived(float time);
 
         void LoginReceived(string playerId, string playerName);

@@ -2,6 +2,7 @@
 using Caveman.Players;
 using Caveman.UI;
 using Caveman.Utils;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Caveman.Network
@@ -121,16 +122,16 @@ namespace Caveman.Network
             StartCoroutine(BattleGui.instance.mainGameTimer.UpdateTime((int)time));
         }
 
-        public void GameResultReceived(IEnumerable<JSONObject> data)
+        public void GameResultReceived(JEnumerable<JObject> data)
         {
             var resultRound = BattleGui.instance.resultRound;
             resultRound.gameObject.SetActive(true);
             var lineIndex = 0;
             foreach (var jsonObject in data)
             {
-                resultRound.Write(jsonObject[ServerParams.UserName].str, resultRound.names, lineIndex);
-                resultRound.Write(jsonObject[ServerParams.Kills].n.ToString(), resultRound.kills, lineIndex);
-                resultRound.Write(jsonObject[ServerParams.Deaths].n.ToString(), resultRound.deaths, lineIndex);
+                resultRound.Write(jsonObject[ServerParams.UserName].ToString(), resultRound.names, lineIndex);
+                resultRound.Write(jsonObject[ServerParams.Kills].ToString(), resultRound.kills, lineIndex);
+                resultRound.Write(jsonObject[ServerParams.Deaths].ToString(), resultRound.deaths, lineIndex);
                 lineIndex++;
             }
             resultReceived = true;

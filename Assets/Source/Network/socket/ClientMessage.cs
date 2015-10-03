@@ -1,113 +1,123 @@
 using System;
 using Caveman.Setting;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Caveman.Network
 {
     public class ClientMessage
     {
-        private ClientMessage(JSONObject jsonContent)
+        private ClientMessage(JObject jObject)
         {
-            this.jsonContent = jsonContent;
+            this.jObject = jObject;
             Content = ContentFromJson();
         }
 
         public string Content { get; private set; }
 
-        private JSONObject jsonContent;
+        private JObject jObject;
 
         public void AddParam(string key, string value)
         {
-            if (jsonContent == null)
+            if (jObject == null)
             {
-                jsonContent = new JSONObject(JSONObject.Type.OBJECT);
+                jObject = new JObject();
             }
-            jsonContent.AddField(key, value);
+            jObject.Add(key, value);
             Content = ContentFromJson();
         }
 
         public static ClientMessage LoginMessage(string userName)
         {
-            var json = new JSONObject(JSONObject.Type.OBJECT);
-            json.AddField(ServerParams.ActionType, ServerParams.LoginAction);
-            json.AddField(ServerParams.UserName, userName);
-            return new ClientMessage(json);
+            return new ClientMessage(new JObject
+            {
+                {ServerParams.ActionType, ServerParams.LoginAction},
+                {ServerParams.UserName, userName}
+            });
         }
 
         public static ClientMessage TickMessage()
         {
-            var json = new JSONObject(JSONObject.Type.OBJECT);
-            json.AddField(ServerParams.ActionType, ServerParams.PingAction);
-            return new ClientMessage(json);
+            return new ClientMessage(new JObject
+            {
+                {ServerParams.ActionType, ServerParams.PingAction}
+            });
         }
 
         public static ClientMessage PickWeapon(string weaponId)
         {
             var pointServer = GetServerPoint(weaponId);
-            var json = new JSONObject(JSONObject.Type.OBJECT);
-            json.AddField(ServerParams.ActionType, ServerParams.WeaponPickAction);
-            json.AddField(ServerParams.X, pointServer.x);
-            json.AddField(ServerParams.Y, pointServer.y);
-            return new ClientMessage(json);
+            return new ClientMessage(new JObject
+            {
+                {ServerParams.ActionType, ServerParams.WeaponPickAction},
+                {ServerParams.X, pointServer.x},
+                {ServerParams.Y, pointServer.y},
+            });
         }
 
         public static ClientMessage UseWeapon(Vector2 pointClient)
         {
             var pointServer = GetServerPoint(pointClient);
-            var json = new JSONObject(JSONObject.Type.OBJECT);
-            json.AddField(ServerParams.ActionType, ServerParams.UseWeaponAction);
-            json.AddField(ServerParams.X, pointServer.x);
-            json.AddField(ServerParams.Y, pointServer.y);
-            return new ClientMessage(json);
+            return new ClientMessage(new JObject
+            {
+                {ServerParams.ActionType, ServerParams.UseWeaponAction},
+                {ServerParams.X, pointServer.x},
+                {ServerParams.Y, pointServer.y}
+            });
         }
 
         public static ClientMessage PickBonus(string bonusId)
         {
             var pointServer = GetServerPoint(bonusId);
-            var json = new JSONObject(JSONObject.Type.OBJECT);
-            json.AddField(ServerParams.ActionType, ServerParams.BonusPickAction);
-            json.AddField(ServerParams.X, pointServer.x);
-            json.AddField(ServerParams.Y, pointServer.y);
-            return new ClientMessage(json);
+            return new ClientMessage(new JObject
+            {
+                {ServerParams.ActionType, ServerParams.BonusPickAction},
+                {ServerParams.X, pointServer.x},
+                {ServerParams.Y, pointServer.y}
+            });
         }
 
         public static ClientMessage Respawn(Vector2 pointClient)
         {
             var pointServer = GetServerPoint(pointClient);
-            var json = new JSONObject(JSONObject.Type.OBJECT);
-            json.AddField(ServerParams.ActionType, ServerParams.PlayerRespawnAction);
-            json.AddField(ServerParams.X, pointServer.x);
-            json.AddField(ServerParams.Y, pointServer.y);
-            return new ClientMessage(json);
+            return new ClientMessage(new JObject
+            {
+                {ServerParams.ActionType, ServerParams.PlayerRespawnAction},
+                {ServerParams.X, pointServer.x},
+                {ServerParams.Y, pointServer.y}
+            });
         }
 
         public static ClientMessage PlayerDead()
         {
-            var json = new JSONObject(JSONObject.Type.OBJECT);
-            json.AddField(ServerParams.ActionType, ServerParams.PlayerDeadAction);
-            return new ClientMessage(json);
+            return new ClientMessage(new JObject
+            {
+                {ServerParams.ActionType, ServerParams.PlayerDeadAction}
+            });
         }
 
         public static ClientMessage Move(Vector2 pointClient)
         {
             var pointServer = GetServerPoint(pointClient);
-            var json = new JSONObject(JSONObject.Type.OBJECT);
-            json.AddField(ServerParams.ActionType, ServerParams.PlayerMoveAction);
-            json.AddField(ServerParams.X, pointServer.x);
-            json.AddField(ServerParams.Y, pointServer.y);
-            return new ClientMessage(json);
+            return new ClientMessage(new JObject
+            {
+                {ServerParams.ActionType, ServerParams.PlayerMoveAction},
+                {ServerParams.X, pointServer.x},
+                {ServerParams.Y, pointServer.y}
+            });
         }
 
         public static ClientMessage Logout()
         {
-            var json = new JSONObject(JSONObject.Type.OBJECT);
-            json.AddField(ServerParams.ActionType, ServerParams.LogoutAction);
-            return new ClientMessage(json);
+            return new ClientMessage(new JObject
+            {
+                {ServerParams.ActionType, ServerParams.LogoutAction}
+            });
         }
 
         private string ContentFromJson()
         {
-            return jsonContent != null ? "#" + jsonContent + "#" : "";
+            return jObject != null ? "#" + jObject + "#" : "";
         }
 
         private static Vector2 GetServerPoint(string id)

@@ -1,103 +1,102 @@
 using Caveman.Setting;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
+    
 namespace Caveman.Network
 {
     public class ServerMessage
     {
-        private readonly JSONObject contentObject;
+        private readonly JArray jArray;
 
         public ServerMessage(string content)
         {
-            //if (content != "[]")
-            //{
-            //    Debug.Log("from server " + content);
-            //}
-            contentObject = new JSONObject(content);
+            jArray = JArray.Parse(content);
         }
 
         public void SendMessageToListener(IServerListener listener)
         {
-            if (contentObject.IsArray)
+            //todo & 
+            if (jArray != null)
             {
-                foreach (var jsonItem in contentObject.list)
+                foreach (var jToken in jArray)
                 {
-                    if (jsonItem[ServerParams.ActionType].str != "move")
+                    if (jToken[ServerParams.ActionType].ToString()!= "move")
                     {
-                        Debug.Log(contentObject.ToString());
+                        //Debug.Log(jToken[ServerParams.ActionType].ToString());
                     }
-                    SendMessageToListener(listener, jsonItem, jsonItem[ServerParams.ActionType].str);
+                    SendMessageToListener(listener, jToken, jToken.Value<string>(ServerParams.ActionType));
                 }
             }
-            else
-            {
-                SendMessageToListener(listener, contentObject, contentObject[ServerParams.ActionType].str);
-            }
+            //else
+            //{
+            //    SendMessageToListener(listener, jArray, jArray[ServerParams.ActionType].ToString());
+            //}
         }
 
 
-        private void SendMessageToListener(IServerListener listener, JSONObject action, string type)
+        private void SendMessageToListener(IServerListener listener, JToken jToken, string action)
         {
-            var pointServer = (action[ServerParams.X] != null && action[ServerParams.Y] != null)
-                ? new Vector2(action[ServerParams.X].f, action[ServerParams.Y].f)
+            var pointServer = (jToken[ServerParams.X] != null && jToken[ServerParams.Y] != null)
+                ? new Vector2(jToken.Value<float>(ServerParams.X), jToken.Value<float>(ServerParams.Y))
                 : Vector2.zero;
             var key = GenerateKey(pointServer);
-            
+
             var pointClient = Convector(pointServer);
-            var playerId = action[ServerParams.UserId]!= null ?action[ServerParams.UserId].str: null;
-           
-            if (type.Equals(ServerParams.StoneAddedAction))
+            var playerId = jToken.Value<string>(ServerParams.UserId);
+
+            if (action.Equals(ServerParams.StoneAddedAction))
             {
+
                 listener.WeaponAddedReceived(key, pointClient);
             }
-            //else if (type.Equals(ServerParams.StoneRemovedAction))
+            //else if (action.Equals(ServerParams.StoneRemovedAction))
             //{
             //    listener.WeaponRemovedReceived(key);
             //}
-            else if (type.Equals(ServerParams.PlayerMoveAction))
+            else if (action.Equals(ServerParams.PlayerMoveAction))
             {
                 listener.PlayerMoveReceived(playerId, pointClient);
             }
-            else if (type.Equals(ServerParams.WeaponPickAction))
+            else if (action.Equals(ServerParams.WeaponPickAction))
             {
                 listener.WeaponPickReceived(playerId, key);
             }
-            else if (type.Equals(ServerParams.BonusAddedAction))
+            else if (action.Equals(ServerParams.BonusAddedAction))
             {
                 listener.BonusAddedReceived(key, pointClient);
             }
-            else if (type.Equals(ServerParams.BonusPickAction))
+            else if (action.Equals(ServerParams.BonusPickAction))
             {
                 listener.BonusPickReceived(playerId, key);
             }
-            else if (type.Equals(ServerParams.UseWeaponAction))
+            else if (action.Equals(ServerParams.UseWeaponAction))
             {                                        //aim
                 listener.WeaponUseReceived(playerId, pointClient);
             }
-            else if (type.Equals(ServerParams.PlayerRespawnAction))
+            else if (action.Equals(ServerParams.PlayerRespawnAction))
             {
                 listener.PlayerRespawnReceived(playerId, pointClient);
-            } 
-            else if (type.Equals(ServerParams.LoginAction))
-            {
-                var playerName = action[ServerParams.UserName].str;
-                listener.LoginReceived(playerId, playerName);
             }
-            else if (type.Equals(ServerParams.PlayerDeadAction))
+            else if (action.Equals(ServerParams.LoginAction))
+            {
+                listener.LoginReceived(playerId, jToken.Value<string>(ServerParams.UserName));
+            }
+            else if (action.Equals(ServerParams.PlayerDeadAction))
             {
                 listener.PlayerDeadReceived(playerId);
             }
-            else if (type.Equals(ServerParams.GameTimeAction))
+            else if (action.Equals(ServerParams.GameTimeAction))
             {
-                listener.GameTimeReceived(action[ServerParams.GameTimeLeft].f);
+                listener.GameTimeReceived(jToken.Value<float>(ServerParams.GameTimeLeft));
             }
-            else if (type.Equals(ServerParams.LogoutAction))
+            else if (action.Equals(ServerParams.LogoutAction))
             {
                 listener.LogoutReceived(playerId);
             }
-            else if (type.Equals(ServerParams.GameResultAction))
+            else if (action.Equals(ServerParams.GameResultAction))
             {
-                listener.GameResultReceived(action[ServerParams.Data].list);
+                listener.GameResultReceived(jToken.Children<JObject>());
             }
         }
 
