@@ -1,0 +1,26 @@
+[
+	{
+		"name" : "speed",
+		"timeRespawn" : 10,
+		"duration" : 4,
+		"maxCountOnMap" : 6
+	},
+	{
+		"name" : "shield",
+		"timeRespawn" : 10,
+		"duration" : 4,
+		"maxCountOnMap" : 6
+	},
+	{
+		"name" : "vacuum—leaner",
+		"timeRespawn" : 10,
+		"duration" : 4,
+		"maxCountOnMap" : 6
+	},
+	{
+		"name" : "instantReaction",
+		"timeRespawn" : 10,
+		"duration" : 4,
+		"maxCountOnMap" : 6
+	}
+]

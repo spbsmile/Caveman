@@ -1,0 +1,12 @@
+[
+	{
+		"name" : "single",
+		"Width" : 24,
+		"Height" : 24
+	},
+	{
+		"name" : "multiplayer",
+		"Width" : 24,
+		"Height" : 24
+	}
+]
