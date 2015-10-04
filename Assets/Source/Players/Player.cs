@@ -1,5 +1,5 @@
 ﻿using System;
-using Caveman.Bonuses;
+using Caveman.Specification;
 
 namespace Caveman.Players
 {
@@ -7,7 +7,7 @@ namespace Caveman.Players
     {
         public Action<int> WeaponsCountChanged;
         public Action<int> KillsCountChanged;
-        public Action<BonusType, int> BonusActivated;
+        public Action<BonusSpecification.Types, float> BonusActivated;
         public int deaths;
         public readonly string name;
         private int weapons;
@@ -50,7 +50,7 @@ namespace Caveman.Players
             }
         }
 
-        public void PickUpBonus(BonusType type, int duration)
+        public void PickUpBonus(BonusSpecification.Types type, float duration)
         {
             if (BonusActivated != null)
             {

@@ -1,4 +1,4 @@
-﻿using Caveman.Bonuses;
+﻿using Caveman.Specification;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,7 +23,7 @@ namespace Caveman.UI.Battle
             canvasGroup.alpha = 0;
         }
 
-        //todo все переделать на события 
+        //todo все переделать на карутину 
         public void Update()
         {
             if (timeBonus)
@@ -47,11 +47,11 @@ namespace Caveman.UI.Battle
             }
         }
 
-        public void BonusActivated(BonusType type, int duration)
+        public void BonusActivated(BonusSpecification.Types type, float duration)
         {
             switch (type)
             {
-                case BonusType.Speed:
+                case BonusSpecification.Types.Speed:
                 {
                     iconCurrentBonus = iconSpeedBonus;
                 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Caveman.Bonuses;
 using Caveman.Setting;
+using Caveman.Specification;
 using Caveman.Weapons;
 using UnityEngine;
 
@@ -23,12 +24,12 @@ namespace Caveman.Players
             {
                 if (weapon.owner == null)
                 {
-                    switch (weapon.type)
+                    switch (weapon.Specification.Type)
                     {
-                        case WeaponType.Stone:
+                        case WeaponSpecification.Types.Stone:
                             PickupWeapon(other.gameObject.GetComponent<StoneModel>());
                             break;
-                        case WeaponType.Skull:
+                        case WeaponSpecification.Types.Skull:
                             PickupWeapon(other.gameObject.GetComponent<SkullModel>());
                             break;
                     }
@@ -65,7 +66,8 @@ namespace Caveman.Players
 
         public override void PickupBonus(BonusBase bonus)
         {
-            if (multiplayer) serverConnection.SendPickBonus(bonus.Id, (int) bonus.Type);
+            //todo hack
+            if (multiplayer) serverConnection.SendPickBonus(bonus.Id, 1);//bonus.specification);
             base.PickupBonus(bonus);
         }
 
@@ -74,12 +76,12 @@ namespace Caveman.Players
             if (player.Weapons > Settings.WeaponsMaxOnPlayer) return;
             base.PickupWeapon(weaponModel);
             player.Weapons += Settings.WeaponCountPickup;
-            if (multiplayer) serverConnection.SendPickWeapon(weaponModel.Id, (int)weaponModel.type);
+            if (multiplayer) serverConnection.SendPickWeapon(weaponModel.Id, (int)weaponModel.Specification.Type);
         }
 
         public override void Throw(Vector2 aim)
         {
-            if (multiplayer) serverConnection.SendUseWeapon(aim, (int) weaponType);
+            if (multiplayer) serverConnection.SendUseWeapon(aim, (int) typeWeapon);
             base.Throw(aim);
             player.Weapons--;
         }

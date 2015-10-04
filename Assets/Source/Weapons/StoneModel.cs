@@ -42,7 +42,7 @@ namespace Caveman.Weapons
             {
                 if (Vector2.SqrMagnitude(target - (Vector2)transform.position) > UnityExtensions.ThresholdPosition)
                 {
-                    bezierTime += Time.deltaTime / Vector2.Distance(startPosition, target) * speed;
+                    bezierTime += Time.deltaTime / Vector2.Distance(startPosition, target) * Specification.Speed;
                     if (bezierTime > 1) bezierTime = 0;
                     transform.position = BezierUtils.Bezier2(startPosition, BezierUtils.ControlPoint(startPosition, target), target, bezierTime);
 

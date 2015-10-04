@@ -5,6 +5,7 @@ using Caveman.Bonuses;
 using Caveman.CustomAnimation;
 using Caveman.Network;
 using Caveman.Setting;
+using Caveman.Specification;
 using Caveman.Utils;
 using Caveman.Weapons;
 using UnityEngine;
@@ -16,12 +17,11 @@ namespace Caveman.Players
     {
         public Action<Vector2> Death;
         public Action RespawnGUIDisabled; 
-        public Func<WeaponType, ObjectPool<WeaponModelBase>> ChangedWeaponsPool;
+        public Func<WeaponSpecification.Types, ObjectPool<WeaponModelBase>> ChangedWeaponsPool;
 
         public Player player;
         public string Id;
-        public float Speed { get; set; }
-        [HideInInspector] public BonusBase bonusType;
+        [HideInInspector] public BonusBase bonusBase;
         [HideInInspector] public SpriteRenderer spriteRenderer;
         [HideInInspector] public bool firstRespawn = true;
         
@@ -32,7 +32,7 @@ namespace Caveman.Players
         protected Random r;
         protected ServerConnection serverConnection;
         protected bool multiplayer;
-        protected WeaponType weaponType;
+        protected WeaponSpecification.Types typeWeapon;
         protected internal bool invulnerability;
         protected PlayerAnimation playerAnimation;
         //todo переделать под массив
@@ -45,7 +45,6 @@ namespace Caveman.Players
         {
             animator = GetComponent<Animator>();
             spriteRenderer = GetComponent<SpriteRenderer>();
-            Speed = Settings.PlayerSpeed;
             playerAnimation = new PlayerAnimation(animator);
         }
 
@@ -77,10 +76,10 @@ namespace Caveman.Players
 
         public virtual void PickupWeapon(WeaponModelBase weaponModel)
         {
-            if (poolWeapons == null || weaponModel.type != weaponType)
+            if (poolWeapons == null || weaponModel.Specification.Type != typeWeapon)
             {
-                poolWeapons = ChangedWeaponsPool(weaponModel.type);
-                weaponType = weaponModel.type;
+                poolWeapons = ChangedWeaponsPool(weaponModel.Specification.Type);
+                typeWeapon = weaponModel.Specification.Type;
                 if (ChangedWeapons != null)
                 {
                     ChangedWeapons();    

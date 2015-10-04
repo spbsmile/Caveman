@@ -2,19 +2,13 @@
 using Caveman.Utils;
 using UnityEngine;
 using Caveman.Setting;
+using Caveman.Specification;
 
 namespace Caveman.Weapons
 {
-    public enum WeaponType
-    {
-        Stone,
-        Skull
-    }
-
     public  class WeaponModelBase : ASupportPool<WeaponModelBase>
     {
-        public WeaponType type;
-        public float speed;
+        public WeaponSpecification Specification { private set; get; }
 
         protected Vector2 startPosition;
         protected Vector2 target;
@@ -29,11 +23,6 @@ namespace Caveman.Weapons
             owner = null;
             delta = Vector2.zero;
             pool.Store(this);
-        }
-
-        public void Awake()
-        {
-            speed = Settings.StoneSpeed;
         }
 
         public void Take()
@@ -53,7 +42,7 @@ namespace Caveman.Weapons
             startPosition = start;
             transform.position = start;
             target = aim;
-            delta = UnityExtensions.CalculateDelta(start, aim, speed);
+            delta = UnityExtensions.CalculateDelta(start, aim, Specification.Speed);
         }
 
         public override void SetPool(ObjectPool<WeaponModelBase> weaponPool)

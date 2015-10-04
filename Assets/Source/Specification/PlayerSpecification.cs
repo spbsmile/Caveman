@@ -1,0 +1,53 @@
+﻿using Caveman.Setting;
+using Newtonsoft.Json;
+
+namespace Caveman.Specification
+{
+    [JsonObject(MemberSerialization.OptIn)]
+    public class PlayerSpecification : ISettings
+    {
+        public PlayerSpecification(string name, float speed, int timeRespawn, int timeInvulnerability)
+        {
+            this.name = name;
+            this.speed = speed;
+            this.timeRespawn = timeRespawn;
+            this.timeInvulnerability = timeInvulnerability;
+        }
+
+        [JsonProperty] private readonly string name;
+        [JsonProperty] private readonly float speed;
+        [JsonProperty] private readonly int timeRespawn;
+        [JsonProperty] private readonly int timeInvulnerability;
+        [JsonProperty] private readonly Types type;
+
+        public string Name
+        {
+            get { return name; }
+        }
+
+        public float Speed
+        {
+            get { return speed; }
+        }
+
+        public int TimeRespawn
+        {
+            get { return timeRespawn; }
+        }
+
+        public int TimeInvulnerability
+        {
+            get { return timeInvulnerability; }
+        }
+
+        public Types Type
+        {
+            get { return type; }
+        }
+
+        public enum Types
+        {
+            Sample
+        }
+    }
+}

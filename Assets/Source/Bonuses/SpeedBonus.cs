@@ -8,7 +8,7 @@ public class SpeedBonus : BonusBase
 {
     public override void Effect(PlayerModelBase playerModel)
     {
-        if (playerModel.bonusType != null) return;
+        if (playerModel.bonusBase != null) return;
         base.Effect(playerModel);
         preValue = playerModel.Speed;
         playerModel.Speed = playerModel.Speed*2;
@@ -18,7 +18,7 @@ public class SpeedBonus : BonusBase
     {
         yield return new WaitForSeconds(Settings.BonusSpeedDuration);
         pool.Store(this);
-        playerModel.bonusType = null;
+        playerModel.bonusBase = null;
         playerModel.Speed = preValue;
     }
 }

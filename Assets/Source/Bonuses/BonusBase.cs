@@ -1,39 +1,18 @@
 ﻿using System.Collections;
 using Caveman.Players;
+using Caveman.Specification;
 using Caveman.Utils;
 using Caveman.Weapons;
 using UnityEngine;
 
 namespace Caveman.Bonuses
 {
-    public enum BonusType
-    {
-        Speed,
-        Shield
-    }
-
     public class BonusBase : ASupportPool<BonusBase>
     {
-        public int duration;
-        public virtual BonusType Type { get { return BonusType.Speed; }}
-
-        protected Animator animator;
-        protected float value;
         protected float preValue;
-
         protected ObjectPool<BonusBase> pool;
-        private Transform icon;
 
-        public void Start()
-        {
-            animator = GetComponent<Animator>();
-        }
-
-        public void Init(ObjectPool<BonusBase> poolBonuses, int duration)
-        {
-            this.duration = duration;
-            pool = poolBonuses;
-        }
+        public BonusSpecification Specification { private set; get; } 
 
         public void OnTriggerEnter2D(Collider2D other)
         {
@@ -55,7 +34,7 @@ namespace Caveman.Bonuses
 
         public virtual void Effect(PlayerModelBase playerModel)
         {
-            playerModel.player.PickUpBonus(Type, duration);
+            playerModel.player.PickUpBonus(Specification.Type, Specification.Duration);
             //todo внедрить систему событий
             playerModel.bonusType = this;
             transform.position = new Vector3(200, 200, 200);

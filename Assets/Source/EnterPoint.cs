@@ -6,6 +6,7 @@ using Caveman.Level;
 using Caveman.Network;
 using Caveman.Players;
 using Caveman.Setting;
+using Caveman.Specification;
 using Caveman.UI;
 using Caveman.Utils;
 using Caveman.Weapons;
@@ -46,7 +47,7 @@ namespace Caveman
 
         public virtual void Awake()
         {
-            Settings.InitSettings();
+            CurrentGameSettings.Load("settings");
             Settings.multiplayerMode = false;
         }
 
@@ -58,7 +59,7 @@ namespace Caveman
             poolDeathImage = CreatePool<EffectBase>(Settings.PoolCountDeathImages, containerDeathImages, prefabDeathImage, null);
             poolStones = CreatePool<WeaponModelBase>(Settings.PoolCountStones, containerStones, prefabStone, InitStoneModel);
             poolSkulls = CreatePool<WeaponModelBase>(Settings.PoolCountSkulls, containerSkulls, prefabSkull, InitSkullModel);
-            poolBonusesSpeed = CreatePool<BonusBase>(Settings.BonusSpeedPoolCount, containerBonusesSpeed, prefabBonusSpeed, InitBonusModel);
+            poolBonusesSpeed = CreatePool<BonusBase>(Settings.BonusSpeedPoolCount, containerBonusesSpeed, prefabBonusSpeed, null);
 
             poolStones.RelatedPool += () => poolStonesSplash;
 
@@ -81,11 +82,11 @@ namespace Caveman
             }
         }
 
-        private void InitBonusModel(GameObject item, ObjectPool<BonusBase> pool)
-        {
-            var bonusModel = item.GetComponent<BonusBase>();
-            bonusModel.Init(pool, Settings.BonusSpeedDuration);
-        }
+        //private void InitBonusModel(GameObject item, ObjectPool<BonusBase> pool)
+        //{
+        //    var bonusModel = item.GetComponent<BonusBase>();
+        //    bonusModel.Init(pool, Settings.BonusSpeedDuration);
+        //}
 
         private void InitSkullModel(GameObject item, ObjectPool<WeaponModelBase> pool) 
         {
@@ -175,13 +176,13 @@ namespace Caveman
             playerModel.Birth(new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)));
         }
 
-        private ObjectPool<WeaponModelBase> ChangedWeapons(WeaponType weaponType)
+        private ObjectPool<WeaponModelBase> ChangedWeapons(WeaponSpecification.Types type)
         {
-            switch (weaponType)
+            switch (type)
             {
-                case WeaponType.Stone:
-                    return poolStones; 
-                case WeaponType.Skull:
+                case WeaponSpecification.Types.Stone:
+                    return poolStones;
+                case WeaponSpecification.Types.Skull:
                     return poolSkulls;
             }
             return null;
