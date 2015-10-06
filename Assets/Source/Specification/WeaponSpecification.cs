@@ -80,6 +80,5 @@ namespace Caveman.Specification
             Stone,
             Skull
         }
-
     }
 }

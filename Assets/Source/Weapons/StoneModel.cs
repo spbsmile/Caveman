@@ -9,7 +9,7 @@ namespace Caveman.Weapons
         private ObjectPool<EffectBase> poolStonesSplash;
         private float bezierTime;
 
-        public void Start()
+        public void Awake()
         {
             Specification = EnterPoint.CurrentSettings.DictionaryWeapons["stone"];
         }

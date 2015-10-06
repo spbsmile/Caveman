@@ -2,7 +2,7 @@
 {
     public class AxeModel : WeaponModelBase
     {
-        public void Start()
+        public void Awake()
         {
             Specification = EnterPoint.CurrentSettings.DictionaryWeapons["axe"];
         }

@@ -29,7 +29,7 @@ namespace Caveman.Players
 
         private void MovePlayer(Vector3 direction, CNAbstractController arg2)
         {
-            delta = direction*specification.Speed;
+            delta = direction*Speed;
             Move();
         }
 

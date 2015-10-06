@@ -44,11 +44,14 @@ namespace Caveman.Players
         private PlayerPool poolPlayers;
         private ObjectPool<WeaponModelBase> poolWeapons;
 
+        public float Speed { get; set; }
+
         protected virtual void Awake()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
             playerAnimation = new PlayerAnimation(GetComponent<Animator>());
             specification = EnterPoint.CurrentSettings.DictionaryPlayer["sample"];
+            Speed = specification.Speed;
             weaponSpecification = EnterPoint.CurrentSettings.DictionaryWeapons["stone"];
         }
 
@@ -150,7 +153,7 @@ namespace Caveman.Players
         public void SetMove(Vector2 target)
         {
             this.target = target;
-            delta = UnityExtensions.CalculateDelta(transform.position, target, specification.Speed);
+            delta = UnityExtensions.CalculateDelta(transform.position, target, Speed);
         }
 
         public void StopMove()

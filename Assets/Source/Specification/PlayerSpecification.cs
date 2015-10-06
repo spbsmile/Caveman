@@ -16,7 +16,7 @@ namespace Caveman.Specification
         }
 
         [JsonProperty] private readonly string name;
-        [JsonProperty] private float speed;
+        [JsonProperty] private readonly float speed;
         [JsonProperty] private readonly int timeRespawn;
         [JsonProperty] private readonly int timeInvulnerability;
         [JsonProperty] private readonly Types type;
@@ -44,11 +44,6 @@ namespace Caveman.Specification
         public Types Type
         {
             get { return type; }
-        }
-
-        public void SetSpeed(float value)
-        {
-            speed = value;
         }
         
         public enum Types

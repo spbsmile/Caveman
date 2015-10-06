@@ -16,8 +16,8 @@ namespace Caveman.Bonuses
         {
             if (playerModel.bonusBase != null) return;
             base.Effect(playerModel);
-            preValue = playerModel.specification.Speed;
-            playerModel.specification.SetSpeed(playerModel.specification.Speed*2);
+            preValue = playerModel.Speed;
+            playerModel.Speed = playerModel.Speed*2;
         }
 
         protected override IEnumerator UnEffect(PlayerModelBase playerModel)
@@ -25,7 +25,7 @@ namespace Caveman.Bonuses
             yield return new WaitForSeconds(Settings.BonusSpeedDuration);
             pool.Store(this);
             playerModel.bonusBase = null;
-            playerModel.specification.SetSpeed(preValue);
+            playerModel.Speed = preValue;
         }
     }
 }
