@@ -9,9 +9,8 @@ namespace Caveman.Players
 {
     public class PlayerModelClient : PlayerModelBase
     {
-        protected override void Start()
+        protected virtual void Start()
         {
-            base.Start();
             ChangedWeapons += () => player.Weapons = 0;
             print("hello subscribe ChangedWeapons" + name);
         }
@@ -19,7 +18,7 @@ namespace Caveman.Players
         public void OnTriggerEnter2D(Collider2D other)
         {
             if (Time.time < 1) return;
-            var weapon = other.gameObject.GetComponent<WeaponModelBase>();
+            var weapon = other.GetComponent<WeaponModelBase>();
             if (weapon)
             {
                 if (weapon.owner == null)
@@ -30,7 +29,7 @@ namespace Caveman.Players
                             PickupWeapon(other.gameObject.GetComponent<StoneModel>());
                             break;
                         case WeaponSpecification.Types.Skull:
-                            PickupWeapon(other.gameObject.GetComponent<SkullModel>());
+                            PickupWeapon(other.gameObject.GetComponent<AxeModel>());
                             break;
                     }
                 }
@@ -67,28 +66,28 @@ namespace Caveman.Players
         public override void PickupBonus(BonusBase bonus)
         {
             //todo hack
-            if (multiplayer) serverConnection.SendPickBonus(bonus.Id, 1);//bonus.specification);
+            if (multiplayer) serverConnection.SendPickBonus(bonus.Id, (int)bonus.Specification.Type);
             base.PickupBonus(bonus);
         }
 
         public override void PickupWeapon(WeaponModelBase weaponModel)
         {
-            if (player.Weapons > Settings.WeaponsMaxOnPlayer) return;
+            if (player.Weapons > weaponModel.Specification.MaxOnPLayer) return;
             base.PickupWeapon(weaponModel);
-            player.Weapons += Settings.WeaponCountPickup;
+            player.Weapons += weaponModel.Specification.CountPickup;
             if (multiplayer) serverConnection.SendPickWeapon(weaponModel.Id, (int)weaponModel.Specification.Type);
         }
 
         public override void Throw(Vector2 aim)
         {
-            if (multiplayer) serverConnection.SendUseWeapon(aim, (int) typeWeapon);
+            if (multiplayer) serverConnection.SendUseWeapon(aim, (int) weaponSpecification.Type);
             base.Throw(aim);
             player.Weapons--;
         }
 
         private IEnumerator ThrowOnTimer()
         {
-            yield return new WaitForSeconds(Settings.WeaponTimerThrow);
+            yield return new WaitForSeconds(weaponSpecification.TimeThrow);
             if (player.Weapons > 0)
             {
                 var victim = FindClosestPlayer();

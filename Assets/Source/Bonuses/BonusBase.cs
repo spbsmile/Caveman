@@ -12,7 +12,7 @@ namespace Caveman.Bonuses
         protected float preValue;
         protected ObjectPool<BonusBase> pool;
 
-        public BonusSpecification Specification { private set; get; } 
+        public BonusSpecification Specification { protected set; get; } 
 
         public void OnTriggerEnter2D(Collider2D other)
         {
@@ -36,7 +36,7 @@ namespace Caveman.Bonuses
         {
             playerModel.player.PickUpBonus(Specification.Type, Specification.Duration);
             //todo внедрить систему событий
-            playerModel.bonusType = this;
+            playerModel.bonusBase = this;
             transform.position = new Vector3(200, 200, 200);
             StartCoroutine(UnEffect(playerModel));
         }

@@ -6,16 +6,17 @@ namespace Caveman.Specification
     [JsonObject(MemberSerialization.OptIn)]
     public class PlayerSpecification : ISettings
     {
-        public PlayerSpecification(string name, float speed, int timeRespawn, int timeInvulnerability)
+        public PlayerSpecification(string name, float speed, int timeRespawn, int timeInvulnerability, Types type)
         {
             this.name = name;
             this.speed = speed;
             this.timeRespawn = timeRespawn;
             this.timeInvulnerability = timeInvulnerability;
+            this.type = type;
         }
 
         [JsonProperty] private readonly string name;
-        [JsonProperty] private readonly float speed;
+        [JsonProperty] private float speed;
         [JsonProperty] private readonly int timeRespawn;
         [JsonProperty] private readonly int timeInvulnerability;
         [JsonProperty] private readonly Types type;
@@ -45,6 +46,11 @@ namespace Caveman.Specification
             get { return type; }
         }
 
+        public void SetSpeed(float value)
+        {
+            speed = value;
+        }
+        
         public enum Types
         {
             Sample

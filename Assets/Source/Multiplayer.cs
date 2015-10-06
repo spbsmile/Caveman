@@ -55,6 +55,7 @@ namespace Caveman.Network
 
         public void WeaponPickReceived(string playerId, string key)
         {
+            print("sfsdfhlsdkjfhsldkjhljk");
             poolPlayers[playerId].PickupWeapon(poolStones[key]);
         }
 

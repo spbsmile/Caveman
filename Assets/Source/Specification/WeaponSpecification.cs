@@ -6,11 +6,18 @@ namespace Caveman.Specification
     [JsonObject(MemberSerialization.OptIn)]
     public class WeaponSpecification : ISettings
     {
-        public WeaponSpecification(string name, float speed, int timeRespawn)
+        //todo binding constr and data json
+        public WeaponSpecification(string name, float speed, int timeRespawn, int countPickup, int timeThrow, int maxOnPlayer, int initialLying, int rotateParameter, Types type)
         {
             this.name = name;
             this.speed = speed;
             this.timeRespawn = timeRespawn;
+            this.countPickup = countPickup;
+            this.timeThrow = timeThrow;
+            this.maxOnPlayer = maxOnPlayer;
+            this.initialLying = initialLying;
+            this.rotateParameter = rotateParameter;
+            this.type = type;
         }
 
         [JsonProperty] private readonly string name;

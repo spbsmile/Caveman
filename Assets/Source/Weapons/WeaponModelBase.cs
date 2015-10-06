@@ -1,14 +1,13 @@
 ﻿using Caveman.Players;
 using Caveman.Utils;
 using UnityEngine;
-using Caveman.Setting;
 using Caveman.Specification;
 
 namespace Caveman.Weapons
 {
     public  class WeaponModelBase : ASupportPool<WeaponModelBase>
     {
-        public WeaponSpecification Specification { private set; get; }
+        public WeaponSpecification Specification { protected set; get; }
 
         protected Vector2 startPosition;
         protected Vector2 target;
@@ -58,7 +57,7 @@ namespace Caveman.Weapons
                 {
                     transform.position = new Vector2(transform.position.x + delta.x * Time.deltaTime,
                         transform.position.y + delta.y * Time.deltaTime);
-                    transform.Rotate(Vector3.forward, Settings.StoneRotateParameter);
+                    transform.Rotate(Vector3.forward, Specification.RotateParameter);
                 }
                 else
                 {

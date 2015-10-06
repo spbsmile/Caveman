@@ -1,5 +1,4 @@
-﻿using Caveman.Setting;
-using Caveman.Weapons;
+﻿using Caveman.Weapons;
 using UnityEngine;
 
 namespace Caveman.Players
@@ -8,16 +7,15 @@ namespace Caveman.Players
     {
         private int weapons;
 
-        protected override void Start()
+        protected void Start()
         {
-            base.Start();
             ChangedWeapons += () => weapons = 0;
             print("hello subscribe ChangedWeapons" + name);
         }
 
         public override void PickupWeapon(WeaponModelBase weaponModel)
         {
-            if (weapons > Settings.WeaponsMaxOnPlayer) return;
+            if (weapons > weaponModel.Specification.MaxOnPLayer) return;
             base.PickupWeapon(weaponModel);
             weapons++;
         }

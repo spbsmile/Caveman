@@ -27,15 +27,15 @@ namespace Caveman.Setting
         {
             roundTime.text = Settings.RoundTime.ToString();
             botsCount.text = Settings.BotsCount.ToString();
-            playerSpeed.text = Settings.PlayerSpeed.ToString();
-            weaponSpeed.text = Settings.StoneSpeed.ToString();
-            weaponTimerThrow.text = Settings.WeaponTimerThrow.ToString();
-            weaponInitialCount.text = Settings.WeaponInitialLying.ToString();
-            weaponTimeRespawn.text = Settings.WeaponTimeRespawn.ToString();
-            weaponsCountPickup.text = Settings.WeaponCountPickup.ToString();
-            bonusSpeedMaxCount.text = Settings.BonusSpeedMaxCount.ToString();
-            bonusSpeedTimeRespawn.text = Settings.BonusTimeRespawn.ToString();
-            weaponsMaxOnPlayer.text = Settings.WeaponsMaxOnPlayer.ToString();
+            //playerSpeed.text = Settings.PlayerSpeed.ToString();
+            //weaponSpeed.text = Settings.StoneSpeed.ToString();
+            //weaponTimerThrow.text = Settings.WeaponTimerThrow.ToString();
+            //weaponInitialCount.text = Settings.WeaponInitialLying.ToString();
+            //weaponTimeRespawn.text = Settings.WeaponTimeRespawn.ToString();
+            //weaponsCountPickup.text = Settings.WeaponCountPickup.ToString();
+            //bonusSpeedMaxCount.text = Settings.BonusSpeedMaxCount.ToString();
+            //bonusSpeedTimeRespawn.text = Settings.BonusTimeRespawn.ToString();
+            //weaponsMaxOnPlayer.text = Settings.WeaponsMaxOnPlayer.ToString();
             serverPingTime.text = Settings.ServerPingTime.ToString();
 
             roundTime.onEndEdit.AddListener(delegate
@@ -46,34 +46,34 @@ namespace Caveman.Setting
             {
                 Settings.BotsCount = Convert.ToInt32(botsCount.text);
             });
-            playerSpeed.onEndEdit.AddListener(delegate
-            {
-                Settings.PlayerSpeed = Convert.ToInt32(playerSpeed.text);
-            });
-            weaponSpeed.onEndEdit.AddListener(delegate
-            {
-                Settings.StoneSpeed = Convert.ToInt32(weaponSpeed.text);
-            });
-            weaponTimeRespawn.onEndEdit.AddListener(delegate
-            {
-                Settings.WeaponTimeRespawn = Convert.ToInt32(weaponTimeRespawn.text);
-            });
-            weaponTimerThrow.onEndEdit.AddListener(delegate
-            {
-                Settings.WeaponTimerThrow = Convert.ToInt32(weaponTimerThrow.text);
-            });
-            weaponInitialCount.onEndEdit.AddListener(delegate
-            {
-                Settings.WeaponInitialLying = Convert.ToInt32(weaponInitialCount.text);
-            });
-            weaponsCountPickup.onEndEdit.AddListener(delegate
-            {
-                Settings.WeaponCountPickup = Convert.ToInt32(weaponsCountPickup.text);
-            });
-            weaponsMaxOnPlayer.onEndEdit.AddListener(delegate
-            {
-                Settings.WeaponsMaxOnPlayer = Convert.ToInt32(weaponsMaxOnPlayer.text);
-            });
+            //playerSpeed.onEndEdit.AddListener(delegate
+            //{
+            //    Settings.PlayerSpeed = Convert.ToInt32(playerSpeed.text);
+            //});
+            //weaponSpeed.onEndEdit.AddListener(delegate
+            //{
+            //    Settings.StoneSpeed = Convert.ToInt32(weaponSpeed.text);
+            //});
+            //weaponTimeRespawn.onEndEdit.AddListener(delegate
+            //{
+            //    Settings.WeaponTimeRespawn = Convert.ToInt32(weaponTimeRespawn.text);
+            //});
+            //weaponTimerThrow.onEndEdit.AddListener(delegate
+            //{
+            //    Settings.WeaponTimerThrow = Convert.ToInt32(weaponTimerThrow.text);
+            //});
+            //weaponInitialCount.onEndEdit.AddListener(delegate
+            //{
+            //    Settings.WeaponInitialLying = Convert.ToInt32(weaponInitialCount.text);
+            //});
+            //weaponsCountPickup.onEndEdit.AddListener(delegate
+            //{
+            //    Settings.WeaponCountPickup = Convert.ToInt32(weaponsCountPickup.text);
+            //});
+            //weaponsMaxOnPlayer.onEndEdit.AddListener(delegate
+            //{
+            //    Settings.WeaponsMaxOnPlayer = Convert.ToInt32(weaponsMaxOnPlayer.text);
+            //});
             bonusSpeedMaxCount.onEndEdit.AddListener(delegate
             {
                 Settings.BonusSpeedMaxCount = Convert.ToInt32(bonusSpeedMaxCount.text);

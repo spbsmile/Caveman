@@ -58,6 +58,7 @@ namespace Caveman.Setting
             catch (Exception e)
             {
                 var i = e.Message;
+                Debug.Log(i);
             }
             return default(T);
         }

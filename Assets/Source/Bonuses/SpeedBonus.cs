@@ -1,24 +1,31 @@
 ﻿using System.Collections;
-using Caveman.Bonuses;
 using Caveman.Players;
 using Caveman.Setting;
 using UnityEngine;
 
-public class SpeedBonus : BonusBase 
+namespace Caveman.Bonuses
 {
-    public override void Effect(PlayerModelBase playerModel)
+    public class SpeedBonus : BonusBase
     {
-        if (playerModel.bonusBase != null) return;
-        base.Effect(playerModel);
-        preValue = playerModel.Speed;
-        playerModel.Speed = playerModel.Speed*2;
-    }
+        public void Start()
+        {
+            Specification = EnterPoint.CurrentSettings.DictionaryBonuses["speed"];
+        }
 
-    protected override IEnumerator UnEffect(PlayerModelBase playerModel)
-    {
-        yield return new WaitForSeconds(Settings.BonusSpeedDuration);
-        pool.Store(this);
-        playerModel.bonusBase = null;
-        playerModel.Speed = preValue;
+        public override void Effect(PlayerModelBase playerModel)
+        {
+            if (playerModel.bonusBase != null) return;
+            base.Effect(playerModel);
+            preValue = playerModel.specification.Speed;
+            playerModel.specification.SetSpeed(playerModel.specification.Speed*2);
+        }
+
+        protected override IEnumerator UnEffect(PlayerModelBase playerModel)
+        {
+            yield return new WaitForSeconds(Settings.BonusSpeedDuration);
+            pool.Store(this);
+            playerModel.bonusBase = null;
+            playerModel.specification.SetSpeed(preValue);
+        }
     }
 }

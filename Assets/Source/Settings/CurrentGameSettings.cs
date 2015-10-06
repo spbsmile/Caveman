@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using Caveman.Specification;
+using UnityEngine;
 
 namespace Caveman.Setting
 {
@@ -19,15 +20,15 @@ namespace Caveman.Setting
         {
             var typeBonuses =
               SettingsHandler.ParseSettingsFromFile<List<BonusSpecification>>(Path.Combine(folder, "bonuses.json")).ToList();
-            typeBonuses.Sort();
+            //typeBonuses.Sort();
 
             var typePlayers =
                 SettingsHandler.ParseSettingsFromFile<List<PlayerSpecification>>(Path.Combine(folder, "players.json")).ToList();
-            typePlayers.Sort();
+            //typePlayers.Sort();
 
             var typeWeapons =
                 SettingsHandler.ParseSettingsFromFile<List<WeaponSpecification>>(Path.Combine(folder, "weapons.json")).ToList();
-            typeWeapons.Sort();
+            //typeWeapons.Sort();
 
             return Create(typeBonuses, typePlayers, typeWeapons);
         }

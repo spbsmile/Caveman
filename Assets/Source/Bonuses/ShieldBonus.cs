@@ -1,15 +1,12 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿namespace Caveman.Bonuses
+{
+    public class ShieldBonus : BonusBase
+    {
+        public void Start()
+        {
+            Specification = EnterPoint.CurrentSettings.DictionaryBonuses["shield"];
+        }
 
-public class ShieldBonus : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+        //todo implement
+    }
 }

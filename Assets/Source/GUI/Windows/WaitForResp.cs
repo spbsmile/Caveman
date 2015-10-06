@@ -10,16 +10,23 @@ namespace Caveman.UI.Windows
         public Button buttonRespawn;
         public Slider progress;
 
-        public void OnEnable()
-        {
-            var timeRespawn = Settings.PlayerTimeRespawn;
-            StartCoroutine(WithProgress(timeRespawn));
-            StartCoroutine(DisplayResult());
-        }
+        //public void OnEnable()
+        //{
+        //    var timeRespawn = Settings.PlayerTimeRespawn;
+        //    StartCoroutine(WithProgress(timeRespawn));
+        //    StartCoroutine(DisplayResult());
+        //}
 
         public void OnDisable()
         {
             progress.value = 0;
+        }
+
+        public void Activate(int timeRespawn)
+        {
+            gameObject.SetActive(true);
+            StartCoroutine(WithProgress(timeRespawn));
+            StartCoroutine(DisplayResult());
         }
 
         protected override IEnumerator DisplayResult()

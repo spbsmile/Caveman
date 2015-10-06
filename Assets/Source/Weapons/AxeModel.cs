@@ -1,7 +1,12 @@
 ﻿namespace Caveman.Weapons
 {
-    public class SkullModel : WeaponModelBase
+    public class AxeModel : WeaponModelBase
     {
+        public void Start()
+        {
+            Specification = EnterPoint.CurrentSettings.DictionaryWeapons["axe"];
+        }
+
         // TODO разные кривые траекторий
         public void Update()
         {

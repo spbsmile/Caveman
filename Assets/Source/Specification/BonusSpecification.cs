@@ -6,12 +6,13 @@ namespace Caveman.Specification
     [JsonObject(MemberSerialization.OptIn)]
     public class BonusSpecification : ISettings
     {
-        public BonusSpecification(string name, int timeRespawn, float duration, int maxCountOnMap)
+        public BonusSpecification(string name, int timeRespawn, float duration, int maxCountOnMap, Types type)
         {
             this.name = name;
             this.timeRespawn = timeRespawn;
             this.duration = duration;
             this.maxCountOnMap = maxCountOnMap;
+            this.type = type;
         }
 
         [JsonProperty] private readonly string name;

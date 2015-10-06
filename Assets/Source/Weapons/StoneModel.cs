@@ -1,5 +1,4 @@
 ﻿using Caveman.CustomAnimation;
-using Caveman.Setting;
 using Caveman.Utils;
 using UnityEngine;
 
@@ -9,6 +8,11 @@ namespace Caveman.Weapons
     {
         private ObjectPool<EffectBase> poolStonesSplash;
         private float bezierTime;
+
+        public void Start()
+        {
+            Specification = EnterPoint.CurrentSettings.DictionaryWeapons["stone"];
+        }
 
         public void Update()
         {
@@ -49,7 +53,7 @@ namespace Caveman.Weapons
                     //linear moving. can be used for testing
                     //                    transform.position = new Vector2(transform.position.x + delta.x * Time.deltaTime,
                     //                        transform.position.y + delta.y * Time.deltaTime);
-                    transform.Rotate(Vector3.forward, Settings.StoneRotateParameter);
+                    transform.Rotate(Vector3.forward, Specification.RotateParameter);
                 }
                 else
                 {

@@ -7,8 +7,9 @@ namespace Caveman.Players
 {
     public class HumanPlayerModel : PlayerModelClient
     {
-        public void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             BattleGui.instance.movementJoystick.ControllerMovedEvent += MovePlayer;
             BattleGui.instance.movementJoystick.FingerLiftedEvent += controller => StopMove();
         }
@@ -28,7 +29,7 @@ namespace Caveman.Players
 
         private void MovePlayer(Vector3 direction, CNAbstractController arg2)
         {
-            delta = direction*Speed;
+            delta = direction*specification.Speed;
             Move();
         }
 

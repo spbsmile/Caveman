@@ -22,7 +22,8 @@ namespace Caveman.CustomAnimation
                 {
                     transform.position = new Vector2(transform.position.x + delta.x*Time.deltaTime,
                         transform.position.y + delta.y*Time.deltaTime);
-                    transform.Rotate(Vector3.forward, Settings.StoneRotateParameter);
+                    //todo hack 
+                    //transform.Rotate(Vector3.forward, Settings.StoneRotateParameter);
                 }
                 else
                 {

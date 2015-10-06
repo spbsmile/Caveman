@@ -20,7 +20,7 @@ namespace Caveman
         public Transform prefabHumanPlayer;
         public Transform prefabAiPlayer;
 
-        public SkullModel prefabSkull;
+        public AxeModel prefabAxe;
         public StoneModel prefabStone;
         public StoneSplash prefabStoneFlagmentInc;
         public EffectBase prefabDeathImage;
@@ -45,9 +45,11 @@ namespace Caveman
         
         private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
 
+        public static CurrentGameSettings CurrentSettings { get; private set; }
+
         public virtual void Awake()
         {
-            CurrentGameSettings.Load("settings");
+            CurrentSettings = CurrentGameSettings.Load("Assets/Settings/");
             Settings.multiplayerMode = false;
         }
 
@@ -58,8 +60,8 @@ namespace Caveman
             poolStonesSplash = CreatePool<EffectBase>(Settings.PoolCountSplashStones, containerSplashStones, prefabStoneFlagmentInc, null);
             poolDeathImage = CreatePool<EffectBase>(Settings.PoolCountDeathImages, containerDeathImages, prefabDeathImage, null);
             poolStones = CreatePool<WeaponModelBase>(Settings.PoolCountStones, containerStones, prefabStone, InitStoneModel);
-            poolSkulls = CreatePool<WeaponModelBase>(Settings.PoolCountSkulls, containerSkulls, prefabSkull, InitSkullModel);
-            poolBonusesSpeed = CreatePool<BonusBase>(Settings.BonusSpeedPoolCount, containerBonusesSpeed, prefabBonusSpeed, null);
+            poolSkulls = CreatePool<WeaponModelBase>(Settings.PoolCountSkulls, containerSkulls, prefabAxe, InitSkullModel);
+            poolBonusesSpeed = CreatePool<BonusBase>(Settings.BonusSpeedPoolCount, containerBonusesSpeed, prefabBonusSpeed, InitBonusModel);
 
             poolStones.RelatedPool += () => poolStonesSplash;
 
@@ -82,15 +84,14 @@ namespace Caveman
             }
         }
 
-        //private void InitBonusModel(GameObject item, ObjectPool<BonusBase> pool)
-        //{
-        //    var bonusModel = item.GetComponent<BonusBase>();
-        //    bonusModel.Init(pool, Settings.BonusSpeedDuration);
-        //}
+        private void InitBonusModel(GameObject item, ObjectPool<BonusBase> pool)
+        {
+            item.GetComponent<BonusBase>().SetPool(pool);
+        }
 
         private void InitSkullModel(GameObject item, ObjectPool<WeaponModelBase> pool) 
         {
-            item.GetComponent<SkullModel>().SetPool(pool);
+            item.GetComponent<AxeModel>().SetPool(pool);
         }
 
         private void InitStoneModel(GameObject item, ObjectPool<WeaponModelBase> pool)

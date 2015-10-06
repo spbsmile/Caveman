@@ -12,10 +12,10 @@
         //public const float PlayerTimeInvulnerability = 2;
         //public static float StoneSpeed = 5f;
         //public const int StoneRotateParameter = 10;
-        //public static int WeaponTimeRespawn = 20;
+        public static int WeaponTimeRespawn = 20;
         //public static int WeaponTimerThrow = 2;
         //public static int WeaponsMaxOnPlayer = 10;
-        //public static int WeaponInitialLying = 10;
+        public static int WeaponInitialLying = 10;
         //public static int WeaponCountPickup = 1;
         
         //todo rename all weapon
