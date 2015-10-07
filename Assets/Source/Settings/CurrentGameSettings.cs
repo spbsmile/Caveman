@@ -16,19 +16,16 @@ namespace Caveman.Setting
         public readonly Dictionary<string, BonusSpecification> DictionaryBonuses = new Dictionary<string, BonusSpecification>();
         public readonly Dictionary<string, WeaponSpecification> DictionaryWeapons = new Dictionary<string, WeaponSpecification>();
 
-        public static CurrentGameSettings Load(string folder)
+        public static CurrentGameSettings Load()
         {
             var typeBonuses =
-              SettingsHandler.ParseSettingsFromFile<List<BonusSpecification>>(Path.Combine(folder, "bonuses.json")).ToList();
-            //typeBonuses.Sort();
+                SettingsHandler.ParseSettingsFromFile<List<BonusSpecification>>("bonuses").ToList();
 
             var typePlayers =
-                SettingsHandler.ParseSettingsFromFile<List<PlayerSpecification>>(Path.Combine(folder, "players.json")).ToList();
-            //typePlayers.Sort();
+                SettingsHandler.ParseSettingsFromFile<List<PlayerSpecification>>("players").ToList();
 
             var typeWeapons =
-                SettingsHandler.ParseSettingsFromFile<List<WeaponSpecification>>(Path.Combine(folder, "weapons.json")).ToList();
-            //typeWeapons.Sort();
+                SettingsHandler.ParseSettingsFromFile<List<WeaponSpecification>>("weapons").ToList();
 
             return Create(typeBonuses, typePlayers, typeWeapons);
         }

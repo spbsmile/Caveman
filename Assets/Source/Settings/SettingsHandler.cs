@@ -47,12 +47,12 @@ namespace Caveman.Setting
             return default(T);
         }
 
-        public static T ParseSettingsFromFile<T>(string file)
+        public static T ParseSettingsFromFile<T>(string fileName)
         {
             try
             {
-                var f = File.ReadAllText(file);
-                var settingsFromFile = ParseSettings<T>(f);
+                var textAsset = Resources.Load(Path.Combine("Settings/", fileName), typeof(TextAsset)) as TextAsset;
+                var settingsFromFile = ParseSettings<T>(textAsset.text);
                 return settingsFromFile;
             }
             catch (Exception e)

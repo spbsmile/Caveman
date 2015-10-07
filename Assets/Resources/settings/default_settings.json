@@ -1,33 +1,11 @@
 {
-    "WidthMap" : 24,
-    "HeightMap" : 24,
-    "RoundTime" : 60,
-
-    "BotsCount" : 3,
-    "PlayerSpeed" : 2.5,
-    "PlayerTimeRespawn" : 3,
-    "PlayerTimeInvulnerability" : 2,
-    "StoneSpeed" : 5,
-    "StoneRotateParameter" : 10,
-    "WeaponTimeRespawn" : 20,
-    "WeaponTimerThrow" : 2,
-    "WeaponsMaxOnPlayer" : 10,
-    "WeaponInitialLying" : 10,
-    "WeaponCountPickup" : 1,
+    "roundTime" : 60,
+    "botsCount" : 3,
     
-    "CountLyingSkulls" : 3,
-
-    "BonusTimeRespawn" : 10,
-
-    "BonusSpeedPoolCount" : 6,
-    "BonusSpeedDuration" : 4,
-    "BonusSpeedMaxCount" : 6,
-
-    "multiplayerMode" : true,
-
-    "PoolCountStones" : 40,
-    "PoolCountDeathImages" : 9,
-    "PoolCountSkulls" : 30,
-    "PoolCountSplashStones" : 30
-
+	"poolCountStones" : 40,
+    "poolCountDeathImages" : 9,
+    "poolCountSkulls" : 30,
+    "poolCountSplashStones" : 30,
+	
+	"multiplayerMode" : true
 }

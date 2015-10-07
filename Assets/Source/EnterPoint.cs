@@ -49,7 +49,7 @@ namespace Caveman
 
         public virtual void Awake()
         {
-            CurrentSettings = CurrentGameSettings.Load("Assets/Settings/");
+            CurrentSettings = CurrentGameSettings.Load();
             Settings.multiplayerMode = false;
         }
 
