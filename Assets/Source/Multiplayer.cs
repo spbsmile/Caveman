@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Caveman.Players;
+﻿using Caveman.Players;
 using Caveman.UI;
 using Caveman.Utils;
 using Newtonsoft.Json.Linq;
@@ -18,6 +17,7 @@ namespace Caveman.Network
 
         public override void Awake()
         {
+            base.Awake();
             Setting.Settings.multiplayerMode = true;
         }
 
