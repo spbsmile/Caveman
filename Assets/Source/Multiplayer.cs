@@ -1,4 +1,5 @@
-﻿using Caveman.Players;
+﻿using System.Linq;
+using Caveman.Players;
 using Caveman.UI;
 using Caveman.Utils;
 using Newtonsoft.Json.Linq;
@@ -55,7 +56,6 @@ namespace Caveman.Network
 
         public void WeaponPickReceived(string playerId, string key)
         {
-            print("sfsdfhlsdkjfhsldkjhljk");
             poolPlayers[playerId].PickupWeapon(poolStones[key]);
         }
 
@@ -123,17 +123,28 @@ namespace Caveman.Network
             StartCoroutine(BattleGui.instance.mainGameTimer.UpdateTime((int)time));
         }
 
-        public void GameResultReceived(JEnumerable<JObject> data)
+        public void GameResultReceived(JToken data)
         {
             var resultRound = BattleGui.instance.resultRound;
             resultRound.gameObject.SetActive(true);
+            // todo refactor this !
             var lineIndex = 0;
-            foreach (var jsonObject in data)
+            foreach (var name in from hero in data
+                select hero[ServerParams.UserName])
             {
-                resultRound.Write(jsonObject[ServerParams.UserName].ToString(), resultRound.names, lineIndex);
-                resultRound.Write(jsonObject[ServerParams.Kills].ToString(), resultRound.kills, lineIndex);
-                resultRound.Write(jsonObject[ServerParams.Deaths].ToString(), resultRound.deaths, lineIndex);
-                lineIndex++;
+                resultRound.Write(name.ToString(), resultRound.names, lineIndex++);
+            }
+            lineIndex = 0;
+            foreach (var kill in  from hero in data
+                                      select hero[ServerParams.Kills])
+            {
+                resultRound.Write(kill.ToString(), resultRound.kills, lineIndex++);
+            }
+            lineIndex = 0;
+            foreach (var deaths in from hero in data
+                         select hero[ServerParams.Deaths])
+            {
+                resultRound.Write(deaths.ToString(), resultRound.deaths, lineIndex++);
             }
             resultReceived = true;
         }

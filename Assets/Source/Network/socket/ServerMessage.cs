@@ -1,3 +1,4 @@
+using System.Linq;
 using Caveman.Setting;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
@@ -96,7 +97,7 @@ namespace Caveman.Network
             }
             else if (action.Equals(ServerParams.GameResultAction))
             {
-                listener.GameResultReceived(jToken.Children<JObject>());
+                listener.GameResultReceived(jToken[ServerParams.Data]);
             }
         }
 

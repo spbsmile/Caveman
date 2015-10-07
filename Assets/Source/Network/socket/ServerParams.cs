@@ -7,9 +7,6 @@ namespace Caveman.Network
         public const string UserId = "id";
         public const string X = "x";
         public const string Y = "y";
-        public const string WeaponType = "weapon_type";
-        public const string BonusType = "bonus_type";
-        public const string Player = "player";
 
         public const string GameTimeAction = "time";
         public const string GameResultAction = "result";
