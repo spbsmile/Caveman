@@ -66,7 +66,15 @@ namespace Caveman.Network
 
         public void BonusAddedReceived(string key, Vector2 point)
         {
-            poolBonusesSpeed.New(key).transform.position = point;
+            if (poolBonusesSpeed.ContainsKey(key))
+            {
+                //todo server bug. one point - many bonus
+                Debug.LogWarning(key + " An bonus with the same key already exists in the dictionary.");
+            }
+            else
+            {
+                poolBonusesSpeed.New(key).transform.position = point;    
+            }
         }
 
         public void BonusPickReceived(string playerId, string key)
@@ -78,7 +86,7 @@ namespace Caveman.Network
         {
             if (!poolPlayers.ContainsKey(playerId))
             {
-                CreatePlayer(new Player("No Name"), playerId, false, true, prefabServerPlayer);
+                CreatePlayer(new Player("No Name", playerId), false, true, prefabServerPlayer);
                 poolPlayers[playerId].transform.position = point;
                 poolPlayers[playerId].firstRespawn = false;
             }
@@ -151,7 +159,7 @@ namespace Caveman.Network
 
         public void LoginReceived(string playerId, string playerName)
         {
-            CreatePlayer(new Player(playerName), playerId, false, true, prefabServerPlayer);
+            CreatePlayer(new Player(playerName, playerId), false, true, prefabServerPlayer);
             serverConnection.SendRespawn(poolPlayers[OwnId].transform.position);
         }
 
