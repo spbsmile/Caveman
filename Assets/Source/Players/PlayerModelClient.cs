@@ -11,7 +11,7 @@ namespace Caveman.Players
     {
         protected virtual void Start()
         {
-            ChangedWeapons += () => player.Weapons = 0;
+            ChangedWeapons += () => Player.Weapons = 0;
             print("hello subscribe ChangedWeapons" + name);
         }
 
@@ -21,7 +21,7 @@ namespace Caveman.Players
             var weapon = other.GetComponent<WeaponModelBase>();
             if (weapon)
             {
-                if (weapon.owner == null)
+                if (weapon.Owner == null)
                 {
                     switch (weapon.Specification.Type)
                     {
@@ -35,14 +35,18 @@ namespace Caveman.Players
                 }
                 else
                 {
-                    if (weapon.owner != player)
+                    if (weapon.Owner != Player)
                     {
-                        weapon.owner.Kills++;
-                        player.deaths++;
+                        weapon.Owner.Kills++;
+                        Player.Deaths++;
+                        if (multiplayer)
+                        {
+                            serverConnection.SendPlayerDead();
+                            serverConnection.SendPlayerDeadTest(weapon.Owner.Id);
+                        }
                         weapon.Destroy();
                         StopAllCoroutines();
                         Die();
-                        if (multiplayer) serverConnection.SendPlayerDead();
                         StartCoroutine(Respawn(new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap))));
                     }
                 }
@@ -72,9 +76,9 @@ namespace Caveman.Players
 
         public override void PickupWeapon(WeaponModelBase weaponModel)
         {
-            if (player.Weapons > weaponModel.Specification.MaxOnPLayer) return;
+            if (Player.Weapons > weaponModel.Specification.MaxOnPLayer) return;
             base.PickupWeapon(weaponModel);
-            player.Weapons += weaponModel.Specification.CountPickup;
+            Player.Weapons += weaponModel.Specification.CountPickup;
             if (multiplayer) serverConnection.SendPickWeapon(weaponModel.Id, (int)weaponModel.Specification.Type);
         }
 
@@ -82,13 +86,13 @@ namespace Caveman.Players
         {
             if (multiplayer) serverConnection.SendUseWeapon(aim, (int) weaponSpecification.Type);
             base.Throw(aim);
-            player.Weapons--;
+            Player.Weapons--;
         }
 
         private IEnumerator ThrowOnTimer()
         {
             yield return new WaitForSeconds(weaponSpecification.TimeThrow);
-            if (player.Weapons > 0)
+            if (Player.Weapons > 0)
             {
                 var victim = FindClosestPlayer();
                 if (victim != null)

@@ -5,6 +5,7 @@ namespace Caveman.Network
         public const string UserName = "name";
         public const string ActionType = "action";
         public const string UserId = "id";
+        public const string Killer = "killer";
         public const string X = "x";
         public const string Y = "y";
 

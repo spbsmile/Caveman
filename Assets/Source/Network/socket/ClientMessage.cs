@@ -96,6 +96,16 @@ namespace Caveman.Network
             });
         }
 
+        //todo temp needed check
+        public static ClientMessage PlayerDeadTest(string killerId)
+        {
+            return new ClientMessage(new JObject
+            {
+                {ServerParams.ActionType, ServerParams.DeadAction},
+                {ServerParams.Killer, killerId},
+            });
+        }
+
         public static ClientMessage Move(Vector2 pointClient)
         {
             var pointServer = GetServerPoint(pointClient);
