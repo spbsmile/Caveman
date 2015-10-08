@@ -34,18 +34,14 @@ namespace Caveman.Utils
 
         public T New()
         {
-            var item = GetItem();
+            var item = GetItem() ?? CreateItem();
             item.gameObject.SetActive(true);
             GetActivedCount++;
             return item;
         }
 
-        private T GetItem()
+        private T CreateItem()
         {
-            if (stack.Count > 0)
-            {
-                return stack.Pop();
-            }
             var item = Instantiate(prefab);
             if (item.GetComponent<ASupportPool<T>>())
             {
@@ -59,6 +55,11 @@ namespace Caveman.Utils
             return item;
         }
 
+        private T GetItem()
+        {
+            return stack.Count > 0 ? stack.Pop() : null;
+        }
+
         public void Store(T obj)
         {
             GetActivedCount--;
@@ -69,7 +70,7 @@ namespace Caveman.Utils
 
         public T New(string key)
         {
-            var item = GetItem();
+            var item = GetItem() ?? CreateItem();
             while (!string.IsNullOrEmpty(item.GetComponent<ASupportPool<T>>().Id))
             {
                 item = GetItem();
