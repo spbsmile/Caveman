@@ -14,7 +14,6 @@ namespace Caveman.Utils
 
         public void Add(string Id, PlayerModelBase item)
         {
-            item.Id = Id;
             if (AddedPlayer != null)
             {
                 AddedPlayer(item);

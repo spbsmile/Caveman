@@ -15,12 +15,10 @@ namespace Caveman.Players
     public class PlayerModelBase : MonoBehaviour
     {
         public Action<Vector2> Death;
-        public Action RespawnGUIDisabled; 
+        public Action RespawnGuiDisabled;
         public Func<WeaponSpecification.Types, ObjectPool<WeaponModelBase>> ChangedWeaponsPool;
         protected Action ChangedWeapons;
 
-        public Player player;
-        public string Id;
         [HideInInspector] public BonusBase bonusBase;
         [HideInInspector] public SpriteRenderer spriteRenderer;
         [HideInInspector] public bool firstRespawn = true;
@@ -37,31 +35,30 @@ namespace Caveman.Players
         protected WeaponSpecification weaponSpecification;
         protected internal bool invulnerability;
         protected PlayerAnimation playerAnimation;
-       
-        //todo переделать под массив
         protected List<PlayerModelBase> players;
 
         private PlayerPool poolPlayers;
         private ObjectPool<WeaponModelBase> poolWeapons;
 
         public float Speed { get; set; }
+        public Player Player { private set; get; }
 
         protected virtual void Awake()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
             playerAnimation = new PlayerAnimation(GetComponent<Animator>());
             specification = EnterPoint.CurrentSettings.DictionaryPlayer["sample"];
-            Speed = specification.Speed;
             weaponSpecification = EnterPoint.CurrentSettings.DictionaryWeapons["stone"];
+            Speed = specification.Speed;
         }
 
         public void Init(Player player, Random random, PlayerPool pool, ServerConnection serverConnection)
         {
             this.serverConnection = serverConnection;
             if (serverConnection != null) multiplayer = true;
-            name = player.name;
+            name = player.Name;
             transform.GetChild(0).GetComponent<TextMesh>().text = name;
-            this.player = player;
+            Player = player;
             poolPlayers = pool;
             players = new List<PlayerModelBase>();
             players.AddRange(poolPlayers.GetCurrentPlayers());
@@ -103,7 +100,7 @@ namespace Caveman.Players
         public virtual void Throw(Vector2 aim)
         {
             playerAnimation.Throw();
-            poolWeapons.New().SetMotion(player, transform.position, aim);
+            poolWeapons.New().SetMotion(Player, transform.position, aim);
         }
 
         public virtual IEnumerator Respawn(Vector2 point)
@@ -111,12 +108,12 @@ namespace Caveman.Players
             yield return new WaitForSeconds(specification.TimeRespawn);
             Birth(point);
             StopMove();
-            if (RespawnGUIDisabled != null) RespawnGUIDisabled();
+            if (RespawnGuiDisabled != null) RespawnGuiDisabled();
         }
 
         public void Birth(Vector2 position)
         {
-            poolPlayers.New(Id).transform.position = position;
+            poolPlayers.New(Player.Id).transform.position = position;
             invulnerability = true;
             StartCoroutine(ProggressInvulnerability(specification.TimeInvulnerability));
         }

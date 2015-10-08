@@ -34,7 +34,7 @@ namespace Caveman.Bonuses
 
         public virtual void Effect(PlayerModelBase playerModel)
         {
-            playerModel.player.PickUpBonus(Specification.Type, Specification.Duration);
+            playerModel.Player.PickUpBonus(Specification.Type, Specification.Duration);
             //todo внедрить систему событий
             playerModel.bonusBase = this;
             transform.position = new Vector3(200, 200, 200);

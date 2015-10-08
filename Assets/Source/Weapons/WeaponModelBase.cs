@@ -8,18 +8,17 @@ namespace Caveman.Weapons
     public  class WeaponModelBase : ASupportPool<WeaponModelBase>
     {
         public WeaponSpecification Specification { protected set; get; }
-
+        public Player Owner { private set; get; }
+        
         protected Vector2 startPosition;
         protected Vector2 target;
         protected Vector2 delta;
-
-        public Player owner;
 
         private ObjectPool<WeaponModelBase> pool;
 
         public virtual void Destroy()
         {
-            owner = null;
+            Owner = null;
             delta = Vector2.zero;
             pool.Store(this);
         }
@@ -31,13 +30,13 @@ namespace Caveman.Weapons
 
         public void UnTake(Vector2 position)
         {
-            owner = null;
+            Owner = null;
             transform.position = position;
         }
 
         public void SetMotion(Player player, Vector3 start, Vector2 aim)
         {
-            owner = player;
+            Owner = player;
             startPosition = start;
             transform.position = start;
             target = aim;

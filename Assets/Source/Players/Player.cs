@@ -8,15 +8,19 @@ namespace Caveman.Players
         public Action<int> WeaponsCountChanged;
         public Action<int> KillsCountChanged;
         public Action<BonusSpecification.Types, float> BonusActivated;
-        public int deaths;
-        public readonly string name;
+       
         private int weapons;
         private int kills;
 
-        public Player(string name)
+        public Player(string name, string id)
         {
-            this.name = name;
+            Name = name;
+            Id = id;
         }
+
+        public string Id { get; private set; }
+        public string Name { get; private set; }
+        public int Deaths { set; get; }
 
         public int Weapons
         {

@@ -67,17 +67,18 @@ namespace Caveman
 
             poolPlayers = containerPlayers.GetComponent<PlayerPool>();
 
-            var humanPlayer = new Player(PlayerPrefs.GetString(AccountManager.KeyNickname));
+            var humanPlayer = new Player(PlayerPrefs.GetString(AccountManager.KeyNickname),
+                SystemInfo.deviceUniqueIdentifier);
             BattleGui.instance.SubscribeOnEvents(humanPlayer);
             BattleGui.instance.resultRound.SetPlayerPool(poolPlayers);
             BattleGui.instance.waitForResp.SetPlayerPool(poolPlayers);
-            CreatePlayer(humanPlayer, SystemInfo.deviceUniqueIdentifier, false, false, prefabHumanPlayer);
+            CreatePlayer(humanPlayer, false, false, prefabHumanPlayer);
             
             if (serverConnection == null)
             {
                 for (var i = 1; i < Settings.BotsCount + 1; i++)
                 {
-                    CreatePlayer(new Player(names[i]), i.ToString(), true, false, prefabAiPlayer);
+                    CreatePlayer(new Player(names[i], i.ToString()), true, false, prefabAiPlayer);
                 }
                 StartCoroutine(PutWeapons());
                 StartCoroutine(PutBonuses());
@@ -151,7 +152,7 @@ namespace Caveman
             return pool;
         }
 
-        protected void CreatePlayer(Player player, string id, bool isAiPlayer, bool isServerPlayer, Transform prefabModel)
+        protected void CreatePlayer(Player player, bool isAiPlayer, bool isServerPlayer, Transform prefabModel)
         {
             var prefab = Instantiate(prefabModel);
             var playerModel = prefab.GetComponent<PlayerModelBase>();
@@ -170,7 +171,7 @@ namespace Caveman
                 }
             }
             playerModel.Init(player, r, poolPlayers, serverConnection);
-            poolPlayers.Add(id, playerModel);
+            poolPlayers.Add(player.Id, playerModel);
             playerModel.transform.SetParent(containerPlayers);
             playerModel.Death += position => StartCoroutine(DeathAnimate(position));
             playerModel.ChangedWeaponsPool += ChangedWeapons;
