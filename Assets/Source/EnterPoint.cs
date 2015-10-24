@@ -43,18 +43,21 @@ namespace Caveman
         protected ObjectPool<EffectBase> poolStonesSplash;
         protected ObjectPool<EffectBase> poolDeathImage;
         
+        //used only single player mode for bots
         private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
 
         public static CurrentGameSettings CurrentSettings { get; private set; }
 
         public virtual void Awake()
         {
+            // load data from json files
             CurrentSettings = CurrentGameSettings.Load();
             Settings.multiplayerMode = false;
         }
 
         public virtual void Start()
         {
+            //todo may be use only UnityEngine.Random
             r = new Random();
 
             poolStonesSplash = CreatePool<EffectBase>(Settings.PoolCountSplashStones, containerSplashStones, prefabStoneFlagmentInc, null);
@@ -84,7 +87,11 @@ namespace Caveman
                 StartCoroutine(PutBonuses());
             }
         }
-
+        /// <summary>
+        /// Each model assigned reference on objectpool
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="pool"></param>
         private void InitBonusModel(GameObject item, ObjectPool<BonusBase> pool)
         {
             item.GetComponent<BonusBase>().SetPool(pool);
@@ -135,6 +142,15 @@ namespace Caveman
                 r.Next(Settings.HeightMap));
         }
 
+        /// <summary>
+        /// Used object pool pattern
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="initialBufferSize"></param>
+        /// <param name="container"></param>
+        /// <param name="prefab"></param>
+        /// <param name="init"></param>
+        /// <returns></returns>
         private ObjectPool<T> CreatePool<T>(int initialBufferSize, Transform container, T prefab, Action<GameObject, ObjectPool<T>> init) where T : MonoBehaviour
         {
             var pool = container.GetComponent<ObjectPool<T>>();
@@ -178,6 +194,11 @@ namespace Caveman
             playerModel.Birth(new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)));
         }
 
+        /// <summary>
+        /// Changed weapon pool storage in player 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         private ObjectPool<WeaponModelBase> ChangedWeapons(WeaponSpecification.Types type)
         {
             switch (type)
@@ -190,6 +211,12 @@ namespace Caveman
             return null;
         }
 
+        // todo extracted this method from enterpoint
+        /// <summary>
+        /// used player
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
         private IEnumerator DeathAnimate(Vector2 position)
         {
             var deathImage = poolDeathImage.New();

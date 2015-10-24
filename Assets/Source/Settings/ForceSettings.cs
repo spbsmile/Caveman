@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 namespace Caveman.Setting
 {
+    // This for developer settings, when game on build, possible changed parameters
     public class ForceSettings : MonoBehaviour
     {
         public InputField roundTime;

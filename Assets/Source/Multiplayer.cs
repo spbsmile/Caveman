@@ -11,6 +11,7 @@ namespace Caveman.Network
     {
         public Transform prefabServerPlayer;
 
+        //todo this const - temp. Defined on server 
         public const float WidthMapServer = 1350;
         public const float HeigthMapServer = 1350;
         private static string OwnId;
@@ -86,6 +87,8 @@ namespace Caveman.Network
         {
             if (!poolPlayers.ContainsKey(playerId))
             {
+
+                // todo names. this is first priority for resolved by Makar. GameInfo parce from server data
                 CreatePlayer(new Player("No Name", playerId), false, true, prefabServerPlayer);
                 poolPlayers[playerId].transform.position = point;
                 poolPlayers[playerId].firstRespawn = false;

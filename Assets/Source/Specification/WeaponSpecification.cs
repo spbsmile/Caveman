@@ -45,11 +45,13 @@ namespace Caveman.Specification
             get { return timeRespawn; }
         }
 
+        //todo bad logic. need move on player specification. Diff player specification - dif value of parameter
         public int TimeThrow
         {
             get { return timeThrow; }
         }
-
+        
+        //todo bad logic. need move on player specification. Diff player specification - dif value of parameter
         public int MaxOnPLayer
         {
             get { return maxOnPlayer; }
@@ -65,6 +67,7 @@ namespace Caveman.Specification
             get { return rotateParameter; }
         }
 
+        //todo bad logic. need move on player specification. Diff player specification - dif value of parameter
         public int CountPickup
         {
             get { return countPickup; }

@@ -12,6 +12,9 @@ namespace Caveman.Weapons
         
         protected Vector2 startPosition;
         protected Vector2 target;
+        /// <summary>
+        /// Linear parameter, define direction and value and on each update
+        /// </summary>
         protected Vector2 delta;
 
         private ObjectPool<WeaponModelBase> pool;
@@ -28,6 +31,10 @@ namespace Caveman.Weapons
             pool.Store(this);    
         }
 
+        /// <summary>
+        /// player can simple put weapon on lang
+        /// </summary>
+        /// <param name="position"></param>
         public void UnTake(Vector2 position)
         {
             Owner = null;
@@ -40,6 +47,7 @@ namespace Caveman.Weapons
             startPosition = start;
             transform.position = start;
             target = aim;
+            // todo if weapon move no linear, delta needless, example: stone model, bezier curve
             delta = UnityExtensions.CalculateDelta(start, aim, Specification.Speed);
         }
 
@@ -48,7 +56,7 @@ namespace Caveman.Weapons
             pool = weaponPool;
         }
 
-        virtual protected void MotionUpdate()
+        protected virtual void MotionUpdate()
         {
             if (Vector2.SqrMagnitude(delta) > UnityExtensions.ThresholdPosition)
             {

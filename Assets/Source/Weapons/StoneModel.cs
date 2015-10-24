@@ -35,6 +35,7 @@ namespace Caveman.Weapons
             }
         }
 
+        //todo this hard binding wepapon model and splash , may be refactor this. 
         public void SetPoolSplash(ObjectPool<EffectBase> objectPool)
         {
             poolStonesSplash = objectPool;
