@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -44,3 +45,4 @@ namespace Caveman.CustomTools
         }
     }
 }
+#endif
