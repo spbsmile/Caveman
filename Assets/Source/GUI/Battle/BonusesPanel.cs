@@ -1,4 +1,5 @@
 ﻿using Caveman.Specification;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,6 @@ namespace Caveman.UI.Battle
         public Text timerBonus;
 
         private Image iconCurrentBonus;
-        private bool timeBonus;
         private float timeLastBonusUpdate;
         private float durationBonus;
         private CanvasGroup canvasGroup;
@@ -23,30 +23,6 @@ namespace Caveman.UI.Battle
             canvasGroup.alpha = 0;
         }
 
-        //todo все переделать на карутину 
-        public void Update()
-        {
-            if (timeBonus)
-            {
-                if (Time.timeSinceLevelLoad - timeLastBonusUpdate > 1)
-                {
-                    timeLastBonusUpdate = Time.timeSinceLevelLoad;
-                    if (durationBonus > 0)
-                    {
-                        durationBonus -= 1;
-                        timerBonus.text = (durationBonus).ToString();
-                    }
-                    else
-                    {
-                        iconCurrentBonus.gameObject.SetActive(false);
-                        timerBonus.text = "";
-                        timeBonus = false;
-                        canvasGroup.alpha = 0;
-                    }
-                }
-            }
-        }
-
         public void BonusActivated(BonusSpecification.Types type, float duration)
         {
             switch (type)
@@ -57,10 +33,26 @@ namespace Caveman.UI.Battle
                 }
                     break;
             }
+            StopCoroutine(BonusTime());
             iconCurrentBonus.gameObject.SetActive(true);
             canvasGroup.alpha = 1;
-            timeBonus = true;
             durationBonus = duration;
+            StartCoroutine(BonusTime());
+        }
+
+        private IEnumerator BonusTime()
+        {
+            while (durationBonus > 0)
+            {
+                durationBonus -= 1;
+                timerBonus.text = (durationBonus).ToString();
+                yield return new WaitForSeconds(1);
+            }
+
+            // Скрываем панель бонуса.
+            iconCurrentBonus.gameObject.SetActive(false);
+            timerBonus.text = "";
+            canvasGroup.alpha = 0;
         }
     }
 }
