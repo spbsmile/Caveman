@@ -53,7 +53,7 @@ namespace Caveman.Weapons
                     //linear moving. can be used for testing
                     //                    transform.position = new Vector2(transform.position.x + delta.x * Time.deltaTime,
                     //                        transform.position.y + delta.y * Time.deltaTime);
-                    transform.Rotate(Vector3.forward, Specification.RotateParameter);
+                    transform.Rotate(Vector3.forward, Specification.RotateParameter * Time.deltaTime * 100);
                 }
                 else
                 {
