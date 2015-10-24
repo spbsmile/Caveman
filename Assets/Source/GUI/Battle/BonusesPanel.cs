@@ -36,18 +36,18 @@ namespace Caveman.UI.Battle
             StopCoroutine(BonusTime());
             iconCurrentBonus.gameObject.SetActive(true);
             canvasGroup.alpha = 1;
-            durationBonus = duration;
-            timerBonus.text = durationBonus.ToString();
+            durationBonus = duration - 0.5f;
+            timerBonus.text = duration.ToString();
             StartCoroutine(BonusTime());
         }
 
         private IEnumerator BonusTime()
         {
-            while (durationBonus > 0)
+            while (durationBonus >= 0)
             {
-                yield return new WaitForSeconds(1);
-                durationBonus -= 1;
-                timerBonus.text = durationBonus.ToString();
+                yield return new WaitForSeconds(0.5f);
+                durationBonus -= 0.5f;
+                timerBonus.text = Mathf.Ceil(durationBonus).ToString();
             }
 
             // Скрываем панель бонуса.
