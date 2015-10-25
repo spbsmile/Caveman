@@ -5,32 +5,10 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using Caveman.Setting;
-using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Caveman.Network
 {
-    public interface IServerListener
-    {
-        void PlayerRespawnReceived(string playerId, Vector2 point);
-        void PlayerMoveReceived(string playerId, Vector2 point);
-        void PlayerDeadReceived(string playerId);
-
-        void WeaponPickReceived(string playerId, string key);
-        void WeaponUseReceived(string playerId, Vector2 aim);
-        void WeaponAddedReceived(string key, Vector2 point);
-        //void WeaponRemovedReceived(string key);
-
-        void BonusPickReceived(string playerId, string key);
-        void BonusAddedReceived(string key, Vector2 point);
-
-        void GameResultReceived(JToken data);
-        void GameTimeReceived(float time);
-
-        void LoginReceived(string playerId, string playerName);
-        void LogoutReceived(string playerId);
-    }
-
     public class ServerConnection
     {
         //"127.0.0.1";
@@ -241,6 +219,7 @@ namespace Caveman.Network
             }
         }
 
+        // invoke on each   send message
         private void CompleteClientMessage(ClientMessage msg)
         {
             msg.AddParam(ServerParams.UserId, clientId);

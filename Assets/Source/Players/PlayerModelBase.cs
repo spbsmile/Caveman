@@ -12,10 +12,16 @@ using Random = System.Random;
 
 namespace Caveman.Players
 {
+    /*
+     * Player concept consists of two types: Player and PlayerModelBase
+     * Type PlayerModelBase - Behavior 
+     * Type Player - contains all parameters/stats.
+     */
     public class PlayerModelBase : MonoBehaviour
     {
         public Action<Vector2> Death;
         public Action RespawnGuiDisabled;
+        // todo two some event. 
         public Func<WeaponSpecification.Types, ObjectPool<WeaponModelBase>> ChangedWeaponsPool;
         protected Action ChangedWeapons;
 
@@ -118,6 +124,7 @@ namespace Caveman.Players
             StartCoroutine(ProggressInvulnerability(specification.TimeInvulnerability));
         }
 
+        // invoke, when respawn
         private IEnumerator ProggressInvulnerability(float playerTimeInvulnerability)
         {
             var startTime = Time.time;

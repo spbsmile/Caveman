@@ -88,7 +88,7 @@ namespace Caveman.Network
             if (!poolPlayers.ContainsKey(playerId))
             {
 
-                // todo names. this is first priority for resolved by Makar. GameInfo parce from server data
+                // todo names. GameInfo parce from server data
                 CreatePlayer(new Player("No Name", playerId), false, true, prefabServerPlayer);
                 poolPlayers[playerId].transform.position = point;
                 poolPlayers[playerId].firstRespawn = false;

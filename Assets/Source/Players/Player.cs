@@ -5,6 +5,7 @@ namespace Caveman.Players
 {
     public class Player
     {
+        // event for gui
         public Action<int> WeaponsCountChanged;
         public Action<int> KillsCountChanged;
         public Action<BonusSpecification.Types, float> BonusActivated;

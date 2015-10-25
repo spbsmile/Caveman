@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Caveman.Players
 {
+    /*
+     * All the other players in multiplayer mode
+     */
     public class PlayerModelServer : PlayerModelBase
     {
         private int weapons;
