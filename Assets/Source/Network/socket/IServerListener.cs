@@ -12,7 +12,7 @@ namespace Caveman.Network
         void WeaponPickReceived(string playerId, string key);
         void WeaponUseReceived(string playerId, Vector2 aim);
         void WeaponAddedReceived(string key, Vector2 point);
-        //void WeaponRemovedReceived(string key);
+        void WeaponRemovedReceived(string key);
 
         void BonusPickReceived(string playerId, string key);
         void BonusAddedReceived(string key, Vector2 point);

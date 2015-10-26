@@ -50,10 +50,10 @@ namespace Caveman.Network
             }
         }
 
-        //public void WeaponRemovedReceived(string key)
-        //{
-        //    poolStones.Store(key);
-        //}
+        public void WeaponRemovedReceived(string key)
+        {
+            poolStones.Store(key);
+        }
 
         public void WeaponPickReceived(string playerId, string key)
         {
