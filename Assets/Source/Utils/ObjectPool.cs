@@ -19,6 +19,7 @@ namespace Caveman.Utils
         private Stack<T> stack;
         private T prefab;
 
+        //for multiplayer <id, item>
         private Dictionary<string, T> poolServer;
 
         public void CreatePool(T prefab, int initialBufferSize, bool multiplayer)
@@ -68,12 +69,19 @@ namespace Caveman.Utils
             stack.Push(obj);            
         }
 
+        /// <summary>
+        /// for multiplayer mode.
+        /// if item with id(key) no contain on map
+        /// add to map
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public T New(string key)
         {
             var item = GetItem() ?? CreateItem();
             while (!string.IsNullOrEmpty(item.GetComponent<ASupportPool<T>>().Id))
             {
-                item = GetItem();
+                item = GetItem() ?? CreateItem();
             }
             item.GetComponent<ASupportPool<T>>().Id = key;
             item.name = item.name + key;
@@ -82,13 +90,16 @@ namespace Caveman.Utils
             return item;
         }
 
+        /// <summary>
+        /// for multiplayer mode.
+        /// </summary>
+        /// <param name="key"></param>
         public void Store(string key)
         {
             T value;
             if (poolServer.TryGetValue(key, out value))
             {
                 Store(value);
-                poolServer[key].name = "item";
                 poolServer.Remove(key);
             }
             else

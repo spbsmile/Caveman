@@ -1,4 +1,3 @@
-using System.Linq;
 using Caveman.Setting;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
@@ -49,13 +48,12 @@ namespace Caveman.Network
 
             if (action.Equals(ServerParams.StoneAddedAction))
             {
-
                 listener.WeaponAddedReceived(key, pointClient);
             }
-            //else if (action.Equals(ServerParams.StoneRemovedAction))
-            //{
-            //    listener.WeaponRemovedReceived(key);
-            //}
+            else if (action.Equals(ServerParams.StoneRemovedAction))
+            {
+                listener.WeaponRemovedReceived(key);
+            }
             else if (action.Equals(ServerParams.PlayerMoveAction))
             {
                 listener.PlayerMoveReceived(playerId, pointClient);
@@ -68,10 +66,10 @@ namespace Caveman.Network
             {
                 listener.BonusAddedReceived(key, pointClient);
             }
-            //else if (action.Equals(ServerParams.BonusRemovedAction))
-            //{
-            //    listener.BonusRemovedReceived(key, pointClient);
-            //}
+            else if (action.Equals(ServerParams.BonusRemovedAction))
+            {
+                listener.BonusRemovedReceived(key, pointClient);
+            }
             else if (action.Equals(ServerParams.BonusPickAction))
             {
                 listener.BonusPickReceived(playerId, key);
