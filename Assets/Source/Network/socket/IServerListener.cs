@@ -16,6 +16,7 @@ namespace Caveman.Network
 
         void BonusPickReceived(string playerId, string key);
         void BonusAddedReceived(string key, Vector2 point);
+        void BonusRemovedReceived(string key, Vector2 point);
 
         void GameResultReceived(JToken data);
         void GameTimeReceived(float time);

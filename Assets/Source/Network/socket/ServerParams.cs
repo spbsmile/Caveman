@@ -22,6 +22,7 @@ namespace Caveman.Network
 
         public const string BonusPickAction = "pick_bonus";
         public const string BonusAddedAction = "bonus_added";
+        public const string BonusRemovedAction = "bonus_removed";
         public const string DeadAction = "dead";
        
         public const string Data = "data";

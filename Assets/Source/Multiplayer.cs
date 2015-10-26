@@ -78,6 +78,11 @@ namespace Caveman.Network
             }
         }
 
+        public void BonusRemovedReceived(string key, Vector2 point)
+        {
+            poolBonusesSpeed.Store(key);
+        }
+
         public void BonusPickReceived(string playerId, string key)
         {
             poolPlayers[playerId].PickupBonus(poolBonusesSpeed[key]);

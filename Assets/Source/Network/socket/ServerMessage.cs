@@ -24,7 +24,8 @@ namespace Caveman.Network
                 {
                     if (jToken[ServerParams.ActionType].ToString()!= "move")
                     {
-                        //Debug.Log(jToken[ServerParams.ActionType].ToString());
+                        Debug.Log(jToken);
+                       // Debug.Log(jToken[ServerParams.ActionType].ToString());
                     }
                     SendMessageToListener(listener, jToken, jToken.Value<string>(ServerParams.ActionType));
                 }
@@ -67,6 +68,10 @@ namespace Caveman.Network
             {
                 listener.BonusAddedReceived(key, pointClient);
             }
+            //else if (action.Equals(ServerParams.BonusRemovedAction))
+            //{
+            //    listener.BonusRemovedReceived(key, pointClient);
+            //}
             else if (action.Equals(ServerParams.BonusPickAction))
             {
                 listener.BonusPickReceived(playerId, key);
