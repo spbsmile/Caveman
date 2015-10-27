@@ -102,6 +102,10 @@ namespace Caveman.Network
             {
                 listener.GameResultReceived(jToken[ServerParams.Data]);
             }
+            else if (action.Equals(ServerParams.GameInfoAction))
+            {
+                listener.GameInfoReceived(jToken["players"]);
+            }
         }
 
         private string GenerateKey(Vector2 point)

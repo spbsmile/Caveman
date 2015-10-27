@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Caveman.Players;
 using Caveman.UI;
 using Caveman.Utils;
@@ -90,15 +91,7 @@ namespace Caveman.Network
 
         public void PlayerRespawnReceived(string playerId, Vector2 point)
         {
-            if (!poolPlayers.ContainsKey(playerId))
-            {
-
-                // todo names. GameInfo parce from server data
-                CreatePlayer(new Player("No Name", playerId), false, true, prefabServerPlayer);
-                poolPlayers[playerId].transform.position = point;
-                poolPlayers[playerId].firstRespawn = false;
-            }
-            else if (poolPlayers[playerId].firstRespawn)
+            if (poolPlayers[playerId].firstRespawn)
             {
                 poolPlayers[playerId].firstRespawn = false;
                 poolPlayers[playerId].transform.position = point;
@@ -134,33 +127,35 @@ namespace Caveman.Network
             }
         }
 
+        public void GameInfoReceived(JToken jToken)
+        {
+            var players = jToken.Children<JObject>();
+            foreach (var player in players)
+            {
+                var playerId = player["id"].ToString();
+                if (!poolPlayers.ContainsKey(playerId))
+                    CreatePlayer(new Player(player["name"].ToString(), playerId), false, true, prefabServerPlayer);
+            }
+        }
+
         public void GameTimeReceived(float time)
         {
             StartCoroutine(BattleGui.instance.mainGameTimer.UpdateTime((int)time));
         }
 
-        public void GameResultReceived(JToken data)
+        public void GameResultReceived(JToken jToken)
         {
             var resultRound = BattleGui.instance.resultRound;
             resultRound.gameObject.SetActive(true);
-            // todo refactor this !
+
             var lineIndex = 0;
-            foreach (var name in from hero in data
-                select hero[ServerParams.UserName])
+            var players = jToken.Children<JObject>();
+            foreach (var player in players)
             {
-                resultRound.Write(name.ToString(), resultRound.names, lineIndex++);
-            }
-            lineIndex = 0;
-            foreach (var kill in  from hero in data
-                                      select hero[ServerParams.Kills])
-            {
-                resultRound.Write(kill.ToString(), resultRound.kills, lineIndex++);
-            }
-            lineIndex = 0;
-            foreach (var deaths in from hero in data
-                         select hero[ServerParams.Deaths])
-            {
-                resultRound.Write(deaths.ToString(), resultRound.deaths, lineIndex++);
+                resultRound.Write(player[ServerParams.UserName].ToString(), resultRound.names, lineIndex);
+                resultRound.Write(player[ServerParams.Kills].ToString(), resultRound.kills, lineIndex);
+                resultRound.Write(player[ServerParams.Deaths].ToString(), resultRound.deaths, lineIndex);
+                lineIndex++;
             }
             resultReceived = true;
         }

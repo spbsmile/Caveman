@@ -10,8 +10,9 @@ namespace Caveman.Network
         public const string Y = "y";
 
         public const string GameTimeAction = "time";
-        public const string GameResultAction = "result";
         public const string GameTimeLeft = "time_left";
+        public const string GameResultAction = "result";
+        public const string GameInfoAction = "game_info";
 
         public const string PlayerMoveAction = "move";
         public const string PlayerRespawnAction = "respawn";
