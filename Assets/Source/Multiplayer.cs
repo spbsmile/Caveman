@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Caveman.Players;
+﻿using Caveman.Players;
 using Caveman.UI;
 using Caveman.Utils;
 using Newtonsoft.Json.Linq;
@@ -41,6 +39,7 @@ namespace Caveman.Network
 
         public void WeaponAddedReceived(string key, Vector2 point)
         {
+            //todo it's bad many lines - bad code. exracted to one method 
             if (!poolStones.ContainsKey(key))
             {
                 poolStones.New(key).transform.position = point;     
@@ -68,6 +67,7 @@ namespace Caveman.Network
 
         public void BonusAddedReceived(string key, Vector2 point)
         {
+            //todo it's bad many lines - bad code. exracted to one method 
             if (poolBonusesSpeed.ContainsKey(key))
             {
                 //todo server bug. one point - many bonus
@@ -121,6 +121,7 @@ namespace Caveman.Network
                     playerServer.SetMove(point);
                 }
             }
+            //todo it's bad many lines - bad code. exracted to one method 
             else
             {
                 Debug.LogWarning("Player null, but move received invoke");
@@ -132,9 +133,9 @@ namespace Caveman.Network
             var players = jToken.Children<JObject>();
             foreach (var player in players)
             {
-                var playerId = player["id"].ToString();
+                var playerId = player[ServerParams.UserId].ToString();
                 if (!poolPlayers.ContainsKey(playerId))
-                    CreatePlayer(new Player(player["name"].ToString(), playerId), false, true, prefabServerPlayer);
+                    CreatePlayer(new Player(player[ServerParams.UserName].ToString(), playerId), false, true, prefabServerPlayer);
             }
         }
 
