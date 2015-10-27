@@ -21,7 +21,33 @@ namespace Caveman.Level
             section = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 10));
             criticalX = (Settings.WidthMap - section.x);
             criticalY = (Settings.HeightMap - section.y);
-            if (target != null) player = target.GetComponent<PlayerModelBase>();
+
+            if (target != null)
+            {
+                player = target.GetComponent<PlayerModelBase>();
+
+                // set position camera
+                var pos = transform.position;
+                var playerPos = player.transform.position;
+                pos.x = playerPos.x;
+                pos.y = playerPos.y;
+
+                // consider min/max position camera
+                var targetX = target.position.x;
+                var targetY = target.position.y;
+
+                if (targetX > criticalX)
+                    pos.x = criticalX;
+                else if (targetX < section.x)
+                    pos.x = section.x;
+
+                if (targetY > criticalY)
+                    pos.y = criticalY;
+                else if (targetY < section.y)
+                    pos.y = section.y;
+
+                transform.position = pos;
+            }
         }
 
         public void LateUpdate()
