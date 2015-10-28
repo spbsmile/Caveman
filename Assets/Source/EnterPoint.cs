@@ -137,9 +137,13 @@ namespace Caveman
         private void PutItem<T>(ObjectPool<T> pool) where T : MonoBehaviour
         {
             var item = pool.New();
-            StartCoroutine(UnityExtensions.FadeIn(item.GetComponent<SpriteRenderer>()));
-            item.transform.position = new Vector2(r.Next(Settings.WidthMap),
-                r.Next(Settings.HeightMap));
+            var sprite = item.GetComponent<SpriteRenderer>();
+            StartCoroutine(UnityExtensions.FadeIn(sprite));
+
+            // put item in random position
+            var x = r.Next(1, Settings.WidthMap - 1);
+            var y = r.Next(1, Settings.HeightMap - 1);
+            item.transform.position = new Vector2(x, y);
         }
 
         /// <summary>
