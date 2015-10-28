@@ -39,15 +39,8 @@ namespace Caveman.Network
 
         public void WeaponAddedReceived(string key, Vector2 point)
         {
-            //todo it's bad many lines - bad code. exracted to one method 
-            if (!poolStones.ContainsKey(key))
-            {
-                poolStones.New(key).transform.position = point;     
-            }
-            else
-            {
-                Debug.LogWarning(key + " An element with the same key already exists in the dictionary.");
-            }
+            if (RepeatKey(poolStones, key)) return;
+            poolStones.New(key).transform.position = point;
         }
 
         public void WeaponRemovedReceived(string key)
@@ -67,16 +60,8 @@ namespace Caveman.Network
 
         public void BonusAddedReceived(string key, Vector2 point)
         {
-            //todo it's bad many lines - bad code. exracted to one method 
-            if (poolBonusesSpeed.ContainsKey(key))
-            {
-                //todo server bug. one point - many bonus
-                Debug.LogWarning(key + " An bonus with the same key already exists in the dictionary.");
-            }
-            else
-            {
-                poolBonusesSpeed.New(key).transform.position = point;    
-            }
+            if (RepeatKey(poolBonusesSpeed, key)) return;
+            poolBonusesSpeed.New(key).transform.position = point;    
         }
 
         public void BonusRemovedReceived(string key, Vector2 point)
@@ -109,29 +94,21 @@ namespace Caveman.Network
 
         public void PlayerMoveReceived(string playerId, Vector2 point)
         {
-            if (poolPlayers.ContainsKey(playerId))
+            if (!PlayerExist(poolPlayers, playerId)) return;
+            if (Vector2.SqrMagnitude((Vector2)  poolPlayers[playerId].transform.position - point) <
+                UnityExtensions.ThresholdPosition)
             {
-                var playerServer = poolPlayers[playerId];
-                if (Vector2.SqrMagnitude((Vector2)playerServer.transform.position - point) < UnityExtensions.ThresholdPosition)
-                {
-                    playerServer.StopMove();
-                }
-                else
-                {
-                    playerServer.SetMove(point);
-                }
+                 poolPlayers[playerId].StopMove();
             }
-            //todo it's bad many lines - bad code. exracted to one method 
             else
             {
-                Debug.LogWarning("Player null, but move received invoke");
+                 poolPlayers[playerId].SetMove(point);
             }
         }
 
         public void GameInfoReceived(JToken jToken)
         {
-            var players = jToken.Children<JObject>();
-            foreach (var player in players)
+            foreach (var player in jToken.Children<JObject>())
             {
                 var playerId = player[ServerParams.UserId].ToString();
                 if (!poolPlayers.ContainsKey(playerId))
@@ -150,8 +127,7 @@ namespace Caveman.Network
             resultRound.gameObject.SetActive(true);
 
             var lineIndex = 0;
-            var players = jToken.Children<JObject>();
-            foreach (var player in players)
+            foreach (var player in jToken.Children<JObject>())
             {
                 resultRound.Write(player[ServerParams.UserName].ToString(), resultRound.names, lineIndex);
                 resultRound.Write(player[ServerParams.Kills].ToString(), resultRound.kills, lineIndex);
@@ -177,6 +153,33 @@ namespace Caveman.Network
         public void OnDestroy()
         {
             serverConnection.StopSession();
+        }
+
+        /// <summary>
+        /// check on uniqueness item with id(key) on map
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="pool"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        private bool RepeatKey<T>(ObjectPool<T> pool, string key) where T : MonoBehaviour
+        {
+            if (pool.ContainsKey(key))
+            {
+                Debug.LogWarning(string.Format("{0} at {1} already exists on map", key, pool[key].name));
+                return true;
+            }
+            return false;
+        }
+
+        private bool PlayerExist(PlayerPool pool, string key)
+        {
+            if (pool.ContainsKey(key))
+            {
+                return true;
+            }
+            Debug.LogWarning("Player null, but received invoke");
+            return false;
         }
     }
 }
