@@ -35,11 +35,25 @@ namespace Caveman.Players
 
         protected override void Move()
         {
-            var position = new Vector3(transform.position.x + delta.x * Time.deltaTime,
-                transform.position.y + delta.y * Time.deltaTime);
-            if (position.x < 0.01f || position.y < 0.01) return;
-            if (position.x > Settings.WidthMap - 0.01f || position.y > Settings.HeightMap) return;
-            transform.position = position;
+            var x = transform.position.x + delta.x * Time.deltaTime;
+            var y = transform.position.y + delta.y * Time.deltaTime;
+
+
+            // check movement out field
+            var halfX = spriteRenderer.bounds.size.x / 2;
+            if (x < halfX)
+                x = halfX;
+            else if (x > Settings.WidthMap - halfX)
+                x = Settings.WidthMap - halfX;
+
+            var halfY = spriteRenderer.bounds.size.y / 2;
+            if (y < halfY)
+                y = halfY;
+            else if (y > Settings.HeightMap)
+                y = Settings.HeightMap;
+
+
+            transform.position = new Vector3(x, y);
 
             playerAnimation.SetMoving(delta.y < 0, delta.x > 0);
         }
