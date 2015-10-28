@@ -9,6 +9,7 @@ namespace Caveman.UI.Common
     {
         public Slider slider;
         public Transform root;
+        public Image blackscreen;
 
         public override void Awake()
         {
@@ -49,25 +50,22 @@ namespace Caveman.UI.Common
                 yield return new WaitForFixedUpdate();
             }
 
-            yield return null;
+            yield return StartCoroutine(FateTestImage());
 
             root.gameObject.SetActive(false);
         }
 
-
-        public void FadeTo(string name)
+        private IEnumerator FateTestImage()
         {
-            WithFade(Application.LoadLevelAsync(name));
+            // todo color.a = Mathf.Lerp(0,128,timer); coroutine 
+            // todo CrossFadeAlpha no work !(
+            blackscreen.CrossFadeAlpha(1, 0.2f, false);
+            yield return new WaitForSeconds(0.2f);
         }
 
-        public void FadeTo(int level)
-        {
-            WithFade(Application.LoadLevelAsync(level));
-        }
-
-        private void WithFade(AsyncOperation loadLevelAsync)
-        {
-
-        }
+        //public void Update()
+        //{
+        //    print(blackscreen.color.a + " alfa");
+        //}
     }
 }
