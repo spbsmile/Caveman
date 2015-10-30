@@ -195,7 +195,7 @@ namespace Caveman
             playerModel.transform.SetParent(containerPlayers);
             playerModel.Death += position => StartCoroutine(DeathAnimate(position));
             playerModel.ChangedWeaponsPool += ChangedWeapons;
-            playerModel.Birth(new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)));
+            playerModel.Birth(new Vector2(r.Next(1, Settings.WidthMap - 1), r.Next(1, Settings.HeightMap - 1)));
         }
 
         /// <summary>
