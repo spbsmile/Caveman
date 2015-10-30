@@ -17,7 +17,6 @@ namespace Caveman.UI.Battle
 
         public void Start()
         {
-            timerBonus.text = "";
             iconSpeedBonus.gameObject.SetActive(false);
             canvasGroup = GetComponent<CanvasGroup>();
             canvasGroup.alpha = 0;
@@ -28,21 +27,20 @@ namespace Caveman.UI.Battle
             switch (type)
             {
                 case BonusSpecification.Types.Speed:
-                {
                     iconCurrentBonus = iconSpeedBonus;
-                }
                     break;
             }
-            StopCoroutine(BonusTime());
-            iconCurrentBonus.gameObject.SetActive(true);
-            canvasGroup.alpha = 1;
-            durationBonus = duration - 0.5f;
-            timerBonus.text = duration.ToString();
-            StartCoroutine(BonusTime());
+
+            StopAllCoroutines();
+            StartCoroutine(BonusTimer(duration));
         }
 
-        private IEnumerator BonusTime()
+        private IEnumerator BonusTimer(float duration)
         {
+            StartCoroutine(BonusPanelShow());
+
+            durationBonus = duration - 0.5f;
+            timerBonus.text = duration.ToString();
             while (durationBonus >= 0)
             {
                 yield return new WaitForSeconds(0.5f);
@@ -50,10 +48,28 @@ namespace Caveman.UI.Battle
                 timerBonus.text = Mathf.Ceil(durationBonus).ToString();
             }
 
-            // Скрываем панель бонуса.
+            StartCoroutine(BonusPanelHide());
+        }
+
+        private IEnumerator BonusPanelShow()
+        {
+            iconCurrentBonus.gameObject.SetActive(true);
+            while (canvasGroup.alpha < 1)
+            {
+                canvasGroup.alpha += 0.2f;
+                yield return new WaitForSeconds(0.01f);
+            }
+        }
+
+        private IEnumerator BonusPanelHide()
+        {
+            StopCoroutine(BonusPanelShow());
+            while (canvasGroup.alpha > 0)
+            {
+                canvasGroup.alpha -= 0.2f;
+                yield return new WaitForSeconds(0.01f);
+            }
             iconCurrentBonus.gameObject.SetActive(false);
-            timerBonus.text = "";
-            canvasGroup.alpha = 0;
         }
     }
 }
