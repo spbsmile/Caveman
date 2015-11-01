@@ -17,13 +17,13 @@ namespace Caveman.Setting
         public static CurrentGameSettings Load()
         {
             var typeBonuses =
-                SettingsHandler.ParseSettingsFromFile<List<BonusSpecification>>("bonuses").ToList();
+                SettingsHandler.ParseSettingsFromFile<List<BonusSpecification>>("bonuses");
 
             var typePlayers =
-                SettingsHandler.ParseSettingsFromFile<List<PlayerSpecification>>("players").ToList();
+                SettingsHandler.ParseSettingsFromFile<List<PlayerSpecification>>("players");
 
             var typeWeapons =
-                SettingsHandler.ParseSettingsFromFile<List<WeaponSpecification>>("weapons").ToList();
+                SettingsHandler.ParseSettingsFromFile<List<WeaponSpecification>>("weapons");
 
             return Create(typeBonuses, typePlayers, typeWeapons);
         }
