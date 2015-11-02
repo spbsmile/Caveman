@@ -7,17 +7,18 @@ namespace Caveman.Bonuses
 {
     public class SpeedBonus : BonusBase
     {
-        public void Start()
+        public void Awake()
         {
             Specification = EnterPoint.CurrentSettings.DictionaryBonuses["speed"];
         }
 
         public override void Effect(PlayerModelBase playerModel)
         {
-            if (playerModel.bonusBase != null) return;
+            if (playerModel.bonusBase != null)
+                return;
             base.Effect(playerModel);
             preValue = playerModel.Speed;
-            playerModel.Speed = playerModel.Speed*2;
+            playerModel.Speed = playerModel.Speed * 2;
         }
 
         protected override IEnumerator UnEffect(PlayerModelBase playerModel)

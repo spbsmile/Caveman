@@ -37,6 +37,8 @@ namespace Caveman.Bonuses
             // HACK: trigger methods calling before Start
             if (playerModel.Player == null)
                 return;
+            if (Specification == null)
+                return;
             playerModel.Player.PickUpBonus(Specification.Type, Specification.Duration);
             //todo внедрить систему событий
             playerModel.bonusBase = this;
