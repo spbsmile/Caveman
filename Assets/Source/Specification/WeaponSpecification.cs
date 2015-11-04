@@ -1,9 +1,9 @@
 ﻿using Caveman.Setting;
-using Newtonsoft.Json;
+using System.Runtime.Serialization;
 
 namespace Caveman.Specification
 {
-    [JsonObject(MemberSerialization.OptIn)]
+    [DataContract]
     public class WeaponSpecification : ISettings
     {
         //todo binding constr and data json
@@ -20,15 +20,15 @@ namespace Caveman.Specification
             this.type = type;
         }
 
-        [JsonProperty] private readonly string name;
-        [JsonProperty] private readonly float speed;
-        [JsonProperty] private readonly int timeRespawn;
-        [JsonProperty] private readonly int countPickup;
-        [JsonProperty] private readonly int timeThrow;
-        [JsonProperty] private readonly int maxOnPlayer;
-        [JsonProperty] private readonly int initialLying;
-        [JsonProperty] private readonly int rotateParameter;
-        [JsonProperty] private readonly Types type;
+        [DataMember] private readonly string name;
+        [DataMember] private readonly float speed;
+        [DataMember] private readonly int timeRespawn;
+        [DataMember] private readonly int countPickup;
+        [DataMember] private readonly int timeThrow;
+        [DataMember] private readonly int maxOnPlayer;
+        [DataMember] private readonly int initialLying;
+        [DataMember] private readonly int rotateParameter;
+        [DataMember] private readonly Types type;
 
         public string Name
         {

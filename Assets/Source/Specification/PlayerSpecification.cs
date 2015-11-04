@@ -1,9 +1,9 @@
 ﻿using Caveman.Setting;
-using Newtonsoft.Json;
+using System.Runtime.Serialization;
 
 namespace Caveman.Specification
 {
-    [JsonObject(MemberSerialization.OptIn)]
+    [DataContract]
     public class PlayerSpecification : ISettings
     {
         public PlayerSpecification(string name, float speed, int timeRespawn, int timeInvulnerability, Types type)
@@ -15,11 +15,11 @@ namespace Caveman.Specification
             this.type = type;
         }
 
-        [JsonProperty] private readonly string name;
-        [JsonProperty] private readonly float speed;
-        [JsonProperty] private readonly int timeRespawn;
-        [JsonProperty] private readonly int timeInvulnerability;
-        [JsonProperty] private readonly Types type;
+        [DataMember] private readonly string name;
+        [DataMember] private readonly float speed;
+        [DataMember] private readonly int timeRespawn;
+        [DataMember] private readonly int timeInvulnerability;
+        [DataMember] private readonly Types type;
 
         public string Name
         {
