@@ -49,8 +49,8 @@ namespace Caveman.Players
             var halfY = spriteRenderer.bounds.size.y / 2;
             if (y < halfY)
                 y = halfY;
-            else if (y > Settings.HeightMap)
-                y = Settings.HeightMap;
+            else if (y > Settings.HeightMap - halfY)
+                y = Settings.HeightMap - halfY;
 
 
             transform.position = new Vector3(x, y);
