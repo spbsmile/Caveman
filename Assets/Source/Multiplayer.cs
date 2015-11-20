@@ -83,7 +83,7 @@ namespace Caveman.Network
             }
             else
             {
-                StartCoroutine(poolPlayers[playerId].Respawn(point));
+                poolPlayers[playerId].Birth(point);
             }
         }
 

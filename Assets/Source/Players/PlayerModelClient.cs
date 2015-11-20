@@ -63,8 +63,13 @@ namespace Caveman.Players
 
         public override IEnumerator Respawn(Vector2 point)
         {
-            if (multiplayer) serverConnection.SendRespawn(point);
             yield return StartCoroutine(base.Respawn(point));
+        }
+
+        public override void Birth(Vector2 position)
+        {
+            base.Birth(position);
+            if (multiplayer) serverConnection.SendRespawn(position);
         }
 
         public override void PickupBonus(BonusBase bonus)
