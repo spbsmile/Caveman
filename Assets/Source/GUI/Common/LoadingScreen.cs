@@ -10,6 +10,7 @@ namespace Caveman.UI.Common
         public Slider slider;
         public Transform root;
         public Image blackscreen;
+        public float TimeEmergenceBlackScreen = 0.2f;
 
         public override void Awake()
         {
@@ -50,22 +51,19 @@ namespace Caveman.UI.Common
                 yield return new WaitForFixedUpdate();
             }
 
-            yield return StartCoroutine(FateTestImage());
+            var color = blackscreen.color;
+            color.a = 0;
+            blackscreen.color = color;
+            var startTime = Time.time;
+            while (blackscreen.color.a < 1)
+            {
+                var c = blackscreen.color;
+                c.a = Mathf.Lerp(0, 1, (Time.time - startTime) / TimeEmergenceBlackScreen);
+                blackscreen.color = c;
+                yield return null;
+            }
 
             root.gameObject.SetActive(false);
         }
-
-        private IEnumerator FateTestImage()
-        {
-            // todo color.a = Mathf.Lerp(0,128,timer); coroutine 
-            // todo CrossFadeAlpha no work !(
-            blackscreen.CrossFadeAlpha(1, 0.2f, false);
-            yield return new WaitForSeconds(0.2f);
-        }
-
-        //public void Update()
-        //{
-        //    print(blackscreen.color.a + " alfa");
-        //}
     }
 }
