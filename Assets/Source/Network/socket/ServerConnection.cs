@@ -125,7 +125,7 @@ namespace Caveman.Network
 
         public void SendPlayerDeadTest(string killerId)
         {
-            SendMessageToSocket(ClientMessage.PlayerDeadTest(killerId));
+            SendMessageToSocket(ClientMessage.AddedKillStat(killerId));
         }
 
         public void SendLogout()

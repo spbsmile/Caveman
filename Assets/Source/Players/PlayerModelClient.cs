@@ -66,10 +66,10 @@ namespace Caveman.Players
             yield return StartCoroutine(base.Respawn(point));
         }
 
-        public override void Birth(Vector2 position)
+        public override void Birth(Vector2 point)
         {
-            base.Birth(position);
-            if (multiplayer) serverConnection.SendRespawn(position);
+            base.Birth(point);
+            if (multiplayer) serverConnection.SendRespawn(point);
         }
 
         public override void PickupBonus(BonusBase bonus)

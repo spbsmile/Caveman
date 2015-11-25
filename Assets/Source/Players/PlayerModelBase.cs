@@ -117,9 +117,9 @@ namespace Caveman.Players
             if (RespawnGuiDisabled != null) RespawnGuiDisabled();
         }
 
-        public virtual void Birth(Vector2 position)
+        public virtual void Birth(Vector2 point)
         {
-            poolPlayers.New(Player.Id).transform.position = position;
+            poolPlayers.New(Player.Id).transform.position = point;
             invulnerability = true;
             StartCoroutine(ProggressInvulnerability(specification.TimeInvulnerability));
         }

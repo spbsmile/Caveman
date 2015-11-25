@@ -96,8 +96,7 @@ namespace Caveman.Network
             });
         }
 
-        //todo temp needed check
-        public static ClientMessage PlayerDeadTest(string killerId)
+        public static ClientMessage AddedKillStat(string killerId)
         {
             return new ClientMessage(new JObject
             {
