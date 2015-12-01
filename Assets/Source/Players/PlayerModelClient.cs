@@ -61,6 +61,14 @@ namespace Caveman.Players
             }
         }
 
+        public override bool SpendGold(int value)
+        {
+            var res = base.SpendGold(value);
+            if (res && multiplayer)
+                serverConnection.SendPlayerGold(Gold);
+            return res;
+        }
+
         public override IEnumerator Respawn(Vector2 point)
         {
             yield return StartCoroutine(base.Respawn(point));

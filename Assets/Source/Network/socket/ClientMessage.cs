@@ -77,6 +77,12 @@ namespace Caveman.Network
             });
         }
 
+        public static ClientMessage PlayerGold(int gold)
+        {
+            // TODO: set gold player on server
+            return new ClientMessage(null);
+        }
+
         public static ClientMessage Respawn(Vector2 pointClient)
         {
             var pointServer = GetServerPoint(pointClient);

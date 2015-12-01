@@ -113,6 +113,11 @@ namespace Caveman.Network
             SendMessageToSocket(ClientMessage.PickBonus(bonusId));
         }
 
+        public void SendPlayerGold(int gold)
+        {
+            SendMessageToSocket(ClientMessage.PlayerGold(gold));
+        }
+
         public void SendRespawn(Vector2 point)
         {
             SendMessageToSocket(ClientMessage.Respawn(point));

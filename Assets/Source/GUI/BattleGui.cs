@@ -46,6 +46,9 @@ namespace Caveman.UI
             playerModelBase.RespawnGuiDisabled += () => waitForResp.gameObject.SetActive(false);
             waitForResp.buttonRespawn.onClick.AddListener(delegate
             {
+                // TODO: set count gold respawn received from server
+                if (!playerModelBase.SpendGold(0))
+                    return;
                 playerModelBase.StopAllCoroutines();
                 playerModelBase.Birth(RandomPosition);
                 waitForResp.gameObject.SetActive(false);

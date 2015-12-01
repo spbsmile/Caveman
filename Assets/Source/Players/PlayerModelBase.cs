@@ -47,6 +47,7 @@ namespace Caveman.Players
         private ObjectPool<WeaponModelBase> poolWeapons;
 
         public float Speed { get; set; }
+        public int Gold { get; private set; }
         public Player Player { private set; get; }
 
         protected virtual void Awake()
@@ -56,6 +57,7 @@ namespace Caveman.Players
             specification = EnterPoint.CurrentSettings.DictionaryPlayer["sample"];
             weaponSpecification = EnterPoint.CurrentSettings.DictionaryWeapons["stone"];
             Speed = specification.Speed;
+            Gold = specification.Gold;
         }
 
         public void Init(Player player, Random random, PlayerPool pool, ServerConnection serverConnection)
@@ -107,6 +109,25 @@ namespace Caveman.Players
         {
             playerAnimation.Throw();
             poolWeapons.New().SetMotion(Player, transform.position, aim);
+        }
+
+        /// <summary>
+        /// Gold spend player. Return true if gold enough.
+        /// </summary>
+        /// <param name="value">Amount spend gold</param>
+        /// <returns>True if gold enough</returns>
+        public virtual bool SpendGold(int value)
+        {
+            if (value == 0)
+                return true;
+            if (value < 0)
+                return false;
+
+            var after = Gold - value;
+            if (after < 0)
+                return false;
+            Gold = after;
+            return true;
         }
 
         public virtual IEnumerator Respawn(Vector2 point)
