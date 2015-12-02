@@ -13,6 +13,10 @@ namespace Caveman.UI.Windows
             {
                 StartCoroutine(DisplayResult());
             }
+            else
+            {
+                joystick.Disable();
+            }
         }
 
         protected override IEnumerator DisplayResult()
