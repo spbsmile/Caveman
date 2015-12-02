@@ -33,6 +33,7 @@ namespace Caveman.Players
         protected Vector2 target;
         protected Vector2 delta;
         protected Random r;
+        protected bool lockedControl = true;
 
         //todo one parameter
         protected ServerConnection serverConnection;
@@ -73,6 +74,11 @@ namespace Caveman.Players
             poolPlayers.AddedPlayer += @base => players.Add(@base);
             poolPlayers.RemovePlayer += @base => players.Remove(@base);
             r = random;
+        }
+
+        public virtual void Play()
+        {
+            lockedControl = false;
         }
 
         public virtual void PickupBonus(BonusBase bonus)
@@ -166,8 +172,10 @@ namespace Caveman.Players
         /// </summary>
         protected virtual void Move()
         {
-            transform.position = new Vector3(transform.position.x + delta.x*Time.deltaTime,
-                transform.position.y + delta.y*Time.deltaTime);
+            if (lockedControl)
+                return;
+            transform.position = new Vector3(transform.position.x + delta.x * Time.deltaTime,
+                transform.position.y + delta.y * Time.deltaTime);
             playerAnimation.SetMoving(delta.y < 0, delta.x > 0);
         }
 
@@ -178,6 +186,8 @@ namespace Caveman.Players
         public void SetMove(Vector2 target)
         {
             this.target = target;
+            if (lockedControl)
+                return;
             delta = UnityExtensions.CalculateDelta(transform.position, target, Speed);
         }
 

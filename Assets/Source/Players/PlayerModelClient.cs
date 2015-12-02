@@ -61,6 +61,12 @@ namespace Caveman.Players
             }
         }
 
+        public override void Play()
+        {
+            base.Play();
+            StartCoroutine(ThrowOnTimer());
+        }
+
         public override bool SpendGold(int value)
         {
             var res = base.SpendGold(value);
@@ -132,11 +138,6 @@ namespace Caveman.Players
                 }
             }
             return result;
-        }
-     
-        public virtual void OnEnable()
-        {
-            StartCoroutine(ThrowOnTimer());
         }
     }
 }

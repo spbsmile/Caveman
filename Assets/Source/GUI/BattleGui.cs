@@ -1,7 +1,9 @@
 ﻿using Caveman.Players;
 using Caveman.Setting;
 using Caveman.UI.Battle;
+using Caveman.UI.Common;
 using Caveman.UI.Windows;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = System.Random;
@@ -31,6 +33,14 @@ namespace Caveman.UI
                 resultRound.gameObject.SetActive(true);
                 waitForResp.gameObject.SetActive(false);
             };
+
+            gameObject.SetActive(false);
+            movementJoystick.gameObject.SetActive(false);
+            LoadingScreen.instance.FinishLoading += new EventHandler((o, s) =>
+            {
+                gameObject.SetActive(true);
+                movementJoystick.gameObject.SetActive(true);
+            });
         }
 
         public void SubscribeOnEvents(Player player)

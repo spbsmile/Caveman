@@ -32,6 +32,12 @@ namespace Caveman.Network
             serverConnection.SendRespawn(poolPlayers[OwnId].transform.position);
         }
 
+        public override void Play()
+        {
+            base.Play();
+            serverConnection.SendRespawn(poolPlayers[OwnId].transform.position);
+        }
+
         public void Update()
         {
             if (!resultReceived) serverConnection.Update();

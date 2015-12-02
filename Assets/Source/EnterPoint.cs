@@ -12,6 +12,7 @@ using Caveman.Utils;
 using Caveman.Weapons;
 using UnityEngine;
 using Random = System.Random;
+using Caveman.UI.Common;
 
 namespace Caveman
 {
@@ -53,6 +54,7 @@ namespace Caveman
             // load data from json files
             CurrentSettings = CurrentGameSettings.Load();
             Settings.multiplayerMode = false;
+            LoadingScreen.instance.FinishLoading += new EventHandler((o, s) => Play());
         }
 
         public virtual void Start()
@@ -86,6 +88,13 @@ namespace Caveman
                 StartCoroutine(PutWeapons());
                 StartCoroutine(PutBonuses());
             }
+        }
+
+        public virtual void Play()
+        {
+            var players = poolPlayers.GetCurrentPlayers();
+            foreach (PlayerModelBase player in players)
+                player.Play();
         }
         /// <summary>
         /// Each model assigned reference on objectpool

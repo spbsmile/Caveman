@@ -13,7 +13,6 @@ namespace Caveman.Players
             base.Start();
             GetComponent<SpriteRenderer>().color = new Color32((byte) r.Next(255), (byte) r.Next(255),
                 (byte) r.Next(255), 255);
-            SetMove(RandomPosition);
         }
 
         public void Update()
@@ -39,6 +38,12 @@ namespace Caveman.Players
                     SetMove(RandomPosition);
                 }
             }
+        }
+
+        public override void Play()
+        {
+            base.Play();
+            SetMove(RandomPosition);
         }
 
         private Vector2 FindClosestLyingWeapon

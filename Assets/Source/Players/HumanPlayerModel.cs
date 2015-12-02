@@ -20,8 +20,16 @@ namespace Caveman.Players
             if (multiplayer) StartCoroutine(SendMove());
         }
 
+        public override void Play()
+        {
+            base.Play();
+            if (multiplayer) StartCoroutine(SendMove());
+        }
+
         private IEnumerator SendMove()
         {
+            while (lockedControl)
+                yield return null;
             yield return new WaitForSeconds(0.3f);
             serverConnection.SendMove(transform.position);
             StartCoroutine(SendMove());
@@ -29,12 +37,17 @@ namespace Caveman.Players
 
         private void MovePlayer(Vector3 direction, CNAbstractController arg2)
         {
+            if (lockedControl)
+                return;
             delta = direction*Speed;
             Move();
         }
 
         protected override void Move()
         {
+            if (lockedControl)
+                return;
+
             var x = transform.position.x + delta.x * Time.deltaTime;
             var y = transform.position.y + delta.y * Time.deltaTime;
 
@@ -56,12 +69,6 @@ namespace Caveman.Players
             transform.position = new Vector3(x, y);
 
             playerAnimation.SetMoving(delta.y < 0, delta.x > 0);
-        }
-
-        public override void OnEnable()
-        {
-            base.OnEnable();
-            if (multiplayer) StartCoroutine(SendMove());
         }
     }
 }
