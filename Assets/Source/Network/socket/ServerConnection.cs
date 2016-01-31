@@ -15,8 +15,7 @@ namespace Caveman.Network
         private const string Ip = "185.117.155.113";
         private const int Port = 8080;
 
-        private static ServerConnection instance;
-        private readonly Queue<ServerMessage> messageQueue = new Queue<ServerMessage>();
+        private readonly Queue<ServerMessageManager> messageQueue = new Queue<ServerMessageManager>();
 
         private TcpClient client;
         private float lastTimeUpdated;
@@ -166,7 +165,7 @@ namespace Caveman.Network
         {
             if (msg != null)
             {
-                CompleteClientMessage(msg);
+                AddUserIdToClientMessage(msg);
                 SendStringToSocket(msg.Content);
             }
         }
@@ -191,7 +190,7 @@ namespace Caveman.Network
                             if (currentChar != '#')
                                 result += currentChar;
                         }
-                        AddItemToQueue(new ServerMessage(result));
+                        AddItemToQueue(new ServerMessageManager(result));
                     }
                     catch (Exception e)
                     {
@@ -208,7 +207,7 @@ namespace Caveman.Network
             networkThread.Start();
         }
 
-        private void AddItemToQueue(ServerMessage item)
+        private void AddItemToQueue(ServerMessageManager item)
         {
             lock (messageQueue)
             {
@@ -216,7 +215,7 @@ namespace Caveman.Network
             }
         }
 
-        private ServerMessage GetItemFromQueue()
+        private ServerMessageManager GetItemFromQueue()
         {
             lock (messageQueue)
             {
@@ -225,7 +224,7 @@ namespace Caveman.Network
         }
 
         // invoke on each   send message
-        private void CompleteClientMessage(ClientMessage msg)
+        private void AddUserIdToClientMessage(ClientMessage msg)
         {
             msg.AddParam(ServerParams.UserId, clientId);
         }
