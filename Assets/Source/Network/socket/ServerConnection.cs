@@ -11,8 +11,8 @@ namespace Caveman.Network
 {
     public class ServerConnection
     {
-        //"127.0.0.1";
-        private const string Ip = "188.166.37.212";
+        //"127.0.0.1"; //"188.166.37.212" old ip
+        private const string Ip = "185.117.155.113";
         private const int Port = 8080;
 
         private static ServerConnection instance;
