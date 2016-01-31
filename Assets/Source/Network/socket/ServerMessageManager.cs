@@ -5,11 +5,11 @@ using UnityEngine;
     
 namespace Caveman.Network
 {
-    public class ServerMessage
+    public class ServerMessageManager
     {
         private readonly JArray jArray;
 
-        public ServerMessage(string content)
+        public ServerMessageManager(string content)
         {
             jArray = JArray.Parse(content);
         }
