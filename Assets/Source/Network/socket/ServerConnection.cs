@@ -170,6 +170,15 @@ namespace Caveman.Network
             }
         }
 
+        protected void SendMessageToSocket(string content)
+        {
+            if (!string.IsNullOrEmpty(content))
+            {
+                //AddUserIdToClientMessage(msg);
+                SendStringToSocket(content);
+            }
+        }
+
         /**
             Listens to the server while Reader is not null
         */

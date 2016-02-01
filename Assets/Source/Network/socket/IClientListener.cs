@@ -1,17 +1,19 @@
-﻿namespace Caveman.Network
+﻿using UnityEngine;
+
+namespace Caveman.Network
 {
     public interface IClientListener
     {
-        void LoginMessage();
+        void LoginMessage(string userName);
         void TickMessage();
-        void PickWeapon();
-        void UseWeapon();
-        void PickBonus();
-        void PlayerGold();
-        void Respawn();
+        void PickWeapon(string weaponId);
+        void UseWeapon(Vector2 pointClient);
+        void PickBonus(string bonusId);
+        void PlayerGold(int gold);
+        void Respawn(Vector2 pointClient);
         void PlayerDead();
-        void AddedKillStat();
-        void Move();
+        void AddedKillStat(string killerId);
+        void Move(Vector2 pointClient   );
         void Logout();
     }
 }
