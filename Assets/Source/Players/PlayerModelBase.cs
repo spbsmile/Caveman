@@ -36,7 +36,7 @@ namespace Caveman.Players
         protected bool lockedControl = true;
 
         //todo one parameter
-        protected ServerNotify serverNotify;
+        protected IClientListener serverNotify;
         protected bool multiplayer;
         
         protected WeaponSpecification weaponSpecification;
@@ -61,10 +61,10 @@ namespace Caveman.Players
             Gold = specification.Gold;
         }
 
-        public void Init(Player player, Random random, PlayerPool pool, ServerNotify serverConnection)
+        public void Init(Player player, Random random, PlayerPool pool, IClientListener serverNotify)
         {
-            serverNotify = serverConnection;
-            if (serverConnection != null) multiplayer = true;
+            this.serverNotify = serverNotify;
+            if (serverNotify != null) multiplayer = true;
             name = player.Name;
             transform.GetChild(0).GetComponent<TextMesh>().text = name;
             Player = player;

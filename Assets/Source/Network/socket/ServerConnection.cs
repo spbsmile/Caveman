@@ -25,7 +25,7 @@ namespace Caveman.Network
         private StreamWriter writer;
         private string clientId;
 
-        public ServerConnection()
+        protected ServerConnection()
         {
             lastTimeUpdated = Time.timeSinceLevelLoad;
         }
@@ -97,16 +97,22 @@ namespace Caveman.Network
                 writer = null;
             }
         }
-       
-        //todo refactor conti
+
         private void SendTick()
         {
-            SendMessageToSocket(ClientMessage.TickMessage());
+            SendMessageToSocket(new JObject
+            {
+                {ServerParams.ActionType, ServerParams.PingAction}
+            });
         }
 
         private void SendLogin(string userName)
         {
-            SendMessageToSocket(ClientMessage.LoginMessage(userName));
+            SendMessageToSocket(new JObject
+            {
+                {ServerParams.ActionType, ServerParams.LoginAction},
+                {ServerParams.UserName, userName}
+            });
         }
 
         private void SendStringToSocket(string str)
@@ -115,15 +121,6 @@ namespace Caveman.Network
             {
                 writer.Write(str);
                 writer.Flush();
-            }
-        }
-
-        private void SendMessageToSocket(ClientMessage msg)
-        {
-            if (msg != null)
-            {
-                //AddUserIdToClientMessage(msg);
-                SendStringToSocket(msg.Content);
             }
         }
 

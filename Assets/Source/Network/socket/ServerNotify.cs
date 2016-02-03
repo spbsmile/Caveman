@@ -5,28 +5,8 @@ using UnityEngine;
 
 namespace Caveman.Network
 {
-    /// <summary>
-    /// To all send message added user id
-    /// </summary>
     public class ServerNotify : ServerConnection, IClientListener
     {
-        public void LoginMessage(string userName)
-        {
-            SendMessageToSocket(new JObject
-            {
-                {ServerParams.ActionType, ServerParams.LoginAction},
-                {ServerParams.UserName, userName}
-            });
-        }
-
-        public void TickMessage()
-        {
-            SendMessageToSocket(new JObject
-            {
-                {ServerParams.ActionType, ServerParams.PingAction}
-            });
-        }
-
         public void PickWeapon(string weaponId, int type)
         {
             var pointServer = GetServerPoint(weaponId);
@@ -115,8 +95,6 @@ namespace Caveman.Network
                 {ServerParams.ActionType, ServerParams.LogoutAction}
             });
         }
-
-        
 
         private static Vector2 GetServerPoint(string id)
         {

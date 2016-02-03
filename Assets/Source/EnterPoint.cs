@@ -36,7 +36,7 @@ namespace Caveman
         public Transform containerBonusesSpeed;
 
         protected Random r;
-        protected ServerNotify serverNotify;
+        protected IClientListener serverNotify;
         protected PlayerPool poolPlayers;
         protected ObjectPool<WeaponModelBase> poolStones;
         protected ObjectPool<WeaponModelBase> poolSkulls;
