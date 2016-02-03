@@ -5,74 +5,118 @@ using UnityEngine;
 
 namespace Caveman.Network
 {
+    /// <summary>
+    /// To all send message added user id
+    /// </summary>
     public class ServerNotify : ServerConnection, IClientListener
     {
         public void LoginMessage(string userName)
         {
-            throw new NotImplementedException();
+            SendMessageToSocket(new JObject
+            {
+                {ServerParams.ActionType, ServerParams.LoginAction},
+                {ServerParams.UserName, userName}
+            });
         }
 
         public void TickMessage()
         {
-            throw new NotImplementedException();
+            SendMessageToSocket(new JObject
+            {
+                {ServerParams.ActionType, ServerParams.PingAction}
+            });
         }
 
-        public void PickWeapon(string weaponId)
+        public void PickWeapon(string weaponId, int type)
         {
-            throw new NotImplementedException();
+            var pointServer = GetServerPoint(weaponId);
+            SendMessageToSocket(new JObject
+            {
+                {ServerParams.ActionType, ServerParams.WeaponPickAction},
+                {ServerParams.X, pointServer.x},
+                {ServerParams.Y, pointServer.y},
+            });
         }
 
-        public void UseWeapon(Vector2 pointClient)
+        public void UseWeapon(Vector2 pointClient, int type)
         {
             var pointServer = GetServerPoint(pointClient);
-
-            SendMessageToSocket(ParseContentForServer(new JObject
+            SendMessageToSocket(new JObject
             {
                 {ServerParams.ActionType, ServerParams.BonusPickAction},
                 {ServerParams.X, pointServer.x},
                 {ServerParams.Y, pointServer.y}
-            }));
+            });
         }
 
-        public void PickBonus(string bonusId)
+        public void PickBonus(string bonusId, int type)
         {
-            throw new NotImplementedException();
+            var pointServer = GetServerPoint(bonusId);
+            SendMessageToSocket(new JObject
+            {
+                {ServerParams.ActionType, ServerParams.BonusPickAction},
+                {ServerParams.X, pointServer.x},
+                {ServerParams.Y, pointServer.y}
+            });
         }
 
+        // TODO: set gold player on server
         public void PlayerGold(int gold)
         {
-            throw new NotImplementedException();
+            SendMessageToSocket(new JObject
+            {
+               
+            });
         }
 
         public void Respawn(Vector2 pointClient)
         {
-            throw new NotImplementedException();
+            var pointServer = GetServerPoint(pointClient);
+            SendMessageToSocket(new JObject
+            {
+                {ServerParams.ActionType, ServerParams.PlayerRespawnAction},
+                {ServerParams.X, pointServer.x},
+                {ServerParams.Y, pointServer.y}
+            });
         }
 
         public void PlayerDead()
         {
-            throw new NotImplementedException();
+            SendMessageToSocket(new JObject
+            {
+                 {ServerParams.ActionType, ServerParams.PlayerDeadAction}
+            });
         }
 
         public void AddedKillStat(string killerId)
         {
-            throw new NotImplementedException();
+            SendMessageToSocket(new JObject
+            {
+                {ServerParams.ActionType, ServerParams.DeadAction},
+                {ServerParams.Killer, killerId},
+            });
         }
 
         public void Move(Vector2 pointClient)
         {
-            throw new NotImplementedException();
+            var pointServer = GetServerPoint(pointClient);
+            SendMessageToSocket(new JObject
+            {
+                {ServerParams.ActionType, ServerParams.PlayerMoveAction},
+                {ServerParams.X, pointServer.x},
+                {ServerParams.Y, pointServer.y}
+            });
         }
 
         public void Logout()
         {
-            throw new NotImplementedException();
+            SendMessageToSocket(new JObject
+            {
+                {ServerParams.ActionType, ServerParams.LogoutAction}
+            });
         }
 
-        private string ParseContentForServer(JObject jObject)
-        {
-            return jObject != null ? "#" + jObject + "#" : "";
-        }
+        
 
         private static Vector2 GetServerPoint(string id)
         {

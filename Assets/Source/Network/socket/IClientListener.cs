@@ -6,9 +6,9 @@ namespace Caveman.Network
     {
         void LoginMessage(string userName);
         void TickMessage();
-        void PickWeapon(string weaponId);
-        void UseWeapon(Vector2 pointClient);
-        void PickBonus(string bonusId);
+        void PickWeapon(string weaponId, int type);
+        void UseWeapon(Vector2 pointClient, int type);
+        void PickBonus(string bonusId, int type);
         void PlayerGold(int gold);
         void Respawn(Vector2 pointClient);
         void PlayerDead();

@@ -36,7 +36,7 @@ namespace Caveman.Players
         protected bool lockedControl = true;
 
         //todo one parameter
-        protected ServerConnection serverConnection;
+        protected ServerNotify serverNotify;
         protected bool multiplayer;
         
         protected WeaponSpecification weaponSpecification;
@@ -61,9 +61,9 @@ namespace Caveman.Players
             Gold = specification.Gold;
         }
 
-        public void Init(Player player, Random random, PlayerPool pool, ServerConnection serverConnection)
+        public void Init(Player player, Random random, PlayerPool pool, ServerNotify serverConnection)
         {
-            this.serverConnection = serverConnection;
+            serverNotify = serverConnection;
             if (serverConnection != null) multiplayer = true;
             name = player.Name;
             transform.GetChild(0).GetComponent<TextMesh>().text = name;
@@ -124,15 +124,6 @@ namespace Caveman.Players
         /// <returns>True if gold enough</returns>
         public virtual bool SpendGold(int value)
         {
-            if (value == 0)
-                return true;
-            if (value < 0)
-                return false;
-
-            var after = Gold - value;
-            if (after < 0)
-                return false;
-            Gold = after;
             return true;
         }
 

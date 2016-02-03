@@ -1,5 +1,5 @@
-﻿using Caveman.Setting;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
+using Caveman.Setting;
 
 namespace Caveman.Specification
 {

@@ -41,8 +41,9 @@ namespace Caveman.Players
                         Player.Deaths++;
                         if (multiplayer)
                         {
-                            serverConnection.SendPlayerDead();
-                            serverConnection.SendPlayerDeadTest(weapon.Owner.Id);
+                            serverNotify.PlayerDead();
+                            //todo must see commit renames
+                            //serverNotify.PlayerDeadTest(weapon.Owner.Id);
                         }
                         weapon.Destroy();
                         StopAllCoroutines();
@@ -71,7 +72,7 @@ namespace Caveman.Players
         {
             var res = base.SpendGold(value);
             if (res && multiplayer)
-                serverConnection.SendPlayerGold(Gold);
+                serverNotify.PlayerGold(Gold);
             return res;
         }
 
@@ -83,13 +84,13 @@ namespace Caveman.Players
         public override void Birth(Vector2 point)
         {
             base.Birth(point);
-            if (multiplayer) serverConnection.SendRespawn(point);
+            if (multiplayer) serverNotify.Respawn(point);
         }
 
         public override void PickupBonus(BonusBase bonus)
         {
             //todo hack
-            if (multiplayer) serverConnection.SendPickBonus(bonus.Id, (int)bonus.Specification.Type);
+            if (multiplayer) serverNotify.PickBonus(bonus.Id, (int)bonus.Specification.Type);
             base.PickupBonus(bonus);
         }
 
@@ -98,12 +99,12 @@ namespace Caveman.Players
             if (Player.Weapons > weaponModel.Specification.MaxOnPLayer) return;
             base.PickupWeapon(weaponModel);
             Player.Weapons += weaponModel.Specification.CountPickup;
-            if (multiplayer) serverConnection.SendPickWeapon(weaponModel.Id, (int)weaponModel.Specification.Type);
+            if (multiplayer) serverNotify.PickWeapon(weaponModel.Id, (int)weaponModel.Specification.Type);
         }
 
         public override void Throw(Vector2 aim)
         {
-            if (multiplayer) serverConnection.SendUseWeapon(aim, (int) weaponSpecification.Type);
+            if (multiplayer) serverNotify.UseWeapon(aim, (int) weaponSpecification.Type);
             base.Throw(aim);
             Player.Weapons--;
         }

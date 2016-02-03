@@ -36,7 +36,7 @@ namespace Caveman
         public Transform containerBonusesSpeed;
 
         protected Random r;
-        protected ServerConnection serverConnection;
+        protected ServerNotify serverNotify;
         protected PlayerPool poolPlayers;
         protected ObjectPool<WeaponModelBase> poolStones;
         protected ObjectPool<WeaponModelBase> poolSkulls;
@@ -79,7 +79,7 @@ namespace Caveman
             BattleGui.instance.waitForResp.SetPlayerPool(poolPlayers);
             CreatePlayer(humanPlayer, false, false, prefabHumanPlayer);
             
-            if (serverConnection == null)
+            if (serverNotify == null)
             {
                 for (var i = 1; i < Settings.BotsCount + 1; i++)
                 {
@@ -167,7 +167,7 @@ namespace Caveman
         private ObjectPool<T> CreatePool<T>(int initialBufferSize, Transform container, T prefab, Action<GameObject, ObjectPool<T>> init) where T : MonoBehaviour
         {
             var pool = container.GetComponent<ObjectPool<T>>();
-            pool.CreatePool(prefab, initialBufferSize, serverConnection != null);
+            pool.CreatePool(prefab, initialBufferSize, serverNotify != null);
             for (var i = 0; i < initialBufferSize; i++)
             {
                 var item = Instantiate(prefab);
@@ -196,10 +196,10 @@ namespace Caveman
                     BattleGui.instance.SubscribeOnEvents(playerModel);
                     smoothCamera.target = prefab.transform;
                     smoothCamera.SetPlayer(prefab.GetComponent<PlayerModelBase>());
-                    if (serverConnection != null) playerModel.GetComponent<SpriteRenderer>().material.color = Color.red;
+                    if (serverNotify != null) playerModel.GetComponent<SpriteRenderer>().material.color = Color.red;
                 }
             }
-            playerModel.Init(player, r, poolPlayers, serverConnection);
+            playerModel.Init(player, r, poolPlayers, serverNotify);
             poolPlayers.Add(player.Id, playerModel);
             playerModel.transform.SetParent(containerPlayers);
             playerModel.Death += position => StartCoroutine(DeathAnimate(position));

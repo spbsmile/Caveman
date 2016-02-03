@@ -25,22 +25,22 @@ namespace Caveman.Network
         public override void Start()
         {
             OwnId = SystemInfo.deviceUniqueIdentifier;
-            serverConnection = new ServerConnection {ServerListener = this};
-            serverConnection.StartSession(OwnId,
+            serverNotify = new ServerNotify {ServerListener = this};
+            serverNotify.StartSession(OwnId,
                 PlayerPrefs.GetString(AccountManager.KeyNickname));
             base.Start();
-            serverConnection.SendRespawn(poolPlayers[OwnId].transform.position);
+            serverNotify.Respawn(poolPlayers[OwnId].transform.position);
         }
 
         public override void Play()
         {
             base.Play();
-            serverConnection.SendRespawn(poolPlayers[OwnId].transform.position);
+            serverNotify.Respawn(poolPlayers[OwnId].transform.position);
         }
 
         public void Update()
         {
-            if (!resultReceived) serverConnection.Update();
+            if (!resultReceived) serverNotify.Update();
         }
 
         public void WeaponAddedReceived(string key, Vector2 point)
@@ -146,7 +146,7 @@ namespace Caveman.Network
         public void LoginReceived(string playerId, string playerName)
         {
             CreatePlayer(new Player(playerName, playerId), false, true, prefabServerPlayer);
-            serverConnection.SendRespawn(poolPlayers[OwnId].transform.position);
+            serverNotify.Respawn(poolPlayers[OwnId].transform.position);
         }
 
         public void LogoutReceived(string playerId)
@@ -158,7 +158,7 @@ namespace Caveman.Network
 
         public void OnDestroy()
         {
-            serverConnection.StopSession();
+            serverNotify.StopSession();
         }
 
         /// <summary>

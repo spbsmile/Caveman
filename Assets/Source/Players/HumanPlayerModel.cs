@@ -31,7 +31,7 @@ namespace Caveman.Players
             while (lockedControl)
                 yield return null;
             yield return new WaitForSeconds(0.3f);
-            serverConnection.SendMove(transform.position);
+            serverNotify.Move(transform.position);
             StartCoroutine(SendMove());
         }
 
