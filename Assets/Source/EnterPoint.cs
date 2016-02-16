@@ -45,6 +45,7 @@ namespace Caveman
         protected ObjectPool<EffectBase> poolDeathImage;
         
         //used only single player mode for bots
+        //todo deleted this. get this data from json
         private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
 
         public static CurrentGameSettings CurrentSettings { get; private set; }
@@ -92,9 +93,10 @@ namespace Caveman
 
         public virtual void Play()
         {
-            var players = poolPlayers.GetCurrentPlayers();
-            foreach (PlayerModelBase player in players)
+            foreach (var player in poolPlayers.GetCurrentPlayers())
+            {
                 player.Play();
+            }
         }
         /// <summary>
         /// Each model assigned reference on objectpool
@@ -146,13 +148,9 @@ namespace Caveman
         private void PutItem<T>(ObjectPool<T> pool) where T : MonoBehaviour
         {
             var item = pool.New();
-            var sprite = item.GetComponent<SpriteRenderer>();
-            StartCoroutine(UnityExtensions.FadeIn(sprite));
-
+            StartCoroutine(UnityExtensions.FadeIn(item.GetComponent<SpriteRenderer>()));
             // put item in random position
-            var x = r.Next(1, Settings.WidthMap - 1);
-            var y = r.Next(1, Settings.HeightMap - 1);
-            item.transform.position = new Vector2(x, y);
+            item.transform.position = new Vector2(r.Next(1, Settings.WidthMap - 1), r.Next(1, Settings.HeightMap - 1));
         }
 
         /// <summary>
