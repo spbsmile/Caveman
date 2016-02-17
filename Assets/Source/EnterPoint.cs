@@ -5,6 +5,7 @@ using Caveman.Bonuses;
 using Caveman.Level;
 using Caveman.Network;
 using Caveman.Players;
+using Caveman.Pools;
 using Caveman.Setting;
 using Caveman.Specification;
 using Caveman.UI;
@@ -48,14 +49,19 @@ namespace Caveman
         //todo deleted this. get this data from json
         private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
 
+        /// <summary>
+        /// Get actual value of something parameter specification  
+        /// </summary>
         public static CurrentGameSettings CurrentSettings { get; private set; }
 
         public virtual void Awake()
         {
             // load data from json files
             CurrentSettings = CurrentGameSettings.Load();
+            //todo strange usage. settings type - deprecate
             Settings.multiplayerMode = false;
-            LoadingScreen.instance.FinishLoading += new EventHandler((o, s) => Play());
+            //todo
+            LoadingScreen.instance.FinishLoading += (o, s) => Play();
         }
 
         public virtual void Start()
@@ -101,8 +107,6 @@ namespace Caveman
         /// <summary>
         /// Each model assigned reference on objectpool
         /// </summary>
-        /// <param name="item"></param>
-        /// <param name="pool"></param>
         private void InitBonusModel(GameObject item, ObjectPool<BonusBase> pool)
         {
             item.GetComponent<BonusBase>().SetPool(pool);
@@ -149,19 +153,12 @@ namespace Caveman
         {
             var item = pool.New();
             StartCoroutine(UnityExtensions.FadeIn(item.GetComponent<SpriteRenderer>()));
-            // put item in random position
             item.transform.position = new Vector2(r.Next(1, Settings.WidthMap - 1), r.Next(1, Settings.HeightMap - 1));
         }
 
         /// <summary>
         /// Used object pool pattern
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="initialBufferSize"></param>
-        /// <param name="container"></param>
-        /// <param name="prefab"></param>
-        /// <param name="init"></param>
-        /// <returns></returns>
         private ObjectPool<T> CreatePool<T>(int initialBufferSize, Transform container, T prefab, Action<GameObject, ObjectPool<T>> init) where T : MonoBehaviour
         {
             var pool = container.GetComponent<ObjectPool<T>>();

@@ -4,7 +4,7 @@ using Caveman.CustomAnimation;
 using Caveman.Weapons;
 using UnityEngine;
 
-namespace Caveman.Utils
+namespace Caveman.Pools
 {
     public abstract class ASupportPool<T> : MonoBehaviour where T : MonoBehaviour
     {

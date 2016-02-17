@@ -1,6 +1,6 @@
 ﻿using Caveman.Weapons;
 
-namespace Caveman.Utils
+namespace Caveman.Pools
 {
     public class WeaponsPool : ObjectPool<WeaponModelBase>{ }
 }

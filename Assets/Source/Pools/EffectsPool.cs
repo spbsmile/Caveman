@@ -1,6 +1,6 @@
 ﻿using Caveman.CustomAnimation;
 
-namespace Caveman.Utils
+namespace Caveman.Pools
 {
     public class EffectsPool : ObjectPool<EffectBase>
     {

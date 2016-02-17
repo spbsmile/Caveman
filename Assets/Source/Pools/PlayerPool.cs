@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Caveman.Players;
 using UnityEngine;
 
-namespace Caveman.Utils
+namespace Caveman.Pools
 {
     public class  PlayerPool : MonoBehaviour
     {

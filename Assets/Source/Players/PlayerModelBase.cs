@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Caveman.Bonuses;
 using Caveman.CustomAnimation;
 using Caveman.Network;
+using Caveman.Pools;
 using Caveman.Specification;
 using Caveman.Utils;
 using Caveman.Weapons;
