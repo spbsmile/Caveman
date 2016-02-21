@@ -69,11 +69,11 @@ namespace Caveman
             //todo may be use only UnityEngine.Random
             r = new Random();
 
-            poolStonesSplash = CreatePool<EffectBase>(Settings.PoolCountSplashStones, containerSplashStones, prefabStoneFlagmentInc, null);
-            poolDeathImage = CreatePool<EffectBase>(Settings.PoolCountDeathImages, containerDeathImages, prefabDeathImage, null);
-            poolStones = CreatePool<WeaponModelBase>(Settings.PoolCountStones, containerStones, prefabStone, InitStoneModel);
-            poolSkulls = CreatePool<WeaponModelBase>(Settings.PoolCountSkulls, containerSkulls, prefabAxe, InitSkullModel);
-            poolBonusesSpeed = CreatePool<BonusBase>(Settings.BonusSpeedPoolCount, containerBonusesSpeed, prefabBonusSpeed, InitBonusModel);
+            poolStonesSplash = PreparePool<EffectBase>(Settings.PoolCountSplashStones, containerSplashStones, prefabStoneFlagmentInc, null);
+            poolDeathImage = PreparePool<EffectBase>(Settings.PoolCountDeathImages, containerDeathImages, prefabDeathImage, null);
+            poolStones = PreparePool<WeaponModelBase>(Settings.PoolCountStones, containerStones, prefabStone, InitStoneModel);
+            poolSkulls = PreparePool<WeaponModelBase>(Settings.PoolCountSkulls, containerSkulls, prefabAxe, InitSkullModel);
+            poolBonusesSpeed = PreparePool<BonusBase>(Settings.BonusSpeedPoolCount, containerBonusesSpeed, prefabBonusSpeed, InitBonusModel);
 
             poolStones.RelatedPool += () => poolStonesSplash;
 
@@ -92,8 +92,8 @@ namespace Caveman
                 {
                     CreatePlayer(new Player(names[i], i.ToString()), true, false, prefabAiPlayer);
                 }
-                StartCoroutine(PutWeapons());
-                StartCoroutine(PutBonuses());
+                StartCoroutine(PutWeaponsOnMap());
+                StartCoroutine(PutBonusesOnMap());
             }
         }
 
@@ -124,32 +124,32 @@ namespace Caveman
             model.SetPoolSplash(poolStonesSplash);
         }
 
-        private IEnumerator PutBonuses()
+        private IEnumerator PutBonusesOnMap()
         {
             var bound = Settings.BonusSpeedMaxCount - poolBonusesSpeed.GetActivedCount; 
             for (var i = 0; i < bound; i++)
             {
-                PutItem(poolBonusesSpeed);
+                PutItemOnMap(poolBonusesSpeed);
             }
             yield return new WaitForSeconds(Settings.BonusTimeRespawn);
-            StartCoroutine(PutBonuses());
+            StartCoroutine(PutBonusesOnMap());
         }
 
-        private IEnumerator PutWeapons()
+        private IEnumerator PutWeaponsOnMap()
         {
             for (var i = 0; i < Settings.WeaponInitialLying; i++)
             {
-                PutItem(poolStones);
+                PutItemOnMap(poolStones);
             }
             for (var i = 0; i < Settings.CountLyingSkulls; i++)
             {
-                PutItem(poolSkulls);
+                PutItemOnMap(poolSkulls);
             }
             yield return new WaitForSeconds(Settings.WeaponTimeRespawn);
-            StartCoroutine(PutWeapons());
+            StartCoroutine(PutWeaponsOnMap());
         }
 
-        private void PutItem<T>(ObjectPool<T> pool) where T : MonoBehaviour
+        private void PutItemOnMap<T>(ObjectPool<T> pool) where T : MonoBehaviour
         {
             var item = pool.New();
             StartCoroutine(UnityExtensions.FadeIn(item.GetComponent<SpriteRenderer>()));
@@ -159,7 +159,7 @@ namespace Caveman
         /// <summary>
         /// Used object pool pattern
         /// </summary>
-        private ObjectPool<T> CreatePool<T>(int initialBufferSize, Transform container, T prefab, Action<GameObject, ObjectPool<T>> init) where T : MonoBehaviour
+        private ObjectPool<T> PreparePool<T>(int initialBufferSize, Transform container, T prefab, Action<GameObject, ObjectPool<T>> init) where T : MonoBehaviour
         {
             var pool = container.GetComponent<ObjectPool<T>>();
             pool.CreatePool(prefab, initialBufferSize, serverNotify != null);
@@ -198,16 +198,14 @@ namespace Caveman
             poolPlayers.Add(player.Id, playerModel);
             playerModel.transform.SetParent(containerPlayers);
             playerModel.Death += position => StartCoroutine(DeathAnimate(position));
-            playerModel.ChangedWeaponsPool += ChangedWeapons;
+            playerModel.ChangedWeaponsPool += SwitchPoolWeapons;
             playerModel.Birth(new Vector2(r.Next(1, Settings.WidthMap - 1), r.Next(1, Settings.HeightMap - 1)));
         }
 
         /// <summary>
-        /// Changed weapon pool storage in player 
+        /// When player pickup weapon another type 
         /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        private ObjectPool<WeaponModelBase> ChangedWeapons(WeaponSpecification.Types type)
+        private ObjectPool<WeaponModelBase> SwitchPoolWeapons(WeaponSpecification.Types type)
         {
             switch (type)
             {
