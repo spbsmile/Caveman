@@ -29,21 +29,10 @@ namespace Caveman
         public SpeedBonus prefabBonusSpeed;
 
         public SmoothCamera smoothCamera;
-        public Transform containerStones;
-        public Transform containerSplashStones;
-        public Transform containerSkulls;
-        public Transform containerDeathImages;
-        public Transform containerPlayers;
-        public Transform containerBonusesSpeed;
-
+     
         protected Random r;
         protected IClientListener serverNotify;
-        protected PlayerPool poolPlayers;
-        protected ObjectPool<WeaponModelBase> poolStones;
-        protected ObjectPool<WeaponModelBase> poolSkulls;
-        protected ObjectPool<BonusBase> poolBonusesSpeed;
-        protected ObjectPool<EffectBase> poolStonesSplash;
-        protected ObjectPool<EffectBase> poolDeathImage;
+      
         
         //used only single player mode for bots
         //todo deleted this. get this data from json
