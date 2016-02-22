@@ -72,7 +72,9 @@ namespace Caveman.Players
         {
             var res = base.SpendGold(value);
             if (res && multiplayer)
-                serverNotify.PlayerGold(Gold);
+            {
+                serverNotify.PlayerGold(Gold);    
+            }
             return res;
         }
 

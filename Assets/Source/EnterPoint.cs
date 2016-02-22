@@ -104,26 +104,7 @@ namespace Caveman
                 player.Play();
             }
         }
-        /// <summary>
-        /// Each model assigned reference on objectpool
-        /// </summary>
-        private void InitBonusModel(GameObject item, ObjectPool<BonusBase> pool)
-        {
-            item.GetComponent<BonusBase>().SetPool(pool);
-        }
-
-        private void InitSkullModel(GameObject item, ObjectPool<WeaponModelBase> pool) 
-        {
-            item.GetComponent<AxeModel>().SetPool(pool);
-        }
-
-        private void InitStoneModel(GameObject item, ObjectPool<WeaponModelBase> pool)
-        {
-            var model = item.GetComponent<StoneModel>();
-            model.SetPool(pool);
-            model.SetPoolSplash(poolStonesSplash);
-        }
-
+        
         private IEnumerator PutBonusesOnMap()
         {
             var bound = Settings.BonusSpeedMaxCount - poolBonusesSpeed.GetActivedCount; 
@@ -156,26 +137,6 @@ namespace Caveman
             item.transform.position = new Vector2(r.Next(1, Settings.WidthMap - 1), r.Next(1, Settings.HeightMap - 1));
         }
 
-        /// <summary>
-        /// Used object pool pattern
-        /// </summary>
-        private ObjectPool<T> PreparePool<T>(int initialBufferSize, Transform container, T prefab, Action<GameObject, ObjectPool<T>> init) where T : MonoBehaviour
-        {
-            var pool = container.GetComponent<ObjectPool<T>>();
-            pool.CreatePool(prefab, initialBufferSize, serverNotify != null);
-            for (var i = 0; i < initialBufferSize; i++)
-            {
-                var item = Instantiate(prefab);
-                if (init != null)
-                {
-                    init(item.gameObject, pool);
-                }
-                item.transform.SetParent(container);
-                pool.Store(item);
-            }
-            return pool;
-        }
-
         protected void CreatePlayer(Player player, bool isAiPlayer, bool isServerPlayer, Transform prefabModel)
         {
             var prefab = Instantiate(prefabModel);
@@ -200,22 +161,7 @@ namespace Caveman
             playerModel.Death += position => StartCoroutine(DeathAnimate(position));
             playerModel.ChangedWeaponsPool += SwitchPoolWeapons;
             playerModel.Birth(new Vector2(r.Next(1, Settings.WidthMap - 1), r.Next(1, Settings.HeightMap - 1)));
-        }
-
-        /// <summary>
-        /// When player pickup weapon another type 
-        /// </summary>
-        private ObjectPool<WeaponModelBase> SwitchPoolWeapons(WeaponSpecification.Types type)
-        {
-            switch (type)
-            {
-                case WeaponSpecification.Types.Stone:
-                    return poolStones;
-                case WeaponSpecification.Types.Skull:
-                    return poolSkulls;
-            }
-            return null;
-        }
+        }      
 
         // todo extracted this method from enterpoint
         /// <summary>
