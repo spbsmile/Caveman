@@ -1,0 +1,11 @@
+{
+    "roundTime" : 60,
+    "botsCount" : 3,
+    
+	"poolCountStones" : 40,
+    "poolCountDeathImages" : 9,
+    "poolCountSkulls" : 30,
+    "poolCountSplashStones" : 30,
+	
+	"multiplayerMode" : true
+}
