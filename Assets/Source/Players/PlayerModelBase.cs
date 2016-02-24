@@ -62,7 +62,7 @@ namespace Caveman.Players
             Gold = specification.Gold;
         }
 
-        public void Init(Player player, Random random,   pool, IClientListener serverNotify)
+        public void Init(Player player, Random random, IClientListener serverNotify)
         {
             this.serverNotify = serverNotify;
             if (serverNotify != null) multiplayer = true;

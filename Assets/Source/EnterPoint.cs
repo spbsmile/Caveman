@@ -115,7 +115,7 @@ namespace Caveman
                 if (serverNotify != null) playerModel.GetComponent<SpriteRenderer>().material.color = Color.red;
 
             }
-            playerModel.Init(player, r, PlayerPool.instance, serverNotify);
+            playerModel.Init(player, r,  serverNotify);
             PlayerPool.instance.Add(player.Id, playerModel);
       
             playerModel.ChangedWeaponsPool += PoolManager.instance.SwitchPoolWeapons;
