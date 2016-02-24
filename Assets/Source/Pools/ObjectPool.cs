@@ -22,12 +22,8 @@ namespace Caveman.Pools
         //for multiplayer <id, item>
         private Dictionary<string, T> poolServer;
 
-        public void CreatePool(T prefab, int initialBufferSize, bool multiplayer)
+        public void CreatePool(T prefab, int initialBufferSize)
         {
-            if (multiplayer)
-            {
-                poolServer = new Dictionary<string, T>();
-            }
             stack = new Stack<T>(initialBufferSize);
             this.prefab = prefab;
             GetActivedCount = initialBufferSize;

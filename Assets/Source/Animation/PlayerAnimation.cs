@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using Caveman.Pools;
 using UnityEngine;
 
 namespace Caveman.CustomAnimation
 {
     public class PlayerAnimation
     {
-        private Animator animator;
-        private Transform transform;
-        private Transform name;
+        private readonly Animator animator;
+        private readonly Transform transform;
+        private readonly Transform name;
 
         public PlayerAnimation(Animator animator)
         {
@@ -73,6 +76,24 @@ namespace Caveman.CustomAnimation
                     IsMoving_F = true;
                 }
             }
+        }
+
+        public IEnumerator Death(Vector2 position)
+        {
+            var deathImage = PoolManager.instance.ImagesDeath.New();
+            deathImage.transform.position = position;
+            var spriteRenderer = deathImage.GetComponent<SpriteRenderer>();
+            if (spriteRenderer)
+            {
+                for (var i = 1f; i > 0; i -= 0.1f)
+                {
+                    var c = spriteRenderer.color;
+                    c.a = i;
+                    spriteRenderer.color = c;
+                    yield return new WaitForSeconds(0.1f);
+                }
+            }
+            PoolManager.instance.ImagesDeath.Store(deathImage);
         }
     }
 }

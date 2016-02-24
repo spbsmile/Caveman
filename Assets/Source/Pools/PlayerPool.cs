@@ -7,13 +7,24 @@ namespace Caveman.Pools
 {
     public class  PlayerPool : MonoBehaviour
     {
+        public static PlayerPool instance;
+
         public Action<PlayerModelBase> AddedPlayer;
         public Action<PlayerModelBase> RemovePlayer;
 
-        private Dictionary<string, PlayerModelBase> pool= new Dictionary<string, PlayerModelBase>();
+        private readonly Dictionary<string, PlayerModelBase> pool= new Dictionary<string, PlayerModelBase>();
+
+        public void Awake()
+        {
+            if (instance == null)
+            {
+                instance = this;
+            }
+        }
 
         public void Add(string Id, PlayerModelBase item)
         {
+            item.transform.SetParent(transform);
             if (AddedPlayer != null)
             {
                 AddedPlayer(item);

@@ -62,14 +62,13 @@ namespace Caveman.Players
             Gold = specification.Gold;
         }
 
-        public void Init(Player player, Random random, PlayerPool pool, IClientListener serverNotify)
+        public void Init(Player player, Random random,   pool, IClientListener serverNotify)
         {
             this.serverNotify = serverNotify;
             if (serverNotify != null) multiplayer = true;
             name = player.Name;
             transform.GetChild(0).GetComponent<TextMesh>().text = name;
             Player = player;
-            poolPlayers = pool;
             players = new List<PlayerModelBase>();
             players.AddRange(poolPlayers.GetCurrentPlayers());
             poolPlayers.AddedPlayer += @base => players.Add(@base);

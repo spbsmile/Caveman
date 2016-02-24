@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics.PerformanceData;
-using Caveman.Bonuses;
+﻿using Caveman.Bonuses;
 using Caveman.CustomAnimation;
 using Caveman.Specification;
 using Caveman.Weapons;
@@ -12,6 +10,12 @@ namespace Caveman.Pools
     {
         public static PoolManager instance;
 
+        public AxeModel prefabAxe;
+        public StoneModel prefabStone;
+        public StoneSplash prefabStoneFlagmentInc;
+        public EffectBase prefabDeathImage;
+        public SpeedBonus prefabBonusSpeed;
+
         public Transform containerStones;
         public Transform containerSplashStones;
         public Transform containerSkulls;
@@ -19,58 +23,50 @@ namespace Caveman.Pools
         public Transform containerPlayers;
         public Transform containerBonusesSpeed;
 
-        public ObjectPool<EffectBase> SplashesStone {  get { return poolStonesSplash; } }
+        public ObjectPool<EffectBase> SplashesStone { private set; get; }
+
         public ObjectPool<EffectBase> ImagesDeath { private set; get; }
         public ObjectPool<WeaponModelBase> Stones { private set; get; }
         public ObjectPool<WeaponModelBase> Skulls { private set; get; }
         public ObjectPool<BonusBase> BonusesSpeed { private set; get; }
 
-        private PlayerPool poolPlayers;
-        private ObjectPool<WeaponModelBase> poolStones;
-        private ObjectPool<WeaponModelBase> poolSkulls;
-        private ObjectPool<BonusBase> poolBonusesSpeed;
-        private ObjectPool<EffectBase> poolStonesSplash;
-        private ObjectPool<EffectBase> poolDeathImage;
+        public void Awake()
+        {
+            if (instance == null)
+            {
+                instance = this;
+            }
+        }
 
-
-
-
-        /// <summary>
         /// Used object pool pattern
-        /// </summary>
         public void PreparePool<T>(int initialBufferSize, Transform container, T prefab,
-            Action<GameObject, ObjectPool<T>> init) where T : MonoBehaviour
+             ObjectPool<T> poolProperty) where T : MonoBehaviour
         {
             var pool = container.GetComponent<ObjectPool<T>>();
-            pool.CreatePool(prefab, initialBufferSize, serverNotify != null);
+            pool.CreatePool(prefab, initialBufferSize);
             for (var i = 0; i < initialBufferSize; i++)
             {
                 var item = Instantiate(prefab);
-                if (init != null)
-                {
-                    init(item.gameObject, pool);
-                }
+              
                 item.transform.SetParent(container);
                 pool.Store(item);
             }
-
-
+            poolProperty = pool;
         }
 
         /// <summary>
         /// When player pickup weapon another type 
         /// </summary>
-        private ObjectPool<WeaponModelBase> SwitchPoolWeapons(WeaponSpecification.Types type)
+        public ObjectPool<WeaponModelBase> SwitchPoolWeapons(WeaponSpecification.Types type)
         {
             switch (type)
             {
                 case WeaponSpecification.Types.Stone:
-                    return poolStones;
+                    return Stones;
                 case WeaponSpecification.Types.Skull:
-                    return poolSkulls;
+                    return Skulls;
             }
             return null;
         }
-
     }
 }

@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections;
-using Caveman.CustomAnimation;
-using Caveman.Bonuses;
+﻿using System.Collections;
 using Caveman.Level;
 using Caveman.Network;
 using Caveman.Players;
 using Caveman.Pools;
 using Caveman.Setting;
-using Caveman.Specification;
 using Caveman.UI;
 using Caveman.Utils;
-using Caveman.Weapons;
 using UnityEngine;
 using Random = System.Random;
 using Caveman.UI.Common;
@@ -22,15 +17,9 @@ namespace Caveman
         public Transform prefabHumanPlayer;
         public Transform prefabAiPlayer;
 
-        public AxeModel prefabAxe;
-        public StoneModel prefabStone;
-        public StoneSplash prefabStoneFlagmentInc;
-        public EffectBase prefabDeathImage;
-        public SpeedBonus prefabBonusSpeed;
-
         public SmoothCamera smoothCamera;
-     
-        protected Random r;
+
+        private Random r;
         protected IClientListener serverNotify;
       
         
@@ -55,26 +44,14 @@ namespace Caveman
 
         public virtual void Start()
         {
-            //todo may be use only UnityEngine.Random
             r = new Random();
-
-            poolStonesSplash = PreparePool<EffectBase>(Settings.PoolCountSplashStones, containerSplashStones, prefabStoneFlagmentInc, null);
-            poolDeathImage = PreparePool<EffectBase>(Settings.PoolCountDeathImages, containerDeathImages, prefabDeathImage, null);
-            poolStones = PreparePool<WeaponModelBase>(Settings.PoolCountStones, containerStones, prefabStone, InitStoneModel);
-            poolSkulls = PreparePool<WeaponModelBase>(Settings.PoolCountSkulls, containerSkulls, prefabAxe, InitSkullModel);
-            poolBonusesSpeed = PreparePool<BonusBase>(Settings.BonusSpeedPoolCount, containerBonusesSpeed, prefabBonusSpeed, InitBonusModel);
-
-            poolStones.RelatedPool += () => poolStonesSplash;
-
-            poolPlayers = containerPlayers.GetComponent<PlayerPool>();
-
+            
+            PoolManager.instance.Stones.RelatedPool += () => PoolManager.instance.SplashesStone;
             var humanPlayer = new Player(PlayerPrefs.GetString(AccountManager.KeyNickname),
                 SystemInfo.deviceUniqueIdentifier);
             BattleGui.instance.SubscribeOnEvents(humanPlayer);
-            BattleGui.instance.resultRound.SetPlayerPool(poolPlayers);
-            BattleGui.instance.waitForResp.SetPlayerPool(poolPlayers);
             CreatePlayer(humanPlayer, false, false, prefabHumanPlayer);
-            
+
             if (serverNotify == null)
             {
                 for (var i = 1; i < Settings.BotsCount + 1; i++)
@@ -88,18 +65,18 @@ namespace Caveman
 
         public virtual void Play()
         {
-            foreach (var player in poolPlayers.GetCurrentPlayers())
-            {
-                player.Play();
-            }
+         //   foreach (var player in poolPlayers.GetCurrentPlayers())
+          //  {
+          //      player.Play();
+          //  }
         }
         
         private IEnumerator PutBonusesOnMap()
         {
-            var bound = Settings.BonusSpeedMaxCount - poolBonusesSpeed.GetActivedCount; 
+            var bound = Settings.BonusSpeedMaxCount - PoolManager.instance.BonusesSpeed.GetActivedCount; 
             for (var i = 0; i < bound; i++)
             {
-                PutItemOnMap(poolBonusesSpeed);
+                PutItemOnMap(PoolManager.instance.BonusesSpeed);
             }
             yield return new WaitForSeconds(Settings.BonusTimeRespawn);
             StartCoroutine(PutBonusesOnMap());
@@ -109,11 +86,11 @@ namespace Caveman
         {
             for (var i = 0; i < Settings.WeaponInitialLying; i++)
             {
-                PutItemOnMap(poolStones);
+                PutItemOnMap(PoolManager.instance.Stones);
             }
             for (var i = 0; i < Settings.CountLyingSkulls; i++)
             {
-                PutItemOnMap(poolSkulls);
+                PutItemOnMap(PoolManager.instance.Skulls);
             }
             yield return new WaitForSeconds(Settings.WeaponTimeRespawn);
             StartCoroutine(PutWeaponsOnMap());
@@ -130,50 +107,19 @@ namespace Caveman
         {
             var prefab = Instantiate(prefabModel);
             var playerModel = prefab.GetComponent<PlayerModelBase>();
-            if (!isServerPlayer)
+            if (!isServerPlayer && !isAiPlayer)
             {
-                if (isAiPlayer)
-                {
-                    (playerModel as AiPlayerModel).SetWeapons(containerStones);
-                }
-                else
-                {
-                    BattleGui.instance.SubscribeOnEvents(playerModel);
-                    smoothCamera.target = prefab.transform;
-                    smoothCamera.SetPlayer(prefab.GetComponent<PlayerModelBase>());
-                    if (serverNotify != null) playerModel.GetComponent<SpriteRenderer>().material.color = Color.red;
-                }
+                BattleGui.instance.SubscribeOnEvents(playerModel);
+                smoothCamera.target = prefab.transform;
+                smoothCamera.SetPlayer(prefab.GetComponent<PlayerModelBase>());
+                if (serverNotify != null) playerModel.GetComponent<SpriteRenderer>().material.color = Color.red;
+
             }
-            playerModel.Init(player, r, poolPlayers, serverNotify);
-            poolPlayers.Add(player.Id, playerModel);
-            playerModel.transform.SetParent(containerPlayers);
-            playerModel.Death += position => StartCoroutine(DeathAnimate(position));
-            playerModel.ChangedWeaponsPool += SwitchPoolWeapons;
+            playerModel.Init(player, r, PlayerPool.instance, serverNotify);
+            PlayerPool.instance.Add(player.Id, playerModel);
+      
+            playerModel.ChangedWeaponsPool += PoolManager.instance.SwitchPoolWeapons;
             playerModel.Birth(new Vector2(r.Next(1, Settings.WidthMap - 1), r.Next(1, Settings.HeightMap - 1)));
         }      
-
-        // todo extracted this method from enterpoint
-        /// <summary>
-        /// used player
-        /// </summary>
-        /// <param name="position"></param>
-        /// <returns></returns>
-        private IEnumerator DeathAnimate(Vector2 position)
-        {
-            var deathImage = poolDeathImage.New();
-            deathImage.transform.position = position;
-            var spriteRenderer = deathImage.GetComponent<SpriteRenderer>();
-            if (spriteRenderer)
-            {
-                for (var i = 1f; i > 0; i -= 0.1f)
-                {
-                    var c = spriteRenderer.color;
-                    c.a = i;
-                    spriteRenderer.color = c;
-                    yield return new WaitForSeconds(0.1f);
-                }
-            }
-            poolDeathImage.Store(deathImage);
-        }
     }
 }

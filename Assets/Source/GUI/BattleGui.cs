@@ -36,11 +36,11 @@ namespace Caveman.UI
 
             gameObject.SetActive(false);
             movementJoystick.gameObject.SetActive(false);
-            LoadingScreen.instance.FinishLoading += new EventHandler((o, s) =>
+            LoadingScreen.instance.FinishLoading += (o, s) =>
             {
                 gameObject.SetActive(true);
                 movementJoystick.gameObject.SetActive(true);
-            });
+            };
         }
 
         public void SubscribeOnEvents(Player player)
