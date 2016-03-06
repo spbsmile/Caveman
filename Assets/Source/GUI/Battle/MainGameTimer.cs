@@ -21,7 +21,7 @@ namespace Caveman.UI.Battle
         {
             if (!Settings.multiplayerMode)
             {
-                StartCoroutine(UpdateTime(Settings.RoundTime));    
+                StartCoroutine(UpdateTime(Settings.RoundTime));
             }
         }
 

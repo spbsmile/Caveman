@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Caveman.CustomAnimation;
-using Caveman.Weapons;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Caveman.Pools
@@ -14,8 +11,6 @@ namespace Caveman.Pools
 
     public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour
     {
-        public Func<ObjectPool<EffectBase>> RelatedPool;
-
         private Stack<T> stack;
         private T prefab;
 
@@ -44,10 +39,6 @@ namespace Caveman.Pools
             {
                 item.transform.SetParent(transform);
                 item.GetComponent<ASupportPool<T>>().SetPool(this);
-            }
-            if (RelatedPool != null && item.GetComponent<StoneModel>())
-            {
-                item.GetComponent<StoneModel>().SetPoolSplash(RelatedPool());
             }
             return item;
         }

@@ -22,14 +22,7 @@ namespace Caveman
         private Random r;
         protected IClientListener serverNotify;
       
-        
-        //used only single player mode for bots
-        //todo deleted this. get this data from json
-        private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
-
-        /// <summary>
-        /// Get actual value of something parameter specification  
-        /// </summary>
+        /// Get actual values from json
         public static CurrentGameSettings CurrentSettings { get; private set; }
 
         public virtual void Awake()
@@ -46,17 +39,15 @@ namespace Caveman
         {
             r = new Random();
             
-            PoolManager.instance.Stones.RelatedPool += () => PoolManager.instance.SplashesStone;
-            var humanPlayer = new Player(PlayerPrefs.GetString(AccountManager.KeyNickname),
-                SystemInfo.deviceUniqueIdentifier);
+            var humanPlayer = new Player(PlayerPrefs.GetString(AccountManager.KeyNickname), SystemInfo.deviceUniqueIdentifier);
             BattleGui.instance.SubscribeOnEvents(humanPlayer);
-            CreatePlayer(humanPlayer, false, false, prefabHumanPlayer);
+            CreatePlayerModel(humanPlayer, false, false, prefabHumanPlayer);
 
             if (serverNotify == null)
             {
                 for (var i = 1; i < Settings.BotsCount + 1; i++)
                 {
-                    CreatePlayer(new Player(names[i], i.ToString()), true, false, prefabAiPlayer);
+                    // CreatePlayerModel(new Player(names[i], i.ToString()), true, false, prefabAiPlayer);
                 }
                 StartCoroutine(PutWeaponsOnMap());
                 StartCoroutine(PutBonusesOnMap());
@@ -103,7 +94,7 @@ namespace Caveman
             item.transform.position = new Vector2(r.Next(1, Settings.WidthMap - 1), r.Next(1, Settings.HeightMap - 1));
         }
 
-        protected void CreatePlayer(Player player, bool isAiPlayer, bool isServerPlayer, Transform prefabModel)
+        protected void CreatePlayerModel(Player player, bool isAiPlayer, bool isServerPlayer, Transform prefabModel)
         {
             var prefab = Instantiate(prefabModel);
             var playerModel = prefab.GetComponent<PlayerModelBase>();

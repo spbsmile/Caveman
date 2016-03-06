@@ -55,6 +55,7 @@ namespace Caveman.Players
             }
         }
 
+        //todo very strange
         public void PickUpBonus(BonusSpecification.Types type, float duration)
         {
             if (BonusActivated != null)

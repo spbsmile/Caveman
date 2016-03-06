@@ -119,7 +119,7 @@ namespace Caveman.Network
             {
                 var playerId = player[ServerParams.UserId].ToString();
                 if (!PlayerPool.instance.ContainsKey(playerId))
-                    CreatePlayer(new Player(player[ServerParams.UserName].ToString(), playerId), false, true, prefabServerPlayer);
+                    CreatePlayerModel(new Player(player[ServerParams.UserName].ToString(), playerId), false, true, prefabServerPlayer);
             }
         }
 
@@ -146,7 +146,7 @@ namespace Caveman.Network
 
         public void LoginReceived(string playerId, string playerName)
         {
-            CreatePlayer(new Player(playerName, playerId), false, true, prefabServerPlayer);
+            CreatePlayerModel(new Player(playerName, playerId), false, true, prefabServerPlayer);
             serverNotify.Respawn(PlayerPool.instance[OwnId].transform.position);
         }
 

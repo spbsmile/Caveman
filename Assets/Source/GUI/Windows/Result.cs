@@ -11,16 +11,9 @@ namespace Caveman.UI.Windows
         public Transform kills;
         public Transform deaths;
 
-        protected PlayerPool poolPlayers;
-
-        public void SetPlayerPool(PlayerPool pool)
-        {
-            poolPlayers = pool;
-        }
-
         protected  virtual IEnumerator DisplayResult()
         {
-            var players = poolPlayers.GetCurrentPlayers();
+            var players = PlayerPool.instance.GetCurrentPlayers();
             var lineIndex = 0;
             foreach (var playerModelBase in players)
             {
