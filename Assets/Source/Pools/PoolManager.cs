@@ -1,5 +1,6 @@
 ﻿using Caveman.Bonuses;
 using Caveman.CustomAnimation;
+using Caveman.Setting;
 using Caveman.Specification;
 using Caveman.Weapons;
 using UnityEngine;
@@ -20,7 +21,7 @@ namespace Caveman.Pools
         public Transform containerSplashStones;
         public Transform containerSkulls;
         public Transform containerDeathImages;
-        public Transform containerPlayers;
+        //public Transform containerPlayers;
         public Transform containerBonusesSpeed;
 
         public ObjectPool<EffectBase> SplashesStone { private set; get; }
@@ -30,17 +31,31 @@ namespace Caveman.Pools
         public ObjectPool<WeaponModelBase> Skulls { private set; get; }
         public ObjectPool<BonusBase> BonusesSpeed { private set; get; }
 
+        private enum PoolName
+        {
+            Stones,
+            ImagesDeath,
+            Skulls,
+            BonusesSpeed,
+            Axe,
+            StoneFlagment
+        }
+
         public void Awake()
         {
             if (instance == null)
             {
                 instance = this;
             }
+
+            PreparePool(Settings.PoolCountDeathImages, containerDeathImages, prefabDeathImage, PoolName.ImagesDeath);
+            //PreparePool();
+
         }
 
         /// Used object pool pattern
-        public void PreparePool<T>(int initialBufferSize, Transform container, T prefab,
-             ObjectPool<T> poolProperty) where T : MonoBehaviour
+        private void PreparePool<T>(int initialBufferSize, Transform container, T prefab,
+             PoolName name) where T : MonoBehaviour
         {
             var pool = container.GetComponent<ObjectPool<T>>();
             pool.CreatePool(prefab, initialBufferSize);
@@ -51,7 +66,10 @@ namespace Caveman.Pools
                 item.transform.SetParent(container);
                 pool.Store(item);
             }
-            poolProperty = pool;
+            //switch (PoolName)
+            //{
+                    
+            //}
         }
 
         /// <summary>
