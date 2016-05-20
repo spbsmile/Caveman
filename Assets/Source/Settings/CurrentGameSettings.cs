@@ -6,10 +6,16 @@ namespace Caveman.Setting
 {
     public class CurrentGameSettings
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public List<BonusSpecification> TypeBonuses { get; private set; }
         public List<WeaponSpecification> TypeWeapons { get; private set; }
         public List<PlayerSpecification> TypePlayer { get; private set; }
 
+        /// <summary>
+        ///  for get value propertes, key - isetting name
+        /// </summary>
         public readonly Dictionary<string, PlayerSpecification> DictionaryPlayer = new Dictionary<string, PlayerSpecification>();
         public readonly Dictionary<string, BonusSpecification> DictionaryBonuses = new Dictionary<string, BonusSpecification>();
         public readonly Dictionary<string, WeaponSpecification> DictionaryWeapons = new Dictionary<string, WeaponSpecification>();

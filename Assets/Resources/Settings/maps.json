@@ -1,12 +1,12 @@
 [
 	{
 		"name" : "single",
-		"Width" : 24,
-		"Height" : 24
+		"Width" : 12,
+		"Height" : 12
 	},
-	{
-		"name" : "multiplayer",
-		"Width" : 24,
-		"Height" : 24
-	}
+  {
+    "name": "multiplayer",
+    "Width": 1350,
+    "Height": 1350
+  }
 ]

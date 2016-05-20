@@ -1,5 +1,5 @@
 {
-    "botsCount" : 3,
-	"multiplayerMode" : false,
-	"botsNames" :["Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" ]
+  "botsCount": 3,
+  "multiplayerMode": false,
+  "botsNames": [ "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" ]
 }

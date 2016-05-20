@@ -25,21 +25,11 @@ namespace Caveman.Pools
         public Transform containerBonusesSpeed;
 
         public ObjectPool<EffectBase> SplashesStone { private set; get; }
-
         public ObjectPool<EffectBase> ImagesDeath { private set; get; }
+        public ObjectPool<EffectBase> Axes { private set; get; }
         public ObjectPool<WeaponModelBase> Stones { private set; get; }
         public ObjectPool<WeaponModelBase> Skulls { private set; get; }
         public ObjectPool<BonusBase> BonusesSpeed { private set; get; }
-
-        private enum PoolName
-        {
-            Stones,
-            ImagesDeath,
-            Skulls,
-            BonusesSpeed,
-            Axe,
-            StoneFlagment
-        }
 
         public void Awake()
         {
@@ -47,35 +37,33 @@ namespace Caveman.Pools
             {
                 instance = this;
             }
+        }
 
-            PreparePool(Settings.PoolCountDeathImages, containerDeathImages, prefabDeathImage, PoolName.ImagesDeath);
-            //PreparePool();
-
+        public void PrepareAllPools(CurrentGameSettings currentSettings)
+        {
+            ImagesDeath = PreparePool<EffectBase>(, containerDeathImages, prefabDeathImage);
+            SplashesStone = PreparePool<EffectBase>()
         }
 
         /// Used object pool pattern
-        private void PreparePool<T>(int initialBufferSize, Transform container, T prefab,
-             PoolName name) where T : MonoBehaviour
+        private ObjectPool<T> PreparePool<T>(int initialBufferSize, Transform container, T prefab) where T : MonoBehaviour
         {
             var pool = container.GetComponent<ObjectPool<T>>();
             pool.CreatePool(prefab, initialBufferSize);
             for (var i = 0; i < initialBufferSize; i++)
             {
                 var item = Instantiate(prefab);
-              
+
                 item.transform.SetParent(container);
                 pool.Store(item);
             }
-            //switch (PoolName)
-            //{
-                    
-            //}
+            return pool;
         }
-
-        /// <summary>
-        /// When player pickup weapon another type 
-        /// </summary>
-        public ObjectPool<WeaponModelBase> SwitchPoolWeapons(WeaponSpecification.Types type)
+ 
+    /// <summary>
+    /// When player pickup weapon another type 
+    /// </summary>
+    public ObjectPool<WeaponModelBase> SwitchPoolWeapons(WeaponSpecification.Types type)
         {
             switch (type)
             {

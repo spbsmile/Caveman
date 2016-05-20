@@ -19,7 +19,6 @@ namespace Caveman
 
         public SmoothCamera smoothCamera;
 
-        private Random r;
         protected IClientListener serverNotify;
       
         /// Get actual values from json
@@ -29,6 +28,7 @@ namespace Caveman
         {
             // load data from json files
             CurrentSettings = CurrentGameSettings.Load();
+
             //todo strange usage. settings type - deprecate
             Settings.multiplayerMode = false;
             //todo
@@ -37,8 +37,8 @@ namespace Caveman
 
         public virtual void Start()
         {
-            r = new Random();
             
+            PoolManager.instance.PrepareAllPools(CurrentSettings);
             var humanPlayer = new Player(PlayerPrefs.GetString(AccountManager.KeyNickname), SystemInfo.deviceUniqueIdentifier);
             BattleGui.instance.SubscribeOnEvents(humanPlayer);
             CreatePlayerModel(humanPlayer, false, false, prefabHumanPlayer);
