@@ -7,15 +7,13 @@ namespace Caveman.Specification
     public class WeaponSpecification : ISettings
     {
         //todo binding constr and data json
-        public WeaponSpecification(string name, float speed, int timeRespawn, int countPickup, int throwInterval, int maxOnPlayer, int initialLying, int rotateParameter, Types type)
+        public WeaponSpecification(string name, float speed, int timeRespawn, int countPickup, int throwInterval, int weight, int rotateParameter, Types type)
         {
             this.name = name;
             this.speed = speed;
             this.timeRespawn = timeRespawn;
             this.countPickup = countPickup;
-            this.throwInterval = throwInterval;
-            this.maxOnPlayer = maxOnPlayer;
-            this.initialLying = initialLying;
+            this.weight = weight;
             this.rotateParameter = rotateParameter;
             this.type = type;
         }
@@ -24,9 +22,7 @@ namespace Caveman.Specification
         [DataMember] private readonly float speed;
         [DataMember] private readonly int timeRespawn;
         [DataMember] private readonly int countPickup;
-        [DataMember] private readonly int throwInterval;
-        [DataMember] private readonly int maxOnPlayer;
-        [DataMember] private readonly int initialLying;
+        [DataMember] private readonly int weight;
         [DataMember] private readonly int rotateParameter;
         [DataMember] private readonly Types type;
 
@@ -45,21 +41,9 @@ namespace Caveman.Specification
             get { return timeRespawn; }
         }
 
-        //todo bad logic. need move on player specification. Diff player specification - dif value of parameter
-        public int ThrowInterval
+        public int Weight
         {
-            get { return throwInterval; }
-        }
-        
-        //todo bad logic. need move on player specification. Diff player specification - dif value of parameter
-        public int MaxOnPLayer
-        {
-            get { return maxOnPlayer; }
-        }
-
-        public int InitialLying
-        {
-            get { return initialLying; }
+            get { return weight; }
         }
 
         public int RotateParameter
@@ -67,7 +51,6 @@ namespace Caveman.Specification
             get { return rotateParameter; }
         }
 
-        //todo bad logic. need move on player specification. Diff player specification - dif value of parameter
         public int CountPickup
         {
             get { return countPickup; }

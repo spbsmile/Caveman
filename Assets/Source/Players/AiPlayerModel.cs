@@ -24,7 +24,7 @@ namespace Caveman.Players
             }
             else
             {
-                if (Player.Weapons < weaponSpecification.MaxOnPLayer)
+                if (Player.Weapons < weaponSpecification.Weight)
                 {
                     target = FindClosestLyingWeapon;
                     if (target == Vector2.zero)
