@@ -49,7 +49,6 @@ namespace Caveman.Players
         private ObjectPool<WeaponModelBase> poolWeapons;
 
         public float Speed { get; set; }
-        public int Gold { get; private set; }
         public Player Player { private set; get; }
 
         protected virtual void Awake()
@@ -59,7 +58,6 @@ namespace Caveman.Players
             specification = EnterPoint.CurrentSettings.DictionaryPlayer["sample"];
             weaponSpecification = EnterPoint.CurrentSettings.DictionaryWeapons["stone"];
             Speed = specification.Speed;
-            Gold = specification.Gold;
         }
 
         public void Init(Player player, Random random, IClientListener serverNotify)

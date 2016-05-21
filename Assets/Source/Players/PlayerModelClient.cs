@@ -68,15 +68,15 @@ namespace Caveman.Players
             StartCoroutine(ThrowOnTimer());
         }
 
-        public override bool SpendGold(int value)
-        {
-            var res = base.SpendGold(value);
-            if (res && multiplayer)
-            {
-                serverNotify.PlayerGold(Gold);    
-            }
-            return res;
-        }
+        //public override bool SpendGold(int value)
+        //{
+        //    var res = base.SpendGold(value);
+        //    if (res && multiplayer)
+        //    {
+        //        serverNotify.PlayerGold(Gold);    
+        //    }
+        //    return res;
+        //}
 
         public override IEnumerator Respawn(Vector2 point)
         {
@@ -113,7 +113,7 @@ namespace Caveman.Players
 
         private IEnumerator ThrowOnTimer()
         {
-            yield return new WaitForSeconds(weaponSpecification.TimeThrow);
+            yield return new WaitForSeconds(weaponSpecification.ThrowInterval);
             if (Player.Weapons > 0)
             {
                 var victim = FindClosestPlayer();

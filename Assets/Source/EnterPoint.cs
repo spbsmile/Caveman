@@ -16,13 +16,15 @@ namespace Caveman
     {
         public Transform prefabHumanPlayer;
         public Transform prefabAiPlayer;
-
+         
         public SmoothCamera smoothCamera;
 
         protected IClientListener serverNotify;
       
         /// Get actual values from json
         public static CurrentGameSettings CurrentSettings { get; private set; }
+
+        private Random r;
 
         public virtual void Awake()
         {
@@ -37,7 +39,8 @@ namespace Caveman
 
         public virtual void Start()
         {
-            
+            r = new Random();
+
             PoolManager.instance.PrepareAllPools(CurrentSettings);
             var humanPlayer = new Player(PlayerPrefs.GetString(AccountManager.KeyNickname), SystemInfo.deviceUniqueIdentifier);
             BattleGui.instance.SubscribeOnEvents(humanPlayer);

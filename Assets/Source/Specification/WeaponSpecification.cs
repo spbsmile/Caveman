@@ -7,13 +7,13 @@ namespace Caveman.Specification
     public class WeaponSpecification : ISettings
     {
         //todo binding constr and data json
-        public WeaponSpecification(string name, float speed, int timeRespawn, int countPickup, int timeThrow, int maxOnPlayer, int initialLying, int rotateParameter, Types type)
+        public WeaponSpecification(string name, float speed, int timeRespawn, int countPickup, int throwInterval, int maxOnPlayer, int initialLying, int rotateParameter, Types type)
         {
             this.name = name;
             this.speed = speed;
             this.timeRespawn = timeRespawn;
             this.countPickup = countPickup;
-            this.timeThrow = timeThrow;
+            this.throwInterval = throwInterval;
             this.maxOnPlayer = maxOnPlayer;
             this.initialLying = initialLying;
             this.rotateParameter = rotateParameter;
@@ -24,7 +24,7 @@ namespace Caveman.Specification
         [DataMember] private readonly float speed;
         [DataMember] private readonly int timeRespawn;
         [DataMember] private readonly int countPickup;
-        [DataMember] private readonly int timeThrow;
+        [DataMember] private readonly int throwInterval;
         [DataMember] private readonly int maxOnPlayer;
         [DataMember] private readonly int initialLying;
         [DataMember] private readonly int rotateParameter;
@@ -46,9 +46,9 @@ namespace Caveman.Specification
         }
 
         //todo bad logic. need move on player specification. Diff player specification - dif value of parameter
-        public int TimeThrow
+        public int ThrowInterval
         {
-            get { return timeThrow; }
+            get { return throwInterval; }
         }
         
         //todo bad logic. need move on player specification. Diff player specification - dif value of parameter

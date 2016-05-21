@@ -6,14 +6,13 @@ namespace Caveman.Specification
     [DataContract]
     public class PlayerSpecification : ISettings
     {
-        public PlayerSpecification(string name, float speed, int timeRespawn, int timeInvulnerability, Types type, int gold)
+        public PlayerSpecification(string name, float speed, int timeRespawn, int timeInvulnerability, Types type)
         {
             this.name = name;
             this.speed = speed;
             this.timeRespawn = timeRespawn;
             this.timeInvulnerability = timeInvulnerability;
             this.type = type;
-            this.gold = gold;
         }
 
         [DataMember] private readonly string name;
@@ -21,7 +20,6 @@ namespace Caveman.Specification
         [DataMember] private readonly int timeRespawn;
         [DataMember] private readonly int timeInvulnerability;
         [DataMember] private readonly Types type;
-        [DataMember] private readonly int gold;
 
         public string Name
         {
@@ -46,11 +44,6 @@ namespace Caveman.Specification
         public Types Type
         {
             get { return type; }
-        }
-
-        public int Gold
-        {
-            get { return gold; }
         }
 
         public enum Types
