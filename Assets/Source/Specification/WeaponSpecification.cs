@@ -6,13 +6,13 @@ namespace Caveman.Specification
     [DataContract]
     public class WeaponSpecification : ISettings
     {
-        //todo binding constr and data json
-        public WeaponSpecification(string name, float speed, int timeRespawn, int countPickup, int throwInterval, int weight, int rotateParameter, Types type)
+        public WeaponSpecification(string name, float speed, int timeRespawn, float cooldown, int countItems, int weight, int rotateParameter, Types type)
         {
             this.name = name;
             this.speed = speed;
             this.timeRespawn = timeRespawn;
-            this.countPickup = countPickup;
+            this.cooldown = cooldown;
+            this.countItems = countItems;
             this.weight = weight;
             this.rotateParameter = rotateParameter;
             this.type = type;
@@ -21,7 +21,8 @@ namespace Caveman.Specification
         [DataMember] private readonly string name;
         [DataMember] private readonly float speed;
         [DataMember] private readonly int timeRespawn;
-        [DataMember] private readonly int countPickup;
+        [DataMember] private readonly float cooldown;
+        [DataMember] private readonly int countItems;
         [DataMember] private readonly int weight;
         [DataMember] private readonly int rotateParameter;
         [DataMember] private readonly Types type;
@@ -41,6 +42,11 @@ namespace Caveman.Specification
             get { return timeRespawn; }
         }
 
+        public float Cooldown
+        {
+            get { return cooldown; }
+        }
+
         public int Weight
         {
             get { return weight; }
@@ -51,9 +57,9 @@ namespace Caveman.Specification
             get { return rotateParameter; }
         }
 
-        public int CountPickup
+        public int CountItems
         {
-            get { return countPickup; }
+            get { return countItems; }
         }
 
         public Types Type

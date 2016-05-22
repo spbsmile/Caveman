@@ -65,7 +65,7 @@ namespace Caveman.Players
         public override void Play()
         {
             base.Play();
-            StartCoroutine(ThrowOnTimer());
+            StartCoroutine(ThrowWeaponOnCooldown());
         }
 
         //public override bool SpendGold(int value)
@@ -100,29 +100,29 @@ namespace Caveman.Players
         {
             if (Player.Weapons > weaponModel.Specification.Weight) return;
             base.PickupWeapon(weaponModel);
-            Player.Weapons += weaponModel.Specification.CountPickup;
+            Player.Weapons += weaponModel.Specification.CountItems;
             if (multiplayer) serverNotify.PickWeapon(weaponModel.Id, (int)weaponModel.Specification.Type);
         }
 
-        public override void Throw(Vector2 aim)
+        public override void ThrowWeapon(Vector2 aim)
         {
             if (multiplayer) serverNotify.UseWeapon(aim, (int) weaponSpecification.Type);
-            base.Throw(aim);
+            base.ThrowWeapon(aim);
             Player.Weapons--;
         }
 
-        private IEnumerator ThrowOnTimer()
+        private IEnumerator ThrowWeaponOnCooldown()
         {
-            yield return new WaitForSeconds(weaponSpecification.ThrowInterval);
+            yield return new WaitForSeconds(weaponSpecification.Cooldown);
             if (Player.Weapons > 0)
             {
                 var victim = FindClosestPlayer();
                 if (victim != null)
                 {
-                    Throw(victim.transform.position);
+                    ThrowWeapon(victim.transform.position);
                 }
             }
-            StartCoroutine(ThrowOnTimer());
+            StartCoroutine(ThrowWeaponOnCooldown());
         }
 
         private PlayerModelBase FindClosestPlayer()

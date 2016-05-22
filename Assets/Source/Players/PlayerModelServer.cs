@@ -29,9 +29,9 @@ namespace Caveman.Players
             base.Die();
         }
 
-        public override void Throw(Vector2 aim)
+        public override void ThrowWeapon(Vector2 aim)
         {
-            base.Throw(aim);
+            base.ThrowWeapon(aim);
             weapons--;
         }
 

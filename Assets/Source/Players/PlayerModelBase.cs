@@ -109,7 +109,7 @@ namespace Caveman.Players
             weaponModel.Take();
         }
 
-        public virtual void Throw(Vector2 aim)
+        public virtual void ThrowWeapon(Vector2 aim)
         {
             playerAnimation.Throw();
             poolWeapons.New().SetMotion(Player, transform.position, aim);
