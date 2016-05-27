@@ -9,7 +9,7 @@ namespace Caveman.Bonuses
     {
         public void Awake()
         {
-            Specification = EnterPoint.CurrentSettings.DictionaryBonuses["speed"];
+            Config = EnterPoint.CurrentSettings.DictionaryBonuses["speed"];
         }
 
         public override void Effect(PlayerModelBase playerModel)

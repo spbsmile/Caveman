@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Caveman.Specification;
+using Caveman.Configs;
 
 namespace Caveman.Setting
 {
@@ -8,33 +8,35 @@ namespace Caveman.Setting
         /// <summary>
         /// 
         /// </summary>
-        public List<BonusSpecification> TypeBonuses { get; private set; }
-        public List<WeaponSpecification> TypeWeapons { get; private set; }
-        public List<PlayerSpecification> TypePlayer { get; private set; }
+        public List<BonusConfig> TypeBonuses { get; private set; }
+        public List<WeaponConfig> TypeWeapons { get; private set; }
+        public List<PlayerConfig> TypePlayer { get; private set; }
 
         /// <summary>
         ///  for get value propertes, key - isetting name
         /// </summary>
-        public readonly Dictionary<string, PlayerSpecification> DictionaryPlayer = new Dictionary<string, PlayerSpecification>();
-        public readonly Dictionary<string, BonusSpecification> DictionaryBonuses = new Dictionary<string, BonusSpecification>();
-        public readonly Dictionary<string, WeaponSpecification> DictionaryWeapons = new Dictionary<string, WeaponSpecification>();
+        public readonly Dictionary<string, PlayerConfig> DictionaryPlayer = new Dictionary<string, PlayerConfig>();
+        public readonly Dictionary<string, BonusConfig> DictionaryBonuses = new Dictionary<string, BonusConfig>();
+        public readonly Dictionary<string, WeaponConfig> DictionaryWeapons = new Dictionary<string, WeaponConfig>();
 
-        public static CurrentGameSettings Load()
+        public static CurrentGameSettings Load(string bonuses, string weapons, string players, string pools)
         {
-            var typeBonuses =
-                SettingsHandler.ParseSettingsFromFile<List<BonusSpecification>>("bonuses");
+            var bonusConfigs =
+                SettingsHandler.ParseSettingsFromFile<List<BonusConfig>>(bonuses);
 
-            var typePlayers =
-                SettingsHandler.ParseSettingsFromFile<List<PlayerSpecification>>("players");
+            var playerConfigs =
+                SettingsHandler.ParseSettingsFromFile<List<PlayerConfig>>(players);
 
-            var typeWeapons =
-                SettingsHandler.ParseSettingsFromFile<List<WeaponSpecification>>("weapons");
+            var weaponConfigs =
+                SettingsHandler.ParseSettingsFromFile<List<WeaponConfig>>(weapons);
 
-            return Create(typeBonuses, typePlayers, typeWeapons);
+            var poolsConfig = SettingsHandler.ParseSettingsFromFile<List<PoolsConfig>>(pools);
+
+            return Create(bonusConfigs, playerConfigs, weaponConfigs);
         }
 
-        private CurrentGameSettings(IEnumerable<BonusSpecification> typeBonuses, IEnumerable<PlayerSpecification> typePlayers,
-            IEnumerable<WeaponSpecification> typeWeapons)
+        private CurrentGameSettings(IEnumerable<BonusConfig> typeBonuses, IEnumerable<PlayerConfig> typePlayers,
+            IEnumerable<WeaponConfig> typeWeapons)
         {
             foreach (var typeBonus in typeBonuses)
             {
@@ -52,8 +54,8 @@ namespace Caveman.Setting
             }
         }
 
-        private static CurrentGameSettings Create(List<BonusSpecification> typeBonuses, List<PlayerSpecification> typePlayers,
-            List<WeaponSpecification> typeWeapons)
+        private static CurrentGameSettings Create(List<BonusConfig> typeBonuses, List<PlayerConfig> typePlayers,
+            List<WeaponConfig> typeWeapons)
         {
             return new CurrentGameSettings(typeBonuses, typePlayers, typeWeapons)
             {

@@ -2,13 +2,13 @@
 using Caveman.Pools;
 using Caveman.Utils;
 using UnityEngine;
-using Caveman.Specification;
+using Caveman.Configs;
 
 namespace Caveman.Weapons
 {
     public  class WeaponModelBase : ASupportPool<WeaponModelBase>
     {
-        public WeaponSpecification Specification { protected set; get; }
+        public WeaponConfig Config { protected set; get; }
         public Player Owner { private set; get; }
         
         protected Vector2 startPosition;
@@ -49,7 +49,7 @@ namespace Caveman.Weapons
             transform.position = start;
             target = aim;
             // todo if weapon move no linear, delta needless, example: stone model, bezier curve
-            delta = UnityExtensions.CalculateDelta(start, aim, Specification.Speed);
+            delta = UnityExtensions.CalculateDelta(start, aim, Config.Speed);
         }
 
         public override void SetPool(ObjectPool<WeaponModelBase> weaponPool)
@@ -65,7 +65,7 @@ namespace Caveman.Weapons
                 {
                     transform.position = new Vector2(transform.position.x + delta.x * Time.deltaTime,
                         transform.position.y + delta.y * Time.deltaTime);
-                    transform.Rotate(Vector3.forward, Specification.RotateParameter * Time.deltaTime * 100);
+                    transform.Rotate(Vector3.forward, Config.RotateParameter * Time.deltaTime * 100);
                 }
                 else
                 {

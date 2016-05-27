@@ -1,12 +1,12 @@
 ﻿using System.Runtime.Serialization;
 using Caveman.Setting;
 
-namespace Caveman.Specification
+namespace Caveman.Configs
 {
     [DataContract]
-    public class PoolsInitialCapacitySpecification : ISettings
+    public class PoolsConfig : ISettings
     {
-        public PoolsInitialCapacitySpecification(string name, int weaponsRare, int weaponsOrdinary, int weaponsPopular, int deathImages)
+        public PoolsConfig(string name, int weaponsRare, int weaponsOrdinary, int weaponsPopular, int deathImages)
         {
             this.name = name;
             this.weaponsRare = weaponsRare;

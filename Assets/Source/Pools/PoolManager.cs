@@ -1,7 +1,7 @@
 ﻿using Caveman.Bonuses;
 using Caveman.CustomAnimation;
 using Caveman.Setting;
-using Caveman.Specification;
+using Caveman.Configs;
 using Caveman.Weapons;
 using UnityEngine;
 
@@ -63,13 +63,13 @@ namespace Caveman.Pools
     /// <summary>
     /// When player pickup weapon another type 
     /// </summary>
-    public ObjectPool<WeaponModelBase> SwitchPoolWeapons(WeaponSpecification.Types type)
+    public ObjectPool<WeaponModelBase> SwitchPoolWeapons(WeaponConfig.Types type)
         {
             switch (type)
             {
-                case WeaponSpecification.Types.Stone:
+                case WeaponConfig.Types.Stone:
                     return Stones;
-                case WeaponSpecification.Types.Skull:
+                case WeaponConfig.Types.Skull:
                     return Skulls;
             }
             return null;

@@ -1,12 +1,12 @@
 ﻿using Caveman.Setting;
 using System.Runtime.Serialization;
 
-namespace Caveman.Specification
+namespace Caveman.Configs
 {
     [DataContract]
-    public class PlayerSpecification : ISettings
+    public class PlayerConfig : ISettings
     {
-        public PlayerSpecification(string name, float speed, int timeRespawn, int timeInvulnerability,float strength, Types type)
+        public PlayerConfig(string name, float speed, int timeRespawn, int timeInvulnerability,float strength, Types type)
         {
             this.name = name;
             this.speed = speed;

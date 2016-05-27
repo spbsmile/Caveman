@@ -1,12 +1,12 @@
 ﻿using System.Runtime.Serialization;
 using Caveman.Setting;
 
-namespace Caveman.Specification
+namespace Caveman.Configs
 {
     [DataContract]
-    public class BonusSpecification : ISettings
+    public class BonusConfig : ISettings
     {
-        public BonusSpecification(string name, float duration, Types type)
+        public BonusConfig(string name, float duration, Types type)
         {
             this.name = name;
             this.duration = duration;

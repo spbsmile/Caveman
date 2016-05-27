@@ -1,12 +1,12 @@
 ﻿using Caveman.Setting;
 using System.Runtime.Serialization;
 
-namespace Caveman.Specification
+namespace Caveman.Configs
 {
     [DataContract]
-    public class WeaponSpecification : ISettings
+    public class WeaponConfig : ISettings
     {
-        public WeaponSpecification(string name, float speed, int timeRespawn, float cooldown, int countItems, int weight, int rotateParameter, Types type)
+        public WeaponConfig(string name, float speed, int timeRespawn, float cooldown, int countItems, int weight, int rotateParameter, Types type)
         {
             this.name = name;
             this.speed = speed;

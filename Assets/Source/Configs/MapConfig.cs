@@ -1,13 +1,13 @@
 ﻿using System.Runtime.Serialization;
 using Caveman.Setting;
 
-namespace Caveman.Specification
+namespace Caveman.Configs
 {
     [DataContract]
-    public class MapSpecification : ISettings
+    public class MapConfig : ISettings
     {
        
-        public MapSpecification(string name, int width, int height)
+        public MapConfig(string name, int width, int height)
         {
             this.name = name;
             this.height = height;

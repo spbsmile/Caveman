@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using Caveman.Bonuses;
 using Caveman.Setting;
-using Caveman.Specification;
+using Caveman.Configs;
 using Caveman.Weapons;
 using UnityEngine;
 
@@ -23,12 +23,12 @@ namespace Caveman.Players
             {
                 if (weapon.Owner == null)
                 {
-                    switch (weapon.Specification.Type)
+                    switch (weapon.Config.Type)
                     {
-                        case WeaponSpecification.Types.Stone:
+                        case WeaponConfig.Types.Stone:
                             PickupWeapon(other.gameObject.GetComponent<StoneModel>());
                             break;
-                        case WeaponSpecification.Types.Skull:
+                        case WeaponConfig.Types.Skull:
                             PickupWeapon(other.gameObject.GetComponent<AxeModel>());
                             break;
                     }
@@ -92,28 +92,28 @@ namespace Caveman.Players
         public override void PickupBonus(BonusBase bonus)
         {
             //todo hack
-            if (multiplayer) serverNotify.PickBonus(bonus.Id, (int)bonus.Specification.Type);
+            if (multiplayer) serverNotify.PickBonus(bonus.Id, (int)bonus.Config.Type);
             base.PickupBonus(bonus);
         }
 
         public override void PickupWeapon(WeaponModelBase weaponModel)
         {
-            if (Player.Weapons > weaponModel.Specification.Weight) return;
+            if (Player.Weapons > weaponModel.Config.Weight) return;
             base.PickupWeapon(weaponModel);
-            Player.Weapons += weaponModel.Specification.CountItems;
-            if (multiplayer) serverNotify.PickWeapon(weaponModel.Id, (int)weaponModel.Specification.Type);
+            Player.Weapons += weaponModel.Config.CountItems;
+            if (multiplayer) serverNotify.PickWeapon(weaponModel.Id, (int)weaponModel.Config.Type);
         }
 
         public override void ThrowWeapon(Vector2 aim)
         {
-            if (multiplayer) serverNotify.UseWeapon(aim, (int) weaponSpecification.Type);
+            if (multiplayer) serverNotify.UseWeapon(aim, (int) WeaponConfig.Type);
             base.ThrowWeapon(aim);
             Player.Weapons--;
         }
 
         private IEnumerator ThrowWeaponOnCooldown()
         {
-            yield return new WaitForSeconds(weaponSpecification.Cooldown);
+            yield return new WaitForSeconds(WeaponConfig.Cooldown);
             if (Player.Weapons > 0)
             {
                 var victim = FindClosestPlayer();

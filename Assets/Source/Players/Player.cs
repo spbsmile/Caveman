@@ -1,5 +1,5 @@
 ﻿using System;
-using Caveman.Specification;
+using Caveman.Configs;
 
 namespace Caveman.Players
 {
@@ -8,7 +8,7 @@ namespace Caveman.Players
         // event for gui
         public Action<int> WeaponsCountChanged;
         public Action<int> KillsCountChanged;
-        public Action<BonusSpecification.Types, float> BonusActivated;
+        public Action<BonusConfig.Types, float> BonusActivated;
        
         private int weapons;
         private int kills;
@@ -56,7 +56,7 @@ namespace Caveman.Players
         }
 
         //todo very strange
-        public void PickUpBonus(BonusSpecification.Types type, float duration)
+        public void PickUpBonus(BonusConfig.Types type, float duration)
         {
             if (BonusActivated != null)
             {

@@ -25,11 +25,11 @@ namespace Caveman
         public static CurrentGameSettings CurrentSettings { get; private set; }
 
         private Random r;
-
+         
         public virtual void Awake()
         {
-            // load data from json files
-            CurrentSettings = CurrentGameSettings.Load();
+            // path: Resource/Settings
+            CurrentSettings = CurrentGameSettings.Load("bonuses", "weapons", "players", "pools");
 
             //todo strange usage. settings type - deprecate
             Settings.multiplayerMode = false;

@@ -5,7 +5,7 @@ using Caveman.Bonuses;
 using Caveman.CustomAnimation;
 using Caveman.Network;
 using Caveman.Pools;
-using Caveman.Specification;
+using Caveman.Configs;
 using Caveman.Utils;
 using Caveman.Weapons;
 using UnityEngine;
@@ -23,13 +23,13 @@ namespace Caveman.Players
         public Action<Vector2> Death;
         public Action RespawnGuiDisabled;
         // todo two some event. 
-        public Func<WeaponSpecification.Types, ObjectPool<WeaponModelBase>> ChangedWeaponsPool;
+        public Func<WeaponConfig.Types, ObjectPool<WeaponModelBase>> ChangedWeaponsPool;
         protected Action ChangedWeapons;
 
         [HideInInspector] public BonusBase bonusBase;
         [HideInInspector] public SpriteRenderer spriteRenderer;
         [HideInInspector] public bool firstRespawn = true;
-        [HideInInspector] public PlayerSpecification specification;
+        [HideInInspector] public PlayerConfig Config;
 
         protected Vector2 target;
         protected Vector2 delta;
@@ -40,7 +40,7 @@ namespace Caveman.Players
         protected IClientListener serverNotify;
         protected bool multiplayer;
         
-        protected WeaponSpecification weaponSpecification;
+        protected WeaponConfig WeaponConfig;
         protected internal bool invulnerability;
         protected PlayerAnimation playerAnimation;
         protected List<PlayerModelBase> players;
@@ -55,9 +55,9 @@ namespace Caveman.Players
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
             playerAnimation = new PlayerAnimation(GetComponent<Animator>());
-            specification = EnterPoint.CurrentSettings.DictionaryPlayer["sample"];
-            weaponSpecification = EnterPoint.CurrentSettings.DictionaryWeapons["stone"];
-            Speed = specification.Speed;
+            Config = EnterPoint.CurrentSettings.DictionaryPlayer["sample"];
+            WeaponConfig = EnterPoint.CurrentSettings.DictionaryWeapons["stone"];
+            Speed = Config.Speed;
         }
 
         public void Init(Player player, Random random, IClientListener serverNotify)
@@ -92,10 +92,10 @@ namespace Caveman.Players
 
         public virtual void PickupWeapon(WeaponModelBase weaponModel)
         {
-            if (poolWeapons == null || weaponModel.Specification.Type != weaponSpecification.Type)
+            if (poolWeapons == null || weaponModel.Config.Type != WeaponConfig.Type)
             {
-                poolWeapons = ChangedWeaponsPool(weaponModel.Specification.Type);
-                weaponSpecification = weaponModel.Specification;
+                poolWeapons = ChangedWeaponsPool(weaponModel.Config.Type);
+                WeaponConfig = weaponModel.Config;
                 if (ChangedWeapons != null)
                 {
                     ChangedWeapons();    
@@ -127,7 +127,7 @@ namespace Caveman.Players
 
         public virtual IEnumerator Respawn(Vector2 point)
         {
-            yield return new WaitForSeconds(specification.TimeRespawn);
+            yield return new WaitForSeconds(Config.TimeRespawn);
             Birth(point);
             StopMove();
             if (RespawnGuiDisabled != null) RespawnGuiDisabled();
@@ -137,7 +137,7 @@ namespace Caveman.Players
         {
             poolPlayers.New(Player.Id).transform.position = point;
             invulnerability = true;
-            StartCoroutine(ProggressInvulnerability(specification.TimeInvulnerability));
+            StartCoroutine(ProggressInvulnerability(Config.TimeInvulnerability));
         }
 
         // invoke, when respawn

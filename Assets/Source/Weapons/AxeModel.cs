@@ -4,7 +4,7 @@
     {
         public void Awake()
         {
-            Specification = EnterPoint.CurrentSettings.DictionaryWeapons["axe"];
+            Config = EnterPoint.CurrentSettings.DictionaryWeapons["axe"];
         }
 
         // TODO разные кривые траекторий

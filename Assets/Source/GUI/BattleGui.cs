@@ -52,7 +52,7 @@ namespace Caveman.UI
 
         public void SubscribeOnEvents(PlayerModelBase playerModelBase)
         {
-            playerModelBase.Death += vector2 => waitForResp.Activate(playerModelBase.specification.TimeRespawn);
+            playerModelBase.Death += vector2 => waitForResp.Activate(playerModelBase.Config.TimeRespawn);
             playerModelBase.RespawnGuiDisabled += () => waitForResp.gameObject.SetActive(false);
             waitForResp.buttonRespawn.onClick.AddListener(delegate
             {
