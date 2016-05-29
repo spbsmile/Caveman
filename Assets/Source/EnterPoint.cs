@@ -59,14 +59,19 @@ namespace Caveman
 
         public virtual void Play()
         {
-         //   foreach (var player in poolPlayers.GetCurrentPlayers())
-          //  {
-          //      player.Play();
-          //  }
+            //   foreach (var player in poolPlayers.GetCurrentPlayers())
+            //  {
+            //      player.Play();
+            //  }
         }
-        
-        private IEnumerator PutBonusesOnMap()
+
+        private IEnumerator PutBonusesOnMap(string[] bonusesType) 
         {
+            for (var i = 0; i < bonusesType.Length; i++)
+            {
+                CurrentSettings.DictionaryBonuses[bonusesType[i]].
+            }
+
             var bound = Settings.BonusSpeedMaxCount - PoolManager.instance.BonusesSpeed.GetActivedCount; 
             for (var i = 0; i < bound; i++)
             {
@@ -76,8 +81,42 @@ namespace Caveman
             StartCoroutine(PutBonusesOnMap());
         }
 
-        private IEnumerator PutWeaponsOnMap()
+        private IEnumerator PutAllItemsOnMap(string[] typesItems)
         {
+            for (int i = 0; i < typesItems.Length; i++)
+            {
+                var timeRespawn = 0;
+                switch (typesItems[i])
+                {
+                    case "weapons":
+                        foreach (var weaponConfig in CurrentSettings.TypeWeapons)
+                        {
+                            
+                        }
+                        timeRespawn = CurrentSettings.DictionaryWeapons[].TimeRespawn;
+                }
+            }
+        }
+
+        private IEnumerator PutItemsOnMap(float timeRespawn)
+        {
+            
+        }
+
+        private IEnumerator PutWeaponsOnMap(string type)
+        {
+            yield return new WaitForSeconds(Settings.WeaponTimeRespawn);
+            StartCoroutine(PutWeaponsOnMap());
+        }
+
+        //todo separate logic to procesuder create world. all params get from json settings
+        private IEnumerator PutWeaponsOnMap(string[] weaponsType)
+        {
+            for (var i = 0; i < weaponsType.Length; i++)
+            {
+                CurrentSettings.DictionaryWeapons[weaponsType[i]]
+            }
+
             for (var i = 0; i < Settings.WeaponInitialLying; i++)
             {
                 PutItemOnMap(PoolManager.instance.Stones);

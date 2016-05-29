@@ -21,7 +21,7 @@ namespace Caveman.Configs
         public string Name
         {
             get { return name; }
-        }
+        } 
 
         public int TimeRespawn
         {

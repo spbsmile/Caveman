@@ -57,6 +57,7 @@ namespace Caveman.Setting
             return default(T);
         }
 
+        //deserilizations
         public static T ParseSettingsFromFile<T>(string fileName)
         {
             var settingsFromFile = default(T);

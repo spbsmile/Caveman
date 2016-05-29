@@ -20,6 +20,9 @@ namespace Caveman.Configs
         [DataMember] private readonly int weaponsOrdinary;
         [DataMember] private readonly int weaponsPopular;
         [DataMember] private readonly int deathImages;
+        [DataMember] private int bonusesRare;
+        [DataMember] private int bonusesOrdinary;
+        [DataMember] private int bonusesPopular;
 
         public string Name { get { return name; } }
 
@@ -28,6 +31,12 @@ namespace Caveman.Configs
         public int WeaponsOrdinary { get { return weaponsOrdinary; } }
 
         public int WeaponsPopular { get { return weaponsPopular; } }
+
+        public int BonusesRare { get { return bonusesRare; } }
+
+        public int BonusesOrdinary { get { return bonusesOrdinary; } }
+
+        public int BonusesPopular { get { return bonusesPopular; } }
 
         public int DeathImages { get { return deathImages; } }
     }

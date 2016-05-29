@@ -2,22 +2,20 @@
   {
     "name": "stone",
     "speed": 5,
-    "countPickup": 1,
+    "countItems": 1,
     "timeRespawn": 20,
-    "timeThrow": 2,
-    "maxOnPlayer": 10,
-    "initialLying": 10,
+    "cooldown": 2,
+    "weight": 10,
     "rotateParameter": 10,
     "type": 0
   },
   {
     "name": "axe",
     "speed": 5,
-    "countPickup": 1,
+    "countItems": 1,
     "timeRespawn": 20,
-    "timeThrow": 2,
-    "maxOnPlayer": 10,
-    "initialLying": 10,
+    "cooldown": 2,
+    "weight": 10,
     "rotateParameter": 10,
     "type": 1
   }

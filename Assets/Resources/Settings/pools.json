@@ -1,0 +1,12 @@
+[
+  {
+    "name": "sample",
+    "weaponsRare": 10,
+    "weaponsOrdinary": 20,
+    "weaponsPopular": 40,
+    "bonusesRare": 10,
+    "bonusesOrdinary": 20,
+    "bonusesPopular": 40,
+    "bonusesSpeed": 6    
+  }
+]
