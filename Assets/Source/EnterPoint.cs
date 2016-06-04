@@ -16,7 +16,7 @@ namespace Caveman
     {
         public Transform prefabHumanPlayer;
         public Transform prefabAiPlayer;
-         
+
         public SmoothCamera smoothCamera;
 
         protected IClientListener serverNotify;
@@ -29,7 +29,7 @@ namespace Caveman
         public virtual void Awake()
         {
             // path: Resource/Settings
-            CurrentSettings = CurrentGameSettings.Load("bonuses", "weapons", "players", "pools");
+            CurrentSettings = CurrentGameSettings.Load("bonuses", "weapons", "players", "pools", "images");
 
             //todo strange usage. settings type - deprecate
             Settings.multiplayerMode = false;
@@ -41,7 +41,7 @@ namespace Caveman
         {
             r = new Random();
 
-            PoolManager.instance.PrepareAllPools(CurrentSettings);
+            PoolsManager.instance.PrepareAllPools(CurrentSettings);
             var humanPlayer = new Player(PlayerPrefs.GetString(AccountManager.KeyNickname), SystemInfo.deviceUniqueIdentifier);
             BattleGui.instance.SubscribeOnEvents(humanPlayer);
             CreatePlayerModel(humanPlayer, false, false, prefabHumanPlayer);
@@ -72,10 +72,10 @@ namespace Caveman
                 CurrentSettings.DictionaryBonuses[bonusesType[i]].
             }
 
-            var bound = Settings.BonusSpeedMaxCount - PoolManager.instance.BonusesSpeed.GetActivedCount; 
+            var bound = Settings.BonusSpeedMaxCount - PoolsManager.instance.BonusesSpeed.GetActivedCount; 
             for (var i = 0; i < bound; i++)
             {
-                PutItemOnMap(PoolManager.instance.BonusesSpeed);
+                PutItemOnMap(PoolsManager.instance.BonusesSpeed);
             }
             yield return new WaitForSeconds(Settings.BonusTimeRespawn);
             StartCoroutine(PutBonusesOnMap());
@@ -94,6 +94,7 @@ namespace Caveman
                             
                         }
                         timeRespawn = CurrentSettings.DictionaryWeapons[].TimeRespawn;
+                        break;
                 }
             }
         }
@@ -119,11 +120,11 @@ namespace Caveman
 
             for (var i = 0; i < Settings.WeaponInitialLying; i++)
             {
-                PutItemOnMap(PoolManager.instance.Stones);
+                PutItemOnMap(PoolsManager.instance.Stones);
             }
             for (var i = 0; i < Settings.CountLyingSkulls; i++)
             {
-                PutItemOnMap(PoolManager.instance.Skulls);
+                PutItemOnMap(PoolsManager.instance.Skulls);
             }
             yield return new WaitForSeconds(Settings.WeaponTimeRespawn);
             StartCoroutine(PutWeaponsOnMap());
@@ -151,7 +152,7 @@ namespace Caveman
             playerModel.Init(player, r,  serverNotify);
             PlayerPool.instance.Add(player.Id, playerModel);
       
-            playerModel.ChangedWeaponsPool += PoolManager.instance.SwitchPoolWeapons;
+            playerModel.ChangedWeaponsPool += PoolsManager.instance.SwitchPoolWeapons;
             playerModel.Birth(new Vector2(r.Next(1, Settings.WidthMap - 1), r.Next(1, Settings.HeightMap - 1)));
         }      
     }

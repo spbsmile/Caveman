@@ -2,7 +2,7 @@
 
 namespace Caveman.Pools
 {
-    public class EffectsPool : ObjectPool<EffectBase>
+    public class ImagesPool : ObjectPool<EffectBase>
     {
     }
 }

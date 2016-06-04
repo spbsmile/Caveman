@@ -1,28 +1,22 @@
-﻿using Caveman.Bonuses;
+﻿using System.Collections.Generic;
+using Caveman.Bonuses;
 using Caveman.CustomAnimation;
 using Caveman.Setting;
 using Caveman.Configs;
+using Caveman.Utils;
 using Caveman.Weapons;
 using UnityEngine;
 
 namespace Caveman.Pools
 {
-    public class PoolManager : MonoBehaviour
+    public class PoolsManager : MonoBehaviour
     {
-        public static PoolManager instance;
+        public static PoolsManager instance;
 
-        public AxeModel prefabAxe;
-        public StoneModel prefabStone;
         public StoneSplash prefabStoneFlagmentInc;
         public EffectBase prefabDeathImage;
-        public SpeedBonus prefabBonusSpeed;
 
-        public Transform containerStones;
-        public Transform containerSplashStones;
-        public Transform containerSkulls;
-        public Transform containerDeathImages;
-        //public Transform containerPlayers;
-        public Transform containerBonusesSpeed;
+        public Transform parentAllContainers;
 
         public ObjectPool<EffectBase> SplashesStone { private set; get; }
         public ObjectPool<EffectBase> ImagesDeath { private set; get; }
@@ -30,6 +24,11 @@ namespace Caveman.Pools
         public ObjectPool<WeaponModelBase> Stones { private set; get; }
         public ObjectPool<WeaponModelBase> Skulls { private set; get; }
         public ObjectPool<BonusBase> BonusesSpeed { private set; get; }
+
+        /// <summary>
+        /// only for procedure generate 
+        /// </summary>
+        public Dictionary<string, object> Pools = new Dictionary<string, object>();
 
         public void Awake()
         {
@@ -39,13 +38,24 @@ namespace Caveman.Pools
             }
         }
 
+        //todo also configs pools gameobjects from json
         public void PrepareAllPools(CurrentGameSettings currentSettings)
         {
-            ImagesDeath = PreparePool<EffectBase>(, containerDeathImages, prefabDeathImage);
-            SplashesStone = PreparePool<EffectBase>()
+
+            ImagesDeath = PreparePool<EffectBase>(, containerDeathImages,
+                Instantiate(Resources.Load("enemy", typeof (GameObject))) as EffectBase);
+            //SplashesStone = PreparePool<EffectBase>()
         }
 
-        /// Used object pool pattern
+        private GameObject CreateContainer(Transform parent, string name)
+        {
+            var c = new GameObject(name);
+            c.transform.parent = parent;
+            return c;
+        }
+    
+
+    /// Used object pool pattern
         private ObjectPool<T> PreparePool<T>(int initialBufferSize, Transform container, T prefab) where T : MonoBehaviour
         {
             var pool = container.GetComponent<ObjectPool<T>>();

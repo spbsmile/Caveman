@@ -1,16 +1,18 @@
 ﻿using System.Collections.Generic;
 using Caveman.Configs;
+using Caveman.Pools;
 
 namespace Caveman.Setting
 {
     public class CurrentGameSettings
     {
         /// <summary>
-        /// 
+        /// for iterate config types
         /// </summary>
         public List<BonusConfig> TypeBonuses { get; private set; }
         public List<WeaponConfig> TypeWeapons { get; private set; }
-        public List<PlayerConfig> TypePlayer { get; private set; }
+        public List<PlayerConfig> TypePlayers { get; private set; }
+        public List<ImageConfig>  TypeImages { get; private set; }
 
         /// <summary>
         ///  for get value propertes, key - isetting name
@@ -18,8 +20,9 @@ namespace Caveman.Setting
         public readonly Dictionary<string, PlayerConfig> DictionaryPlayer = new Dictionary<string, PlayerConfig>();
         public readonly Dictionary<string, BonusConfig> DictionaryBonuses = new Dictionary<string, BonusConfig>();
         public readonly Dictionary<string, WeaponConfig> DictionaryWeapons = new Dictionary<string, WeaponConfig>();
+        public readonly Dictionary<string, ImageConfig> DictionaryImages = new Dictionary<string, ImageConfig>();
 
-        public static CurrentGameSettings Load(string bonuses, string weapons, string players, string pools)
+        public static CurrentGameSettings Load(string bonuses, string weapons, string players, string pools, string images)
         {
             var bonusConfigs =
                 SettingsHandler.ParseSettingsFromFile<List<BonusConfig>>(bonuses);
@@ -32,36 +35,37 @@ namespace Caveman.Setting
 
             var poolsConfig = SettingsHandler.ParseSettingsFromFile<List<PoolsConfig>>(pools);
 
-            return Create(bonusConfigs, playerConfigs, weaponConfigs);
+            var imagesConfig = SettingsHandler.ParseSettingsFromFile<List<ImageConfig>>(images);
+
+            return Create(bonusConfigs, playerConfigs, weaponConfigs, imagesConfig);
         }
 
-        private CurrentGameSettings(IEnumerable<BonusConfig> typeBonuses, IEnumerable<PlayerConfig> typePlayers,
-            IEnumerable<WeaponConfig> typeWeapons)
+        private CurrentGameSettings(IEnumerable<BonusConfig> bonusesConfigs, IEnumerable<PlayerConfig> playersConfigs, IEnumerable<WeaponConfig> weaponsConfigs, List<ImageConfig> typeImages)
         {
-            foreach (var typeBonus in typeBonuses)
+            foreach (var bonusConfig in bonusesConfigs)
             {
-                DictionaryBonuses.Add(typeBonus.Name, typeBonus);
+                DictionaryBonuses.Add(bonusConfig.Name, bonusConfig);
             }
 
-            foreach (var typePlayer in typePlayers)
+            foreach (var playerConfig in playersConfigs)
             {
-                DictionaryPlayer.Add(typePlayer.Name, typePlayer);
+                DictionaryPlayer.Add(playerConfig.Name, playerConfig);
             }
 
-            foreach (var typeWeapon in typeWeapons)
+            foreach (var weaponConfig in weaponsConfigs)
             {
-                DictionaryWeapons.Add(typeWeapon.Name, typeWeapon);
+                DictionaryWeapons.Add(weaponConfig.Name, weaponConfig);
             }
         }
 
-        private static CurrentGameSettings Create(List<BonusConfig> typeBonuses, List<PlayerConfig> typePlayers,
-            List<WeaponConfig> typeWeapons)
+        private static CurrentGameSettings Create(List<BonusConfig> typeBonuses, List<PlayerConfig> typePlayers, List<WeaponConfig> typeWeapons, List<ImageConfig> typeImages)
         {
-            return new CurrentGameSettings(typeBonuses, typePlayers, typeWeapons)
+            return new CurrentGameSettings(typeBonuses, typePlayers, typeWeapons, typeImages)
             {
                 TypeBonuses = typeBonuses,
-                TypePlayer = typePlayers,
-                TypeWeapons = typeWeapons
+                TypePlayers = typePlayers,
+                TypeWeapons = typeWeapons,
+                TypeImages = typeImages
             };
         }
     }

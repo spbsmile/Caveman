@@ -6,7 +6,7 @@ namespace Caveman.Configs
     [DataContract]
     public class WeaponConfig : ISettings
     {
-        public WeaponConfig(string name, float speed, int timeRespawn, float cooldown, int countItems, int weight, int rotateParameter, Types type)
+        public WeaponConfig(string name, float speed, int timeRespawn, float cooldown, int countItems, int weight, int rotateParameter, Types type, string prefabPath)
         {
             this.name = name;
             this.speed = speed;
@@ -16,6 +16,7 @@ namespace Caveman.Configs
             this.weight = weight;
             this.rotateParameter = rotateParameter;
             this.type = type;
+            this.prefabPath = prefabPath;
         }
 
         [DataMember] private readonly string name;
@@ -26,6 +27,7 @@ namespace Caveman.Configs
         [DataMember] private readonly int weight;
         [DataMember] private readonly int rotateParameter;
         [DataMember] private readonly Types type;
+        [DataMember] private readonly string prefabPath;
 
         public string Name
         {
@@ -65,6 +67,11 @@ namespace Caveman.Configs
         public Types Type
         {
             get { return type; }
+        }
+
+        public string PrefabPath
+        {
+            get { return prefabPath; }
         }
 
         public enum Types

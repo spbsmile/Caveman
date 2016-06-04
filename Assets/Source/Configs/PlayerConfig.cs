@@ -6,7 +6,7 @@ namespace Caveman.Configs
     [DataContract]
     public class PlayerConfig : ISettings
     {
-        public PlayerConfig(string name, float speed, int timeRespawn, int timeInvulnerability,float strength, Types type)
+        public PlayerConfig(string name, float speed, int timeRespawn, int timeInvulnerability,float strength, Types type, string prefabPath)
         {
             this.name = name;
             this.speed = speed;
@@ -14,6 +14,7 @@ namespace Caveman.Configs
             this.timeInvulnerability = timeInvulnerability;
             this.type = type;
             this.strength = strength;
+            this.prefabPath = prefabPath;
         }
 
         [DataMember] private readonly string name;
@@ -22,6 +23,7 @@ namespace Caveman.Configs
         [DataMember] private readonly int timeInvulnerability;
         [DataMember] private readonly float strength;
         [DataMember] private readonly Types type;
+        [DataMember] private string prefabPath;
 
         public string Name
         {
@@ -46,6 +48,11 @@ namespace Caveman.Configs
         public int TimeInvulnerability
         {
             get { return timeInvulnerability; }
+        }
+
+        public string PrefabPath
+        {
+            get { return prefabPath; }
         }
 
         public Types Type

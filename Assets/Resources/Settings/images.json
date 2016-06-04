@@ -1,0 +1,10 @@
+[
+	{
+		"name" : "death",
+    "prefabPath": "/Resources/Images/death" 
+	},
+	{
+		"name" : "shield",
+    "prefabPath": "/Resources/Images/stones_fragment"
+	}
+]

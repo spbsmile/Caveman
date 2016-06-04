@@ -79,7 +79,7 @@ namespace Caveman.CustomAnimation
 
         public IEnumerator Death(Vector2 position)
         {
-            var deathImage = PoolManager.instance.ImagesDeath.New();
+            var deathImage = PoolsManager.instance.ImagesDeath.New();
             deathImage.transform.position = position;
             var spriteRenderer = deathImage.GetComponent<SpriteRenderer>();
             if (spriteRenderer)
@@ -92,7 +92,7 @@ namespace Caveman.CustomAnimation
                     yield return new WaitForSeconds(0.1f);
                 }
             }
-            PoolManager.instance.ImagesDeath.Store(deathImage);
+            PoolsManager.instance.ImagesDeath.Store(deathImage);
         }
     }
 }

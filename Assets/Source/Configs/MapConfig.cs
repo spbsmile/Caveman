@@ -6,7 +6,6 @@ namespace Caveman.Configs
     [DataContract]
     public class MapConfig : ISettings
     {
-       
         public MapConfig(string name, int width, int height)
         {
             this.name = name;
