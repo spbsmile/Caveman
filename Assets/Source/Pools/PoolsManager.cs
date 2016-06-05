@@ -42,16 +42,16 @@ namespace Caveman.Pools
         public void PrepareAllPools(CurrentGameSettings currentSettings)
         {
 
-            ImagesDeath = PreparePool<EffectBase>(, containerDeathImages,
+            ImagesDeath = PreparePool<EffectBase>(, CreateContainer(parentAllContainers, "pool_images_death"),
                 Instantiate(Resources.Load("enemy", typeof (GameObject))) as EffectBase);
             //SplashesStone = PreparePool<EffectBase>()
         }
 
-        private GameObject CreateContainer(Transform parent, string name)
+        private Transform CreateContainer(Transform parent, string name)
         {
-            var c = new GameObject(name);
-            c.transform.parent = parent;
-            return c;
+            var container = new GameObject(name);
+            container.transform.parent = parent;
+            return container.transform;
         }
     
 
@@ -63,7 +63,6 @@ namespace Caveman.Pools
             for (var i = 0; i < initialBufferSize; i++)
             {
                 var item = Instantiate(prefab);
-
                 item.transform.SetParent(container);
                 pool.Store(item);
             }

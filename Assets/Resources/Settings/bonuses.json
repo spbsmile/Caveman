@@ -3,24 +3,24 @@
 		"name" : "speed",
 		"timeRespawn" : 10,
 		"duration" : 4,
-    "prefabPath": "/Resources/Bonuses/Speed_bonus" 
+    "prefabPath": "/Bonuses/Speed_bonus" 
 	},
 	{
 		"name" : "shield",
 		"timeRespawn" : 10,
 		"duration" : 4,
-    "prefabPath": "/Resources/Bonuses/bonus_shield_test"
+    "prefabPath": "/Bonuses/bonus_shield_test"
 	},
 	{
 		"name" : "vacuumCleaner",
 		"timeRespawn" : 10,
 		"duration" : 4,
-    "prefabPath": "/Resources/Bonuses/"
+    "prefabPath": "/Bonuses/"
 	},
 	{
 		"name" : "instantReaction",
 		"timeRespawn" : 10,
 		"duration" : 4,
-    "prefabPath": "/Resources/Bonuses/"
+    "prefabPath": "/Bonuses/"
 	}
 ]

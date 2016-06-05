@@ -3,27 +3,34 @@ using Caveman.Setting;
 
 namespace Caveman.Configs
 {
+    /// <summary>
+    /// define initial count items in pools, may be deleted this file later
+    /// </summary>
     [DataContract]
     public class PoolsConfig : ISettings
     {
-        public PoolsConfig(string name, int weaponsRare, int weaponsOrdinary, int weaponsPopular, int deathImages)
+        public PoolsConfig(string name, int weaponsRare, int weaponsOrdinary, int weaponsPopular, int imagesRare, int imagesOrdinary, int imagesPopular)
         {
             this.name = name;
             this.weaponsRare = weaponsRare;
             this.weaponsOrdinary = weaponsOrdinary;
             this.weaponsPopular = weaponsPopular;
-            this.deathImages = deathImages;
+            this.imagesRare = imagesRare;
+            this.imagesOrdinary = imagesOrdinary;
+            this.imagesPopular = imagesPopular;
         }
 
         [DataMember] private readonly string name;
         [DataMember] private readonly int weaponsRare;
         [DataMember] private readonly int weaponsOrdinary;
         [DataMember] private readonly int weaponsPopular;
-        [DataMember] private readonly int deathImages;
         [DataMember] private int bonusesRare;
         [DataMember] private int bonusesOrdinary;
         [DataMember] private int bonusesPopular;
-
+        [DataMember] private int imagesRare;
+        [DataMember] private int imagesOrdinary;
+        [DataMember] private int imagesPopular;
+                     
         public string Name { get { return name; } }
 
         public int WeaponsRare { get { return weaponsRare; } }
@@ -38,6 +45,10 @@ namespace Caveman.Configs
 
         public int BonusesPopular { get { return bonusesPopular; } }
 
-        public int DeathImages { get { return deathImages; } }
+        public int ImagesRare { get { return imagesRare; } }
+
+        public int ImagesOrdinary {  get { return imagesOrdinary; } }
+
+        public int ImagesPopular { get { return imagesPopular; } }
     }
 }
