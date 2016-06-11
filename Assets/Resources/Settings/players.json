@@ -1,10 +1,10 @@
 [
-  {
-    "name": "sample",
-    "speed": 2.5,
-    "timeRespawn": 3,
-    "timeInvulnerability": 2,
-    "strength": 5,
-    "prefabPath": "/Players/"
-  }
+    {
+        "name": "sample",
+        "speed": 2.5,
+        "timeRespawn": 3,
+        "timeInvulnerability": 2,
+        "strength": 5,
+        "prefabPath": "/Players/"
+    }
 ]

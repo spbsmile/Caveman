@@ -39,10 +39,11 @@ namespace Caveman.Pools
         }
 
         //todo also configs pools gameobjects from json
-        public void PrepareAllPools(CurrentGameSettings currentSettings)
+        public void PrepareAllPools(CurrentGameSettings settings)
         {
 
-            ImagesDeath = PreparePool<EffectBase>(, CreateContainer(parentAllContainers, "pool_images_death"),
+            ImagesDeath = PreparePool<EffectBase>(settings.PoolsConfigs["sample"].ImagesPopular,
+                CreateContainer(parentAllContainers, "pool_images_death"),
                 Instantiate(Resources.Load("enemy", typeof (GameObject))) as EffectBase);
             //SplashesStone = PreparePool<EffectBase>()
         }
@@ -53,10 +54,11 @@ namespace Caveman.Pools
             container.transform.parent = parent;
             return container.transform;
         }
-    
 
-    /// Used object pool pattern
-        private ObjectPool<T> PreparePool<T>(int initialBufferSize, Transform container, T prefab) where T : MonoBehaviour
+
+        /// Used object pool pattern
+        private ObjectPool<T> PreparePool<T>(int initialBufferSize, Transform container, T prefab)
+            where T : MonoBehaviour
         {
             var pool = container.GetComponent<ObjectPool<T>>();
             pool.CreatePool(prefab, initialBufferSize);
@@ -68,11 +70,11 @@ namespace Caveman.Pools
             }
             return pool;
         }
- 
-    /// <summary>
-    /// When player pickup weapon another type 
-    /// </summary>
-    public ObjectPool<WeaponModelBase> SwitchPoolWeapons(WeaponConfig.Types type)
+
+        /// <summary>
+        /// When player pickup weapon another type 
+        /// </summary>
+        public ObjectPool<WeaponModelBase> SwitchPoolWeapons(WeaponConfig.Types type)
         {
             switch (type)
             {

@@ -4,7 +4,7 @@
     {
         public void Start()
         {
-            Config = EnterPoint.CurrentSettings.DictionaryBonuses["instantReaction"];
+            Config = EnterPoint.CurrentSettings.BonusesConfigs["instantReaction"];
         }
 
         //todo implement

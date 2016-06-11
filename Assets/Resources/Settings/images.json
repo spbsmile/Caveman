@@ -1,10 +1,10 @@
 [
-	{
-		"name" : "death",
-    "prefabPath": "/Images/death" 
-	},
-	{
-		"name" : "stones_fragment",
-    "prefabPath": "/Images/stones_fragment"
-	}
+    {
+        "name": "death",
+        "prefabPath": "/Images/death"
+    },
+    {
+        "name": "stones_fragment",
+        "prefabPath": "/Images/stones_fragment"
+    }
 ]

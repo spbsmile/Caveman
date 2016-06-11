@@ -4,7 +4,7 @@
     {
         public void Start()
         {
-            Config = EnterPoint.CurrentSettings.DictionaryBonuses["vacuumCleaner"];
+            Config = EnterPoint.CurrentSettings.BonusesConfigs["vacuumCleaner"];
         }
 
         //todo implement

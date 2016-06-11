@@ -55,8 +55,8 @@ namespace Caveman.Players
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
             playerAnimation = new PlayerAnimation(GetComponent<Animator>());
-            Config = EnterPoint.CurrentSettings.DictionaryPlayer["sample"];
-            WeaponConfig = EnterPoint.CurrentSettings.DictionaryWeapons["stone"];
+            Config = EnterPoint.CurrentSettings.PlayersConfigs["sample"];
+            WeaponConfig = EnterPoint.CurrentSettings.WeaponsConfigs["stone"];
             Speed = Config.Speed;
         }
 

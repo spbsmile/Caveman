@@ -69,7 +69,7 @@ namespace Caveman
         {
             for (var i = 0; i < bonusesType.Length; i++)
             {
-                CurrentSettings.DictionaryBonuses[bonusesType[i]].
+                CurrentSettings.BonusesConfigs[bonusesType[i]].
             }
 
             var bound = Settings.BonusSpeedMaxCount - PoolsManager.instance.BonusesSpeed.GetActivedCount; 
@@ -93,7 +93,7 @@ namespace Caveman
                         {
                             
                         }
-                        timeRespawn = CurrentSettings.DictionaryWeapons[].TimeRespawn;
+                        timeRespawn = CurrentSettings.WeaponsConfigs[].TimeRespawn;
                         break;
                 }
             }
@@ -115,7 +115,7 @@ namespace Caveman
         {
             for (var i = 0; i < weaponsType.Length; i++)
             {
-                CurrentSettings.DictionaryWeapons[weaponsType[i]]
+                CurrentSettings.WeaponsConfigs[weaponsType[i]]
             }
 
             for (var i = 0; i < Settings.WeaponInitialLying; i++)
