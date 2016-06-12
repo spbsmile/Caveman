@@ -3,7 +3,6 @@ using Caveman.Bonuses;
 using Caveman.CustomAnimation;
 using Caveman.Setting;
 using Caveman.Configs;
-using Caveman.Utils;
 using Caveman.Weapons;
 using UnityEngine;
 
@@ -13,15 +12,13 @@ namespace Caveman.Pools
     {
         public static PoolsManager instance;
 
-        public StoneSplash prefabStoneFlagmentInc;
-        public EffectBase prefabDeathImage;
-
-        public Transform parentAllContainers;
+        public Transform container;
 
         public ObjectPool<EffectBase> SplashesStone { private set; get; }
         public ObjectPool<EffectBase> ImagesDeath { private set; get; }
-        public ObjectPool<EffectBase> Axes { private set; get; }
+        public ObjectPool<WeaponModelBase> Axes { private set; get; }
         public ObjectPool<WeaponModelBase> Stones { private set; get; }
+        // todo miss prefab skull in resource
         public ObjectPool<WeaponModelBase> Skulls { private set; get; }
         public ObjectPool<BonusBase> BonusesSpeed { private set; get; }
 
@@ -41,31 +38,42 @@ namespace Caveman.Pools
         //todo also configs pools gameobjects from json
         public void PrepareAllPools(CurrentGameSettings settings)
         {
+            var poolsConfig = settings.PoolsConfigs["sample"];
 
-            ImagesDeath = PreparePool<EffectBase>(settings.PoolsConfigs["sample"].ImagesPopular,
-                CreateContainer(parentAllContainers, "pool_images_death"),
-                Instantiate(Resources.Load("enemy", typeof (GameObject))) as EffectBase);
-            //SplashesStone = PreparePool<EffectBase>()
+            var deathConfig = settings.ImagesConfigs["death"];
+            var splahesConfig = settings.ImagesConfigs["splashesStone"];
+            var stonesConfig = settings.WeaponsConfigs["stone"];
+            var axesConfig = settings.WeaponsConfigs["axe"];
+            var skullsConfig = settings.WeaponsConfigs["skulls"];
+            var bonusSpeedConfig = settings.BonusesConfigs["speed"];
+
+            ImagesDeath = PreparePool(Inst<EffectBase>(deathConfig.PrefabPath), deathConfig.Name, poolsConfig.ImagesOrdinary);
+            SplashesStone = PreparePool(Inst<EffectBase>(splahesConfig.PrefabPath), splahesConfig.Name, poolsConfig.ImagesPopular);
+            Skulls = PreparePool(Inst<WeaponModelBase>(skullsConfig.PrefabPath), skullsConfig.Name, poolsConfig.WeaponsOrdinary);
+            Stones = PreparePool(Inst<WeaponModelBase>(stonesConfig.PrefabPath), stonesConfig.Name, poolsConfig.WeaponsPopular);
+            Axes = PreparePool(Inst<WeaponModelBase>(axesConfig.PrefabPath), axesConfig.Name, poolsConfig.BonusesOrdinary);
+            BonusesSpeed = PreparePool(Inst<BonusBase>(bonusSpeedConfig.PrefabPath), bonusSpeedConfig.Name, poolsConfig.BonusesOrdinary);
         }
 
-        private Transform CreateContainer(Transform parent, string name)
+        private T Inst<T>(string prefabPath) where T : MonoBehaviour
         {
-            var container = new GameObject(name);
-            container.transform.parent = parent;
-            return container.transform;
+            return Instantiate(Resources.Load(prefabPath, typeof (GameObject))) as T;
         }
-
 
         /// Used object pool pattern
-        private ObjectPool<T> PreparePool<T>(int initialBufferSize, Transform container, T prefab)
+        private ObjectPool<T> PreparePool<T>(T prefab, string nameContainer, int initialBufferSize)
             where T : MonoBehaviour
         {
-            var pool = container.GetComponent<ObjectPool<T>>();
+            var containerSingle = new GameObject(nameContainer);
+            containerSingle.transform.parent = container;
+
+            var pool = containerSingle.AddComponent<ObjectPool<T>>();
+
             pool.CreatePool(prefab, initialBufferSize);
             for (var i = 0; i < initialBufferSize; i++)
             {
                 var item = Instantiate(prefab);
-                item.transform.SetParent(container);
+                item.transform.SetParent(container.transform);
                 pool.Store(item);
             }
             return pool;

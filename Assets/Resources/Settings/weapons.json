@@ -1,24 +1,35 @@
 [
-    {
-        "name": "stone",
-        "speed": 5,
-        "countItems": 1,
-        "timeRespawn": 20,
-        "cooldown": 2,
-        "weight": 10,
-        "rotateParameter": 10,
-        "prefabPath": "/Weapons/stone",
-        "type": 0
-    },
-    {
-        "name": "axe",
-        "speed": 5,
-        "countItems": 1,
-        "timeRespawn": 20,
-        "cooldown": 2,
-        "weight": 10,
-        "rotateParameter": 10,
-        "prefabPath": "/Weapons/axe",
-        "type": 1
-     }
+  {
+    "name": "stone",
+    "speed": 5,
+    "countItems": 1,
+    "timeRespawn": 20,
+    "cooldown": 2,
+    "weight": 10,
+    "rotateParameter": 10,
+    "prefabPath": "/Weapons/stone",
+    "type": 0
+  },
+  {
+    "name": "axe",
+    "speed": 5,
+    "countItems": 1,
+    "timeRespawn": 20,
+    "cooldown": 2,
+    "weight": 10,
+    "rotateParameter": 10,
+    "prefabPath": "/Weapons/axe",
+    "type": 1
+  },
+  {
+    "name": "skulls",
+    "speed": 5,
+    "countItems": 1,
+    "timeRespawn": 20,
+    "cooldown": 2,
+    "weight": 10,
+    "rotateParameter": 10,
+    "prefabPath": "/Weapons/axe",
+    "type": 1
+  }
 ]
