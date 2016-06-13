@@ -12,9 +12,9 @@ namespace Caveman.Setting
         public InputField weaponTimeRespawn;
         public InputField weaponInitialCount;
         public InputField weaponSpeed;
-        public InputField weaponTimerThrow;
-        public InputField weaponsCountPickup;
-        public InputField weaponsMaxOnPlayer;
+        public InputField weaponCooldown;
+        public InputField weaponCountItems;
+        public InputField weaponWeight;
 
         public InputField bonusSpeedMaxCount;
         public InputField bonusSpeedTimeRespawn;
@@ -30,14 +30,14 @@ namespace Caveman.Setting
             botsCount.text = Settings.BotsCount.ToString();
             //playerSpeed.text = Settings.PlayerSpeed.ToString();
             //weaponSpeed.text = Settings.StoneSpeed.ToString();
-            //weaponTimerThrow.text = Settings.WeaponTimerThrow.ToString();
+            //weaponCooldown.text = Settings.WeaponTimerThrow.ToString();
             //weaponInitialCount.text = Settings.WeaponInitialLying.ToString();
             //weaponTimeRespawn.text = Settings.WeaponTimeRespawn.ToString();
-            //weaponsCountPickup.text = Settings.WeaponCountPickup.ToString();
+            //weaponCountItems.text = Settings.WeaponCountPickup.ToString();
             //bonusSpeedMaxCount.text = Settings.BonusSpeedMaxCount.ToString();
             //bonusSpeedTimeRespawn.text = Settings.BonusTimeRespawn.ToString();
-            //weaponsMaxOnPlayer.text = Settings.WeaponsMaxOnPlayer.ToString();
-            serverPingTime.text = Settings.ServerPingTime.ToString();
+            //weaponWeight.text = Settings.WeaponsMaxOnPlayer.ToString();
+            serverPingTime.text = Settings.ServerPingTime.ToString();    
 
             roundTime.onEndEdit.AddListener(delegate
             {
@@ -59,21 +59,21 @@ namespace Caveman.Setting
             //{
             //    Settings.WeaponTimeRespawn = Convert.ToInt32(weaponTimeRespawn.text);
             //});
-            //weaponTimerThrow.onEndEdit.AddListener(delegate
+            //weaponCooldown.onEndEdit.AddListener(delegate
             //{
-            //    Settings.WeaponTimerThrow = Convert.ToInt32(weaponTimerThrow.text);
+            //    Settings.WeaponTimerThrow = Convert.ToInt32(weaponCooldown.text);
             //});
             //weaponInitialCount.onEndEdit.AddListener(delegate
             //{
             //    Settings.WeaponInitialLying = Convert.ToInt32(weaponInitialCount.text);
             //});
-            //weaponsCountPickup.onEndEdit.AddListener(delegate
+            //weaponCountItems.onEndEdit.AddListener(delegate
             //{
-            //    Settings.WeaponCountPickup = Convert.ToInt32(weaponsCountPickup.text);
+            //    Settings.WeaponCountPickup = Convert.ToInt32(weaponCountItems.text);
             //});
-            //weaponsMaxOnPlayer.onEndEdit.AddListener(delegate
+            //weaponWeight.onEndEdit.AddListener(delegate
             //{
-            //    Settings.WeaponsMaxOnPlayer = Convert.ToInt32(weaponsMaxOnPlayer.text);
+            //    Settings.WeaponsMaxOnPlayer = Convert.ToInt32(weaponWeight.text);
             //});
             bonusSpeedMaxCount.onEndEdit.AddListener(delegate
             {
@@ -81,7 +81,7 @@ namespace Caveman.Setting
             });
             bonusSpeedTimeRespawn.onEndEdit.AddListener(delegate
             {
-                Settings.BonusTimeRespawn = Convert.ToInt32(bonusSpeedTimeRespawn.text);
+                //Settings.BonusTimeRespawn = Convert.ToInt32(bonusSpeedTimeRespawn.text);
             });
             serverPingTime.onEndEdit.AddListener(delegate
             {

@@ -3,6 +3,7 @@ using Caveman.Bonuses;
 using Caveman.CustomAnimation;
 using Caveman.Setting;
 using Caveman.Configs;
+using Caveman.Utils;
 using Caveman.Weapons;
 using UnityEngine;
 
@@ -46,6 +47,12 @@ namespace Caveman.Pools
             var axesConfig = settings.WeaponsConfigs["axe"];
             var skullsConfig = settings.WeaponsConfigs["skulls"];
             var bonusSpeedConfig = settings.BonusesConfigs["speed"];
+
+            // example
+            //var pool = (ObjectPool<BonusBase>)Pools["sdfds"];
+            //var item = pool.New();
+            //StartCoroutine(UnityExtensions.FadeIn(item.GetComponent<SpriteRenderer>()));
+            //item.transform.position = new Vector2(r.Next(1, Settings.WidthMap - 1), r.Next(1, Settings.HeightMap - 1));
 
             ImagesDeath = PreparePool(Inst<EffectBase>(deathConfig.PrefabPath), deathConfig.Name, poolsConfig.ImagesOrdinary);
             SplashesStone = PreparePool(Inst<EffectBase>(splahesConfig.PrefabPath), splahesConfig.Name, poolsConfig.ImagesPopular);

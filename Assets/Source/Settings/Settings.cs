@@ -11,7 +11,7 @@
         public static int WeaponTimeRespawn = 20;
 
         public static int WeaponInitialLying = 10;
-        
+
         //todo rename all weapon
         public static int CountLyingSkulls = 3;
 

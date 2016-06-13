@@ -57,9 +57,10 @@ namespace Caveman
             }
         }
 
+        // todo virtual &
         public virtual void Play()
         {
-            //   foreach (var player in poolPlayers.GetCurrentPlayers())
+            //  foreach (var player in poolPlayers.GetCurrentPlayers())
             //  {
             //      player.Play();
             //  }
@@ -99,16 +100,16 @@ namespace Caveman
             }
         }
 
-        private IEnumerator PutItemsOnMap(float timeRespawn)
+        private IEnumerator PutItemsOnMap(string poolId, float timeRespawn)
         {
             
         }
 
-        private IEnumerator PutWeaponsOnMap(string type)
-        {
-            yield return new WaitForSeconds(Settings.WeaponTimeRespawn);
-            StartCoroutine(PutWeaponsOnMap());
-        }
+        //private IEnumerator PutWeaponsOnMap(string type)
+        //{
+        //    yield return new WaitForSeconds(Settings.WeaponTimeRespawn);
+        //    StartCoroutine(PutWeaponsOnMap());
+        //}
 
         //todo separate logic to procesuder create world. all params get from json settings
         private IEnumerator PutWeaponsOnMap(string[] weaponsType)
@@ -118,16 +119,16 @@ namespace Caveman
                 CurrentSettings.WeaponsConfigs[weaponsType[i]]
             }
 
-            for (var i = 0; i < Settings.WeaponInitialLying; i++)
-            {
-                PutItemOnMap(PoolsManager.instance.Stones);
-            }
-            for (var i = 0; i < Settings.CountLyingSkulls; i++)
-            {
-                PutItemOnMap(PoolsManager.instance.Skulls);
-            }
-            yield return new WaitForSeconds(Settings.WeaponTimeRespawn);
-            StartCoroutine(PutWeaponsOnMap());
+            //for (var i = 0; i < Settings.WeaponInitialLying; i++)
+            //{
+            //    PutItemOnMap(PoolsManager.instance.Stones);
+            //}
+            //for (var i = 0; i < Settings.CountLyingSkulls; i++)
+            //{
+            //    PutItemOnMap(PoolsManager.instance.Skulls);
+            //}
+            //yield return new WaitForSeconds(Settings.WeaponTimeRespawn);
+            //StartCoroutine(PutWeaponsOnMap());
         }
 
         private void PutItemOnMap<T>(ObjectPool<T> pool) where T : MonoBehaviour
