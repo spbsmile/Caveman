@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Caveman.Bonuses;
 using Caveman.Level;
 using Caveman.Network;
 using Caveman.Players;
@@ -9,6 +10,7 @@ using Caveman.Utils;
 using UnityEngine;
 using Random = System.Random;
 using Caveman.UI.Common;
+using Caveman.Weapons;
 
 namespace Caveman
 {
@@ -50,10 +52,9 @@ namespace Caveman
             {
                 for (var i = 1; i < Settings.BotsCount + 1; i++)
                 {
-                    // CreatePlayerModel(new Player(names[i], i.ToString()), true, false, prefabAiPlayer);
+                    //CreatePlayerModel(new Player(names[i], i.ToString()), true, false, prefabAiPlayer);
                 }
-                StartCoroutine(PutWeaponsOnMap());
-                StartCoroutine(PutBonusesOnMap());
+                PutAllItemsOnMap(new[] {"weapons", "bonuses"});
             }
         }
 
@@ -66,69 +67,39 @@ namespace Caveman
             //  }
         }
 
-        private IEnumerator PutBonusesOnMap(string[] bonusesType) 
+        private void PutAllItemsOnMap(string[] typesItems)
         {
-            for (var i = 0; i < bonusesType.Length; i++)
+            for (var i = 0; i < typesItems.Length; i++)
             {
-                CurrentSettings.BonusesConfigs[bonusesType[i]].
-            }
-
-            var bound = Settings.BonusSpeedMaxCount - PoolsManager.instance.BonusesSpeed.GetActivedCount; 
-            for (var i = 0; i < bound; i++)
-            {
-                PutItemOnMap(PoolsManager.instance.BonusesSpeed);
-            }
-            yield return new WaitForSeconds(Settings.BonusTimeRespawn);
-            StartCoroutine(PutBonusesOnMap());
-        }
-
-        private IEnumerator PutAllItemsOnMap(string[] typesItems)
-        {
-            for (int i = 0; i < typesItems.Length; i++)
-            {
-                var timeRespawn = 0;
                 switch (typesItems[i])
                 {
                     case "weapons":
-                        foreach (var weaponConfig in CurrentSettings.TypeWeapons)
+                        // todo sort config to folder/levels game
+                        foreach (var weaponConfig in CurrentSettings.WeaponsConfigs.Values)
                         {
-                            
+                            StartCoroutine(PutItemsOnMap<WeaponModelBase>(weaponConfig.PrefabPath, weaponConfig.TimeRespawn));
                         }
-                        timeRespawn = CurrentSettings.WeaponsConfigs[].TimeRespawn;
+                        break;
+                    case "bonuses":
+                        foreach (var bonusConfig in CurrentSettings.BonusesConfigs.Values)
+                        {
+                            StartCoroutine(PutItemsOnMap<BonusBase>(bonusConfig.PrefabPath, bonusConfig.TimeRespawn));
+                        }
                         break;
                 }
             }
         }
 
-        private IEnumerator PutItemsOnMap(string poolId, float timeRespawn)
+        private IEnumerator PutItemsOnMap<T>(string poolId, float timeRespawn) where T : MonoBehaviour
         {
-            
-        }
-
-        //private IEnumerator PutWeaponsOnMap(string type)
-        //{
-        //    yield return new WaitForSeconds(Settings.WeaponTimeRespawn);
-        //    StartCoroutine(PutWeaponsOnMap());
-        //}
-
-        //todo separate logic to procesuder create world. all params get from json settings
-        private IEnumerator PutWeaponsOnMap(string[] weaponsType)
-        {
-            for (var i = 0; i < weaponsType.Length; i++)
+            yield return new WaitForSeconds(timeRespawn);
+            //todo length
+            // todo var bound = Settings.BonusSpeedMaxCount - PoolsManager.instance.BonusesSpeed.GetActivedCount; 
+            for (var i = 0; i < Settings.WeaponInitialLying; i++)
             {
-                CurrentSettings.WeaponsConfigs[weaponsType[i]]
+                PutItemOnMap((ObjectPool<T>)PoolsManager.instance.Pools[poolId]);
             }
-
-            //for (var i = 0; i < Settings.WeaponInitialLying; i++)
-            //{
-            //    PutItemOnMap(PoolsManager.instance.Stones);
-            //}
-            //for (var i = 0; i < Settings.CountLyingSkulls; i++)
-            //{
-            //    PutItemOnMap(PoolsManager.instance.Skulls);
-            //}
-            //yield return new WaitForSeconds(Settings.WeaponTimeRespawn);
-            //StartCoroutine(PutWeaponsOnMap());
+            StartCoroutine(PutItemsOnMap<T>(poolId, timeRespawn));
         }
 
         private void PutItemOnMap<T>(ObjectPool<T> pool) where T : MonoBehaviour

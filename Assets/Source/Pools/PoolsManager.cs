@@ -3,7 +3,6 @@ using Caveman.Bonuses;
 using Caveman.CustomAnimation;
 using Caveman.Setting;
 using Caveman.Configs;
-using Caveman.Utils;
 using Caveman.Weapons;
 using UnityEngine;
 
@@ -26,7 +25,7 @@ namespace Caveman.Pools
         /// <summary>
         /// only for procedure generate 
         /// </summary>
-        public Dictionary<string, object> Pools = new Dictionary<string, object>();
+        public readonly Dictionary<string, object> Pools = new Dictionary<string, object>();
 
         public void Awake()
         {
@@ -48,18 +47,18 @@ namespace Caveman.Pools
             var skullsConfig = settings.WeaponsConfigs["skulls"];
             var bonusSpeedConfig = settings.BonusesConfigs["speed"];
 
-            // example
-            //var pool = (ObjectPool<BonusBase>)Pools["sdfds"];
-            //var item = pool.New();
-            //StartCoroutine(UnityExtensions.FadeIn(item.GetComponent<SpriteRenderer>()));
-            //item.transform.position = new Vector2(r.Next(1, Settings.WidthMap - 1), r.Next(1, Settings.HeightMap - 1));
-
             ImagesDeath = PreparePool(Inst<EffectBase>(deathConfig.PrefabPath), deathConfig.Name, poolsConfig.ImagesOrdinary);
             SplashesStone = PreparePool(Inst<EffectBase>(splahesConfig.PrefabPath), splahesConfig.Name, poolsConfig.ImagesPopular);
             Skulls = PreparePool(Inst<WeaponModelBase>(skullsConfig.PrefabPath), skullsConfig.Name, poolsConfig.WeaponsOrdinary);
             Stones = PreparePool(Inst<WeaponModelBase>(stonesConfig.PrefabPath), stonesConfig.Name, poolsConfig.WeaponsPopular);
             Axes = PreparePool(Inst<WeaponModelBase>(axesConfig.PrefabPath), axesConfig.Name, poolsConfig.BonusesOrdinary);
             BonusesSpeed = PreparePool(Inst<BonusBase>(bonusSpeedConfig.PrefabPath), bonusSpeedConfig.Name, poolsConfig.BonusesOrdinary);
+
+            Pools.Add(deathConfig.PrefabPath, ImagesDeath);
+            Pools.Add(splahesConfig.PrefabPath, SplashesStone);
+            Pools.Add(stonesConfig.PrefabPath, Stones);
+            Pools.Add(axesConfig.PrefabPath, Axes);
+            Pools.Add(bonusSpeedConfig.PrefabPath, BonusesSpeed);
         }
 
         private T Inst<T>(string prefabPath) where T : MonoBehaviour
