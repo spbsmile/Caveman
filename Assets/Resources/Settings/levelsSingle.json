@@ -1,8 +1,9 @@
 {
+    "name":"sample",
     "botsCount": 3,
     "multiplayerMode": false,
     "botsNames": [
-        "Kiracosyan",
+        "bob",
         "IkillU",
         "skaska",
         "loser",

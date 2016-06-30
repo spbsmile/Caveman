@@ -52,7 +52,7 @@ namespace Caveman
             {
                 for (var i = 1; i < Settings.BotsCount + 1; i++)
                 {
-                    //CreatePlayerModel(new Player(names[i], i.ToString()), true, false, prefabAiPlayer);
+                    CreatePlayerModel(new Player(names[i], i.ToString()), true, false, prefabAiPlayer);
                 }
                 PutAllItemsOnMap(new[] {"weapons", "bonuses"});
             }
