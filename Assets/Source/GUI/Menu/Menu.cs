@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using Caveman.UI.Common;
 using Caveman.Utils;
 using UnityEngine;

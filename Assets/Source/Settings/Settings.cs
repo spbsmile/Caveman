@@ -10,7 +10,6 @@
 
         public static int BonusSpeedDuration = 4;
 
-        public static bool multiplayerMode;
         public static float ServerPingTime = 0.2f;
 
     }

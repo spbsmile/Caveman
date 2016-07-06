@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿ using System.Collections;
 using Caveman.Bonuses;
 using Caveman.Level;
 using Caveman.Network;
@@ -19,6 +19,9 @@ namespace Caveman
         public Transform prefabHumanPlayer;
         public Transform prefabAiPlayer;
 
+        public string pathLevelSingleConfig;
+        public string pathLevelMultiplayerConfig;
+        public bool isMultiplayerMode;
         public SmoothCamera smoothCamera;
 
         protected IClientListener serverNotify;
@@ -31,10 +34,9 @@ namespace Caveman
         public virtual void Awake()
         {
             // path: Resource/Settings
-            CurrentSettings = CurrentGameSettings.Load("bonuses", "weapons", "players", "pools", "images");
+            CurrentSettings = CurrentGameSettings.Load(
+              "bonuses", "weapons", "players", "pools", "images", pathLevelSingleConfig, pathLevelMultiplayerConfig);
 
-            //todo strange usage. settings type - deprecate
-            Settings.multiplayerMode = false;
             //todo
             LoadingScreen.instance.FinishLoading += (o, s) => Play();
         }
@@ -50,9 +52,9 @@ namespace Caveman
 
             if (serverNotify == null)
             {
-                for (var i = 1; i < Settings.BotsCount + 1; i++)
+                for (var i = 1; i < CurrentSettings.LevelsSingleConfigs["level0"].BotsCount + 1; i++)
                 {
-                    CreatePlayerModel(new Player(names[i], i.ToString()), true, false, prefabAiPlayer);
+                    CreatePlayerModel(new Player(CurrentSettings.LevelsSingleConfigs["level0"].BotsName[i], i.ToString()), true, false, prefabAiPlayer);
                 }
                 PutAllItemsOnMap(new[] {"weapons", "bonuses"});
             }

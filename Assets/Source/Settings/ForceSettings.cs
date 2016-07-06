@@ -27,7 +27,7 @@ namespace Caveman.Setting
         public void Start()
         {
             roundTime.text = Settings.RoundTime.ToString();
-            botsCount.text = Settings.BotsCount.ToString();
+            //botsCount.text = Settings.BotsCount.ToString();
             //playerSpeed.text = Settings.PlayerSpeed.ToString();
             //weaponSpeed.text = Settings.StoneSpeed.ToString();
             //weaponCooldown.text = Settings.WeaponTimerThrow.ToString();
@@ -45,7 +45,7 @@ namespace Caveman.Setting
             });
             botsCount.onEndEdit.AddListener(delegate
             {
-                Settings.BotsCount = Convert.ToInt32(botsCount.text);
+              //  Settings.BotsCount = Convert.ToInt32(botsCount.text);
             });
             //playerSpeed.onEndEdit.AddListener(delegate
             //{
@@ -77,7 +77,7 @@ namespace Caveman.Setting
             //});
             bonusSpeedMaxCount.onEndEdit.AddListener(delegate
             {
-                Settings.BonusSpeedMaxCount = Convert.ToInt32(bonusSpeedMaxCount.text);
+                //Settings.BonusSpeedMaxCount = Convert.ToInt32(bonusSpeedMaxCount.text);
             });
             bonusSpeedTimeRespawn.onEndEdit.AddListener(delegate
             {
