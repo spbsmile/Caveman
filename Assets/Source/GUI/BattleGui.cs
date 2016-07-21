@@ -3,7 +3,6 @@ using Caveman.Setting;
 using Caveman.UI.Battle;
 using Caveman.UI.Common;
 using Caveman.UI.Windows;
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = System.Random;
@@ -22,7 +21,9 @@ namespace Caveman.UI
 
         public static BattleGui instance;
 
-        private System.Random r;
+        public bool IsMultiplayerMode { get; private set; }
+
+        private Random r;
 
         public void Awake()
         {
@@ -57,8 +58,8 @@ namespace Caveman.UI
             waitForResp.buttonRespawn.onClick.AddListener(delegate
             {
                 // TODO: set count gold respawn received from server
-                if (!playerModelBase.SpendGold(0))
-                    return;
+                //if (!playerModelBase.SpendGold(0))
+                //   return;
                 playerModelBase.StopAllCoroutines();
                 playerModelBase.Birth(RandomPosition);
                 waitForResp.gameObject.SetActive(false);

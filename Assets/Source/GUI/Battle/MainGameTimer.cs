@@ -19,7 +19,7 @@ namespace Caveman.UI.Battle
 
         public void OnEnable()
         {
-            if (!Settings.multiplayerMode)
+            if (!BattleGui.instance.IsMultiplayerMode)
             {
                 StartCoroutine(UpdateTime(Settings.RoundTime));
             }
@@ -39,7 +39,7 @@ namespace Caveman.UI.Battle
                     yield return new WaitForSeconds(1);
             } while (--roundTime >= 0);
 
-            if (RoundEnded != null && !Settings.multiplayerMode)
+            if (RoundEnded != null && !BattleGui.instance.IsMultiplayerMode)
             {
                 RoundEnded();
                 StopAllCoroutines();

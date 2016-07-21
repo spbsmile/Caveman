@@ -17,12 +17,6 @@ namespace Caveman.Network
         private static string OwnId;
         private bool resultReceived;
 
-        public override void Awake()
-        {
-            base.Awake();
-            Setting.Settings.multiplayerMode = true;
-        }
-
         public override void Start()
         {
             OwnId = SystemInfo.deviceUniqueIdentifier;

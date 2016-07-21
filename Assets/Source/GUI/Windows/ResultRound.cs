@@ -9,7 +9,7 @@ namespace Caveman.UI.Windows
 
         public void OnEnable()
         {
-            if (!Setting.Settings.multiplayerMode)
+            if (!BattleGui.instance.IsMultiplayerMode)
             {
                 StartCoroutine(DisplayResult());
             }

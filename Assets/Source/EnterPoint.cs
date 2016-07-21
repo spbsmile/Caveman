@@ -16,11 +16,15 @@ namespace Caveman
 {
     public class EnterPoint : MonoBehaviour
     {
+        public PlayersManager playersManager;
+
         public Transform prefabHumanPlayer;
         public Transform prefabAiPlayer;
 
         public string pathLevelSingleConfig;
         public string pathLevelMultiplayerConfig;
+        public string currentLevelName;
+
         public bool isMultiplayerMode;
         public SmoothCamera smoothCamera;
 
@@ -48,13 +52,14 @@ namespace Caveman
             PoolsManager.instance.PrepareAllPools(CurrentSettings);
             var humanPlayer = new Player(PlayerPrefs.GetString(AccountManager.KeyNickname), SystemInfo.deviceUniqueIdentifier);
             BattleGui.instance.SubscribeOnEvents(humanPlayer);
-            CreatePlayerModel(humanPlayer, false, false, prefabHumanPlayer);
+            playersManager.CreatePlayer(humanPlayer, false, false, prefabHumanPlayer);
+            var mapManager = new MapManager(serverNotify);
 
             if (serverNotify == null)
             {
-                for (var i = 1; i < CurrentSettings.LevelsSingleConfigs["level0"].BotsCount + 1; i++)
+                for (var i = 1; i < CurrentSettings.LevelsSingleConfigs[currentLevelName].BotsCount + 1; i++)
                 {
-                    CreatePlayerModel(new Player(CurrentSettings.LevelsSingleConfigs["level0"].BotsName[i], i.ToString()), true, false, prefabAiPlayer);
+                    playersManager.CreatePlayer(new Player(CurrentSettings.LevelsSingleConfigs[currentLevelName].BotsName[i], i.ToString()), true, false, prefabAiPlayer);
                 }
                 PutAllItemsOnMap(new[] {"weapons", "bonuses"});
             }
@@ -110,24 +115,5 @@ namespace Caveman
             StartCoroutine(UnityExtensions.FadeIn(item.GetComponent<SpriteRenderer>()));
             item.transform.position = new Vector2(r.Next(1, Settings.WidthMap - 1), r.Next(1, Settings.HeightMap - 1));
         }
-
-        protected void CreatePlayerModel(Player player, bool isAiPlayer, bool isServerPlayer, Transform prefabModel)
-        {
-            var prefab = Instantiate(prefabModel);
-            var playerModel = prefab.GetComponent<PlayerModelBase>();
-            if (!isServerPlayer && !isAiPlayer)
-            {
-                BattleGui.instance.SubscribeOnEvents(playerModel);
-                smoothCamera.target = prefab.transform;
-                smoothCamera.SetPlayer(prefab.GetComponent<PlayerModelBase>());
-                if (serverNotify != null) playerModel.GetComponent<SpriteRenderer>().material.color = Color.red;
-
-            }
-            playerModel.Init(player, r,  serverNotify);
-            PlayerPool.instance.Add(player.Id, playerModel);
-      
-            playerModel.ChangedWeaponsPool += PoolsManager.instance.SwitchPoolWeapons;
-            playerModel.Birth(new Vector2(r.Next(1, Settings.WidthMap - 1), r.Next(1, Settings.HeightMap - 1)));
-        }      
     }
 }

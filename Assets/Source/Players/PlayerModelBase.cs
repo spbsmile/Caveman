@@ -62,11 +62,13 @@ namespace Caveman.Players
 
         public void Init(Player player, Random random, IClientListener serverNotify)
         {
+            //todo replace to playersmanager
             this.serverNotify = serverNotify;
             if (serverNotify != null) multiplayer = true;
             name = player.Name;
             transform.GetChild(0).GetComponent<TextMesh>().text = name;
             Player = player;
+            // todo replace to playercore
             players = new List<PlayerModelBase>();
             players.AddRange(poolPlayers.GetCurrentPlayers());
             poolPlayers.AddedPlayer += @base => players.Add(@base);
