@@ -1,12 +1,13 @@
 ﻿using Caveman.Setting;
-using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
 namespace Caveman.Configs
 {
-    [DataContract]
+    [JsonObject(MemberSerialization.OptIn)]
     public class PlayerConfig : ISettings
     {
-        public PlayerConfig(string name, float speed, int timeRespawn, int timeInvulnerability,float strength, Types type, string prefabPath)
+        public PlayerConfig(string name, float speed, int timeRespawn, int timeInvulnerability, float strength,
+            Types type, string prefabPath)
         {
             this.name = name;
             this.speed = speed;
@@ -17,13 +18,13 @@ namespace Caveman.Configs
             this.prefabPath = prefabPath;
         }
 
-        [DataMember] private readonly string name;
-        [DataMember] private readonly float speed;
-        [DataMember] private readonly int timeRespawn;
-        [DataMember] private readonly int timeInvulnerability;
-        [DataMember] private readonly float strength;
-        [DataMember] private readonly Types type;
-        [DataMember] private string prefabPath;
+        [JsonProperty] private readonly string name;
+        [JsonProperty] private readonly float speed;
+        [JsonProperty] private readonly int timeRespawn;
+        [JsonProperty] private readonly int timeInvulnerability;
+        [JsonProperty] private readonly float strength;
+        [JsonProperty] private readonly Types type;
+        [JsonProperty] private string prefabPath;
 
         public string Name
         {

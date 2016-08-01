@@ -1,28 +1,28 @@
-﻿using System.Runtime.Serialization;
-using Caveman.Setting;
+﻿using Caveman.Setting;
+using Newtonsoft.Json;
 
 namespace Caveman.Configs.Levels
 {
-  [DataContract]
-  public  class LevelMultiplayerConfig : ISettings
-  {
-    public LevelMultiplayerConfig(string name, int roundTime)
+    [JsonObject(MemberSerialization.OptIn)]
+    public class LevelMultiplayerConfig : ISettings
     {
-      this.roundTime = roundTime;
-      this.name = name;
-    }
+        public LevelMultiplayerConfig(string name, int roundTime)
+        {
+            this.roundTime = roundTime;
+            this.name = name;
+        }
 
-    [DataMember] private string name;
-    [DataMember] private int roundTime;
+        [JsonProperty] private string name;
+        [JsonProperty] private int roundTime;
 
-    public string Name
-    {
-      get { return name; }
-    }
+        public string Name
+        {
+            get { return name; }
+        }
 
-    public int RoundTime
-    {
-      get { return roundTime; }
+        public int RoundTime
+        {
+            get { return roundTime; }
+        }
     }
-  }
 }

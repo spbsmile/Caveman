@@ -1,12 +1,13 @@
 ﻿using Caveman.Setting;
-using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
 namespace Caveman.Configs
 {
-    [DataContract]
+    [JsonObject(MemberSerialization.OptIn)]
     public class WeaponConfig : ISettings
     {
-        public WeaponConfig(string name, float speed, int timeRespawn, float cooldown, int countItems, int weight, int rotateParameter, Types type, string prefabPath)
+        public WeaponConfig(string name, float speed, int timeRespawn, float cooldown, int countItems, int weight,
+            int rotateParameter, Types type, string prefabPath)
         {
             this.name = name;
             this.speed = speed;
@@ -19,16 +20,16 @@ namespace Caveman.Configs
             this.prefabPath = prefabPath;
         }
 
-        [DataMember] private readonly string name;
-        [DataMember] private readonly float speed;
-        [DataMember] private readonly int timeRespawn;
-        [DataMember] private readonly float cooldown;
-        [DataMember] private readonly int countItems;
-        [DataMember] private readonly int weight;
-        [DataMember] private readonly int rotateParameter;
-        [DataMember] private readonly Types type;
-        [DataMember] private readonly string prefabPath;
-
+        [JsonProperty] private readonly string name;
+        [JsonProperty] private readonly float speed;
+        [JsonProperty] private readonly int timeRespawn;
+        [JsonProperty] private readonly float cooldown;
+        [JsonProperty] private readonly int countItems;
+        [JsonProperty] private readonly int weight;
+        [JsonProperty] private readonly int rotateParameter;
+        [JsonProperty] private readonly string prefabPath;
+        [JsonProperty] private readonly Types type;
+        
         public string Name
         {
             get { return name; }

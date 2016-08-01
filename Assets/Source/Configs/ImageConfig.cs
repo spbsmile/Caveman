@@ -1,9 +1,9 @@
-﻿using System.Runtime.Serialization;
-using Caveman.Setting;
+﻿using Caveman.Setting;
+using Newtonsoft.Json;
 
 namespace Caveman.Configs
 {
-    [DataContract]
+    [JsonObject(MemberSerialization.OptIn)]
     public class ImageConfig : ISettings
     {
         public ImageConfig(string name, string prefabPath)
@@ -12,10 +12,8 @@ namespace Caveman.Configs
             this.prefabPath = prefabPath;
         }
 
-        [DataMember]
-        private string name;
-        [DataMember]
-        private string prefabPath;
+        [JsonProperty] private string name;
+        [JsonProperty] private string prefabPath;
 
         public string Name { get { return name; } }
         public string PrefabPath {  get { return prefabPath; } }

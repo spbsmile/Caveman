@@ -29,17 +29,17 @@ namespace Caveman
         public SmoothCamera smoothCamera;
 
         protected IClientListener serverNotify;
-      
+
         /// Get actual values from json
         public static CurrentGameSettings CurrentSettings { get; private set; }
 
         private Random r;
-         
+
         public virtual void Awake()
         {
             // path: Resource/Settings
             CurrentSettings = CurrentGameSettings.Load(
-              "bonuses", "weapons", "players", "pools", "images", pathLevelSingleConfig, pathLevelMultiplayerConfig);
+                "bonuses", "weapons", "players", "pools", "images", pathLevelSingleConfig, pathLevelMultiplayerConfig);
 
             //todo
             LoadingScreen.instance.FinishLoading += (o, s) => Play();
@@ -50,7 +50,8 @@ namespace Caveman
             r = new Random();
 
             PoolsManager.instance.PrepareAllPools(CurrentSettings);
-            var humanPlayer = new Player(PlayerPrefs.GetString(AccountManager.KeyNickname), SystemInfo.deviceUniqueIdentifier);
+            var humanPlayer = new Player(PlayerPrefs.GetString(AccountManager.KeyNickname),
+                SystemInfo.deviceUniqueIdentifier);
             BattleGui.instance.SubscribeOnEvents(humanPlayer);
             playersManager.CreatePlayer(humanPlayer, false, false, prefabHumanPlayer);
             var mapManager = new MapManager(serverNotify);
@@ -59,7 +60,9 @@ namespace Caveman
             {
                 for (var i = 1; i < CurrentSettings.LevelsSingleConfigs[currentLevelName].BotsCount + 1; i++)
                 {
-                    playersManager.CreatePlayer(new Player(CurrentSettings.LevelsSingleConfigs[currentLevelName].BotsName[i], i.ToString()), true, false, prefabAiPlayer);
+                    playersManager.CreatePlayer(
+                        new Player(CurrentSettings.LevelsSingleConfigs[currentLevelName].BotsName[i], i.ToString()),
+                        true, false, prefabAiPlayer);
                 }
                 PutAllItemsOnMap(new[] {"weapons", "bonuses"});
             }
@@ -84,7 +87,8 @@ namespace Caveman
                         // todo sort config to folder/levels game
                         foreach (var weaponConfig in CurrentSettings.WeaponsConfigs.Values)
                         {
-                            StartCoroutine(PutItemsOnMap<WeaponModelBase>(weaponConfig.PrefabPath, weaponConfig.TimeRespawn));
+                            StartCoroutine(PutItemsOnMap<WeaponModelBase>(weaponConfig.PrefabPath,
+                                weaponConfig.TimeRespawn));
                         }
                         break;
                     case "bonuses":
@@ -104,7 +108,7 @@ namespace Caveman
             // todo var bound = Settings.BonusSpeedMaxCount - PoolsManager.instance.BonusesSpeed.GetActivedCount; 
             for (var i = 0; i < Settings.WeaponInitialLying; i++)
             {
-                PutItemOnMap((ObjectPool<T>)PoolsManager.instance.Pools[poolId]);
+                PutItemOnMap((ObjectPool<T>) PoolsManager.instance.Pools[poolId]);
             }
             StartCoroutine(PutItemsOnMap<T>(poolId, timeRespawn));
         }

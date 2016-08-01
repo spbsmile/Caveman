@@ -1,9 +1,9 @@
-﻿using System.Runtime.Serialization;
-using Caveman.Setting;
+﻿using Caveman.Setting;
+using Newtonsoft.Json;
 
 namespace Caveman.Configs
 {
-    [DataContract]
+    [JsonObject(MemberSerialization.OptIn)]
     public class BonusConfig : ISettings
     {
         public BonusConfig(string name, float duration, Types type, string prefabPath)
@@ -14,16 +14,16 @@ namespace Caveman.Configs
             this.prefabPath = prefabPath;
         }
 
-        [DataMember] private readonly string name;
-        [DataMember] private readonly int timeRespawn;
-        [DataMember] private readonly float duration;
-        [DataMember] private readonly Types type;
-        [DataMember] private string prefabPath;
+        [JsonProperty] private readonly string name;
+        [JsonProperty] private readonly int timeRespawn;
+        [JsonProperty] private readonly float duration;
+        [JsonProperty] private readonly Types type;
+        [JsonProperty] private string prefabPath;
 
         public string Name
         {
             get { return name; }
-        } 
+        }
 
         public int TimeRespawn
         {
