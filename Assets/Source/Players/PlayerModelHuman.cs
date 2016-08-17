@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Caveman.Players
 {
-    public class HumanPlayerModel : PlayerModelClient
+    public class PlayerModelHuman : PlayerModelClient
     {
         protected override void Awake()
         {
@@ -14,22 +14,19 @@ namespace Caveman.Players
             BattleGui.instance.movementJoystick.FingerLiftedEvent += controller => StopMove();
         }
 
-        protected override void Start()
+        protected void Start()
         {
-            base.Start();
             if (multiplayer) StartCoroutine(SendMove());
         }
-
+        /*
         public override void Play()
         {
             base.Play();
             if (multiplayer) StartCoroutine(SendMove());
         }
-
+        */
         private IEnumerator SendMove()
         {
-            while (lockedControl)
-                yield return null;
             yield return new WaitForSeconds(0.3f);
             serverNotify.Move(transform.position);
             StartCoroutine(SendMove());
@@ -37,19 +34,14 @@ namespace Caveman.Players
 
         private void MovePlayer(Vector3 direction, CNAbstractController arg2)
         {
-            if (lockedControl)
-                return;
-            delta = direction*Speed;
+            moveUnit = direction*Speed;
             Move();
         }
 
         protected override void Move()
         {
-            if (lockedControl)
-                return;
-
-            var x = transform.position.x + delta.x * Time.deltaTime;
-            var y = transform.position.y + delta.y * Time.deltaTime;
+            var x = transform.position.x + moveUnit.x * Time.deltaTime;
+            var y = transform.position.y + moveUnit.y * Time.deltaTime;
 
 
             // check movement out field
@@ -68,7 +60,7 @@ namespace Caveman.Players
 
             transform.position = new Vector3(x, y);
 
-            playerAnimation.SetMoving(delta.y < 0, delta.x > 0);
+            playerAnimation.SetMoving(moveUnit.y < 0, moveUnit.x > 0);
         }
     }
 }

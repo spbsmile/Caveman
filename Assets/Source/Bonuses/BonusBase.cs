@@ -35,11 +35,11 @@ namespace Caveman.Bonuses
         public virtual void Effect(PlayerModelBase playerModel)
         {
             // HACK: trigger methods calling before Start
-            if (playerModel.Player == null)
+            if (playerModel.PlayerCore == null)
                 return;
             if (Config == null)
                 return;
-            playerModel.Player.PickUpBonus(Config.Type, Config.Duration);
+            playerModel.PlayerCore.ActivatedBonus(Config.Type, Config.Duration);
             //todo внедрить систему событий
             playerModel.bonusBase = this;
             transform.position = new Vector3(200, 200, 200);

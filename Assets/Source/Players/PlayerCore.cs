@@ -3,7 +3,7 @@ using Caveman.Configs;
 
 namespace Caveman.Players
 {
-    public class Player
+    public class PlayerCore 
     {
         // event for gui
         public Action<int> WeaponsCountChanged;
@@ -13,7 +13,7 @@ namespace Caveman.Players
         private int weapons;
         private int kills;
 
-        public Player(string name, string id)
+        public PlayerCore(string name, string id)
         {
             Name = name;
             Id = id;
@@ -56,7 +56,7 @@ namespace Caveman.Players
         }
 
         //todo very strange
-        public void PickUpBonus(BonusConfig.Types type, float duration)
+        public void ActivatedBonus(BonusConfig.Types type, float duration)
         {
             if (BonusActivated != null)
             {

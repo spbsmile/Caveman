@@ -14,27 +14,23 @@ using Random = System.Random;
 namespace Caveman.Players
 {
     /*
-     * Player concept consists of two types: Player and PlayerModelBase
+     * PlayerCore concept consists of two types: PlayerCore and PlayerModelBase
      * Type PlayerModelBase - Behavior 
-     * Type Player - contains all parameters/stats.
+     * Type PlayerCore - contains all parameters/stats.
      */
     public class PlayerModelBase : MonoBehaviour
     {
         public Action<Vector2> Death;
         public Action RespawnGuiDisabled;
-        // todo two some event. 
-        public Func<WeaponConfig.Types, ObjectPool<WeaponModelBase>> ChangedWeaponsPool;
-        protected Action ChangedWeapons;
+        public Func<WeaponConfig.Types, ObjectPool<WeaponModelBase>> ChangedWeaponsPool;        
 
         [HideInInspector] public BonusBase bonusBase;
         [HideInInspector] public SpriteRenderer spriteRenderer;
-        [HideInInspector] public bool firstRespawn = true;
         [HideInInspector] public PlayerConfig Config;
 
-        protected Vector2 target;
-        protected Vector2 delta;
+        protected Vector2 moveUnit;
         protected Random r;
-        protected bool lockedControl = true;
+       // protected bool lockedControl = true;
 
         //todo one parameter
         protected IClientListener serverNotify;
@@ -46,10 +42,10 @@ namespace Caveman.Players
         protected List<PlayerModelBase> players;
 
         private PlayerPool poolPlayers;
-        private ObjectPool<WeaponModelBase> poolWeapons;
+        private ObjectPool<WeaponModelBase> currentPoolWeapons;
 
         public float Speed { get; set; }
-        public Player Player { private set; get; }
+        public PlayerCore PlayerCore { private set; get; }
 
         protected virtual void Awake()
         {
@@ -60,14 +56,12 @@ namespace Caveman.Players
             Speed = Config.Speed;
         }
 
-        public void Init(Player player, Random random, IClientListener serverNotify)
+        public void Init(PlayerCore playerCore, Random random, IClientListener serverNotify)
         {
             //todo replace to playersmanager
             this.serverNotify = serverNotify;
             if (serverNotify != null) multiplayer = true;
-            name = player.Name;
-            transform.GetChild(0).GetComponent<TextMesh>().text = name;
-            Player = player;
+            PlayerCore = playerCore;
             // todo replace to playercore
             players = new List<PlayerModelBase>();
             players.AddRange(poolPlayers.GetCurrentPlayers());
@@ -75,12 +69,12 @@ namespace Caveman.Players
             poolPlayers.RemovePlayer += @base => players.Remove(@base);
             r = random;
         }
-
+        /*
         public virtual void Play()
         {
             lockedControl = false;
-        }
-
+        }*/
+        
         public virtual void PickupBonus(BonusBase bonus)
         {
             bonus.Effect(this);
@@ -94,18 +88,11 @@ namespace Caveman.Players
 
         public virtual void PickupWeapon(WeaponModelBase weaponModel)
         {
-            if (poolWeapons == null || weaponModel.Config.Type != WeaponConfig.Type)
+            if (currentPoolWeapons == null || weaponModel.Config.Type != WeaponConfig.Type)
             {
-                poolWeapons = ChangedWeaponsPool(weaponModel.Config.Type);
+                currentPoolWeapons = ChangedWeaponsPool(weaponModel.Config.Type);
                 WeaponConfig = weaponModel.Config;
-                if (ChangedWeapons != null)
-                {
-                    ChangedWeapons();    
-                }
-                else
-                {
-                    print("ChangedWeapons null" + name);
-                }
+                PlayerCore.Weapons = 0;
             }
             playerAnimation.Pickup();
             weaponModel.Take();
@@ -114,7 +101,7 @@ namespace Caveman.Players
         public virtual void ThrowWeapon(Vector2 aim)
         {
             playerAnimation.Throw();
-            poolWeapons.New().SetMotion(Player, transform.position, aim);
+            currentPoolWeapons.New().SetMotion(PlayerCore, transform.position, aim);
         }
 
         /// <summary>
@@ -137,7 +124,7 @@ namespace Caveman.Players
 
         public virtual void Birth(Vector2 point)
         {
-            poolPlayers.New(Player.Id).transform.position = point;
+            poolPlayers.New(PlayerCore.Id).transform.position = point;
             invulnerability = true;
             StartCoroutine(ProggressInvulnerability(Config.TimeInvulnerability));
         }
@@ -163,28 +150,19 @@ namespace Caveman.Players
         /// </summary>
         protected virtual void Move()
         {
-            if (lockedControl)
-                return;
-            transform.position = new Vector3(transform.position.x + delta.x * Time.deltaTime,
-                transform.position.y + delta.y * Time.deltaTime);
-            playerAnimation.SetMoving(delta.y < 0, delta.x > 0);
+            transform.position = new Vector3(transform.position.x + moveUnit.x * Time.deltaTime,
+                transform.position.y + moveUnit.y * Time.deltaTime);
+            playerAnimation.SetMoving(moveUnit.y < 0, moveUnit.x > 0);
         }
 
-        /// <summary>
-        /// set delta - direction of motion
-        /// </summary>
-        /// <param name="target"></param>
-        public void SetMove(Vector2 target)
+        public void CalculateMoveUnit(Vector2 targetPosition)
         {
-            this.target = target;
-            if (lockedControl)
-                return;
-            delta = UnityExtensions.CalculateDelta(transform.position, target, Speed);
+            moveUnit = UnityExtensions.CalculateDelta(transform.position, targetPosition, Speed);
         }
 
         public void StopMove()
         {
-            delta = Vector2.zero;
+            moveUnit = Vector2.zero;
             playerAnimation.IsMoving_B = false;
             playerAnimation.IsMoving_F = false;
         }

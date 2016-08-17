@@ -1,25 +1,32 @@
+using System;
+using Caveman.Level;
 using Caveman.Network;
 using Caveman.Pools;
 using Caveman.Setting;
 using Caveman.UI;
+using Random = System.Random;
 using UnityEngine;
 
 namespace Caveman.Players
 {
-    public class PlayersManager : MonoBehaviour
+    public class PlayersManager 
     {
-        private IClientListener serverNotify;
-        private bool isMultiplayer;
+        private readonly IClientListener serverNotify;        
+        private readonly SmoothCamera smoothCamera;
+        private readonly Random r;
 
-        public void Init(IClientListener serverNotify)
+        public bool[] name; 
+
+        public PlayersManager(IClientListener clientListener, SmoothCamera smoothCamera, System.Random random)
         {
-            this.serverNotify = serverNotify;
-            if (serverNotify != null) isMultiplayer = true;
+            r = random;
+            serverNotify = clientListener;
+            this.smoothCamera = smoothCamera;
         }
 
-        protected void CreatePlayer(Player player, bool isAiPlayer, bool isServerPlayer, Transform prefabModel)
+        public void CreatePlayerModel(PlayerCore playerCore, bool isAiPlayer, bool isServerPlayer, Transform prefabModel)
         {
-            var prefab = Instantiate(prefabModel);
+            var prefab = prefabModel;
             var playerModel = prefab.GetComponent<PlayerModelBase>();
             if (!isServerPlayer && !isAiPlayer)
             {
@@ -28,15 +35,20 @@ namespace Caveman.Players
                 smoothCamera.SetPlayer(prefab.GetComponent<PlayerModelBase>());
                 if (serverNotify != null) playerModel.GetComponent<SpriteRenderer>().material.color = Color.red;
             }
-            playerModel.Init(player, r, serverNotify);
-            PlayerPool.instance.Add(player.Id, playerModel);
+            playerModel.Init(playerCore, r, serverNotify);
+            PlayerPool.instance.Add(playerCore.Id, playerModel);
 
             playerModel.ChangedWeaponsPool += PoolsManager.instance.SwitchPoolWeapons;
             playerModel.Birth(new Vector2(r.Next(1, Settings.WidthMap - 1), r.Next(1, Settings.HeightMap - 1)));
+            
+            // copy past
+            playerModel.name = playerCore.Name;
+            playerModel.transform.GetChild(0).GetComponent<TextMesh>().text = playerCore.Name;
+        }
 
-            playerModel.name = player.Name;
-            playerModel.transform.GetChild(0).GetComponent<TextMesh>().text = name;
-            Player = player;
+        public void CreateAllPlayersModels()
+        {
+            
         }
 
         public void Respawn()

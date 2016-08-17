@@ -9,26 +9,23 @@ using Caveman.UI;
 using Caveman.Utils;
 using UnityEngine;
 using Random = System.Random;
-using Caveman.UI.Common;
-using Caveman.Weapons;
+ using Caveman.Weapons;
 
 namespace Caveman
 {
     public class EnterPoint : MonoBehaviour
     {
-        public PlayersManager playersManager;
-
         public Transform prefabHumanPlayer;
         public Transform prefabAiPlayer;
 
         public string pathLevelSingleConfig;
         public string pathLevelMultiplayerConfig;
         public string currentLevelName;
-
-        public bool isMultiplayerMode;
+        
         public SmoothCamera smoothCamera;
 
         protected IClientListener serverNotify;
+        protected PlayersManager playersManager;
 
         /// Get actual values from json
         public static CurrentGameSettings CurrentSettings { get; private set; }
@@ -42,26 +39,30 @@ namespace Caveman
                 "bonuses", "weapons", "players", "pools", "images", pathLevelSingleConfig, pathLevelMultiplayerConfig);
 
             //todo
-            LoadingScreen.instance.FinishLoading += (o, s) => Play();
+            //  LoadingScreen.instance.FinishLoading += (o, s) => Play();
         }
 
         public virtual void Start()
         {
             r = new Random();
-
             PoolsManager.instance.PrepareAllPools(CurrentSettings);
-            var humanPlayer = new Player(PlayerPrefs.GetString(AccountManager.KeyNickname),
+
+            var humanPlayer = new PlayerCore(PlayerPrefs.GetString(AccountManager.KeyNickname),
                 SystemInfo.deviceUniqueIdentifier);
             BattleGui.instance.SubscribeOnEvents(humanPlayer);
-            playersManager.CreatePlayer(humanPlayer, false, false, prefabHumanPlayer);
+            
+            playersManager = new PlayersManager(serverNotify, smoothCamera, r);
             var mapManager = new MapManager(serverNotify);
+
+            playersManager.CreatePlayerModel(humanPlayer, false, false, Instantiate(prefabHumanPlayer));
+
 
             if (serverNotify == null)
             {
                 for (var i = 1; i < CurrentSettings.LevelsSingleConfigs[currentLevelName].BotsCount + 1; i++)
                 {
-                    playersManager.CreatePlayer(
-                        new Player(CurrentSettings.LevelsSingleConfigs[currentLevelName].BotsName[i], i.ToString()),
+                    playersManager.CreatePlayerModel(
+                        new PlayerCore(CurrentSettings.LevelsSingleConfigs[currentLevelName].BotsName[i], i.ToString()),
                         true, false, prefabAiPlayer);
                 }
                 PutAllItemsOnMap(new[] {"weapons", "bonuses"});
@@ -69,14 +70,14 @@ namespace Caveman
         }
 
         // todo virtual &
-        public virtual void Play()
+      /*  public virtual void Play()
         {
             //  foreach (var player in poolPlayers.GetCurrentPlayers())
             //  {
             //      player.Play();
             //  }
         }
-
+        */
         private void PutAllItemsOnMap(string[] typesItems)
         {
             for (var i = 0; i < typesItems.Length; i++)

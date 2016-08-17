@@ -57,9 +57,9 @@ namespace UnityStandardAssets.Cameras
             {
                 // we're in 'follow rotation' mode, where the camera rig's rotation follows the object's rotation.
 
-                // This section allows the camera to stop following the target's rotation when the target is spinning too fast.
+                // This section allows the camera to stop following the target's rotation when the targetPosition is spinning too fast.
                 // eg when a car has been knocked into a spin. The camera will resume following the rotation
-                // of the target when the target's angular velocity slows below the threshold.
+                // of the target when the targetPosition's angular velocity slows below the threshold.
                 var currentFlatAngle = Mathf.Atan2(targetForward.x, targetForward.z)*Mathf.Rad2Deg;
                 if (m_SpinTurnLimit > 0)
                 {

@@ -44,11 +44,11 @@ namespace Caveman.UI
             };
         }
 
-        public void SubscribeOnEvents(Player player)
+        public void SubscribeOnEvents(PlayerCore playerCore)
         {
-            player.WeaponsCountChanged += WeaponsCountChanged;
-            player.KillsCountChanged += KillsCountChanged;
-            player.BonusActivated += bonusesPanel.BonusActivated;
+            playerCore.WeaponsCountChanged += WeaponsCountChanged;
+            playerCore.KillsCountChanged += KillsCountChanged;
+            playerCore.BonusActivated += bonusesPanel.BonusActivated;
         }
 
         public void SubscribeOnEvents(PlayerModelBase playerModelBase)

@@ -4,48 +4,45 @@ using UnityEngine;
 
 namespace Caveman.Players
 {
-    public class AiPlayerModel : PlayerModelClient
+    public class PlayerModelAi : PlayerModelClient
     {
         private Transform weapons;
+        private Vector2 targetPosition;
 
-        protected override void Start()
+        protected void Start()
         {
-            base.Start();
             GetComponent<SpriteRenderer>().color = new Color32((byte) r.Next(255), (byte) r.Next(255),
                 (byte) r.Next(255), 255);
         }
 
         public void Update()
         {
-            if ((Vector2.SqrMagnitude(delta) > UnityExtensions.ThresholdPosition &&
-                    Vector2.SqrMagnitude((Vector2)transform.position - target) > UnityExtensions.ThresholdPosition))
+            if ((Vector2.SqrMagnitude(moveUnit) > UnityExtensions.ThresholdPosition &&
+                    Vector2.SqrMagnitude((Vector2)transform.position - targetPosition) > UnityExtensions.ThresholdPosition))
             {
                 Move();
             }
             else
             {
-                if (Player.Weapons < WeaponConfig.Weight)
+                if (PlayerCore.Weapons < WeaponConfig.Weight)
                 {
-                    target = FindClosestLyingWeapon;
-                    if (target == Vector2.zero)
-                    {
-                        target = RandomPosition;
-                    }
-                    SetMove(target);
+                    var closestPosition = FindClosestLyingWeapon;
+                    targetPosition = closestPosition == Vector2.zero ? RandomPosition : closestPosition;
+                    CalculateMoveUnit(targetPosition);
                 }
                 else
                 {
-                    SetMove(RandomPosition);
+                    CalculateMoveUnit(RandomPosition);
                 }
             }
         }
-
+        /*
         public override void Play()
         {
             base.Play();
-            SetMove(RandomPosition);
+            CalculateMoveUnit(RandomPosition);
         }
-
+        */
         private Vector2 FindClosestLyingWeapon
         {
             get

@@ -9,7 +9,7 @@ namespace Caveman.Weapons
     public  class WeaponModelBase : ASupportPool<WeaponModelBase>
     {
         public WeaponConfig Config { protected set; get; }
-        public Player Owner { private set; get; }
+        public PlayerCore Owner { private set; get; }
         
         protected Vector2 startPosition;
         protected Vector2 target;
@@ -42,13 +42,13 @@ namespace Caveman.Weapons
             transform.position = position;
         }
 
-        public void SetMotion(Player player, Vector3 start, Vector2 aim)
+        public void SetMotion(PlayerCore playerCore, Vector3 start, Vector2 aim)
         {
-            Owner = player;
+            Owner = playerCore;
             startPosition = start;
             transform.position = start;
             target = aim;
-            // todo if weapon move no linear, delta needless, example: stone model, bezier curve
+            // todo if weapon move no linear, moveUnit needless, example: stone model, bezier curve
             delta = UnityExtensions.CalculateDelta(start, aim, Config.Speed);
         }
 

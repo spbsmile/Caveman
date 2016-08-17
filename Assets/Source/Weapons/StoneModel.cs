@@ -53,8 +53,8 @@ namespace Caveman.Weapons
                     transform.position = BezierUtils.Bezier2(startPosition, BezierUtils.ControlPoint(startPosition, target), target, bezierTime);
 
                     //linear moving. can be used for testing
-                    //                    transform.position = new Vector2(transform.position.x + delta.x * Time.deltaTime,
-                    //                        transform.position.y + delta.y * Time.deltaTime);
+                    //                    transform.position = new Vector2(transform.position.x + moveUnit.x * Time.deltaTime,
+                    //                        transform.position.y + moveUnit.y * Time.deltaTime);
                     transform.Rotate(Vector3.forward, Config.RotateParameter * Time.deltaTime * 100);
                 }
                 else

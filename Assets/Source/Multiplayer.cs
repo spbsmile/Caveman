@@ -26,12 +26,12 @@ namespace Caveman.Network
             base.Start();
             serverNotify.Respawn(PlayerPool.instance[OwnId].transform.position);
         }
-
+        /*
         public override void Play()
         {
             base.Play();
             serverNotify.Respawn(PlayerPool.instance[OwnId].transform.position);
-        }
+        }*/
 
         public void Update()
         {
@@ -103,7 +103,7 @@ namespace Caveman.Network
             }
             else
             {
-                PlayerPool.instance[playerId].SetMove(point);
+                PlayerPool.instance[playerId].CalculateMoveUnit(point);
             }
         }
 
@@ -113,7 +113,7 @@ namespace Caveman.Network
             {
                 var playerId = player[ServerParams.UserId].ToString();
                 if (!PlayerPool.instance.ContainsKey(playerId))
-                    CreatePlayerModel(new Player(player[ServerParams.UserName].ToString(), playerId), false, true, prefabServerPlayer);
+                    playersManager.CreatePlayerModel(new PlayerCore(player[ServerParams.UserName].ToString(), playerId), false, true, Instantiate(prefabServerPlayer));
             }
         }
 
@@ -140,7 +140,7 @@ namespace Caveman.Network
 
         public void LoginReceived(string playerId, string playerName)
         {
-            CreatePlayerModel(new Player(playerName, playerId), false, true, prefabServerPlayer);
+            playersManager.CreatePlayerModel(new PlayerCore(playerName, playerId), false, true, Instantiate(prefabServerPlayer));
             serverNotify.Respawn(PlayerPool.instance[OwnId].transform.position);
         }
 
@@ -178,7 +178,7 @@ namespace Caveman.Network
             {
                 return true;
             }
-            Debug.LogWarning("Player null, but received invoke");
+            Debug.LogWarning("PlayerCore null, but received invoke");
             return false;
         }
     }

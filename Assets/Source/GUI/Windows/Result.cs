@@ -17,9 +17,9 @@ namespace Caveman.UI.Windows
             var lineIndex = 0;
             foreach (var playerModelBase in players)
             {
-                Write(playerModelBase.Player.Name, names, lineIndex);
-                Write(playerModelBase.Player.Deaths.ToString(), deaths, lineIndex);
-                Write(playerModelBase.Player.Kills.ToString(), kills, lineIndex);
+                Write(playerModelBase.PlayerCore.Name, names, lineIndex);
+                Write(playerModelBase.PlayerCore.Deaths.ToString(), deaths, lineIndex);
+                Write(playerModelBase.PlayerCore.Kills.ToString(), kills, lineIndex);
                 lineIndex++;
             }
             yield return new WaitForSeconds(1f);
