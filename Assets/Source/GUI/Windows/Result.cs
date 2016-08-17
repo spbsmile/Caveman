@@ -18,8 +18,8 @@ namespace Caveman.UI.Windows
             foreach (var playerModelBase in players)
             {
                 Write(playerModelBase.PlayerCore.Name, names, lineIndex);
-                Write(playerModelBase.PlayerCore.Deaths.ToString(), deaths, lineIndex);
-                Write(playerModelBase.PlayerCore.Kills.ToString(), kills, lineIndex);
+                Write(playerModelBase.PlayerCore.DeathCount.ToString(), deaths, lineIndex);
+                Write(playerModelBase.PlayerCore.KillCount.ToString(), kills, lineIndex);
                 lineIndex++;
             }
             yield return new WaitForSeconds(1f);

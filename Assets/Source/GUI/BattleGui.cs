@@ -46,36 +46,38 @@ namespace Caveman.UI
 
         public void SubscribeOnEvents(PlayerCore playerCore)
         {
-            playerCore.WeaponsCountChanged += WeaponsCountChanged;
-            playerCore.KillsCountChanged += KillsCountChanged;
-            playerCore.BonusActivated += bonusesPanel.BonusActivated;
+            playerCore.WeaponCountChange += count => weapons.text = count.ToString();
+            playerCore.KillCountChange += count => killed.text = count.ToString();
+	        playerCore.BonusActivate += bonusesPanel.BonusActivated;
         }
 
         public void SubscribeOnEvents(PlayerModelBase playerModelBase)
         {
-            playerModelBase.Death += vector2 => waitForResp.Activate(playerModelBase.Config.TimeRespawn);
-            playerModelBase.RespawnGuiDisabled += () => waitForResp.gameObject.SetActive(false);
+	        playerModelBase.PlayerCore.IsAliveChange += isAlive => ReportIsAliveChange(playerModelBase, isAlive);
             waitForResp.buttonRespawn.onClick.AddListener(delegate
             {
                 // TODO: set count gold respawn received from server
                 //if (!playerModelBase.SpendGold(0))
                 //   return;
+	            playerModelBase.PlayerCore.IsAlive = true;
                 playerModelBase.StopAllCoroutines();
                 playerModelBase.Birth(RandomPosition);
-                waitForResp.gameObject.SetActive(false);
             });
         }
 
-        private void WeaponsCountChanged(int count)
-        {
-            weapons.text = count.ToString();
-        }
 
-        private void KillsCountChanged(int count)
-        {
-            killed.text = count.ToString();
-        }
-       
+	    private void ReportIsAliveChange(PlayerModelBase playerModelBase, bool isAlive)
+	    {
+		    if (isAlive)
+		    {
+			    waitForResp.gameObject.SetActive(false);
+		    }
+		    else
+		    {
+			    waitForResp.Activate(playerModelBase.Config.TimeRespawn);
+		    }
+	    }
+
         private Vector2 RandomPosition
         {
             get { return new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)); }

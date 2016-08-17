@@ -10,21 +10,21 @@ namespace Caveman.Players
     {
         public override void PickupWeapon(WeaponModelBase weaponModel)
         {
-            if (PlayerCore.Weapons > weaponModel.Config.Weight) return;
+            if (PlayerCore.WeaponCount > weaponModel.Config.Weight) return;
             base.PickupWeapon(weaponModel);
-            PlayerCore.Weapons++;
+            PlayerCore.WeaponCount++;
         }
 
         public override void Die()
         {
-            PlayerCore.Weapons = 0;
+            PlayerCore.WeaponCount = 0;
             base.Die();
         }
 
         public override void ThrowWeapon(Vector2 aim)
         {
             base.ThrowWeapon(aim);
-            PlayerCore.Weapons--;
+            PlayerCore.WeaponCount--;
         }
 
         public void Update()

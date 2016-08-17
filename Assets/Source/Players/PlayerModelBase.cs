@@ -14,14 +14,12 @@ using Random = System.Random;
 namespace Caveman.Players
 {
     /*
-     * PlayerCore concept consists of two types: PlayerCore and PlayerModelBase
+     * Player concept consists of two types: PlayerCore and PlayerModelBase
      * Type PlayerModelBase - Behavior 
      * Type PlayerCore - contains all parameters/stats.
      */
     public class PlayerModelBase : MonoBehaviour
     {
-        public Action<Vector2> Death;
-        public Action RespawnGuiDisabled;
         public Func<WeaponConfig.Types, ObjectPool<WeaponModelBase>> ChangedWeaponsPool;        
 
         [HideInInspector] public BonusBase bonusBase;
@@ -82,7 +80,7 @@ namespace Caveman.Players
 
         public virtual void Die()
         {
-            Death(transform.position);
+	        PlayerCore.IsAlive = false;
             poolPlayers.Store(this);
         }
 
@@ -92,7 +90,7 @@ namespace Caveman.Players
             {
                 currentPoolWeapons = ChangedWeaponsPool(weaponModel.Config.Type);
                 WeaponConfig = weaponModel.Config;
-                PlayerCore.Weapons = 0;
+                PlayerCore.WeaponCount = 0;
             }
             playerAnimation.Pickup();
             weaponModel.Take();
@@ -119,7 +117,7 @@ namespace Caveman.Players
             yield return new WaitForSeconds(Config.TimeRespawn);
             Birth(point);
             StopMove();
-            if (RespawnGuiDisabled != null) RespawnGuiDisabled();
+	        PlayerCore.IsAlive = true;
         }
 
         public virtual void Birth(Vector2 point)

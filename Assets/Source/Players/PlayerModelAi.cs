@@ -24,7 +24,7 @@ namespace Caveman.Players
             }
             else
             {
-                if (PlayerCore.Weapons < WeaponConfig.Weight)
+                if (PlayerCore.WeaponCount < WeaponConfig.Weight)
                 {
                     var closestPosition = FindClosestLyingWeapon;
                     targetPosition = closestPosition == Vector2.zero ? RandomPosition : closestPosition;

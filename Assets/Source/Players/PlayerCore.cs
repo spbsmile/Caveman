@@ -5,13 +5,14 @@ namespace Caveman.Players
 {
     public class PlayerCore 
     {
-        // event for gui
-        public Action<int> WeaponsCountChanged;
-        public Action<int> KillsCountChanged;
-        public Action<BonusConfig.Types, float> BonusActivated;
+        public Action<int> WeaponCountChange;
+        public Action<int> KillCountChange;
+        public Action<BonusConfig.Types, float> BonusActivate;
+	    public Action<bool> IsAliveChange;
        
-        private int weapons;
-        private int kills;
+        private int weaponCount;
+        private int killCount;
+	    private bool isAlive;
 
         public PlayerCore(string name, string id)
         {
@@ -21,46 +22,57 @@ namespace Caveman.Players
 
         public string Id { get; private set; }
         public string Name { get; private set; }
-        public int Deaths { set; get; }
 
-        public int Weapons
+        public int DeathCount { set; get; }
+
+        public int WeaponCount
         {
-            get { return weapons; }
+            get { return weaponCount; }
             set
             {
-                if (weapons != value)
-                {
-                    weapons = value;
-                    if (WeaponsCountChanged != null)
-                    {
-                        WeaponsCountChanged(weapons);
-                    }
-                }
+	            if (weaponCount == value) return;
+	            weaponCount = value;
+	            if (WeaponCountChange != null)
+	            {
+		            WeaponCountChange(value);
+	            }
             }
         }
 
-        public int Kills
+        public int KillCount
         {
-            get { return kills; }
+            get { return killCount; }
             set
             {
-                if (kills != value)
-                {
-                    kills = value;
-                    if (KillsCountChanged != null)
-                    {
-                        KillsCountChanged(kills);
-                    }
-                }
+	            if (killCount == value) return;
+	            killCount = value;
+	            if (KillCountChange != null)
+	            {
+		            KillCountChange(value);
+	            }
             }
         }
 
-        //todo very strange
+	    public bool IsAlive
+	    {
+		    get { return isAlive; }
+		    set
+		    {
+			    if (isAlive == value) return;
+			    isAlive = value;
+			    if (IsAliveChange != null)
+			    {
+				    IsAliveChange(value);
+			    }
+		    }
+	    }
+
+	    //todo very strange
         public void ActivatedBonus(BonusConfig.Types type, float duration)
         {
-            if (BonusActivated != null)
+            if (BonusActivate != null)
             {
-                BonusActivated(type, duration);
+                BonusActivate(type, duration);
             }
         }
     }

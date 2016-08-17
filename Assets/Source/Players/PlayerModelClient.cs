@@ -31,8 +31,8 @@ namespace Caveman.Players
                 {
                     if (weapon.Owner != PlayerCore)
                     {
-                        weapon.Owner.Kills++;
-                        PlayerCore.Deaths++;
+                        weapon.Owner.KillCount++;
+                        PlayerCore.DeathCount++;
                         if (multiplayer)
                         {
                             serverNotify.PlayerDead();
@@ -95,9 +95,9 @@ namespace Caveman.Players
         public override void PickupWeapon(WeaponModelBase weaponModel)
         {
             //todo strong hero and weight weapon formula strong = countWeapon&weigthWeapon
-            if (PlayerCore.Weapons > weaponModel.Config.Weight) return;
+            if (PlayerCore.WeaponCount > weaponModel.Config.Weight) return;
             base.PickupWeapon(weaponModel);
-            PlayerCore.Weapons += weaponModel.Config.CountItems;
+            PlayerCore.WeaponCount += weaponModel.Config.CountItems;
             if (multiplayer) serverNotify.PickWeapon(weaponModel.Id, (int)weaponModel.Config.Type);
         }
 
@@ -105,13 +105,13 @@ namespace Caveman.Players
         {
             if (multiplayer) serverNotify.UseWeapon(aim, (int) WeaponConfig.Type);
             base.ThrowWeapon(aim);
-            PlayerCore.Weapons--;
+            PlayerCore.WeaponCount--;
         }
 
         private IEnumerator ThrowWeaponOnCooldown()
         {
             yield return new WaitForSeconds(WeaponConfig.Cooldown);
-            if (PlayerCore.Weapons > 0)
+            if (PlayerCore.WeaponCount > 0)
             {
                 var victim = FindClosestPlayer();
                 if (victim != null)
