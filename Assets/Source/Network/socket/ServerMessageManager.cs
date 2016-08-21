@@ -48,63 +48,63 @@ namespace Caveman.Network
 
             if (action.Equals(ServerParams.StoneAddedAction))
             {
-                listener.WeaponAddedReceived(key, pointClient);
+                listener.WeaponAddedReceive(key, pointClient);
             }
             else if (action.Equals(ServerParams.StoneRemovedAction))
             {
-                listener.WeaponRemovedReceived(key);
+                listener.WeaponRemovedReceive(key);
             }
             else if (action.Equals(ServerParams.PlayerMoveAction))
             {
-                listener.PlayerMoveReceived(playerId, pointClient);
+                listener.PlayerMoveReceive(playerId, pointClient);
             }
             else if (action.Equals(ServerParams.WeaponPickAction))
             {
-                listener.WeaponPickReceived(playerId, key);
+                listener.WeaponPickReceive(playerId, key);
             }
             else if (action.Equals(ServerParams.BonusAddedAction))
             {
-                listener.BonusAddedReceived(key, pointClient);
+                listener.BonusAddedReceive(key, pointClient);
             }
             else if (action.Equals(ServerParams.BonusRemovedAction))
             {
-                listener.BonusRemovedReceived(key, pointClient);
+                listener.BonusRemovedReceive(key, pointClient);
             }
             else if (action.Equals(ServerParams.BonusPickAction))
             {
-                listener.BonusPickReceived(playerId, key);
+                listener.BonusPickReceive(playerId, key);
             }
             else if (action.Equals(ServerParams.UseWeaponAction))
             {                                        //aim
-                listener.WeaponUseReceived(playerId, pointClient);
+                listener.WeaponUseReceive(playerId, pointClient);
             }
             else if (action.Equals(ServerParams.PlayerRespawnAction))
             {
-                listener.PlayerRespawnReceived(playerId, pointClient);
+                listener.PlayerRespawnReceive(playerId, pointClient);
             }
             else if (action.Equals(ServerParams.LoginAction))
             {
-                listener.LoginReceived(playerId, jToken.Value<string>(ServerParams.UserName));
+                listener.LoginReceive(playerId, jToken.Value<string>(ServerParams.UserName));
             }
             else if (action.Equals(ServerParams.PlayerDeadAction))
             {
-                listener.PlayerDeadReceived(playerId);
+                listener.PlayerDeadReceive(playerId);
             }
             else if (action.Equals(ServerParams.GameTimeAction))
             {
-                listener.GameTimeReceived(jToken.Value<float>(ServerParams.GameTimeLeft));
+                listener.GameTimeReceive(jToken.Value<float>(ServerParams.GameTimeLeft));
             }
             else if (action.Equals(ServerParams.LogoutAction))
             {
-                listener.LogoutReceived(playerId);
+                listener.LogoutReceive(playerId);
             }
             else if (action.Equals(ServerParams.GameResultAction))
             {
-                listener.GameResultReceived(jToken[ServerParams.Data]);
+                listener.GameResultReceive(jToken[ServerParams.Data]);
             }
             else if (action.Equals(ServerParams.GameInfoAction))
             {
-                listener.GameInfoReceived(jToken["players"]);
+                listener.GameInfoReceive(jToken["players"]);
             }
         }
 
@@ -115,8 +115,8 @@ namespace Caveman.Network
 
         private Vector2 Convector(Vector2 pointServer)
         {
-            var x = (pointServer.x / Multiplayer.WidthMapServer) * Settings.WidthMap;
-            var y = (pointServer.y / Multiplayer.HeigthMapServer) * Settings.HeightMap;
+            var x = (pointServer.x / ServerMessageHandler.WidthMapServer) * Settings.WidthMap;
+            var y = (pointServer.y / ServerMessageHandler.HeigthMapServer) * Settings.HeightMap;
             return new Vector2(x, y);
         }
     }

@@ -53,7 +53,7 @@ namespace Caveman.UI
 
         public void SubscribeOnEvents(PlayerModelBase playerModelBase)
         {
-	        playerModelBase.PlayerCore.IsAliveChange += isAlive => ReportIsAliveChange(playerModelBase, isAlive);
+	        playerModelBase.PlayerCore.IsAliveChange += isAlive => ReportIsAliveChange(playerModelBase.PlayerCore.Config.RespawnDuration, isAlive);
             waitForResp.buttonRespawn.onClick.AddListener(delegate
             {
                 // TODO: set count gold respawn received from server
@@ -61,12 +61,12 @@ namespace Caveman.UI
                 //   return;
 	            playerModelBase.PlayerCore.IsAlive = true;
                 playerModelBase.StopAllCoroutines();
-                playerModelBase.Birth(RandomPosition);
+                playerModelBase.RespawnInstantly(RandomPosition);
             });
         }
 
 
-	    private void ReportIsAliveChange(PlayerModelBase playerModelBase, bool isAlive)
+	    private void ReportIsAliveChange(int respawnDuration, bool isAlive)
 	    {
 		    if (isAlive)
 		    {
@@ -74,7 +74,7 @@ namespace Caveman.UI
 		    }
 		    else
 		    {
-			    waitForResp.Activate(playerModelBase.Config.TimeRespawn);
+			    waitForResp.Activate(respawnDuration);
 		    }
 	    }
 

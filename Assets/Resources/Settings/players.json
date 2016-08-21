@@ -2,8 +2,8 @@
     {
         "name": "sample",
         "speed": 2.5,
-        "timeRespawn": 3,
-        "timeInvulnerability": 2,
+        "respawnDuration": 3,
+        "invulnerabilityDuration": 2,
         "strength": 5,
         "prefabPath": "/Players/"
     }

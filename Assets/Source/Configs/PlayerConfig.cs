@@ -6,13 +6,13 @@ namespace Caveman.Configs
     [JsonObject(MemberSerialization.OptIn)]
     public class PlayerConfig : ISettings
     {
-        public PlayerConfig(string name, float speed, int timeRespawn, int timeInvulnerability, float strength,
+        public PlayerConfig(string name, float speed, int respawnDuration, int invulnerabilityDuration, float strength,
             Types type, string prefabPath)
         {
             this.name = name;
             this.speed = speed;
-            this.timeRespawn = timeRespawn;
-            this.timeInvulnerability = timeInvulnerability;
+            this.respawnDuration = respawnDuration;
+            this.invulnerabilityDuration = invulnerabilityDuration;
             this.type = type;
             this.strength = strength;
             this.prefabPath = prefabPath;
@@ -20,8 +20,8 @@ namespace Caveman.Configs
 
         [JsonProperty] private readonly string name;
         [JsonProperty] private readonly float speed;
-        [JsonProperty] private readonly int timeRespawn;
-        [JsonProperty] private readonly int timeInvulnerability;
+        [JsonProperty] private readonly int respawnDuration;
+        [JsonProperty] private readonly int invulnerabilityDuration;
         [JsonProperty] private readonly float strength;
         [JsonProperty] private readonly Types type;
         [JsonProperty] private string prefabPath;
@@ -41,14 +41,14 @@ namespace Caveman.Configs
             get { return speed; }
         }
 
-        public int TimeRespawn
+        public int RespawnDuration
         {
-            get { return timeRespawn; }
+            get { return respawnDuration; }
         }
 
-        public int TimeInvulnerability
+        public int InvulnerabilityDuration
         {
-            get { return timeInvulnerability; }
+            get { return invulnerabilityDuration; }
         }
 
         public string PrefabPath

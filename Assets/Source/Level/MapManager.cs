@@ -4,7 +4,7 @@ namespace Caveman
 {
   public class MapManager
   {
-    public MapManager(IClientListener serverNotify)
+    public MapManager(IServerNotify serverNotify)
     {
       throw new System.NotImplementedException();
       

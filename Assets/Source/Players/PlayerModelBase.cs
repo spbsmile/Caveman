@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using Caveman.Bonuses;
 using Caveman.CustomAnimation;
 using Caveman.Network;
@@ -24,54 +23,37 @@ namespace Caveman.Players
 
         [HideInInspector] public BonusBase bonusBase;
         [HideInInspector] public SpriteRenderer spriteRenderer;
-        [HideInInspector] public PlayerConfig Config;
 
-        protected Vector2 moveUnit;
+        protected Vector2 moveUnit;  
         protected Random r;
-       // protected bool lockedControl = true;
 
         //todo one parameter
-        protected IClientListener serverNotify;
+        protected IServerNotify serverNotify;
         protected bool multiplayer;
         
         protected WeaponConfig WeaponConfig;
         protected internal bool invulnerability;
         protected PlayerAnimation playerAnimation;
-        protected List<PlayerModelBase> players;
+	    protected PlayersManager playersManager;
+	    private ObjectPool<WeaponModelBase> currentPoolWeapons;
 
-        private PlayerPool poolPlayers;
-        private ObjectPool<WeaponModelBase> currentPoolWeapons;
-
-        public float Speed { get; set; }
         public PlayerCore PlayerCore { private set; get; }
 
         protected virtual void Awake()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
             playerAnimation = new PlayerAnimation(GetComponent<Animator>());
-            Config = EnterPoint.CurrentSettings.PlayersConfigs["sample"];
             WeaponConfig = EnterPoint.CurrentSettings.WeaponsConfigs["stone"];
-            Speed = Config.Speed;
         }
 
-        public void Init(PlayerCore playerCore, Random random, IClientListener serverNotify)
+        public void Init(PlayerCore playerCore, Random random, IServerNotify serverNotify, PlayersManager playersManager)
         {
-            //todo replace to playersmanager
             this.serverNotify = serverNotify;
+	        this.playersManager = playersManager;
             if (serverNotify != null) multiplayer = true;
             PlayerCore = playerCore;
-            // todo replace to playercore
-            players = new List<PlayerModelBase>();
-            players.AddRange(poolPlayers.GetCurrentPlayers());
-            poolPlayers.AddedPlayer += @base => players.Add(@base);
-            poolPlayers.RemovePlayer += @base => players.Remove(@base);
             r = random;
         }
-        /*
-        public virtual void Play()
-        {
-            lockedControl = false;
-        }*/
         
         public virtual void PickupBonus(BonusBase bonus)
         {
@@ -102,37 +84,27 @@ namespace Caveman.Players
             currentPoolWeapons.New().SetMotion(PlayerCore, transform.position, aim);
         }
 
-        /// <summary>
-        /// Gold spend player. Return true if gold enough.
-        /// </summary>
-        /// <param name="value">Amount spend gold</param>
-        /// <returns>True if gold enough</returns>
-        public virtual bool SpendGold(int value)
+        public virtual IEnumerator Respawn(Vector2 position)
         {
-            return true;
-        }
-
-        public virtual IEnumerator Respawn(Vector2 point)
-        {
-            yield return new WaitForSeconds(Config.TimeRespawn);
-            Birth(point);
+            yield return new WaitForSeconds(PlayerCore.Config.RespawnDuration);
+            RespawnInstantly(position);
             StopMove();
 	        PlayerCore.IsAlive = true;
         }
 
-        public virtual void Birth(Vector2 point)
+        public virtual void RespawnInstantly(Vector2 position)
         {
-            poolPlayers.New(PlayerCore.Id).transform.position = point;
+            poolPlayers.New(PlayerCore.Id).transform.position = position;
             invulnerability = true;
-            StartCoroutine(ProggressInvulnerability(Config.TimeInvulnerability));
+            StartCoroutine(ProggressInvulnerability(PlayerCore.Config.InvulnerabilityDuration));
         }
 
         // invoke, when respawn
-        private IEnumerator ProggressInvulnerability(float playerTimeInvulnerability)
+        private IEnumerator ProggressInvulnerability(float duration)
         {
             var startTime = Time.time;
             var render = spriteRenderer ? spriteRenderer : GetComponent<SpriteRenderer>();
-            while (Time.time  < startTime + playerTimeInvulnerability)
+            while (Time.time  < startTime + duration)
             {
                 render.enabled = false;
                 yield return new WaitForSeconds(0.1f);
@@ -155,7 +127,7 @@ namespace Caveman.Players
 
         public void CalculateMoveUnit(Vector2 targetPosition)
         {
-            moveUnit = UnityExtensions.CalculateDelta(transform.position, targetPosition, Speed);
+            moveUnit = UnityExtensions.CalculateDelta(transform.position, targetPosition, PlayerCore.Speed);
         }
 
         public void StopMove()

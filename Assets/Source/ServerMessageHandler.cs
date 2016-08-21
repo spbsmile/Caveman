@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Caveman.Network
 {
-    public class Multiplayer : EnterPoint, IServerListener
+    public class ServerMessageHandler : EnterPoint, IServerListener
     {
         public Transform prefabServerPlayer;
 
@@ -16,84 +16,72 @@ namespace Caveman.Network
         public const float HeigthMapServer = 1350;
         private static string OwnId;
         private bool resultReceived;
+	    private ServerConnection serverConnection;
 
         public override void Start()
         {
             OwnId = SystemInfo.deviceUniqueIdentifier;
             serverNotify = new ServerNotify {ServerListener = this};
-            serverNotify.StartSession(OwnId,
+	        serverConnection = (ServerConnection) serverNotify;
+	        serverConnection.StartSession(OwnId,
                 PlayerPrefs.GetString(AccountManager.KeyNickname));
             base.Start();
-            serverNotify.Respawn(PlayerPool.instance[OwnId].transform.position);
+            serverNotify.RespawnSend(PlayerPool.instance[OwnId].transform.position);
         }
-        /*
-        public override void Play()
-        {
-            base.Play();
-            serverNotify.Respawn(PlayerPool.instance[OwnId].transform.position);
-        }*/
 
         public void Update()
         {
-            if (!resultReceived) serverNotify.Update();
+            if (!resultReceived) serverConnection.Update();
         }
 
-        public void WeaponAddedReceived(string key, Vector2 point)
+        public void WeaponAddedReceive(string key, Vector2 point)
         {
             if (RepeatKey(PoolsManager.instance.Stones, key)) return;
             PoolsManager.instance.Stones.New(key).transform.position = point;
         }
 
-        public void WeaponRemovedReceived(string key)
+        public void WeaponRemovedReceive(string key)
         {
             PoolsManager.instance.Stones.Store(key);
         }
 
-        public void WeaponPickReceived(string playerId, string key)
+        public void WeaponPickReceive(string playerId, string key)
         {
             PlayerPool.instance[playerId].PickupWeapon(PoolsManager.instance.Stones[key]);
         }
 
-        public void WeaponUseReceived(string playerId, Vector2 aim)
+        public void WeaponUseReceive(string playerId, Vector2 aim)
         {
             PlayerPool.instance[playerId].ThrowWeapon(aim);
         }
 
-        public void BonusAddedReceived(string key, Vector2 point)
+        public void BonusAddedReceive(string key, Vector2 point)
         {
             if (RepeatKey(PoolsManager.instance.BonusesSpeed, key)) return;
             PoolsManager.instance.BonusesSpeed.New(key).transform.position = point;    
         }
 
-        public void BonusRemovedReceived(string key, Vector2 point)
+        public void BonusRemovedReceive(string key, Vector2 point)
         {
             PoolsManager.instance.BonusesSpeed.Store(key);
         }
 
-        public void BonusPickReceived(string playerId, string key)
+        public void BonusPickReceive(string playerId, string key)
         {
             PlayerPool.instance[playerId].PickupBonus(PoolsManager.instance.BonusesSpeed[key]);
         }
 
-        public void PlayerRespawnReceived(string playerId, Vector2 point)
-        {
-            if (PlayerPool.instance[playerId].firstRespawn)
-            {
-                PlayerPool.instance[playerId].firstRespawn = false;
-                PlayerPool.instance[playerId].transform.position = point;
-            }
-            else
-            {
-                PlayerPool.instance[playerId].Birth(point);
-            }
-        }
+	    public void PlayerRespawnReceive(string playerId, Vector2 point)
+	    {
+		    PlayerPool.instance[playerId].RespawnInstantly(point);
+	    }
 
-        public void PlayerDeadReceived(string playerId)
+	    public void PlayerDeadReceive(string playerId)
         {
             PlayerPool.instance[playerId].Die();
         }
 
-        public void PlayerMoveReceived(string playerId, Vector2 point)
+        public void PlayerMoveReceive(string playerId, Vector2 point)
         {
             if (!PlayerExist(PlayerPool.instance, playerId)) return;
             if (Vector2.SqrMagnitude((Vector2)PlayerPool.instance[playerId].transform.position - point) <
@@ -107,22 +95,23 @@ namespace Caveman.Network
             }
         }
 
-        public void GameInfoReceived(JToken jToken)
+        public void GameInfoReceive(JToken jToken)
         {
             foreach (var player in jToken.Children<JObject>())
             {
                 var playerId = player[ServerParams.UserId].ToString();
                 if (!PlayerPool.instance.ContainsKey(playerId))
-                    playersManager.CreatePlayerModel(new PlayerCore(player[ServerParams.UserName].ToString(), playerId), false, true, Instantiate(prefabServerPlayer));
+                    playersManager.CreatePlayerModel(new PlayerCore(player[ServerParams.UserName].ToString(), playerId,
+		                    CurrentSettings.PlayersConfigs["sample"]), false, true, Instantiate(prefabServerPlayer));
             }
         }
 
-        public void GameTimeReceived(float time)
+        public void GameTimeReceive(float time)
         {
             StartCoroutine(BattleGui.instance.mainGameTimer.UpdateTime((int)time));
         }
 
-        public void GameResultReceived(JToken jToken)
+        public void GameResultReceive(JToken jToken)
         {
             var resultRound = BattleGui.instance.resultRound;
             resultRound.gameObject.SetActive(true);
@@ -138,13 +127,14 @@ namespace Caveman.Network
             resultReceived = true;
         }
 
-        public void LoginReceived(string playerId, string playerName)
+        public void LoginReceive(string playerId, string playerName)
         {
-            playersManager.CreatePlayerModel(new PlayerCore(playerName, playerId), false, true, Instantiate(prefabServerPlayer));
-            serverNotify.Respawn(PlayerPool.instance[OwnId].transform.position);
+            playersManager.CreatePlayerModel(new PlayerCore(playerName, playerId,
+	            CurrentSettings.PlayersConfigs["sample"]), false, true, Instantiate(prefabServerPlayer));
+            serverNotify.RespawnSend(PlayerPool.instance[OwnId].transform.position);
         }
 
-        public void LogoutReceived(string playerId)
+        public void LogoutReceive(string playerId)
         {
             PlayerPool.instance.Remove(playerId);
             Destroy(PlayerPool.instance[playerId].gameObject);
@@ -152,7 +142,7 @@ namespace Caveman.Network
 
         public void OnDestroy()
         {
-            serverNotify.StopSession();
+	        serverConnection.StopSession();
         }
 
         /// <summary>

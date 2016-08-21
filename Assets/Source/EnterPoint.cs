@@ -24,7 +24,7 @@ namespace Caveman
         
         public SmoothCamera smoothCamera;
 
-        protected IClientListener serverNotify;
+        protected IServerNotify serverNotify;
         protected PlayersManager playersManager;
 
         /// Get actual values from json
@@ -48,7 +48,7 @@ namespace Caveman
             PoolsManager.instance.PrepareAllPools(CurrentSettings);
 
             var humanPlayer = new PlayerCore(PlayerPrefs.GetString(AccountManager.KeyNickname),
-                SystemInfo.deviceUniqueIdentifier);
+                SystemInfo.deviceUniqueIdentifier, CurrentSettings.PlayersConfigs["sample"]);
             BattleGui.instance.SubscribeOnEvents(humanPlayer);
             
             playersManager = new PlayersManager(serverNotify, smoothCamera, r);
@@ -62,7 +62,8 @@ namespace Caveman
                 for (var i = 1; i < CurrentSettings.LevelsSingleConfigs[currentLevelName].BotsCount + 1; i++)
                 {
                     playersManager.CreatePlayerModel(
-                        new PlayerCore(CurrentSettings.LevelsSingleConfigs[currentLevelName].BotsName[i], i.ToString()),
+                        new PlayerCore(CurrentSettings.LevelsSingleConfigs[currentLevelName].BotsName[i], i.ToString(),
+	                        CurrentSettings.PlayersConfigs["sample"]),
                         true, false, prefabAiPlayer);
                 }
                 PutAllItemsOnMap(new[] {"weapons", "bonuses"});

@@ -35,7 +35,7 @@ namespace Caveman.Players
                         PlayerCore.DeathCount++;
                         if (multiplayer)
                         {
-                            serverNotify.PlayerDead();
+                            serverNotify.PlayerDeadSend();
                             //todo must see commit renames
                             //serverNotify.PlayerDeadTest(weapon.Owner.Id);
                         }
@@ -55,41 +55,23 @@ namespace Caveman.Players
                 }
             }
         }
-        /*
-        public override void Play()
+
+        public override IEnumerator Respawn(Vector2 position)
         {
-            base.Play();
-            StartCoroutine(ThrowWeaponOnCooldown());
-        }
-        */
-
-
-        //public override bool SpendGold(int value)
-        //{
-        //    var res = base.SpendGold(value);
-        //    if (res && multiplayer)
-        //    {
-        //        serverNotify.PlayerGold(Gold);    
-        //    }
-        //    return res;
-        //}
-
-        public override IEnumerator Respawn(Vector2 point)
-        {
-            yield return StartCoroutine(base.Respawn(point));
+            yield return StartCoroutine(base.Respawn(position));
         }
 
-        public override void Birth(Vector2 point)
+        public override void RespawnInstantly(Vector2 position)
         {
-            base.Birth(point);
-            if (multiplayer) serverNotify.Respawn(point);
+            base.RespawnInstantly(position);
+            if (multiplayer) serverNotify.RespawnSend(position);
         }
 
         public override void PickupBonus(BonusBase bonus)
         {
-            //todo hack
-            if (multiplayer) serverNotify.PickBonus(bonus.Id, (int)bonus.Config.Type);
-            base.PickupBonus(bonus);
+            if (multiplayer) serverNotify.PickBonusSend(bonus.Id, (int)bonus.Config.Type);
+	        //todo hack
+	        base.PickupBonus(bonus);
         }
 
         public override void PickupWeapon(WeaponModelBase weaponModel)
@@ -98,12 +80,12 @@ namespace Caveman.Players
             if (PlayerCore.WeaponCount > weaponModel.Config.Weight) return;
             base.PickupWeapon(weaponModel);
             PlayerCore.WeaponCount += weaponModel.Config.CountItems;
-            if (multiplayer) serverNotify.PickWeapon(weaponModel.Id, (int)weaponModel.Config.Type);
+            if (multiplayer) serverNotify.PickWeaponSend(weaponModel.Id, (int)weaponModel.Config.Type);
         }
 
         public override void ThrowWeapon(Vector2 aim)
         {
-            if (multiplayer) serverNotify.UseWeapon(aim, (int) WeaponConfig.Type);
+            if (multiplayer) serverNotify.UseWeaponSend(aim, (int) WeaponConfig.Type);
             base.ThrowWeapon(aim);
             PlayerCore.WeaponCount--;
         }
@@ -113,31 +95,13 @@ namespace Caveman.Players
             yield return new WaitForSeconds(WeaponConfig.Cooldown);
             if (PlayerCore.WeaponCount > 0)
             {
-                var victim = FindClosestPlayer();
+                var victim = playersManager.FindClosestPlayer(this);
                 if (victim != null)
                 {
                     ThrowWeapon(victim.transform.position);
                 }
             }
             StartCoroutine(ThrowWeaponOnCooldown());
-        }
-
-        private PlayerModelBase FindClosestPlayer()
-        {
-            var minDistance = (float) Settings.HeightMap*Settings.WidthMap;
-            PlayerModelBase result = null;
-            for (var i = 0; i < players.Count; i++)
-            {
-                if (!players[i].gameObject.activeSelf || players[i] == this ||
-                    !players[i].spriteRenderer.isVisible || players[i].invulnerability) continue;
-                var childDistance = Vector2.SqrMagnitude(players[i].transform.position - transform.position);
-                if (minDistance > childDistance)
-                {
-                    result = players[i];
-                    minDistance = childDistance;
-                }
-            }
-            return result;
         }
     }
 }

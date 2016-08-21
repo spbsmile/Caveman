@@ -1,5 +1,6 @@
 ﻿using System;
 using Caveman.Configs;
+using UnityEditor;
 
 namespace Caveman.Players
 {
@@ -7,23 +8,32 @@ namespace Caveman.Players
     {
         public Action<int> WeaponCountChange;
         public Action<int> KillCountChange;
-        public Action<BonusConfig.Types, float> BonusActivate;
 	    public Action<bool> IsAliveChange;
+	    public Action<BonusConfig.Types, float> BonusActivate;
        
         private int weaponCount;
         private int killCount;
 	    private bool isAlive;
+	    private float speed;
 
-        public PlayerCore(string name, string id)
+	    public PlayerCore(string name, string id, PlayerConfig config)
         {
             Name = name;
             Id = id;
+	        Config = config;
+	        speed = Config.Speed;
         }
 
-        public string Id { get; private set; }
+	    public PlayerConfig Config { get; }
+	    public string Id { get; private set; }
         public string Name { get; private set; }
+	    public int DeathCount { set; get; }
 
-        public int DeathCount { set; get; }
+	    public float Speed
+	    {
+		    get { return speed; }
+		    set { speed = value; }
+	    }
 
         public int WeaponCount
         {

@@ -32,21 +32,21 @@ namespace Caveman.Bonuses
             pool = item;
         }
 
-        public virtual void Effect(PlayerModelBase playerModel)
+        public virtual void Effect(PlayerModelBase model)
         {
             // HACK: trigger methods calling before Start
-            if (playerModel.PlayerCore == null)
+            if (model.PlayerCore == null)
                 return;
             if (Config == null)
                 return;
-            playerModel.PlayerCore.ActivatedBonus(Config.Type, Config.Duration);
+            model.PlayerCore.ActivatedBonus(Config.Type, Config.Duration);
             //todo внедрить систему событий
-            playerModel.bonusBase = this;
+            model.bonusBase = this;
             transform.position = new Vector3(200, 200, 200);
-            StartCoroutine(UnEffect(playerModel));
+            StartCoroutine(UnEffect(model));
         }
 
-        protected virtual IEnumerator UnEffect(PlayerModelBase playerModel)
+        protected virtual IEnumerator UnEffect(PlayerModelBase model)
         {
             yield return null;
         }

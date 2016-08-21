@@ -18,23 +18,17 @@ namespace Caveman.Players
         {
             if (multiplayer) StartCoroutine(SendMove());
         }
-        /*
-        public override void Play()
-        {
-            base.Play();
-            if (multiplayer) StartCoroutine(SendMove());
-        }
-        */
+
         private IEnumerator SendMove()
         {
             yield return new WaitForSeconds(0.3f);
-            serverNotify.Move(transform.position);
+            serverNotify.MoveSend(transform.position);
             StartCoroutine(SendMove());
         }
 
         private void MovePlayer(Vector3 direction, CNAbstractController arg2)
         {
-            moveUnit = direction*Speed;
+            moveUnit = direction*PlayerCore.Speed;
             Move();
         }
 

@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace Caveman.Network
 {
-    public class ServerNotify : ServerConnection, IClientListener
+    public class  ServerNotify : ServerConnection, IServerNotify
     {
-        public void PickWeapon(string weaponId, int type)
+        public void PickWeaponSend(string weaponId, int type)
         {
             var pointServer = GetServerPoint(weaponId);
             SendMessageToSocket(new JObject
@@ -18,7 +18,7 @@ namespace Caveman.Network
             });
         }
 
-        public void UseWeapon(Vector2 pointClient, int type)
+        public void UseWeaponSend(Vector2 pointClient, int type)
         {
             var pointServer = GetServerPoint(pointClient);
             SendMessageToSocket(new JObject
@@ -29,7 +29,7 @@ namespace Caveman.Network
             });
         }
 
-        public void PickBonus(string bonusId, int type)
+        public void PickBonusSend(string bonusId, int type)
         {
             var pointServer = GetServerPoint(bonusId);
             SendMessageToSocket(new JObject
@@ -49,7 +49,7 @@ namespace Caveman.Network
             });
         }
 
-        public void Respawn(Vector2 pointClient)
+        public void RespawnSend(Vector2 pointClient)
         {
             var pointServer = GetServerPoint(pointClient);
             SendMessageToSocket(new JObject
@@ -60,7 +60,7 @@ namespace Caveman.Network
             });
         }
 
-        public void PlayerDead()
+        public void PlayerDeadSend()
         {
             SendMessageToSocket(new JObject
             {
@@ -68,7 +68,7 @@ namespace Caveman.Network
             });
         }
 
-        public void AddedKillStat(string killerId)
+        public void AddedKillStatSend(string killerId)
         {
             SendMessageToSocket(new JObject
             {
@@ -77,7 +77,7 @@ namespace Caveman.Network
             });
         }
 
-        public void Move(Vector2 pointClient)
+        public void MoveSend(Vector2 pointClient)
         {
             var pointServer = GetServerPoint(pointClient);
             SendMessageToSocket(new JObject
@@ -88,7 +88,7 @@ namespace Caveman.Network
             });
         }
 
-        public void Logout()
+        public void LogoutSend()
         {
             SendMessageToSocket(new JObject
             {
@@ -106,8 +106,8 @@ namespace Caveman.Network
 
         private static Vector2 GetServerPoint(Vector2 pointClient)
         {
-            var x = (pointClient.x / Settings.WidthMap) * Multiplayer.WidthMapServer;
-            var y = (pointClient.y / Settings.HeightMap) * Multiplayer.HeigthMapServer;
+            var x = (pointClient.x / Settings.WidthMap) * ServerMessageHandler.WidthMapServer;
+            var y = (pointClient.y / Settings.HeightMap) * ServerMessageHandler.HeigthMapServer;
             return new Vector2(x, y);
         }
     }
