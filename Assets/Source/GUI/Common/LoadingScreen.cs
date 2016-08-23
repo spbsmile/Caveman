@@ -12,9 +12,7 @@ namespace Caveman.UI.Common
         public Transform root;
         public Image blackscreen;
         public float TimeEmergenceBlackScreen = 0.2f;
-        public float TimeHidingBlackScreen = 0.5f;
-
-        public event EventHandler FinishLoading;
+        public float TimeHidingBlackScreen = 0.5f;        
 
         public override void Awake()
         {
@@ -81,9 +79,7 @@ namespace Caveman.UI.Common
                 yield return null;
             }
 
-            blackscreen.gameObject.SetActive(false);
-            if (FinishLoading != null)
-                FinishLoading(this, EventArgs.Empty);
+            blackscreen.gameObject.SetActive(false);           
         }
     }
 }

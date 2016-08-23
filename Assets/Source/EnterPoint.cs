@@ -16,7 +16,7 @@ namespace Caveman
     public class EnterPoint : MonoBehaviour
     {
         public Transform prefabHumanPlayer;
-        public Transform prefabAiPlayer;
+        public Transform prefabAiPlayer;        
 
         public string pathLevelSingleConfig;
         public string pathLevelMultiplayerConfig;
@@ -32,14 +32,11 @@ namespace Caveman
 
         private Random r;
 
-        public virtual void Awake()
+        public void Awake()
         {
             // path: Resource/Settings
             CurrentSettings = CurrentGameSettings.Load(
                 "bonuses", "weapons", "players", "pools", "images", pathLevelSingleConfig, pathLevelMultiplayerConfig);
-
-            //todo
-            //  LoadingScreen.instance.FinishLoading += (o, s) => Play();
         }
 
         public virtual void Start()
@@ -56,13 +53,12 @@ namespace Caveman
 
             playersManager.CreatePlayerModel(humanPlayer, false, false, Instantiate(prefabHumanPlayer));
 
-
             if (serverNotify == null)
             {
-                for (var i = 1; i < CurrentSettings.LevelsSingleConfigs[currentLevelName].BotsCount + 1; i++)
+                for (var i = 1; i < 2;i++)//CurrentSettings.LevelsSingleConfigs[currentLevelName].BotsCount + 1; i++)
                 {
                     playersManager.CreatePlayerModel(
-                        new PlayerCore(CurrentSettings.LevelsSingleConfigs[currentLevelName].BotsName[i], i.ToString(),
+                        new PlayerCore("test"/*CurrentSettings.LevelsSingleConfigs[currentLevelName].BotsName[i]*/, i.ToString(),
 	                        CurrentSettings.PlayersConfigs["sample"]),
                         true, false, prefabAiPlayer);
                 }
@@ -70,15 +66,6 @@ namespace Caveman
             }
         }
 
-        // todo virtual &
-      /*  public virtual void Play()
-        {
-            //  foreach (var player in poolPlayers.GetCurrentPlayers())
-            //  {
-            //      player.Play();
-            //  }
-        }
-        */
         private void PutAllItemsOnMap(string[] typesItems)
         {
             for (var i = 0; i < typesItems.Length; i++)

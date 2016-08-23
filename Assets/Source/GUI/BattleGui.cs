@@ -36,12 +36,7 @@ namespace Caveman.UI
             };
 
             gameObject.SetActive(false);
-            movementJoystick.gameObject.SetActive(false);
-            LoadingScreen.instance.FinishLoading += (o, s) =>
-            {
-                gameObject.SetActive(true);
-                movementJoystick.gameObject.SetActive(true);
-            };
+            movementJoystick.gameObject.SetActive(false);           
         }
 
         public void SubscribeOnEvents(PlayerCore playerCore)
