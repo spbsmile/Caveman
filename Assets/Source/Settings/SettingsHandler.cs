@@ -1,7 +1,8 @@
-﻿using MiniJSON;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Caveman.Setting
@@ -21,7 +22,7 @@ namespace Caveman.Setting
         {
             try
             {
-                return Json.Serialize(data);
+                return JsonConvert.SerializeObject(data, Formatting.Indented);
             }
             catch (Exception e)
             {
@@ -48,7 +49,7 @@ namespace Caveman.Setting
         {
             try
             {
-                return Json.Deserialize<T>(data);
+                return JsonConvert.DeserializeObject<T>(data);
             }
             catch (Exception e)
             {
