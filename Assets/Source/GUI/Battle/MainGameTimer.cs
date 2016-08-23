@@ -17,7 +17,7 @@ namespace Caveman.UI.Battle
             value = GetComponent<Text>();
         }
 
-        public void OnEnable()
+        public void Start() 
         {
             if (!BattleGui.instance.IsMultiplayerMode)
             {
