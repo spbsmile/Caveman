@@ -24,7 +24,7 @@ namespace Caveman.Players
         [HideInInspector] public BonusBase bonusBase;
         [HideInInspector] public SpriteRenderer spriteRenderer;
 
-        protected Vector2 moveUnit;  
+        protected Vector2 moveUnit;
         protected Random r;
 
         //todo one parameter
@@ -39,18 +39,21 @@ namespace Caveman.Players
 
         public PlayerCore PlayerCore { private set; get; }
 
-        protected virtual void Awake()
+	    private PlayerPool playerPool;
+
+	    protected virtual void Awake()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
             playerAnimation = new PlayerAnimation(GetComponent<Animator>());
             WeaponConfig = EnterPoint.CurrentSettings.WeaponsConfigs["stone"];
         }
 
-        public void Init(PlayerCore playerCore, Random random, IServerNotify serverNotify, PlayersManager playersManager)
+        public void Init(PlayerCore playerCore, Random random, IServerNotify serverNotify, PlayersManager playersManager, PlayerPool playerPool)
         {
             this.serverNotify = serverNotify;
 	        this.playersManager = playersManager;
-            if (serverNotify != null) multiplayer = true;
+	        this.playerPool = playerPool;
+	        if (serverNotify != null) multiplayer = true;
             PlayerCore = playerCore;
             r = random;
         }
@@ -63,7 +66,7 @@ namespace Caveman.Players
         public virtual void Die()
         {
 	        PlayerCore.IsAlive = false;
-            poolPlayers.Store(this);
+            playerPool.Store(this);
         }
 
         public virtual void PickupWeapon(WeaponModelBase weaponModel)
@@ -94,7 +97,7 @@ namespace Caveman.Players
 
         public virtual void RespawnInstantly(Vector2 position)
         {
-            poolPlayers.New(PlayerCore.Id).transform.position = position;
+            playerPool.New(PlayerCore.Id).transform.position = position;
             invulnerability = true;
             StartCoroutine(ProggressInvulnerability(PlayerCore.Config.InvulnerabilityDuration));
         }

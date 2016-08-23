@@ -24,7 +24,7 @@ namespace Caveman.Players
 	        speed = Config.Speed;
         }
 
-	    public PlayerConfig Config { get; }
+	    public PlayerConfig Config { get; private set; }
 	    public string Id { get; private set; }
         public string Name { get; private set; }
 	    public int DeathCount { set; get; }
