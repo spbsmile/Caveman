@@ -2,7 +2,7 @@
 
 namespace Caveman.Pools
 {
-    public class BonusesPool : ObjectPool<BonusBase>
+    public class BonusPool : ObjectPool<BonusBase>
     {
     }
 }
