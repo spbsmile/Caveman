@@ -41,15 +41,15 @@ namespace Caveman.Pools
             var poolsConfig = settings.PoolsConfigs["sample"];
 
             var deathConfig = settings.ImagesConfigs["death"];
-            var splahesConfig = settings.ImagesConfigs["splashesStone"];
+            var splahesConfig = settings.ImagesConfigs["stones_fragment"];
             var stonesConfig = settings.WeaponsConfigs["stone"];
             var axesConfig = settings.WeaponsConfigs["axe"];
             var skullsConfig = settings.WeaponsConfigs["skulls"];
             var bonusSpeedConfig = settings.BonusesConfigs["speed"];
 
-            ImagesDeath = PreparePool(Inst<EffectBase>(deathConfig.PrefabPath), deathConfig.Name, poolsConfig.ImagesOrdinary);
-            SplashesStone = PreparePool(Inst<EffectBase>(splahesConfig.PrefabPath), splahesConfig.Name, poolsConfig.ImagesPopular);
-            Skulls = PreparePool(Inst<WeaponModelBase>(skullsConfig.PrefabPath), skullsConfig.Name, poolsConfig.WeaponsOrdinary);
+            //ImagesDeath = PreparePool(Inst<EffectBase>(deathConfig.PrefabPath), deathConfig.Name, poolsConfig.ImagesOrdinary);
+            //SplashesStone = PreparePool(Inst<EffectBase>(splahesConfig.PrefabPath), splahesConfig.Name, poolsConfig.ImagesPopular);
+            //Skulls = PreparePool(Inst<WeaponModelBase>(skullsConfig.PrefabPath), skullsConfig.Name, poolsConfig.WeaponsOrdinary);
             Stones = PreparePool(Inst<WeaponModelBase>(stonesConfig.PrefabPath), stonesConfig.Name, poolsConfig.WeaponsPopular);
             Axes = PreparePool(Inst<WeaponModelBase>(axesConfig.PrefabPath), axesConfig.Name, poolsConfig.BonusesOrdinary);
             BonusesSpeed = PreparePool(Inst<BonusBase>(bonusSpeedConfig.PrefabPath), bonusSpeedConfig.Name, poolsConfig.BonusesOrdinary);
@@ -62,7 +62,7 @@ namespace Caveman.Pools
         }
 
         private T Inst<T>(string prefabPath) where T : MonoBehaviour
-        {
+        {           
             return Instantiate(Resources.Load(prefabPath, typeof (GameObject))) as T;
         }
 

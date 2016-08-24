@@ -7,7 +7,7 @@
     "cooldown": 2,
     "weight": 10,
     "rotateParameter": 10,
-    "prefabPath": "/Weapons/stone",
+    "prefabPath": "Weapons/stone",
     "type": 0
   },
   {
@@ -18,7 +18,7 @@
     "cooldown": 2,
     "weight": 10,
     "rotateParameter": 10,
-    "prefabPath": "/Weapons/axe",
+    "prefabPath": "Weapons/axe",
     "type": 1
   },
   {
@@ -29,7 +29,7 @@
     "cooldown": 2,
     "weight": 10,
     "rotateParameter": 10,
-    "prefabPath": "/Weapons/axe",
+    "prefabPath": "Weapons/axe",
     "type": 1
   }
 ]
