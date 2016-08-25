@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Caveman.Bonuses;
 using Caveman.CustomAnimation;
 using Caveman.Setting;
@@ -12,7 +13,16 @@ namespace Caveman.Pools
     {
         public static PoolsManager instance;
 
+        public StoneModel prefabStone;
+
         public Transform container;
+
+        public Transform containerStones;
+        public Transform containerSplashStones;
+        public Transform containerSkulls;
+        public Transform containerDeathImages;
+        public Transform containerPlayers;
+        public Transform containerBonusesSpeed;
 
         public ObjectPool<EffectBase> SplashesStone { private set; get; }
         public ObjectPool<EffectBase> ImagesDeath { private set; get; }
@@ -50,9 +60,10 @@ namespace Caveman.Pools
             //ImagesDeath = PreparePool(Inst<EffectBase>(deathConfig.PrefabPath), deathConfig.Name, poolsConfig.ImagesOrdinary);
             //SplashesStone = PreparePool(Inst<EffectBase>(splahesConfig.PrefabPath), splahesConfig.Name, poolsConfig.ImagesPopular);
             //Skulls = PreparePool(Inst<WeaponModelBase>(skullsConfig.PrefabPath), skullsConfig.Name, poolsConfig.WeaponsOrdinary);
-            Stones = PreparePool(Inst<WeaponModelBase>(stonesConfig.PrefabPath), stonesConfig.Name, poolsConfig.WeaponsPopular);
-            Axes = PreparePool(Inst<WeaponModelBase>(axesConfig.PrefabPath), axesConfig.Name, poolsConfig.BonusesOrdinary);
-            BonusesSpeed = PreparePool(Inst<BonusBase>(bonusSpeedConfig.PrefabPath), bonusSpeedConfig.Name, poolsConfig.BonusesOrdinary);
+          
+            Stones = PreparePool<WeaponModelBase>(containerStones, Inst<WeaponModelBase>(stonesConfig.PrefabPath), poolsConfig.WeaponsPopular);
+            //Axes = PreparePool(Inst<WeaponModelBase>(axesConfig.PrefabPath), axesConfig.Name, poolsConfig.BonusesOrdinary);
+            //BonusesSpeed = PreparePool(Inst<BonusBase>(bonusSpeedConfig.PrefabPath), bonusSpeedConfig.Name, poolsConfig.BonusesOrdinary);
 
             Pools.Add(deathConfig.PrefabPath, ImagesDeath);
             Pools.Add(splahesConfig.PrefabPath, SplashesStone);
@@ -63,18 +74,19 @@ namespace Caveman.Pools
 
         private T Inst<T>(string prefabPath) where T : MonoBehaviour
         {           
-            return Instantiate(Resources.Load(prefabPath, typeof (GameObject))) as T;
+            return Instantiate(Resources.Load(prefabPath, typeof (T))) as T;
         }
 
+        /// <summary>
         /// Used object pool pattern
-        private ObjectPool<T> PreparePool<T>(T prefab, string nameContainer, int initialBufferSize)
+        /// </summary>
+        private ObjectPool<T> PreparePool<T>(Transform container, T prefab, int initialBufferSize)
             where T : MonoBehaviour
         {
-            var containerSingle = new GameObject(nameContainer);
-            containerSingle.transform.parent = container;
 
-            var pool = containerSingle.AddComponent<ObjectPool<T>>();
-
+            var pool = container.GetComponent<ObjectPool<T>>();
+            pool.CreatePool(prefab, initialBufferSize);
+                        
             pool.CreatePool(prefab, initialBufferSize);
             for (var i = 0; i < initialBufferSize; i++)
             {
@@ -83,7 +95,7 @@ namespace Caveman.Pools
                 pool.Store(item);
             }
             return pool;
-        }
+        }       
 
         /// <summary>
         /// When player pickup weapon another type 
