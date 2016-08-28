@@ -14,7 +14,7 @@ namespace Caveman.Players
         private readonly IServerNotify serverNotify;
         private readonly SmoothCamera smoothCamera;
 	    private List<PlayerModelBase> playersModel;
-	    private PlayerPool playerPool;
+	    private readonly PlayerPool playerPool;
 	    private readonly Random r;
 
 	    public PlayersManager(IServerNotify serverNotify, SmoothCamera smoothCamera, Random random)

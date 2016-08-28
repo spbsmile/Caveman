@@ -1,12 +1,21 @@
 [
-    {
-        "name": "single",
-        "Width": 12,
-        "Height": 12
-    },
-    {
-        "name": "multiplayer",
-        "Width": 1350,
-        "Height": 1350
-    }
+  {
+    "name": "sample",
+    "width": 12,
+    "height": 12,
+    "pathPrefabTile": "Map/ground1",
+    "artefacts": 
+    [
+      {
+        "name": "dot",
+        "pathPrefab": "Map/dot",
+        "count": "30"
+      },
+      {
+        "name": "pool",
+        "pathPrefab": "Map/pool",
+        "count": "3"
+      }
+    ]
+  }
 ]

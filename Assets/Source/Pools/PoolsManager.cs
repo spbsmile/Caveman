@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Caveman.Bonuses;
 using Caveman.CustomAnimation;
 using Caveman.Setting;
@@ -11,17 +10,12 @@ namespace Caveman.Pools
 {
     public class PoolsManager : MonoBehaviour
     {
-        public static PoolsManager instance;
-
-        public StoneModel prefabStone;
-
-        public Transform container;
+        public static PoolsManager instance;                
 
         public Transform containerStones;
         public Transform containerSplashStones;
         public Transform containerSkulls;
-        public Transform containerDeathImages;
-        public Transform containerPlayers;
+        public Transform containerImagesDeath;
         public Transform containerBonusesSpeed;
 
         public ObjectPool<EffectBase> SplashesStone { private set; get; }
@@ -57,13 +51,12 @@ namespace Caveman.Pools
             var skullsConfig = settings.WeaponsConfigs["skulls"];
             var bonusSpeedConfig = settings.BonusesConfigs["speed"];
 
-            //ImagesDeath = PreparePool(Inst<EffectBase>(deathConfig.PrefabPath), deathConfig.Name, poolsConfig.ImagesOrdinary);
-            //SplashesStone = PreparePool(Inst<EffectBase>(splahesConfig.PrefabPath), splahesConfig.Name, poolsConfig.ImagesPopular);
-            //Skulls = PreparePool(Inst<WeaponModelBase>(skullsConfig.PrefabPath), skullsConfig.Name, poolsConfig.WeaponsOrdinary);
-          
-            Stones = PreparePool<WeaponModelBase>(containerStones, Inst<WeaponModelBase>(stonesConfig.PrefabPath), poolsConfig.WeaponsPopular);
-            //Axes = PreparePool(Inst<WeaponModelBase>(axesConfig.PrefabPath), axesConfig.Name, poolsConfig.BonusesOrdinary);
-            //BonusesSpeed = PreparePool(Inst<BonusBase>(bonusSpeedConfig.PrefabPath), bonusSpeedConfig.Name, poolsConfig.BonusesOrdinary);
+            ImagesDeath = PreparePool(containerImagesDeath, Inst<EffectBase>(deathConfig.PrefabPath),  poolsConfig.ImagesOrdinary);
+            SplashesStone = PreparePool(containerSplashStones, Inst<EffectBase>(splahesConfig.PrefabPath),  poolsConfig.ImagesPopular);
+            Skulls = PreparePool(containerSkulls, Inst<WeaponModelBase>(skullsConfig.PrefabPath), poolsConfig.WeaponsOrdinary);
+            Stones = PreparePool(containerStones, Inst<WeaponModelBase>(stonesConfig.PrefabPath), poolsConfig.WeaponsPopular);
+            //Axes = PreparePool(Inst<WeaponModelBase>(axesConfig.PrefabPath), poolsConfig.BonusesOrdinary);
+            BonusesSpeed = PreparePool(containerBonusesSpeed, Inst<BonusBase>(bonusSpeedConfig.PrefabPath), poolsConfig.BonusesOrdinary);
 
             Pools.Add(deathConfig.PrefabPath, ImagesDeath);
             Pools.Add(splahesConfig.PrefabPath, SplashesStone);
