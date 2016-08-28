@@ -7,11 +7,19 @@ namespace Caveman.Players
 {
     public class HumanPlayerModel : PlayerModelClient
     {
+        private bool isMoving;
+
         protected override void Awake()
         {
             base.Awake();
             BattleGui.instance.movementJoystick.ControllerMovedEvent += MovePlayer;
-            BattleGui.instance.movementJoystick.FingerLiftedEvent += controller => StopMove();
+            BattleGui.instance.movementJoystick.FingerLiftedEvent += controller => HandlerOnStopMove();
+        }
+
+        private void HandlerOnStopMove()
+        {
+            StopMove();
+            isMoving = false;
         }
 
         protected override void Start()
@@ -23,12 +31,19 @@ namespace Caveman.Players
         private IEnumerator SendMove()
         {
             yield return new WaitForSeconds(0.3f);
-            serverConnection.SendMove(transform.position);
+            if (isMoving)
+            {
+                serverConnection.SendMove(transform.position);
+            }
             StartCoroutine(SendMove());
         }
 
         private void MovePlayer(Vector3 direction, CNAbstractController arg2)
         {
+            if (!isMoving)
+            {
+                isMoving = true;
+            }
             delta = direction*Speed;
             Move();
         }
