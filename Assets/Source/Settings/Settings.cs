@@ -34,5 +34,8 @@
         public const int PoolCountDeathImages = 9;
         public const int PoolCountSkulls = 30;
         public const int PoolCountSplashStones = 30;
+
+
+        public static string IP_SERVER = "127.0.0.1";
     }
 }

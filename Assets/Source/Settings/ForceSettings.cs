@@ -23,6 +23,7 @@ namespace Caveman.Setting
         public InputField playerSpeed;
 
         public InputField serverPingTime;
+        public InputField ip_server;
 
         public void Start()
         {
@@ -86,6 +87,10 @@ namespace Caveman.Setting
             serverPingTime.onEndEdit.AddListener(delegate
             {
                 Settings.ServerPingTime = Convert.ToInt32(serverPingTime.text);
+            });
+            ip_server.onEndEdit.AddListener(delegate
+            {
+                Settings.IP_SERVER = Convert.ToString(ip_server.text);
             });
         }
 

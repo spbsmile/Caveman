@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using Caveman.Setting;
@@ -12,7 +13,7 @@ namespace Caveman.Network
     public class ServerConnection
     {
         //"127.0.0.1";
-        private const string Ip = "188.166.37.212";
+        //private const string Ip = "188.166.37.212";
         private const int Port = 8080;
 
         private static ServerConnection instance;
@@ -69,7 +70,7 @@ namespace Caveman.Network
             {
                 try
                 {
-                    client = new TcpClient(Ip, Port);
+                    client = new TcpClient(Settings.IP_SERVER, Port);
                     var stream = client.GetStream();
 
                     reader = new StreamReader(stream, Encoding.UTF8);
