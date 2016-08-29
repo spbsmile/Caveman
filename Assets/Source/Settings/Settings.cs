@@ -36,6 +36,7 @@
         public const int PoolCountSplashStones = 30;
 
 
-        public static string IP_SERVER = "127.0.0.1";
+        public static string IP_SERVER = "10.0.1.17";
+        public const string KeyIpServer = "IP_SERVER";
     }
 }
