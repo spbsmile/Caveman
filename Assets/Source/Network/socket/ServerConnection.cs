@@ -70,7 +70,10 @@ namespace Caveman.Network
             {
                 try
                 {
-                    client = new TcpClient(Settings.IP_SERVER, Port);
+                    var ipServer = PlayerPrefs.HasKey(Settings.KeyIpServer)
+                        ? PlayerPrefs.GetString(Settings.KeyIpServer)
+                        : Settings.IP_SERVER;
+                    client = new TcpClient(ipServer, Port);
                     var stream = client.GetStream();
 
                     reader = new StreamReader(stream, Encoding.UTF8);

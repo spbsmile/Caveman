@@ -40,6 +40,8 @@ namespace Caveman.Setting
             //weaponsMaxOnPlayer.text = Settings.WeaponsMaxOnPlayer.ToString();
             serverPingTime.text = Settings.ServerPingTime.ToString();
 
+            ip_server.text = PlayerPrefs.HasKey(Settings.KeyIpServer) ? PlayerPrefs.GetString(Settings.KeyIpServer) : Settings.IP_SERVER;
+
             roundTime.onEndEdit.AddListener(delegate
             {
                 Settings.RoundTime = Convert.ToInt32(roundTime.text);
@@ -91,6 +93,7 @@ namespace Caveman.Setting
             ip_server.onEndEdit.AddListener(delegate
             {
                 Settings.IP_SERVER = Convert.ToString(ip_server.text);
+                PlayerPrefs.SetString(Settings.KeyIpServer, Convert.ToString(ip_server.text));
             });
         }
 
