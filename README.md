@@ -9,3 +9,5 @@ We appreciate any help including feedback, advice and collaboration.
 
 
 [Roadmap Trello board](https://trello.com/b/YJKI6zTo)
+
+[apk file] (https://letsdrinktea.ru/APK/apk_fixed_camera.apk). Hash commit: 13f676a61b7cee69c91668515702504481d570a6
