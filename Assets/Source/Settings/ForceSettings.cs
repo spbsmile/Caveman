@@ -24,6 +24,7 @@ namespace Caveman.Setting
 
         public InputField serverPingTime;
         public InputField ip_server;
+        public Toggle disableSendMove;
 
         public void Start()
         {
@@ -94,6 +95,17 @@ namespace Caveman.Setting
             {
                 Settings.IP_SERVER = Convert.ToString(ip_server.text);
                 PlayerPrefs.SetString(Settings.KeyIpServer, Convert.ToString(ip_server.text));
+            });
+
+            disableSendMove.onValueChanged.AddListener(delegate
+            {
+                if (disableSendMove.isOn)
+                {
+                    Settings.DisableSendMove = true;
+                }
+                else {
+                    Settings.DisableSendMove = false;
+                }
             });
         }
 

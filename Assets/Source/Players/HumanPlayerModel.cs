@@ -25,7 +25,7 @@ namespace Caveman.Players
         protected override void Start()
         {
             base.Start();
-            if (multiplayer) StartCoroutine(SendMove());
+            if (multiplayer && !Settings.DisableSendMove) StartCoroutine(SendMove());
         }
 
         private IEnumerator SendMove()
@@ -62,7 +62,7 @@ namespace Caveman.Players
         public override void OnEnable()
         {
             base.OnEnable();
-            if (multiplayer) StartCoroutine(SendMove());
+            if (multiplayer && !Settings.DisableSendMove) StartCoroutine(SendMove());
         }
     }
 }

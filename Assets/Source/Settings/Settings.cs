@@ -38,5 +38,6 @@
 
         public static string IP_SERVER = "10.0.1.17";
         public const string KeyIpServer = "IP_SERVER";
+        public static bool DisableSendMove;
     }
 }
