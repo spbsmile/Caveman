@@ -4,8 +4,7 @@
     "width": 12,
     "height": 12,
     "pathPrefabTile": "Map/ground1",
-    "artefacts": 
-    [
+    "artefacts": [
       {
         "name": "dot",
         "pathPrefab": "Map/dot",
@@ -16,6 +15,20 @@
         "pathPrefab": "Map/pool",
         "count": "3"
       }
-    ]
+    ],
+    "itemsPeriodical": [
+      {
+        "name": "stone",
+        "period": "10",
+        "count": "10",
+        "type": "weapon"   
+      },
+      {
+        "name": "speed",
+        "period": "10",
+        "count": "5",
+        "type": "bonus"  
+     }
+    ] 
   }
 ]

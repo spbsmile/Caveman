@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using Caveman.Players;
-using Caveman.Setting;
 using UnityEngine;
 
 namespace Caveman.Bonuses
@@ -23,7 +22,7 @@ namespace Caveman.Bonuses
 
         protected override IEnumerator UnEffect(PlayerModelBase model)
         {
-            yield return new WaitForSeconds(Settings.BonusSpeedDuration);
+            yield return new WaitForSeconds(Config.Duration);
             pool.Store(this);
             model.bonusBase = null;
             model.PlayerCore.Speed = preValue;

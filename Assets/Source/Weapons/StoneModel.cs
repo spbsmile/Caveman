@@ -44,7 +44,7 @@ namespace Caveman.Weapons
 
         override protected void MotionUpdate()
         {
-            if (Vector2.SqrMagnitude(delta) > UnityExtensions.ThresholdPosition)
+            if (Vector2.SqrMagnitude(moveUnit) > UnityExtensions.ThresholdPosition)
             {
                 if (Vector2.SqrMagnitude(target - (Vector2)transform.position) > UnityExtensions.ThresholdPosition)
                 {

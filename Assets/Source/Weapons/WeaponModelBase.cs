@@ -16,14 +16,14 @@ namespace Caveman.Weapons
         /// <summary>
         /// Linear parameter, define direction and value and on each update
         /// </summary>
-        protected Vector2 delta;
+        protected Vector2 moveUnit;
 
         private ObjectPool<WeaponModelBase> pool;
 
         public virtual void Destroy()
         {
             Owner = null;
-            delta = Vector2.zero;
+            moveUnit = Vector2.zero;
             pool.Store(this);
         }
 
@@ -49,7 +49,7 @@ namespace Caveman.Weapons
             transform.position = start;
             target = aim;
             // todo if weapon move no linear, moveUnit needless, example: stone model, bezier curve
-            delta = UnityExtensions.CalculateDelta(start, aim, Config.Speed);
+            moveUnit = UnityExtensions.CalculateDelta(start, aim, Config.Speed);
         }
 
         public override void SetPool(ObjectPool<WeaponModelBase> weaponPool)
@@ -59,12 +59,12 @@ namespace Caveman.Weapons
 
         protected virtual void MotionUpdate()
         {
-            if (Vector2.SqrMagnitude(delta) > UnityExtensions.ThresholdPosition)
+            if (Vector2.SqrMagnitude(moveUnit) > UnityExtensions.ThresholdPosition)
             {
                 if (Vector2.SqrMagnitude(target - (Vector2)transform.position) > UnityExtensions.ThresholdPosition)
                 {
-                    transform.position = new Vector2(transform.position.x + delta.x * Time.deltaTime,
-                        transform.position.y + delta.y * Time.deltaTime);
+                    transform.position = new Vector2(transform.position.x + moveUnit.x * Time.deltaTime,
+                        transform.position.y + moveUnit.y * Time.deltaTime);
                     transform.Rotate(Vector3.forward, Config.RotateParameter * Time.deltaTime * 100);
                 }
                 else

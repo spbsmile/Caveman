@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Caveman.Bonuses;
 using Caveman.Configs;
 using Caveman.Pools;
-using Caveman.Setting;
 using Caveman.Utils;
 using Caveman.Weapons;
 using UnityEngine;
@@ -17,7 +17,7 @@ namespace Caveman.Level
         private int width;
         private int height;
 
-        public void CreateTerrain(Random rand, string pathPrefabTile, List<MapConfig.Artefacts> artefacts, int width, int height, bool isMultiplayer)
+        public void CreateTerrain(Random rand, string pathPrefabTile, IEnumerable<MapConfig.Artefacts> artefacts, int width, int height, bool isMultiplayer)
         {
             this.width = width;
             this.height = height;
@@ -60,43 +60,38 @@ namespace Caveman.Level
             }
         }
 
-        public void PutAllItemsOnMap(string[] typesItems)
+        public void StartItemPeriodicals(IEnumerable<MapConfig.ItemPeriodical> configItemPeriodicals)
         {
-            for (var i = 0; i < typesItems.Length; i++)
+            foreach (var config in configItemPeriodicals)
             {
-                switch (typesItems[i])
+                if (config.Type == "weapon")
                 {
-                    case "weapons":
-                        // todo sort config to folder/levels game
-                        foreach (var weaponConfig in EnterPoint.CurrentSettings.WeaponsConfigs.Values)
-                        {
-                            StartCoroutine(PutItemsOnMap<WeaponModelBase>(weaponConfig.PrefabPath,
-                                weaponConfig.TimeRespawn));
-                        }
-                        break;
-                    case "bonuses":
-                        foreach (var bonusConfig in EnterPoint.CurrentSettings.BonusesConfigs.Values)
-                        {
-                            StartCoroutine(PutItemsOnMap<BonusBase>(bonusConfig.PrefabPath, bonusConfig.TimeRespawn));
-                        }
-                        break;
+                    StartCoroutine(
+                        PutItems<WeaponModelBase>(EnterPoint.CurrentSettings.WeaponsConfigs[config.Name].PrefabPath,
+                            config.Period, config.Count
+                        ));
+                }
+                else if (config.Type == "bonus")
+                {
+                    StartCoroutine(PutItems<BonusBase>(
+                        EnterPoint.CurrentSettings.BonusesConfigs[config.Name].PrefabPath, config.Period, config.Count));
                 }
             }
         }
 
-        private IEnumerator PutItemsOnMap<T>(string poolId, float timeRespawn) where T : MonoBehaviour
+        private IEnumerator PutItems<T>(string poolId, int period, int count) where T : MonoBehaviour
         {
-            yield return new WaitForSeconds(timeRespawn);
+            yield return new WaitForSeconds(period);
             //todo length
             // todo var bound = Settings.BonusSpeedMaxCount - PoolsManager.instance.BonusesSpeed.GetActivedCount; 
-            for (var i = 0; i < Settings.WeaponInitialLying; i++)
+            for (var i = 0; i < count; i++)
             {
-                PutItemOnMap((ObjectPool<T>)PoolsManager.instance.Pools[poolId]);
+                PutItem((ObjectPool<T>)PoolsManager.instance.Pools[poolId]);
             }
-            StartCoroutine(PutItemsOnMap<T>(poolId, timeRespawn));
+            StartCoroutine(PutItems<T>(poolId, period, count));
         }
 
-        private void PutItemOnMap<T>(ObjectPool<T> pool) where T : MonoBehaviour
+        private void PutItem<T>(ObjectPool<T> pool) where T : MonoBehaviour
         {
             var item = pool.New();
             StartCoroutine(UnityExtensions.FadeIn(item.GetComponent<SpriteRenderer>()));

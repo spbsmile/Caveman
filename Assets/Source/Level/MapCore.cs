@@ -14,7 +14,7 @@ namespace Caveman.Level
             Config = config;
             this.model = model;
             model.CreateTerrain(rand, config.PathPrefabTile, config.Artefactses, config.Width, config.Heght, isMultiplayer);
-            model.PutAllItemsOnMap(new[] { "weapons", "bonuses" });
+            model.StartItemPeriodicals(config.ItemsPeriodicals);
         }
     }
 }

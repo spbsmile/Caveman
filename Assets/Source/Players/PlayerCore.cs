@@ -1,6 +1,5 @@
 ﻿using System;
 using Caveman.Configs;
-using UnityEditor;
 
 namespace Caveman.Players
 {
