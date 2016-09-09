@@ -5,6 +5,6 @@
         "respawnDuration": 3,
         "invulnerabilityDuration": 2,
         "strength": 5,
-        "prefabPath": "/Players/"
+        "prefabPath": "Players/"
     }
 ]

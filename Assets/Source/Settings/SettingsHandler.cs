@@ -9,7 +9,7 @@ namespace Caveman.Setting
 {
     public class SettingsHandler 
     {
-        private const string RESOURCES_NAME = "Settings";
+        private const string RESOURCES_NAME = "JSON";
 
         private static TextAsset[] settings;
 
