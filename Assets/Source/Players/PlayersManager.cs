@@ -37,6 +37,9 @@ namespace Caveman.Players
 	    public void CreatePlayerModel(PlayerCore playerCore, bool isAiPlayer, bool isServerPlayer, Transform prefab)
         {
             var model = prefab.GetComponent<PlayerModelBase>();
+            model.Init(playerCore, r, serverNotify, this, playerPool);
+            PlayerPool.instance.Add(playerCore.Id, model);
+
             if (!isServerPlayer && !isAiPlayer)
             {
                 BattleGui.instance.SubscribeOnEvents(model);
@@ -44,8 +47,6 @@ namespace Caveman.Players
                 smoothCamera.SetPlayer(prefab.GetComponent<PlayerModelBase>());
                 if (serverNotify != null) model.GetComponent<SpriteRenderer>().material.color = Color.red;
             }
-            model.Init(playerCore, r, serverNotify, this, playerPool);
-            PlayerPool.instance.Add(playerCore.Id, model);
 
             model.ChangedWeaponsPool += PoolsManager.instance.SwitchPoolWeapons;
 	        // todo deleted this row, ectracte in method

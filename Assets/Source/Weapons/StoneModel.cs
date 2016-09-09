@@ -7,7 +7,7 @@ namespace Caveman.Weapons
 {
     public class StoneModel : WeaponModelBase
     {
-        private ObjectPool<EffectBase> poolStonesSplash;
+        private ObjectPool<ImageBase> poolStonesSplash;
         private float bezierTime;
 
         public void Awake()
@@ -37,7 +37,7 @@ namespace Caveman.Weapons
         }
 
         //todo this hard binding wepapon model and splash , may be refactor this. 
-        public void SetPoolSplash(ObjectPool<EffectBase> objectPool)
+        public void SetPoolSplash(ObjectPool<ImageBase> objectPool)
         {
             poolStonesSplash = objectPool;
         }

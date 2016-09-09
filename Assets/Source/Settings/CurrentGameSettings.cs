@@ -13,14 +13,14 @@ namespace Caveman.Setting
         public readonly Dictionary<string, ImageConfig> ImagesConfigs = new Dictionary<string, ImageConfig>();
         public readonly Dictionary<string, PoolsConfig> PoolsConfigs = new Dictionary<string, PoolsConfig>();
         public readonly Dictionary<string, MapConfig> MapConfigs = new Dictionary<string, MapConfig>();
-      /*  public readonly Dictionary<string, LevelSingleConfig> LevelsSingleConfigs = new Dictionary<string, LevelSingleConfig>(); */
-        public readonly Dictionary<string, LevelMultiplayerConfig> LevelsMultiplayerConfigs = new Dictionary<string, LevelMultiplayerConfig>();
+        public readonly Dictionary<string, SingleLevelConfig> SingleLevelConfigs = new Dictionary<string, SingleLevelConfig>(); 
+        public readonly Dictionary<string, MultiplayerLevelConfig> MultiplayerLevelConfigs = new Dictionary<string, MultiplayerLevelConfig>();
 
         private CurrentGameSettings(IEnumerable<BonusConfig> bonusesConfigs, IEnumerable<PlayerConfig> playersConfigs,
                 IEnumerable<WeaponConfig> weaponsConfigs,
                 IEnumerable<ImageConfig> imagesConfigs,
-                IEnumerable<PoolsConfig> poolsConfig, IEnumerable<MapConfig> mapConfigs)
-            //, IEnumerable<LevelSingleConfig> levelsSingleConfigs, IEnumerable<LevelMultiplayerConfig> levelsMultiplayerConfigs)
+                IEnumerable<PoolsConfig> poolsConfig, IEnumerable<MapConfig> mapConfigs,
+             IEnumerable<SingleLevelConfig> levelsSingleConfigs, IEnumerable<MultiplayerLevelConfig> levelsMultiplayerConfigs)
         {
             WriteConfig(bonusesConfigs, BonusesConfigs);
             WriteConfig(playersConfigs, PlayersConfigs);
@@ -28,8 +28,8 @@ namespace Caveman.Setting
             WriteConfig(imagesConfigs, ImagesConfigs);
             WriteConfig(poolsConfig, PoolsConfigs);
             WriteConfig(mapConfigs, MapConfigs);
-            //WriteConfig(levelsSingleConfigs, LevelsSingleConfigs);
-            //WriteConfig(levelsMultiplayerConfigs, LevelsMultiplayerConfigs);
+            WriteConfig(levelsSingleConfigs, SingleLevelConfigs);
+            WriteConfig(levelsMultiplayerConfigs, MultiplayerLevelConfigs);
         }
 
         public static
@@ -41,15 +41,16 @@ namespace Caveman.Setting
                 SettingsHandler.ParseSettingsFromFile<List<PlayerConfig>>(players),
                 SettingsHandler.ParseSettingsFromFile<List<WeaponConfig>>(weapons),
                 SettingsHandler.ParseSettingsFromFile<List<ImageConfig>>(images),
-                SettingsHandler.ParseSettingsFromFile<List<PoolsConfig>>(pools), 
-                SettingsHandler.ParseSettingsFromFile<List<MapConfig>>(map)/*,
-                SettingsHandler.ParseSettingsFromFile<List<LevelSingleConfig>>(levelsSingle),
-                SettingsHandler.ParseSettingsFromFile<List<LevelMultiplayerConfig>>(levelsMultiplayer)
-                */);
+                SettingsHandler.ParseSettingsFromFile<List<PoolsConfig>>(pools),
+                SettingsHandler.ParseSettingsFromFile<List<MapConfig>>(map),
+                SettingsHandler.ParseSettingsFromFile<List<SingleLevelConfig>>(levelsSingle),
+                SettingsHandler.ParseSettingsFromFile<List<MultiplayerLevelConfig>>(levelsMultiplayer)
+            );
         }
 
         private void WriteConfig<T>(IEnumerable<T> source, Dictionary<string, T> targetConfig) where T : ISettings
         {
+            if (source == null) return;
             foreach (var config in source)
             {
                 targetConfig.Add(config.Name, config);

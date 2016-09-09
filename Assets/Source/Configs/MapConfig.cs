@@ -11,17 +11,17 @@ namespace Caveman.Configs
         [JsonProperty] private readonly int width;
         [JsonProperty] private readonly int height;
         [JsonProperty] private readonly string pathPrefabTile;
-        [JsonProperty] private readonly IEnumerable<Artefacts> artefacts;
-        [JsonProperty] private readonly IEnumerable<ItemPeriodical> itemsPeriodicals;
+        [JsonProperty] private readonly List<Artefacts> artefacts;
+        [JsonProperty] private readonly List<ItemPeriodical> itemsPeriodical;
 
-        public MapConfig(string name, int width, int height, string pathPrefabTile, IEnumerable<Artefacts> artefacts, IEnumerable<ItemPeriodical> itemsPeriodicals )
+        public MapConfig(string name, int width, int height, string pathPrefabTile, List<Artefacts> artefacts, List<ItemPeriodical> itemsPeriodical)
         {
             this.name = name;
             this.height = height;
             this.width = width;
             this.pathPrefabTile = pathPrefabTile;
             this.artefacts = artefacts;
-            this.itemsPeriodicals = itemsPeriodicals;
+            this.itemsPeriodical = itemsPeriodical;
         }
 
         public string Name
@@ -49,9 +49,9 @@ namespace Caveman.Configs
             get { return artefacts; }
         }
 
-        public IEnumerable<ItemPeriodical> ItemsPeriodicals
+        public List<ItemPeriodical> ItemsPeriodicals
         {
-            get { return itemsPeriodicals; }
+            get { return itemsPeriodical; }
         }
 
         [JsonObject(MemberSerialization.OptIn)]

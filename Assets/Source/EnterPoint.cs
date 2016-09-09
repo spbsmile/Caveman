@@ -15,25 +15,21 @@ namespace Caveman
         public Transform prefabAiPlayer;
         public MapModel mapModel;
 
-        public string pathLevelSingleConfig;
-        public string pathLevelMultiplayerConfig;
         public string currentLevelName;
-        
+
         public SmoothCamera smoothCamera;
 
         protected IServerNotify serverNotify;
         protected PlayersManager playersManager;
 
-        /// Get actual values from json
         public static CurrentGameSettings CurrentSettings { get; private set; }
 
         private Random rand;
 
         public void Awake()
         {
-            // path: Resource/Settings
             CurrentSettings = CurrentGameSettings.Load(
-                "bonuses", "weapons", "players", "pools", "images", "maps", pathLevelSingleConfig, pathLevelMultiplayerConfig);
+                "bonuses", "weapons", "players", "pools", "images", "maps", "", " ");
         }
 
         public virtual void Start()
@@ -42,25 +38,22 @@ namespace Caveman
             var isMultiplayer = serverNotify != null;
             var mapCore = new MapCore(CurrentSettings.MapConfigs["sample"] , isMultiplayer, mapModel, rand);
             PoolsManager.instance.PrepareAllPools(CurrentSettings);
-
-            var humanPlayer = new PlayerCore(PlayerPrefs.GetString(AccountManager.KeyNickname),
+            var humanCore = new PlayerCore(PlayerPrefs.GetString(AccountManager.KeyNickname),
                 SystemInfo.deviceUniqueIdentifier, CurrentSettings.PlayersConfigs["sample"]);
-            BattleGui.instance.SubscribeOnEvents(humanPlayer);
-            
+            BattleGui.instance.SubscribeOnEvents(humanCore);
             playersManager = new PlayersManager(serverNotify, smoothCamera, rand);
+            playersManager.CreatePlayerModel(humanCore, false, false, Instantiate(prefabHumanPlayer));
 
-            playersManager.CreatePlayerModel(humanPlayer, false, false, Instantiate(prefabHumanPlayer));
-
-            if (!isMultiplayer)
-            {
-                for (var i = 1; i < 2; i++)//CurrentSettings.LevelsSingleConfigs[currentLevelName].BotsCount + 1; i++)
-                {
-                    playersManager.CreatePlayerModel(
-                        new PlayerCore("test"/*CurrentSettings.LevelsSingleConfigs[currentLevelName].BotsName[i]*/, i.ToString(),
-	                        CurrentSettings.PlayersConfigs["sample"]),
-                        true, false, prefabAiPlayer);
-                }              
-            }
+            //if (!isMultiplayer)
+            //{
+            //    for (var i = 1; i < CurrentSettings.SingleLevelConfigs[currentLevelName].BotsCount + 1; i++)
+            //    {
+            //        playersManager.CreatePlayerModel(
+            //            new PlayerCore(CurrentSettings.SingleLevelConfigs[currentLevelName].BotsName[i], i.ToString(),
+            //                CurrentSettings.PlayersConfigs["sample"]),
+            //            true, false, prefabAiPlayer);
+            //    }
+            //}
         }
     }
 }

@@ -18,8 +18,8 @@ namespace Caveman.Pools
         public Transform containerImagesDeath;
         public Transform containerBonusesSpeed;
 
-        public ObjectPool<EffectBase> SplashesStone { private set; get; }
-        public ObjectPool<EffectBase> ImagesDeath { private set; get; }
+        public ObjectPool<ImageBase> SplashesStone { private set; get; }
+        public ObjectPool<ImageBase> ImagesDeath { private set; get; }
         public ObjectPool<WeaponModelBase> Axes { private set; get; }
         public ObjectPool<WeaponModelBase> Stones { private set; get; }
         // todo miss prefab skull in resource
@@ -51,8 +51,8 @@ namespace Caveman.Pools
             var skullsConfig = settings.WeaponsConfigs["skulls"];
             var bonusSpeedConfig = settings.BonusesConfigs["speed"];
 
-            ImagesDeath = PreparePool(containerImagesDeath, Inst<EffectBase>(deathConfig.PrefabPath),  poolsConfig.ImagesOrdinary);
-            SplashesStone = PreparePool(containerSplashStones, Inst<EffectBase>(splahesConfig.PrefabPath),  poolsConfig.ImagesPopular);
+            ImagesDeath = PreparePool(containerImagesDeath, Inst<ImageBase>(deathConfig.PrefabPath), poolsConfig.ImagesOrdinary);
+            SplashesStone = PreparePool(containerSplashStones, Inst<ImageBase>(splahesConfig.PrefabPath), poolsConfig.ImagesPopular);
             Skulls = PreparePool(containerSkulls, Inst<WeaponModelBase>(skullsConfig.PrefabPath), poolsConfig.WeaponsOrdinary);
             Stones = PreparePool(containerStones, Inst<WeaponModelBase>(stonesConfig.PrefabPath), poolsConfig.WeaponsPopular);
             //Axes = PreparePool(Inst<WeaponModelBase>(axesConfig.PrefabPath), poolsConfig.BonusesOrdinary);
