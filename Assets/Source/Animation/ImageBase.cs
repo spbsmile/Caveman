@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Caveman.CustomAnimation
 {
-    public class EffectBase : MonoBehaviour
+    public class ImageBase : MonoBehaviour
     {
 
     }
