@@ -171,7 +171,7 @@ open UnityEngine
 type NewBehaviourScript() = 
     inherit MonoBehaviour()
     member this.Start() = Debug.Log(""Hello World"")";
-        File.WriteAllText(SelectionPath() + "/NewBehaviourScript.fs", content);
+        File.WriteAllText(AssetDatabase.GetAssetPath(Selection.activeObject) + "/NewBehaviourScript.fs", content);
         AssetDatabase.Refresh();
 
         // TODO create it in the selected folder with name editing:
