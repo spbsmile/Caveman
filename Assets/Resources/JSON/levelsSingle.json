@@ -1,8 +1,9 @@
-{
+[
+  {
     "name":"sample",
     "botsCount": 3,
     "roundTime": 60,    
-    "botsNames": [
+    "botsName": [
         "bob",
         "IkillU",
         "skaska",
@@ -10,4 +11,5 @@
         "yohoho",
         "shpuntik"
     ]
-}
+  }
+]

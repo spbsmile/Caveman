@@ -39,7 +39,6 @@ namespace Caveman.Pools
             }
         }
 
-        //todo also configs pools gameobjects from json
         public void PrepareAllPools(CurrentGameSettings settings)
         {
             var poolsConfig = settings.PoolsConfigs["sample"];
@@ -70,16 +69,10 @@ namespace Caveman.Pools
             return Instantiate(Resources.Load(prefabPath, typeof (T))) as T;
         }
 
-        /// <summary>
-        /// Used object pool pattern
-        /// </summary>
         private ObjectPool<T> PreparePool<T>(Transform container, T prefab, int initialBufferSize)
             where T : MonoBehaviour
         {
-
             var pool = container.GetComponent<ObjectPool<T>>();
-            pool.CreatePool(prefab, initialBufferSize);
-                        
             pool.CreatePool(prefab, initialBufferSize);
             for (var i = 0; i < initialBufferSize; i++)
             {

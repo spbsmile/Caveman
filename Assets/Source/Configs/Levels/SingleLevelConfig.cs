@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Caveman.Setting;
+﻿using Caveman.Setting;
 using Newtonsoft.Json;
 
 namespace Caveman.Configs.Levels
@@ -7,7 +6,7 @@ namespace Caveman.Configs.Levels
     [JsonObject(MemberSerialization.OptIn)]
     public class SingleLevelConfig : ISettings
     {
-        public SingleLevelConfig(string name, int roundTime, int botsCount, List<string> botsName)
+        public SingleLevelConfig(string name, int roundTime, int botsCount, string[] botsName)
         {
             this.name = name;
             this.roundTime = roundTime;
@@ -16,9 +15,12 @@ namespace Caveman.Configs.Levels
         }
 
         [JsonProperty] private readonly string name;
-        [JsonProperty] private readonly int roundTime;
-        [JsonProperty] private readonly int botsCount;
-        [JsonProperty] private readonly List<string> botsName;
+        [JsonProperty]
+        private readonly int roundTime;
+        [JsonProperty]
+        private readonly int botsCount;
+        [JsonProperty]
+        private readonly string[] botsName;
 
         public string Name
         {
@@ -35,10 +37,9 @@ namespace Caveman.Configs.Levels
             get { return botsCount; }
         }
 
-        public List<string> BotsName
+        public string[] BotsName
         {
             get { return botsName; }
         }
-
     }
 }

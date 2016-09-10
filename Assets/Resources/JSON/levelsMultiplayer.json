@@ -1,4 +1,6 @@
-{
-  "name":"sample",
-  "roundTime": 60
-}
+[
+  {
+    "name":"sample",
+    "roundTime": 60
+  }
+]

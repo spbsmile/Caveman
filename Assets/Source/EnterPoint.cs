@@ -29,31 +29,39 @@ namespace Caveman
         public void Awake()
         {
             CurrentSettings = CurrentGameSettings.Load(
-                "bonuses", "weapons", "players", "pools", "images", "maps", "", " ");
+                "bonuses", "weapons", "players", "pools", "images", "maps", "levelsSingle", " ");
         }
 
         public virtual void Start()
         {
             rand = new Random();
             var isMultiplayer = serverNotify != null;
-            var mapCore = new MapCore(CurrentSettings.MapConfigs["sample"] , isMultiplayer, mapModel, rand);
+            new MapCore(CurrentSettings.MapConfigs["sample"] , isMultiplayer, mapModel, rand);
             PoolsManager.instance.PrepareAllPools(CurrentSettings);
             var humanCore = new PlayerCore(PlayerPrefs.GetString(AccountManager.KeyNickname),
                 SystemInfo.deviceUniqueIdentifier, CurrentSettings.PlayersConfigs["sample"]);
             BattleGui.instance.SubscribeOnEvents(humanCore);
+
+
             playersManager = new PlayersManager(serverNotify, smoothCamera, rand);
+
+
             playersManager.CreatePlayerModel(humanCore, false, false, Instantiate(prefabHumanPlayer));
 
-            //if (!isMultiplayer)
-            //{
-            //    for (var i = 1; i < CurrentSettings.SingleLevelConfigs[currentLevelName].BotsCount + 1; i++)
-            //    {
-            //        playersManager.CreatePlayerModel(
-            //            new PlayerCore(CurrentSettings.SingleLevelConfigs[currentLevelName].BotsName[i], i.ToString(),
-            //                CurrentSettings.PlayersConfigs["sample"]),
-            //            true, false, prefabAiPlayer);
-            //    }
-            //}
+            if (!isMultiplayer)
+            {
+                for (var i = 1; i < CurrentSettings.SingleLevelConfigs[currentLevelName].BotsCount + 1; i++)
+                {
+                    var name = CurrentSettings.SingleLevelConfigs[currentLevelName].BotsName[i];
+                    print(name + " name");
+                    var playerCore = new PlayerCore(name,
+                        i.ToString(),
+                        CurrentSettings.PlayersConfigs["sample"]);
+
+                    playersManager.CreatePlayerModel(playerCore,
+                        true, false, Instantiate(prefabAiPlayer));
+                }
+            }
         }
     }
 }
