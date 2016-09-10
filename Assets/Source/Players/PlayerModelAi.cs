@@ -1,4 +1,5 @@
-﻿using Caveman.Setting;
+﻿using Caveman.Pools;
+using Caveman.Setting;
 using Caveman.Utils;
 using UnityEngine;
 
@@ -6,7 +7,6 @@ namespace Caveman.Players
 {
     public class PlayerModelAi : PlayerModelClient
     {
-        private Transform weapons;
         private Vector2 targetPosition;
 
         protected void Start()
@@ -17,8 +17,8 @@ namespace Caveman.Players
 
         public void Update()
         {
-            if ((Vector2.SqrMagnitude(moveUnit) > UnityExtensions.ThresholdPosition &&
-                    Vector2.SqrMagnitude((Vector2)transform.position - targetPosition) > UnityExtensions.ThresholdPosition))
+            if (Vector2.SqrMagnitude(moveUnit) > UnityExtensions.ThresholdPosition &&
+                Vector2.SqrMagnitude((Vector2)transform.position - targetPosition) > UnityExtensions.ThresholdPosition)
             {
                 Move();
             }
@@ -36,13 +36,7 @@ namespace Caveman.Players
                 }
             }
         }
-        /*
-        public override void Play()
-        {
-            base.Play();
-            CalculateMoveUnit(RandomPosition);
-        }
-        */
+     
         private Vector2 FindClosestLyingWeapon
         {
             get
@@ -50,7 +44,7 @@ namespace Caveman.Players
                 var minDistance = (float)Settings.HeightMap*Settings.WidthMap;
                 var nearPosition = Vector2.zero;
 
-                foreach (Transform weapon in weapons)
+                foreach (Transform weapon in PoolsManager.instance.containerStones)
                 {
                     if (!weapon.gameObject.activeSelf) continue;
                     var childDistance = Vector2.SqrMagnitude(weapon.position - transform.position);

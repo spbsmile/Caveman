@@ -36,13 +36,12 @@ namespace Caveman.Weapons
             }
         }
 
-        //todo this hard binding wepapon model and splash , may be refactor this. 
-        public void SetPoolSplash(ObjectPool<ImageBase> objectPool)
+        public void InitializationPoolSplashesStone(ObjectPool<ImageBase> objectPool)
         {
             poolStonesSplash = objectPool;
         }
 
-        override protected void MotionUpdate()
+        protected override void MotionUpdate()
         {
             if (Vector2.SqrMagnitude(moveUnit) > UnityExtensions.ThresholdPosition)
             {

@@ -27,7 +27,7 @@ namespace Caveman.Bonuses
             }
         }
 
-        public override void SetPool(ObjectPool<BonusBase> item)
+        public override void InitializationPool(ObjectPool<BonusBase> item)
         {
             pool = item;
         }

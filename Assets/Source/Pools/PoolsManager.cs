@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Caveman.Bonuses;
 using Caveman.CustomAnimation;
 using Caveman.Setting;
@@ -26,9 +27,6 @@ namespace Caveman.Pools
         public ObjectPool<WeaponModelBase> Skulls { private set; get; }
         public ObjectPool<BonusBase> BonusesSpeed { private set; get; }
 
-        /// <summary>
-        /// only for procedure generate 
-        /// </summary>
         public readonly Dictionary<string, object> Pools = new Dictionary<string, object>();
 
         public void Awake()
@@ -50,12 +48,12 @@ namespace Caveman.Pools
             var skullsConfig = settings.WeaponsConfigs["skulls"];
             var bonusSpeedConfig = settings.BonusesConfigs["speed"];
 
-            ImagesDeath = PreparePool(containerImagesDeath, Inst<ImageBase>(deathConfig.PrefabPath), poolsConfig.ImagesOrdinary);
-            SplashesStone = PreparePool(containerSplashStones, Inst<ImageBase>(splahesConfig.PrefabPath), poolsConfig.ImagesPopular);
-            Skulls = PreparePool(containerSkulls, Inst<WeaponModelBase>(skullsConfig.PrefabPath), poolsConfig.WeaponsOrdinary);
-            Stones = PreparePool(containerStones, Inst<WeaponModelBase>(stonesConfig.PrefabPath), poolsConfig.WeaponsPopular);
+            ImagesDeath = PreparePool(containerImagesDeath, Inst<ImageBase>(deathConfig.PrefabPath), poolsConfig.ImagesOrdinary, null);
+            SplashesStone = PreparePool(containerSplashStones, Inst<ImageBase>(splahesConfig.PrefabPath), poolsConfig.ImagesPopular, null);
+            Skulls = PreparePool(containerSkulls, Inst<WeaponModelBase>(skullsConfig.PrefabPath), poolsConfig.WeaponsOrdinary, InitializationPoolAxe);
+            Stones = PreparePool(containerStones, Inst<WeaponModelBase>(stonesConfig.PrefabPath), poolsConfig.WeaponsPopular, InitializationPoolStone);
             //Axes = PreparePool(Inst<WeaponModelBase>(axesConfig.PrefabPath), poolsConfig.BonusesOrdinary);
-            BonusesSpeed = PreparePool(containerBonusesSpeed, Inst<BonusBase>(bonusSpeedConfig.PrefabPath), poolsConfig.BonusesOrdinary);
+            BonusesSpeed = PreparePool(containerBonusesSpeed, Inst<BonusBase>(bonusSpeedConfig.PrefabPath), poolsConfig.BonusesOrdinary, InitializationPoolBonus);
 
             Pools.Add(deathConfig.PrefabPath, ImagesDeath);
             Pools.Add(splahesConfig.PrefabPath, SplashesStone);
@@ -69,19 +67,43 @@ namespace Caveman.Pools
             return Instantiate(Resources.Load(prefabPath, typeof (T))) as T;
         }
 
-        private ObjectPool<T> PreparePool<T>(Transform container, T prefab, int initialBufferSize)
+        private ObjectPool<T> PreparePool<T>(Transform container, T prefab, int initialBufferSize, Action<GameObject, ObjectPool<T>> init)
             where T : MonoBehaviour
         {
             var pool = container.GetComponent<ObjectPool<T>>();
-            pool.CreatePool(prefab, initialBufferSize);
+            pool.Initialization(prefab, initialBufferSize);
             for (var i = 0; i < initialBufferSize; i++)
             {
                 var item = Instantiate(prefab);
+                if (init != null)
+                {
+                    init(item.gameObject, pool);
+                }
                 item.transform.SetParent(container.transform);
                 pool.Store(item);
             }
             return pool;
-        }       
+        }
+
+        /// <summary>
+        /// Each model assigned reference on objectpool
+        /// </summary>
+        private void InitializationPoolBonus(GameObject item, ObjectPool<BonusBase> pool)
+        {
+            item.GetComponent<BonusBase>().InitializationPool(pool);
+        }
+
+        private void InitializationPoolAxe(GameObject item, ObjectPool<WeaponModelBase> pool)
+        {
+            item.GetComponent<AxeModel>().InitializationPool(pool);
+        }
+
+        private void InitializationPoolStone(GameObject item, ObjectPool<WeaponModelBase> pool)
+        {
+            var model = item.GetComponent<StoneModel>();
+            model.InitializationPool(pool);
+            model.InitializationPoolSplashesStone(SplashesStone);
+        }
 
         /// <summary>
         /// When player pickup weapon another type 

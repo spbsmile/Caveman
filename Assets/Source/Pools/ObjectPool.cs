@@ -5,7 +5,7 @@ namespace Caveman.Pools
 {
     public abstract class ASupportPool<T> : MonoBehaviour where T : MonoBehaviour
     {
-        public abstract void SetPool(ObjectPool<T> item);
+        public abstract void InitializationPool(ObjectPool<T> item);
         public string Id;
     }
 
@@ -17,7 +17,7 @@ namespace Caveman.Pools
         //for multiplayer <id, item>
         private Dictionary<string, T> poolServer;
 
-        public void CreatePool(T prefab, int initialBufferSize)
+        public void Initialization(T prefab, int initialBufferSize)
         {
             stack = new Stack<T>(initialBufferSize);
             this.prefab = prefab;
@@ -38,7 +38,7 @@ namespace Caveman.Pools
             if (item.GetComponent<ASupportPool<T>>())
             {
                 item.transform.SetParent(transform);
-                item.GetComponent<ASupportPool<T>>().SetPool(this);
+                item.GetComponent<ASupportPool<T>>().InitializationPool(this);
             }
             return item;
         }

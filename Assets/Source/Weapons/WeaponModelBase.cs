@@ -52,7 +52,7 @@ namespace Caveman.Weapons
             moveUnit = UnityExtensions.CalculateDelta(start, aim, Config.Speed);
         }
 
-        public override void SetPool(ObjectPool<WeaponModelBase> weaponPool)
+        public override void InitializationPool(ObjectPool<WeaponModelBase> weaponPool)
         {
             pool = weaponPool;
         }
