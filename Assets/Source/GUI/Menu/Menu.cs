@@ -2,6 +2,7 @@
 using Caveman.UI.Common;
 using Caveman.Utils;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Caveman.UI.Menu
@@ -43,7 +44,7 @@ namespace Caveman.UI.Menu
         public void LoadMenu()
         {
             Time.timeScale = 1;
-            Application.LoadLevel(0);
+            SceneManager.LoadScene(0);
         }
 
         public void Quit()
@@ -53,12 +54,12 @@ namespace Caveman.UI.Menu
 
         public void Settings()
         {
-            Application.LoadLevel(2);
+            SceneManager.LoadScene(2);
         }
 
         public void LoadProfile()
         {
-            Application.LoadLevel(6);
+            SceneManager.LoadScene(6);
         }
 
         private void ShowNoNameAlert()

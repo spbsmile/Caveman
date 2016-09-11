@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Caveman.Utils;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Caveman.UI.Common
@@ -30,12 +30,12 @@ namespace Caveman.UI.Common
 
         public void ProgressTo(string name)
         {
-            ProgressTo(Application.LoadLevelAsync(name));
+            ProgressTo(SceneManager.LoadSceneAsync(name));
         }
 
         public void ProgressTo(int level)
         {
-            ProgressTo(Application.LoadLevelAsync(level));
+            ProgressTo(SceneManager.LoadSceneAsync(level));
         }
 
         private void ProgressTo(AsyncOperation loadLevelAsync)
