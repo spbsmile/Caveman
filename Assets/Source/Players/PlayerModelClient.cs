@@ -36,8 +36,7 @@ namespace Caveman.Players
                         if (multiplayer)
                         {
                             serverNotify.PlayerDeadSend();
-                            //todo must see commit renames
-                            //serverNotify.PlayerDeadTest(weapon.Owner.Id);
+                            serverNotify.AddedKillStatSend(weapon.Owner.Id);
                         }
                         weapon.Destroy();
                         StopAllCoroutines();
@@ -76,8 +75,7 @@ namespace Caveman.Players
 
         public override void PickupWeapon(WeaponModelBase weaponModel)
         {
-            //todo strong hero and weight weapon formula strong = countWeapon&weigthWeapon
-            if (PlayerCore.WeaponCount > weaponModel.Config.Weight) return;
+            if (!IsStrongEnoughTakeWeapon(weaponModel.Config.Weight)) return;
             base.PickupWeapon(weaponModel);
             PlayerCore.WeaponCount += weaponModel.Config.CountItems;
             if (multiplayer) serverNotify.PickWeaponSend(weaponModel.Id, (int)weaponModel.Config.Type);
@@ -88,6 +86,11 @@ namespace Caveman.Players
             if (multiplayer) serverNotify.UseWeaponSend(aim, (int) WeaponConfig.Type);
             base.ThrowWeapon(aim);
             PlayerCore.WeaponCount--;
+        }
+
+        protected bool IsStrongEnoughTakeWeapon(int weightWeapon)
+        {
+            return PlayerCore.Config.Strength > PlayerCore.WeaponCount*weightWeapon;
         }
 
         private IEnumerator ThrowWeaponOnCooldown()

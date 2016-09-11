@@ -4,7 +4,7 @@
         "speed": 2.5,
         "respawnDuration": 3,
         "invulnerabilityDuration": 2,
-        "strength": 5,
+        "strength": 15,
         "prefabPath": "Players/"
     }
 ]
