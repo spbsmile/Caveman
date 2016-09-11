@@ -41,9 +41,8 @@ namespace Caveman
             rand = new Random();
             var isMultiplayer = serverNotify != null;
 
-            new MapCore(CurrentSettings.MapConfigs["sample"] , isMultiplayer, mapModel, rand);
-
             PoolsManager.instance.PrepareAllPools(CurrentSettings);
+            new MapCore(CurrentSettings.MapConfigs["sample"] , isMultiplayer, mapModel, rand);
 
             var humanCore = new PlayerCore(PlayerPrefs.GetString(AccountManager.KeyNickname),
                 SystemInfo.deviceUniqueIdentifier, CurrentSettings.PlayersConfigs["sample"]);
