@@ -1,8 +1,8 @@
 [
   {
     "name": "sample",
-    "width": 12,
-    "height": 12,
+    "width": 24,
+    "height": 24,
     "pathPrefabTile": "Map/ground1",
     "artefacts": [
       {

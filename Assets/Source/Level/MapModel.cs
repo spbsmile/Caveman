@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Caveman.Bonuses;
 using Caveman.Configs;
 using Caveman.Pools;
@@ -49,12 +48,12 @@ namespace Caveman.Level
                     item.transform.SetParent(transform);
                     if (!isMultiplayer)
                     {
-                        gameObject.transform.position = new Vector2(rand.Next(width),
+                        item.transform.position = new Vector2(rand.Next(width),
                         rand.Next(height));
                     }
                     else
                     {
-                        gameObject.transform.position = new Vector2(width / (artefact.Count * 2) * (i + 2), height / (artefact.Count * 2) * (i + 2));
+                        item.transform.position = new Vector2(width / (artefact.Count * 2) * (i + 2), height / (artefact.Count * 2) * (i + 2));
                     }
                 }
             }
@@ -81,13 +80,14 @@ namespace Caveman.Level
 
         private IEnumerator PutItems<T>(string poolId, int period, int count) where T : MonoBehaviour
         {
-            yield return new WaitForSeconds(period);
+            
             //todo length
             // todo var bound = Settings.BonusSpeedMaxCount - PoolsManager.instance.BonusesSpeed.GetActivedCount; 
             for (var i = 0; i < count; i++)
             {
                 PutItem((ObjectPool<T>)PoolsManager.instance.Pools[poolId]);
             }
+            yield return new WaitForSeconds(period);
             StartCoroutine(PutItems<T>(poolId, period, count));
         }
 
