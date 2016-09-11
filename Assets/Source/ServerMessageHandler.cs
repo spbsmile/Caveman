@@ -36,18 +36,18 @@ namespace Caveman.Network
 
         public void WeaponAddedReceive(string key, Vector2 point)
         {
-            if (RepeatKey(PoolsManager.instance.Stones, key)) return;
-            PoolsManager.instance.Stones.New(key).transform.position = point;
+            if (RepeatKey(poolStones, key)) return;
+            poolStones.New(key).transform.position = point;
         }
 
         public void WeaponRemovedReceive(string key)
         {
-            PoolsManager.instance.Stones.Store(key);
+            poolStones.Store(key);
         }
 
         public void WeaponPickReceive(string playerId, string key)
         {
-            PlayerPool.instance[playerId].PickupWeapon(PoolsManager.instance.Stones[key]);
+            PlayerPool.instance[playerId].PickupWeapon(poolStones[key]);
         }
 
         public void WeaponUseReceive(string playerId, Vector2 aim)
@@ -57,18 +57,18 @@ namespace Caveman.Network
 
         public void BonusAddedReceive(string key, Vector2 point)
         {
-            if (RepeatKey(PoolsManager.instance.BonusesSpeed, key)) return;
-            PoolsManager.instance.BonusesSpeed.New(key).transform.position = point;    
+            if (RepeatKey(poolBonusesSpeed, key)) return;
+            poolBonusesSpeed.New(key).transform.position = point;    
         }
 
         public void BonusRemovedReceive(string key, Vector2 point)
         {
-            PoolsManager.instance.BonusesSpeed.Store(key);
+            poolBonusesSpeed.Store(key);
         }
 
         public void BonusPickReceive(string playerId, string key)
         {
-            PlayerPool.instance[playerId].PickupBonus(PoolsManager.instance.BonusesSpeed[key]);
+            PlayerPool.instance[playerId].PickupBonus(poolBonusesSpeed[key]);
         }
 
 	    public void PlayerRespawnReceive(string playerId, Vector2 point)

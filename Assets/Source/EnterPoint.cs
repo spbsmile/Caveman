@@ -23,10 +23,14 @@ namespace Caveman
         public PoolsManager poolsManager;
         public SmoothCamera smoothCamera;
 
+        public static CurrentGameSettings CurrentSettings { get; private set; }
+
         protected IServerNotify serverNotify;
         protected PlayersManager playersManager;
 
-        public static CurrentGameSettings CurrentSettings { get; private set; }
+        // for server message handler
+        protected ObjectPool<WeaponModelBase> poolStones;
+        protected ObjectPool<BonusBase> poolBonusesSpeed;
 
         private Random rand;
 
@@ -41,7 +45,10 @@ namespace Caveman
             rand = new Random();
             var isMultiplayer = serverNotify != null;
 
-            PoolsManager.instance.PrepareAllPools(CurrentSettings);
+            poolsManager.PrepareAllPools(CurrentSettings);
+            poolStones = poolsManager.Stones;
+            poolBonusesSpeed = poolsManager.BonusesSpeed;
+
             new MapCore(CurrentSettings.MapConfigs["sample"] , isMultiplayer, mapModel, rand);
 
             var humanCore = new PlayerCore(PlayerPrefs.GetString(AccountManager.KeyNickname),
