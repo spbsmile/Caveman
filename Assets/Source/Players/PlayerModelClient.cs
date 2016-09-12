@@ -55,6 +55,11 @@ namespace Caveman.Players
             }
         }
 
+        public void Play()
+        {
+            StartCoroutine(ThrowWeaponOnCooldown());
+        }
+
         public override IEnumerator Respawn(Vector2 position)
         {
             yield return StartCoroutine(base.Respawn(position));

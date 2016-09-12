@@ -34,9 +34,6 @@ namespace Caveman.UI
                 resultRound.gameObject.SetActive(true);
                 waitForResp.gameObject.SetActive(false);
             };
-
-            gameObject.SetActive(false);
-            movementJoystick.gameObject.SetActive(false);           
         }
 
         public void SubscribeOnEvents(PlayerCore playerCore)
