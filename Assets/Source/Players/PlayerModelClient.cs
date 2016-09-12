@@ -55,7 +55,7 @@ namespace Caveman.Players
             }
         }
 
-        public void Play()
+        public override void StartThrowWeaponOnCooldown()
         {
             StartCoroutine(ThrowWeaponOnCooldown());
         }

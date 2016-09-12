@@ -69,6 +69,8 @@ namespace Caveman
                         true, false, Instantiate(prefabAiPlayer));
                 }
             }
+
+          playersManager.StartThrowWeaponOnCooldownOfPlayers();
         }
     }
 }

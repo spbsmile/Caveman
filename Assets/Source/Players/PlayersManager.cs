@@ -25,10 +25,19 @@ namespace Caveman.Players
 	        playerPool = PlayerPool.instance;
         }
 
-	    public void CreateAllPlayerModel()
+        public void StartThrowWeaponOnCooldownOfPlayers()
+        {
+            playersModel = new List<PlayerModelBase>();
+            playersModel.AddRange(playerPool.GetCurrentPlayers());
+            var players = PlayerPool.instance.GetCurrentPlayers();
+            foreach (var player in players)
+            {
+                player.StartThrowWeaponOnCooldown();
+            }
+        }
+
+        public void CreateAllPlayerModel()
 	    {
-		    playersModel = new List<PlayerModelBase>();
-		    playersModel.AddRange(playerPool.GetCurrentPlayers());
 		    // todo may be deleted it
 		    playerPool.AddedPlayer += @base => playersModel.Add(@base);
 		    playerPool.RemovePlayer += @base => playersModel.Remove(@base);
@@ -73,5 +82,7 @@ namespace Caveman.Players
 		    }
 		    return result;
 	    }
+
+        
     }
 }
