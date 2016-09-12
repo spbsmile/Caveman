@@ -1,5 +1,5 @@
-﻿using Caveman.Specification;
-using System.Collections;
+﻿using System.Collections;
+using Caveman.Configs;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,11 +22,11 @@ namespace Caveman.UI.Battle
             canvasGroup.alpha = 0;
         }
 
-        public void BonusActivated(BonusSpecification.Types type, float duration)
+        public void BonusActivated(BonusConfig.Types type, float duration)
         {
             switch (type)
             {
-                case BonusSpecification.Types.Speed:
+                case BonusConfig.Types.Speed:
                     iconCurrentBonus = iconSpeedBonus;
                     break;
             }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Caveman.UI.Windows
 {
@@ -24,7 +25,7 @@ namespace Caveman.UI.Windows
 
         public void ExitGame()
         {
-            Application.LoadLevel(0);
+            SceneManager.LoadScene(0);
             Time.timeScale = 1;
         }
     }

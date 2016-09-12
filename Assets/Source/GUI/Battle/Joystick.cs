@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Caveman.UI.Battle
 {
@@ -19,10 +17,10 @@ namespace Caveman.UI.Battle
         {
             if (SecondFingerId == -1)
             {
-                int touchCount = Input.touchCount;
-                for (int i = 0; i < touchCount; i++)
+                var touchCount = Input.touchCount;
+                for (var i = 0; i < touchCount; i++)
                 {
-                    Touch currentTouch = Input.GetTouch(i);
+                    var currentTouch = Input.GetTouch(i);
                     if (currentTouch.phase == TouchPhase.Began &&
                         IsTouchInZone(currentTouch.position))
                     {
@@ -39,7 +37,7 @@ namespace Caveman.UI.Battle
         {
             if (!IsCurrentlyTweaking && SecondFingerId != -1)
             {
-                Touch? touch = GetTouchByFingerId(SecondFingerId);
+                var touch = GetTouchByFingerId(SecondFingerId);
                 SecondFingerId = -1;
                 if (touch == null || touch.Value.phase == TouchPhase.Ended)
                 {
@@ -55,11 +53,11 @@ namespace Caveman.UI.Battle
 
         protected override bool IsTouchCaptured(out Touch capturedTouch)
         {
-            int touchCount = Input.touchCount;
+            var touchCount = Input.touchCount;
 
-            for (int i = 0; i < touchCount; i++)
+            for (var i = 0; i < touchCount; i++)
             {
-                Touch currentTouch = Input.GetTouch(i);
+                var currentTouch = Input.GetTouch(i);
                 if (IsTouchInZone(currentTouch.position))
                 {
                     IsCurrentlyTweaking = true;

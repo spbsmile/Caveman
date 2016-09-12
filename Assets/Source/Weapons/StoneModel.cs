@@ -7,12 +7,12 @@ namespace Caveman.Weapons
 {
     public class StoneModel : WeaponModelBase
     {
-        private ObjectPool<EffectBase> poolStonesSplash;
+        private ObjectPool<ImageBase> poolStonesSplash;
         private float bezierTime;
 
         public void Awake()
         {
-            Specification = EnterPoint.CurrentSettings.DictionaryWeapons["stone"];
+            Config = EnterPoint.CurrentSettings.WeaponsConfigs["stone"];
         }
 
         public void Update()
@@ -36,26 +36,25 @@ namespace Caveman.Weapons
             }
         }
 
-        //todo this hard binding wepapon model and splash , may be refactor this. 
-        public void SetPoolSplash(ObjectPool<EffectBase> objectPool)
+        public void InitializationPoolSplashesStone(ObjectPool<ImageBase> objectPool)
         {
             poolStonesSplash = objectPool;
         }
 
-        override protected void MotionUpdate()
+        protected override void MotionUpdate()
         {
-            if (Vector2.SqrMagnitude(delta) > UnityExtensions.ThresholdPosition)
+            if (Vector2.SqrMagnitude(moveUnit) > UnityExtensions.ThresholdPosition)
             {
                 if (Vector2.SqrMagnitude(target - (Vector2)transform.position) > UnityExtensions.ThresholdPosition)
                 {
-                    bezierTime += Time.deltaTime / Vector2.Distance(startPosition, target) * Specification.Speed;
+                    bezierTime += Time.deltaTime / Vector2.Distance(startPosition, target) * Config.Speed;
                     if (bezierTime > 1) bezierTime = 0;
                     transform.position = BezierUtils.Bezier2(startPosition, BezierUtils.ControlPoint(startPosition, target), target, bezierTime);
 
                     //linear moving. can be used for testing
-                    //                    transform.position = new Vector2(transform.position.x + delta.x * Time.deltaTime,
-                    //                        transform.position.y + delta.y * Time.deltaTime);
-                    transform.Rotate(Vector3.forward, Specification.RotateParameter * Time.deltaTime * 100);
+                    //                    transform.position = new Vector2(transform.position.x + moveUnit.x * Time.deltaTime,
+                    //                        transform.position.y + moveUnit.y * Time.deltaTime);
+                    transform.Rotate(Vector3.forward, Config.RotateParameter * Time.deltaTime * 100);
                 }
                 else
                 {

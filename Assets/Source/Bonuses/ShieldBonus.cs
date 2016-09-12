@@ -4,7 +4,7 @@
     {
         public void Start()
         {
-            Specification = EnterPoint.CurrentSettings.DictionaryBonuses["shield"];
+            Config = EnterPoint.CurrentSettings.BonusesConfigs["shield"];
         }
 
         //todo implement

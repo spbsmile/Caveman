@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using Caveman.Bonuses;
 using Caveman.Setting;
-using Caveman.Specification;
+using Caveman.Configs;
 using Caveman.Weapons;
 using UnityEngine;
 
@@ -9,12 +9,6 @@ namespace Caveman.Players
 {
     public class PlayerModelClient : PlayerModelBase
     {
-        protected virtual void Start()
-        {
-            ChangedWeapons += () => Player.Weapons = 0;
-            print("hello subscribe ChangedWeapons" + name);
-        }
-
         public void OnTriggerEnter2D(Collider2D other)
         {
             if (Time.time < 1) return;
@@ -23,27 +17,26 @@ namespace Caveman.Players
             {
                 if (weapon.Owner == null)
                 {
-                    switch (weapon.Specification.Type)
+                    switch (weapon.Config.Type)
                     {
-                        case WeaponSpecification.Types.Stone:
+                        case WeaponConfig.Types.Stone:
                             PickupWeapon(other.gameObject.GetComponent<StoneModel>());
                             break;
-                        case WeaponSpecification.Types.Skull:
+                        case WeaponConfig.Types.Skull:
                             PickupWeapon(other.gameObject.GetComponent<AxeModel>());
                             break;
                     }
                 }
                 else
                 {
-                    if (weapon.Owner != Player)
+                    if (weapon.Owner != PlayerCore)
                     {
-                        weapon.Owner.Kills++;
-                        Player.Deaths++;
+                        weapon.Owner.KillCount++;
+                        PlayerCore.DeathCount++;
                         if (multiplayer)
                         {
-                            serverNotify.PlayerDead();
-                            //todo must see commit renames
-                            //serverNotify.PlayerDeadTest(weapon.Owner.Id);
+                            serverNotify.PlayerDeadSend();
+                            serverNotify.AddedKillStatSend(weapon.Owner.Id);
                         }
                         weapon.Destroy();
                         StopAllCoroutines();
@@ -62,83 +55,61 @@ namespace Caveman.Players
             }
         }
 
-        public override void Play()
+        public void StartUseWeapon()
         {
-            base.Play();
-            StartCoroutine(ThrowOnTimer());
+            StartCoroutine(PerformWeaponAction());
         }
 
-        public override bool SpendGold(int value)
+        public override IEnumerator Respawn(Vector2 position)
         {
-            var res = base.SpendGold(value);
-            if (res && multiplayer)
-                serverNotify.PlayerGold(Gold);
-            return res;
+            yield return StartCoroutine(base.Respawn(position));
         }
 
-        public override IEnumerator Respawn(Vector2 point)
+        public override void RespawnInstantly(Vector2 position)
         {
-            yield return StartCoroutine(base.Respawn(point));
-        }
-
-        public override void Birth(Vector2 point)
-        {
-            base.Birth(point);
-            if (multiplayer) serverNotify.Respawn(point);
+            base.RespawnInstantly(position);
+            if (multiplayer) serverNotify.RespawnSend(position);
         }
 
         public override void PickupBonus(BonusBase bonus)
         {
-            //todo hack
-            if (multiplayer) serverNotify.PickBonus(bonus.Id, (int)bonus.Specification.Type);
-            base.PickupBonus(bonus);
+            if (multiplayer) serverNotify.PickBonusSend(bonus.Id, (int)bonus.Config.Type);
+	        //todo hack
+	        base.PickupBonus(bonus);
         }
 
         public override void PickupWeapon(WeaponModelBase weaponModel)
         {
-            if (Player.Weapons > weaponModel.Specification.MaxOnPLayer) return;
+            if (!IsEnoughStrength(weaponModel.Config.Weight)) return;
             base.PickupWeapon(weaponModel);
-            Player.Weapons += weaponModel.Specification.CountPickup;
-            if (multiplayer) serverNotify.PickWeapon(weaponModel.Id, (int)weaponModel.Specification.Type);
+            PlayerCore.WeaponCount += weaponModel.Config.CountItems;
+            if (multiplayer) serverNotify.PickWeaponSend(weaponModel.Id, (int)weaponModel.Config.Type);
         }
 
-        public override void Throw(Vector2 aim)
+        public override void ActivateWeapon(Vector2 aim)
         {
-            if (multiplayer) serverNotify.UseWeapon(aim, (int) weaponSpecification.Type);
-            base.Throw(aim);
-            Player.Weapons--;
+            if (multiplayer) serverNotify.ActivateWeaponSend(aim, (int) WeaponConfig.Type);
+            base.ActivateWeapon(aim);
+            PlayerCore.WeaponCount--;
         }
 
-        private IEnumerator ThrowOnTimer()
+        protected bool IsEnoughStrength(int weight)
         {
-            yield return new WaitForSeconds(weaponSpecification.TimeThrow);
-            if (Player.Weapons > 0)
+            return PlayerCore.Config.Strength > PlayerCore.WeaponCount*weight;
+        }
+
+        private IEnumerator PerformWeaponAction()
+        {
+            yield return new WaitForSeconds(WeaponConfig.Cooldown);
+            if (PlayerCore.WeaponCount > 0)
             {
-                var victim = FindClosestPlayer();
+                var victim = playersManager.FindClosestPlayer(this);
                 if (victim != null)
                 {
-                    Throw(victim.transform.position);
+                    ActivateWeapon(victim.transform.position);
                 }
             }
-            StartCoroutine(ThrowOnTimer());
-        }
-
-        private PlayerModelBase FindClosestPlayer()
-        {
-            var minDistance = (float) Settings.HeightMap*Settings.WidthMap;
-            PlayerModelBase result = null;
-            for (var i = 0; i < players.Count; i++)
-            {
-                if (!players[i].gameObject.activeSelf || players[i] == this ||
-                    !players[i].spriteRenderer.isVisible || players[i].invulnerability) continue;
-                var childDistance = Vector2.SqrMagnitude(players[i].transform.position - transform.position);
-                if (minDistance > childDistance)
-                {
-                    result = players[i];
-                    minDistance = childDistance;
-                }
-            }
-            return result;
+            StartCoroutine(PerformWeaponAction());
         }
     }
 }

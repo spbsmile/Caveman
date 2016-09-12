@@ -21,7 +21,7 @@ namespace UnityStandardAssets.Cameras
 
         protected virtual void Start()
         {
-            // if auto targeting is used, find the object tagged "Player"
+            // if auto targeting is used, find the object tagged "PlayerCore"
             // any class inheriting from this should call base.Start() to perform this action!
             if (m_AutoTargetPlayer)
             {
@@ -81,8 +81,8 @@ namespace UnityStandardAssets.Cameras
 
         public void FindAndTargetPlayer()
         {
-            // auto target an object tagged player, if no target has been assigned
-            var targetObj = GameObject.FindGameObjectWithTag("Player");
+            // auto target an object tagged player, if no targetPosition has been assigned
+            var targetObj = GameObject.FindGameObjectWithTag("PlayerCore");
             if (targetObj)
             {
                 SetTarget(targetObj.transform);

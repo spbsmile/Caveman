@@ -8,31 +8,23 @@ namespace Caveman.Players
      */
     public class PlayerModelServer : PlayerModelBase
     {
-        private int weapons;
-
-        protected void Start()
-        {
-            ChangedWeapons += () => weapons = 0;
-            print("hello subscribe ChangedWeapons" + name);
-        }
-
         public override void PickupWeapon(WeaponModelBase weaponModel)
         {
-            if (weapons > weaponModel.Specification.MaxOnPLayer) return;
+            if (PlayerCore.WeaponCount > weaponModel.Config.Weight) return;
             base.PickupWeapon(weaponModel);
-            weapons++;
+            PlayerCore.WeaponCount++;
         }
 
         public override void Die()
         {
-            weapons = 0;
+            PlayerCore.WeaponCount = 0;
             base.Die();
         }
 
-        public override void Throw(Vector2 aim)
+        public override void ActivateWeapon(Vector2 aim)
         {
-            base.Throw(aim);
-            weapons--;
+            base.ActivateWeapon(aim);
+            PlayerCore.WeaponCount--;
         }
 
         public void Update()

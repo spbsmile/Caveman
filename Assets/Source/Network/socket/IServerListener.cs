@@ -5,25 +5,25 @@ namespace Caveman.Network
 {
     public interface IServerListener
     {
-        void PlayerRespawnReceived(string playerId, Vector2 point);
-        void PlayerMoveReceived(string playerId, Vector2 point);
-        void PlayerDeadReceived(string playerId);
+        void PlayerRespawnReceive(string playerId, Vector2 point);
+        void PlayerMoveReceive(string playerId, Vector2 point);
+        void PlayerDeadReceive(string playerId);
 
-        void WeaponPickReceived(string playerId, string key);
-        void WeaponUseReceived(string playerId, Vector2 aim);
-        void WeaponAddedReceived(string key, Vector2 point);
-        void WeaponRemovedReceived(string key);
+        void WeaponPickReceive(string playerId, string key);
+        void WeaponUseReceive(string playerId, Vector2 aim);
+        void WeaponAddedReceive(string key, Vector2 point);
+        void WeaponRemovedReceive(string key);
 
-        void BonusPickReceived(string playerId, string key);
-        void BonusAddedReceived(string key, Vector2 point);
-        void BonusRemovedReceived(string key, Vector2 point);
+        void BonusPickReceive(string playerId, string key);
+        void BonusAddedReceive(string key, Vector2 point);
+        void BonusRemovedReceive(string key, Vector2 point);
 
-        void GameResultReceived(JToken jToken);
-        void GameInfoReceived(JToken jToken);
-        void GameTimeReceived(float time);
+        void GameResultReceive(JToken jToken);
+        void GameInfoReceive(JToken jToken);
+        void GameTimeReceive(float time);
 
-        void LoginReceived(string playerId, string playerName);
-        void LogoutReceived(string playerId);
+        void LoginReceive(string playerId, string playerName);
+        void LogoutReceive(string playerId);
         
     }
 }

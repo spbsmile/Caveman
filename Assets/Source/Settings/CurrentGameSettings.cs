@@ -1,61 +1,60 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Caveman.Specification;
+using Caveman.Configs;
+using Caveman.Configs.Levels;
 
 namespace Caveman.Setting
 {
     public class CurrentGameSettings
     {
-        public List<BonusSpecification> TypeBonuses { get; private set; }
-        public List<WeaponSpecification> TypeWeapons { get; private set; }
-        public List<PlayerSpecification> TypePlayer { get; private set; }
+        // key - isetting name
+        public readonly Dictionary<string, PlayerConfig> PlayersConfigs = new Dictionary<string, PlayerConfig>();
+        public readonly Dictionary<string, BonusConfig> BonusesConfigs = new Dictionary<string, BonusConfig>();
+        public readonly Dictionary<string, WeaponConfig> WeaponsConfigs = new Dictionary<string, WeaponConfig>();
+        public readonly Dictionary<string, ImageConfig> ImagesConfigs = new Dictionary<string, ImageConfig>();
+        public readonly Dictionary<string, PoolsConfig> PoolsConfigs = new Dictionary<string, PoolsConfig>();
+        public readonly Dictionary<string, MapConfig> MapConfigs = new Dictionary<string, MapConfig>();
+        public readonly Dictionary<string, SingleLevelConfig> SingleLevelConfigs = new Dictionary<string, SingleLevelConfig>(); 
+        public readonly Dictionary<string, MultiplayerLevelConfig> MultiplayerLevelConfigs = new Dictionary<string, MultiplayerLevelConfig>();
 
-        public readonly Dictionary<string, PlayerSpecification> DictionaryPlayer = new Dictionary<string, PlayerSpecification>();
-        public readonly Dictionary<string, BonusSpecification> DictionaryBonuses = new Dictionary<string, BonusSpecification>();
-        public readonly Dictionary<string, WeaponSpecification> DictionaryWeapons = new Dictionary<string, WeaponSpecification>();
-
-        public static CurrentGameSettings Load()
+        private CurrentGameSettings(IEnumerable<BonusConfig> bonusesConfigs, IEnumerable<PlayerConfig> playersConfigs,
+                IEnumerable<WeaponConfig> weaponsConfigs,
+                IEnumerable<ImageConfig> imagesConfigs,
+                IEnumerable<PoolsConfig> poolsConfig, IEnumerable<MapConfig> mapConfigs,
+             IEnumerable<SingleLevelConfig> levelsSingleConfigs, IEnumerable<MultiplayerLevelConfig> levelsMultiplayerConfigs)
         {
-            var typeBonuses =
-                SettingsHandler.ParseSettingsFromFile<List<BonusSpecification>>("bonuses");
-
-            var typePlayers =
-                SettingsHandler.ParseSettingsFromFile<List<PlayerSpecification>>("players");
-
-            var typeWeapons =
-                SettingsHandler.ParseSettingsFromFile<List<WeaponSpecification>>("weapons");
-
-            return Create(typeBonuses, typePlayers, typeWeapons);
+            WriteConfig(bonusesConfigs, BonusesConfigs);
+            WriteConfig(playersConfigs, PlayersConfigs);
+            WriteConfig(weaponsConfigs, WeaponsConfigs);
+            WriteConfig(imagesConfigs, ImagesConfigs);
+            WriteConfig(poolsConfig, PoolsConfigs);
+            WriteConfig(mapConfigs, MapConfigs);
+            WriteConfig(levelsSingleConfigs, SingleLevelConfigs);
+            WriteConfig(levelsMultiplayerConfigs, MultiplayerLevelConfigs);
         }
 
-        private CurrentGameSettings(IEnumerable<BonusSpecification> typeBonuses, IEnumerable<PlayerSpecification> typePlayers,
-            IEnumerable<WeaponSpecification> typeWeapons)
+        public static
+            CurrentGameSettings Load(string bonuses, string weapons, string players, string pools,
+                string images, string map, string levelsSingle, string levelsMultiplayer)
         {
-            foreach (var typeBonus in typeBonuses)
-            {
-                DictionaryBonuses.Add(typeBonus.Name, typeBonus);
-            }
-
-            foreach (var typePlayer in typePlayers)
-            {
-                DictionaryPlayer.Add(typePlayer.Name, typePlayer);
-            }
-
-            foreach (var typeWeapon in typeWeapons)
-            {
-                DictionaryWeapons.Add(typeWeapon.Name, typeWeapon);
-            }
+            return new CurrentGameSettings(
+                SettingsHandler.ParseSettingsFromFile<List<BonusConfig>>(bonuses),
+                SettingsHandler.ParseSettingsFromFile<List<PlayerConfig>>(players),
+                SettingsHandler.ParseSettingsFromFile<List<WeaponConfig>>(weapons),
+                SettingsHandler.ParseSettingsFromFile<List<ImageConfig>>(images),
+                SettingsHandler.ParseSettingsFromFile<List<PoolsConfig>>(pools),
+                SettingsHandler.ParseSettingsFromFile<List<MapConfig>>(map),
+                SettingsHandler.ParseSettingsFromFile<List<SingleLevelConfig>>(levelsSingle),
+                SettingsHandler.ParseSettingsFromFile<List<MultiplayerLevelConfig>>(levelsMultiplayer)
+            );
         }
 
-        private static CurrentGameSettings Create(List<BonusSpecification> typeBonuses, List<PlayerSpecification> typePlayers,
-            List<WeaponSpecification> typeWeapons)
+        private void WriteConfig<T>(IEnumerable<T> source, Dictionary<string, T> targetConfig) where T : ISettings
         {
-            return new CurrentGameSettings(typeBonuses, typePlayers, typeWeapons)
+            if (source == null) return;
+            foreach (var config in source)
             {
-                TypeBonuses = typeBonuses,
-                TypePlayer = typePlayers,
-                TypeWeapons = typeWeapons
-            };
+                targetConfig.Add(config.Name, config);
+            }
         }
     }
 }

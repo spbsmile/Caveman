@@ -1,33 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using Caveman.CustomAnimation;
-using Caveman.Weapons;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Caveman.Pools
 {
     public abstract class ASupportPool<T> : MonoBehaviour where T : MonoBehaviour
     {
-        public abstract void SetPool(ObjectPool<T> item);
+        public abstract void InitializationPool(ObjectPool<T> item);
         public string Id;
     }
 
     public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour
     {
-        public Func<ObjectPool<EffectBase>> RelatedPool;
-
         private Stack<T> stack;
         private T prefab;
 
         //for multiplayer <id, item>
         private Dictionary<string, T> poolServer;
 
-        public void CreatePool(T prefab, int initialBufferSize, bool multiplayer)
+        public void Initialization(T prefab, int initialBufferSize)
         {
-            if (multiplayer)
-            {
-                poolServer = new Dictionary<string, T>();
-            }
             stack = new Stack<T>(initialBufferSize);
             this.prefab = prefab;
             GetActivedCount = initialBufferSize;
@@ -47,11 +38,7 @@ namespace Caveman.Pools
             if (item.GetComponent<ASupportPool<T>>())
             {
                 item.transform.SetParent(transform);
-                item.GetComponent<ASupportPool<T>>().SetPool(this);
-            }
-            if (RelatedPool != null && item.GetComponent<StoneModel>())
-            {
-                item.GetComponent<StoneModel>().SetPoolSplash(RelatedPool());
+                item.GetComponent<ASupportPool<T>>().InitializationPool(this);
             }
             return item;
         }
@@ -61,7 +48,7 @@ namespace Caveman.Pools
             return stack.Count > 0 ? stack.Pop() : null;
         }
 
-        public void Store(T obj)
+        public void  Store(T obj)
         {
             GetActivedCount--;
             obj.gameObject.SetActive(false);

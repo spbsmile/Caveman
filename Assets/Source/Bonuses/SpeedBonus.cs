@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using Caveman.Players;
-using Caveman.Setting;
 using UnityEngine;
 
 namespace Caveman.Bonuses
@@ -9,24 +8,24 @@ namespace Caveman.Bonuses
     {
         public void Awake()
         {
-            Specification = EnterPoint.CurrentSettings.DictionaryBonuses["speed"];
+            Config = EnterPoint.CurrentSettings.BonusesConfigs["speed"];
         }
 
-        public override void Effect(PlayerModelBase playerModel)
+        public override void Effect(PlayerModelBase model)
         {
-            if (playerModel.bonusBase != null)
+            if (model.bonusBase != null)
                 return;
-            base.Effect(playerModel);
-            preValue = playerModel.Speed;
-            playerModel.Speed = playerModel.Speed * 2;
+            base.Effect(model);
+            preValue = model.PlayerCore.Speed;
+            model.PlayerCore.Speed = model.PlayerCore.Speed * 2;
         }
 
-        protected override IEnumerator UnEffect(PlayerModelBase playerModel)
+        protected override IEnumerator UnEffect(PlayerModelBase model)
         {
-            yield return new WaitForSeconds(Settings.BonusSpeedDuration);
+            yield return new WaitForSeconds(Config.Duration);
             pool.Store(this);
-            playerModel.bonusBase = null;
-            playerModel.Speed = preValue;
+            model.bonusBase = null;
+            model.PlayerCore.Speed = preValue;
         }
     }
 }

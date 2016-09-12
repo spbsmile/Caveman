@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Caveman.UI
 {
@@ -6,7 +7,7 @@ namespace Caveman.UI
     {
         public void LoadMainMenu()
         {
-            Application.LoadLevel(0);
+            SceneManager.LoadScene(0);
         }
     }
 }

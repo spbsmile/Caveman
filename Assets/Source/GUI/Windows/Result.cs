@@ -11,22 +11,15 @@ namespace Caveman.UI.Windows
         public Transform kills;
         public Transform deaths;
 
-        protected PlayerPool poolPlayers;
-
-        public void SetPlayerPool(PlayerPool pool)
-        {
-            poolPlayers = pool;
-        }
-
         protected  virtual IEnumerator DisplayResult()
         {
-            var players = poolPlayers.GetCurrentPlayers();
+            var players = PlayerPool.instance.GetCurrentPlayers();
             var lineIndex = 0;
             foreach (var playerModelBase in players)
             {
-                Write(playerModelBase.Player.Name, names, lineIndex);
-                Write(playerModelBase.Player.Deaths.ToString(), deaths, lineIndex);
-                Write(playerModelBase.Player.Kills.ToString(), kills, lineIndex);
+                Write(playerModelBase.PlayerCore.Name, names, lineIndex);
+                Write(playerModelBase.PlayerCore.DeathCount.ToString(), deaths, lineIndex);
+                Write(playerModelBase.PlayerCore.KillCount.ToString(), kills, lineIndex);
                 lineIndex++;
             }
             yield return new WaitForSeconds(1f);

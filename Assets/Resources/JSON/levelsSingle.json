@@ -1,0 +1,15 @@
+[
+  {
+    "name":"sample",
+    "botsCount": 3,
+    "roundTime": 60,    
+    "botsName": [
+        "bob",
+        "IkillU",
+        "skaska",
+        "loser",
+        "yohoho",
+        "shpuntik"
+    ]
+  }
+]

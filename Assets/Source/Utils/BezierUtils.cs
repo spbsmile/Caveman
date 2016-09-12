@@ -10,7 +10,7 @@ namespace Caveman.Utils
          */
         public static Vector2 Bezier2(Vector2 Start, Vector2 Control, Vector2 End , float t)
         {
-            return (((1-t)*(1-t)) * Start) + (2 * t * (1 - t) * Control) + ((t * t) * End);
+            return (1-t)*(1-t) * Start + 2 * t * (1 - t) * Control + t * t * End;
         }
 
         /**
