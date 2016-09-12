@@ -81,12 +81,7 @@ namespace Caveman.Players
             weaponModel.Take();
         }
 
-        public virtual void StartThrowWeaponOnCooldown()
-        {
-           // yield return null;
-        }
-
-        public virtual void ThrowWeapon(Vector2 aim)
+        public virtual void ActivateWeapon(Vector2 aim)
         {
             playerAnimation.Throw();
             currentPoolWeapons.New().SetMotion(PlayerCore, transform.position, aim);

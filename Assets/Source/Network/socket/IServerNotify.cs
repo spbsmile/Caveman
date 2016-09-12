@@ -5,7 +5,7 @@ namespace Caveman.Network
     public interface IServerNotify
     {
         void PickWeaponSend(string weaponId, int type);
-        void UseWeaponSend(Vector2 pointClient, int type);
+        void ActivateWeaponSend(Vector2 pointClient, int type);
         void PickBonusSend(string bonusId, int type);
 
         void RespawnSend(Vector2 pointClient);

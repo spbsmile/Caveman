@@ -18,7 +18,7 @@ namespace Caveman.Network
             });
         }
 
-        public void UseWeaponSend(Vector2 pointClient, int type)
+        public void ActivateWeaponSend(Vector2 pointClient, int type)
         {
             var pointServer = GetServerPoint(pointClient);
             SendMessageToSocket(new JObject

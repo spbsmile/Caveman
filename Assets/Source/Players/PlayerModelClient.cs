@@ -55,9 +55,9 @@ namespace Caveman.Players
             }
         }
 
-        public override void StartThrowWeaponOnCooldown()
+        public void StartUseWeapon()
         {
-            StartCoroutine(ThrowWeaponOnCooldown());
+            StartCoroutine(PerformWeaponAction());
         }
 
         public override IEnumerator Respawn(Vector2 position)
@@ -80,25 +80,25 @@ namespace Caveman.Players
 
         public override void PickupWeapon(WeaponModelBase weaponModel)
         {
-            if (!IsStrongEnoughTakeWeapon(weaponModel.Config.Weight)) return;
+            if (!IsEnoughStrength(weaponModel.Config.Weight)) return;
             base.PickupWeapon(weaponModel);
             PlayerCore.WeaponCount += weaponModel.Config.CountItems;
             if (multiplayer) serverNotify.PickWeaponSend(weaponModel.Id, (int)weaponModel.Config.Type);
         }
 
-        public override void ThrowWeapon(Vector2 aim)
+        public override void ActivateWeapon(Vector2 aim)
         {
-            if (multiplayer) serverNotify.UseWeaponSend(aim, (int) WeaponConfig.Type);
-            base.ThrowWeapon(aim);
+            if (multiplayer) serverNotify.ActivateWeaponSend(aim, (int) WeaponConfig.Type);
+            base.ActivateWeapon(aim);
             PlayerCore.WeaponCount--;
         }
 
-        protected bool IsStrongEnoughTakeWeapon(int weightWeapon)
+        protected bool IsEnoughStrength(int weight)
         {
-            return PlayerCore.Config.Strength > PlayerCore.WeaponCount*weightWeapon;
+            return PlayerCore.Config.Strength > PlayerCore.WeaponCount*weight;
         }
 
-        private IEnumerator ThrowWeaponOnCooldown()
+        private IEnumerator PerformWeaponAction()
         {
             yield return new WaitForSeconds(WeaponConfig.Cooldown);
             if (PlayerCore.WeaponCount > 0)
@@ -106,10 +106,10 @@ namespace Caveman.Players
                 var victim = playersManager.FindClosestPlayer(this);
                 if (victim != null)
                 {
-                    ThrowWeapon(victim.transform.position);
+                    ActivateWeapon(victim.transform.position);
                 }
             }
-            StartCoroutine(ThrowWeaponOnCooldown());
+            StartCoroutine(PerformWeaponAction());
         }
     }
 }

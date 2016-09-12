@@ -32,7 +32,8 @@ namespace Caveman.Players
             var players = PlayerPool.instance.GetCurrentPlayers();
             foreach (var player in players)
             {
-                player.StartThrowWeaponOnCooldown();
+                var playerClient = (PlayerModelClient) player;
+                playerClient.StartUseWeapon();
             }
         }
 
@@ -82,7 +83,5 @@ namespace Caveman.Players
 		    }
 		    return result;
 	    }
-
-        
     }
 }

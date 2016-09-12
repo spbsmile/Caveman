@@ -52,7 +52,7 @@ namespace Caveman.Network
 
         public void WeaponUseReceive(string playerId, Vector2 aim)
         {
-            PlayerPool.instance[playerId].ThrowWeapon(aim);
+            PlayerPool.instance[playerId].ActivateWeapon(aim);
         }
 
         public void BonusAddedReceive(string key, Vector2 point)

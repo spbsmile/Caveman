@@ -68,9 +68,8 @@ namespace Caveman
                     playersManager.CreatePlayerModel(playerCore,
                         true, false, Instantiate(prefabAiPlayer));
                 }
+                playersManager.StartThrowWeaponOnCooldownOfPlayers();
             }
-
-          playersManager.StartThrowWeaponOnCooldownOfPlayers();
         }
     }
 }
