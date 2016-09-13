@@ -1,6 +1,7 @@
 ﻿// hack the planet!
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.ProjectWindowCallback;
 using System;
 using System.IO;
 using System.Linq;
@@ -163,7 +164,7 @@ public class FSharpKit : EditorWindow {
     }
     
     [MenuItem ("Assets/Create/F# Script")]
-    public static void Create () {
+    public static void Create() {
         //File.Create("Assets/Script.fs").Dispose();
         var content = @"namespace FSharp
 open UnityEngine
@@ -174,14 +175,18 @@ type NewBehaviourScript() =
         File.WriteAllText(AssetDatabase.GetAssetPath(Selection.activeObject) + "/NewBehaviourScript.fs", content);
         AssetDatabase.Refresh();
 
-        // TODO create it in the selected folder with name editing:
-        //var DoCreateScriptAsset = Type.GetType("UnityEditor.ProjectWindowCallback.DoCreateScriptAsset, UnityEditor");    
-        //ProjectWindowUtil.StartNameEditingIfProjectWindowExists(
-        //    0,
-        //    ScriptableObject.CreateInstance(DoCreateScriptAsset) as UnityEditor.ProjectWindowCallback.EndNameEditAction,
-        //    "Script.fs",
-        //    null,
-        //    null);
+        // create file and start editing
+        // (need to create NewScriptTemplate.fs.txt first!)
+        // TODO rename created class to created file name
+        /*var DoCreateScriptAsset = Type.GetType("UnityEditor.ProjectWindowCallback.DoCreateScriptAsset, UnityEditor");
+        ProjectWindowUtil.StartNameEditingIfProjectWindowExists(
+            0,
+            ScriptableObject.CreateInstance(DoCreateScriptAsset) as UnityEditor.ProjectWindowCallback.EndNameEditAction,
+            AssetDatabase.GetAssetPath(Selection.activeObject) + "/NewBehaviourScript.fs", // filepath
+            null, // icon
+            "Assets/F#kit/Editor/NewScriptTemplate.fs.txt"); // template
+
+        Debug.Log(AssetDatabase.GetAssetPath(Selection.activeObject));*/
     }
 
     public static void Build() {

@@ -12,7 +12,12 @@ public class FSharpBuildOSX {
     public static string monoPath = "/Library/Frameworks/Mono.framework/";
     public static string monoUrl = "http://download.mono-project.com/archive/4.2.3/macos-10-x86/MonoFramework-MDK-4.2.3.4.macos10.xamarin.x86.pkg";
     
+    // UnityEngine.dll path seems to have changed in 5.4.
+    #if UNITY_5_4_OR_NEWER
+    public static string unityenginedllPath = EditorApplication.applicationPath + "/Contents/Managed/UnityEngine.dll";
+    #else
     public static string unityenginedllPath = EditorApplication.applicationPath + "/Contents/Frameworks/Managed/UnityEngine.dll";
+    #endif
 
     static void CreateXamarinProject(string[] scripts) {
         // note: FSharpProject.userprefs not necessary
