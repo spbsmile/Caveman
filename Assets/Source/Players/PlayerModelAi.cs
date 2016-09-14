@@ -11,8 +11,8 @@ namespace Caveman.Players
 
         protected void Start()
         {
-            GetComponent<SpriteRenderer>().color = new Color32((byte) r.Next(255), (byte) r.Next(255),
-                (byte) r.Next(255), 255);
+            GetComponent<SpriteRenderer>().color = new Color32((byte) rand.Next(255), (byte) rand.Next(255),
+                (byte) rand.Next(255), 255);
         }
 
         public void Update()
@@ -61,7 +61,7 @@ namespace Caveman.Players
 
         private Vector2 RandomPosition
         {
-            get { return new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)); }
+            get { return new Vector2(rand.Next(Settings.WidthMap), rand.Next(Settings.HeightMap)); }
         }
     }
 }

@@ -19,13 +19,10 @@ namespace Caveman.Players
      */
     public class PlayerModelBase : MonoBehaviour
     {
-        public Func<WeaponConfig.Types, ObjectPool<WeaponModelBase>> ChangedWeaponsPool;        
+        public Func<WeaponConfig.Types, ObjectPool<WeaponModelBase>> WeaponPoolChange;        
 
         [HideInInspector] public BonusBase bonusBase;
         [HideInInspector] public SpriteRenderer spriteRenderer;
-
-        protected Vector2 moveUnit;
-        protected Random r;
 
         //todo one parameter
         protected IServerNotify serverNotify;
@@ -35,11 +32,13 @@ namespace Caveman.Players
         protected internal bool invulnerability;
         protected PlayerAnimation playerAnimation;
 	    protected PlayersManager playersManager;
-	    private ObjectPool<WeaponModelBase> currentPoolWeapons;
+        protected Vector2 moveUnit;
+        protected Random rand;
+        private ObjectPool<WeaponModelBase> currentPoolWeapons;
 
         public PlayerCore PlayerCore { private set; get; }
 
-	    private PlayerPool playerPool;
+	    private PlayerPool pool;
 
 	    protected virtual void Awake()
         {
@@ -48,14 +47,14 @@ namespace Caveman.Players
             WeaponConfig = EnterPoint.CurrentSettings.WeaponsConfigs["stone"];
         }
 
-        public void Init(PlayerCore playerCore, Random random, IServerNotify serverNotify, PlayersManager playersManager, PlayerPool playerPool)
+        public void Initialization(PlayerCore playerCore, Random rand, IServerNotify serverNotify, PlayersManager playersManager, PlayerPool pool)
         {
             this.serverNotify = serverNotify;
 	        this.playersManager = playersManager;
-	        this.playerPool = playerPool;
-	        if (serverNotify != null) multiplayer = true;
+	        this.pool = pool;
+            this.rand = rand;
+            if (serverNotify != null) multiplayer = true;
             PlayerCore = playerCore;
-            r = random;
         }
         
         public virtual void PickupBonus(BonusBase bonus)
@@ -66,14 +65,14 @@ namespace Caveman.Players
         public virtual void Die()
         {
 	        PlayerCore.IsAlive = false;
-            playerPool.Store(this);
+            pool.Store(this);
         }
 
         public virtual void PickupWeapon(WeaponModelBase weaponModel)
         {
             if (currentPoolWeapons == null || weaponModel.Config.Type != WeaponConfig.Type)
             {
-                currentPoolWeapons = ChangedWeaponsPool(weaponModel.Config.Type);
+                currentPoolWeapons = WeaponPoolChange(weaponModel.Config.Type);
                 WeaponConfig = weaponModel.Config;
                 PlayerCore.WeaponCount = 0;
             }
@@ -97,7 +96,7 @@ namespace Caveman.Players
 
         public virtual void RespawnInstantly(Vector2 position)
         {
-            playerPool.New(PlayerCore.Id).transform.position = position;
+            pool.New(PlayerCore.Id).transform.position = position;
             invulnerability = true;
             StartCoroutine(ProggressInvulnerability(PlayerCore.Config.InvulnerabilityDuration));
         }

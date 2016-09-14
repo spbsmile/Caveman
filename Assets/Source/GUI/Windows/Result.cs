@@ -13,7 +13,7 @@ namespace Caveman.UI.Windows
 
         protected  virtual IEnumerator DisplayResult()
         {
-            var players = PlayerPool.instance.GetCurrentPlayers();
+            var players = PlayerPool.instance.GetCurrentPlayerModels();
             var lineIndex = 0;
             foreach (var playerModelBase in players)
             {
