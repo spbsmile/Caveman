@@ -41,7 +41,7 @@ namespace Caveman.Players
                         weapon.Destroy();
                         StopAllCoroutines();
                         Die();
-                        StartCoroutine(Respawn(new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap))));
+                        StartCoroutine(Respawn(new Vector2(rand.Next(Settings.WidthMap), rand.Next(Settings.HeightMap))));
                     }
                 }
             }

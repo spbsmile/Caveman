@@ -108,7 +108,7 @@ namespace Caveman.Pools
         /// <summary>
         /// When player pickup weapon another type 
         /// </summary>
-        public ObjectPool<WeaponModelBase> SwitchPoolWeapons(WeaponConfig.Types type)
+        public ObjectPool<WeaponModelBase> ChangeWeaponPool(WeaponConfig.Types type)
         {
             switch (type)
             {

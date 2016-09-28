@@ -19,8 +19,8 @@ namespace Caveman.Level
         public void Start()
         {
             section = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 10));
-            criticalX = (Settings.WidthMap - section.x);
-            criticalY = (Settings.HeightMap - section.y);
+            criticalX = Settings.WidthMap - section.x;
+            criticalY = Settings.HeightMap - section.y;
 
             if (target != null)
             {

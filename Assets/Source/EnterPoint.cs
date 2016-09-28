@@ -14,21 +14,21 @@ namespace Caveman
 {
     public class EnterPoint : MonoBehaviour
     {
+        // this fields initialization from scene
         public Transform prefabHumanPlayer;
         public Transform prefabAiPlayer;
         public MapModel mapModel;
-
-        public string currentLevelName;
-
         public PoolsManager poolsManager;
         public SmoothCamera smoothCamera;
+        public PlayerPool playerPool;
+        public string currentLevelName;
 
         public static CurrentGameSettings CurrentSettings { get; private set; }
 
         protected IServerNotify serverNotify;
         protected PlayersManager playersManager;
 
-        // for server message handler
+        // caсhe fields for server message handler
         protected ObjectPool<WeaponModelBase> poolStones;
         protected ObjectPool<BonusBase> poolBonusesSpeed;
 
@@ -54,7 +54,7 @@ namespace Caveman
             var humanCore = new PlayerCore(PlayerPrefs.GetString(AccountManager.KeyNickname),
                 SystemInfo.deviceUniqueIdentifier, CurrentSettings.PlayersConfigs["sample"]);
             BattleGui.instance.SubscribeOnEvents(humanCore);
-            playersManager = new PlayersManager(serverNotify, smoothCamera, rand);
+            playersManager = new PlayersManager(serverNotify, smoothCamera, rand, playerPool);
             playersManager.CreatePlayerModel(humanCore, false, false, Instantiate(prefabHumanPlayer));
 
             if (!isMultiplayer)
@@ -68,7 +68,7 @@ namespace Caveman
                     playersManager.CreatePlayerModel(playerCore,
                         true, false, Instantiate(prefabAiPlayer));
                 }
-                playersManager.StartThrowWeaponOnCooldownOfPlayers();
+                playersManager.StartUseWeapon();
             }
         }
     }

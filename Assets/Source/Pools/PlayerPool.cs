@@ -41,7 +41,7 @@ namespace Caveman.Pools
             pool.Remove(playerId);
         }
 
-        public IEnumerable<PlayerModelBase> GetCurrentPlayers()
+        public IEnumerable<PlayerModelBase> GetCurrentPlayerModels()
         {
             return pool.Values;
         }
