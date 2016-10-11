@@ -7,27 +7,36 @@ namespace Caveman.Players
 {
     public class PlayerModelHuman : PlayerModelClient
     {
+        private bool isMoving;
+
         protected override void Awake()
         {
             base.Awake();
             BattleGui.instance.movementJoystick.ControllerMovedEvent += MovePlayer;
-            BattleGui.instance.movementJoystick.FingerLiftedEvent += controller => StopMove();
+            BattleGui.instance.movementJoystick.FingerLiftedEvent += controller => HandlerOnStopMove();
         }
 
         protected void Start()
         {
-            if (multiplayer) StartCoroutine(SendMove());
+            if (multiplayer && !Settings.DisableSendMove) StartCoroutine(SendMove());
+        }
+
+        private void HandlerOnStopMove()
+        {
+            StopMove();
+            isMoving = false;
         }
 
         private IEnumerator SendMove()
         {
             yield return new WaitForSeconds(0.3f);
-            serverNotify.MoveSend(transform.position);
+            if (isMoving) serverNotify.MoveSend(transform.position);            
             StartCoroutine(SendMove());
         }
 
         private void MovePlayer(Vector3 direction, CNAbstractController arg2)
         {
+            if (!isMoving) isMoving = true;
             moveUnit = direction*PlayerCore.Speed;
             Move();
         }
@@ -56,5 +65,12 @@ namespace Caveman.Players
 
             playerAnimation.SetMoving(moveUnit.y < 0, moveUnit.x > 0);
         }
+
+        // todo OnEnable must see last commits
+        //public override void OnEnable()
+        //{
+        //    base.OnEnable();
+        //    if (multiplayer && !Settings.DisableSendMove) StartCoroutine(SendMove());
+        //}
     }
 }
