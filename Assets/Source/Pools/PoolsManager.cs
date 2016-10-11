@@ -11,7 +11,7 @@ namespace Caveman.Pools
 {
     public class PoolsManager : MonoBehaviour
     {
-        public static PoolsManager instance;                
+        public static PoolsManager instance;
 
         public Transform containerStones;
         public Transform containerSplashStones;
@@ -63,8 +63,8 @@ namespace Caveman.Pools
         }
 
         private T Inst<T>(string prefabPath) where T : MonoBehaviour
-        {           
-            return Instantiate(Resources.Load(prefabPath, typeof (T))) as T;
+        {
+            return Instantiate(Resources.Load(prefabPath, typeof(T))) as T;
         }
 
         private ObjectPool<T> PreparePool<T>(Transform container, T prefab, int initialBufferSize, Action<GameObject, ObjectPool<T>> init, bool isMultiplayer)
@@ -72,17 +72,23 @@ namespace Caveman.Pools
         {
             var pool = container.GetComponent<ObjectPool<T>>();
             pool.Initialization(prefab, initialBufferSize, isMultiplayer);
+
             for (var i = 0; i < initialBufferSize; i++)
             {
-                var item = Instantiate(prefab);
-                if (init != null)
-                {
-                    init(item.gameObject, pool);
-                }
-                item.transform.SetParent(container.transform);
-                pool.Store(item);
+                AddItem(pool, init, container, Instantiate(prefab));
             }
+            AddItem(pool, init, container, prefab);
             return pool;
+        }
+
+        private void AddItem<T>(ObjectPool<T> pool, Action<GameObject, ObjectPool<T>> init, Transform container, T item) where T : MonoBehaviour
+        {
+            if (init != null)
+            {
+                init(item.gameObject, pool);
+            }
+            item.transform.SetParent(container.transform);
+            pool.Store(item);
         }
 
         /// <summary>
