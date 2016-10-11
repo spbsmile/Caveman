@@ -37,7 +37,7 @@ namespace Caveman.Pools
             }
         }
 
-        public void PrepareAllPools(CurrentGameSettings settings)
+        public void InitializationPools(CurrentGameSettings settings, bool isMultiplayer)
         {
             var poolsConfig = settings.PoolsConfigs["sample"];
 
@@ -48,12 +48,12 @@ namespace Caveman.Pools
             var skullsConfig = settings.WeaponsConfigs["skulls"];
             var bonusSpeedConfig = settings.BonusesConfigs["speed"];
 
-            ImagesDeath = PreparePool(containerImagesDeath, Inst<ImageBase>(deathConfig.PrefabPath), poolsConfig.ImagesOrdinary, null);
-            SplashesStone = PreparePool(containerSplashStones, Inst<ImageBase>(splahesConfig.PrefabPath), poolsConfig.ImagesPopular, null);
-            Skulls = PreparePool(containerSkulls, Inst<WeaponModelBase>(skullsConfig.PrefabPath), poolsConfig.WeaponsOrdinary, InitializationPoolAxe);
-            Stones = PreparePool(containerStones, Inst<WeaponModelBase>(stonesConfig.PrefabPath), poolsConfig.WeaponsPopular, InitializationPoolStone);
+            ImagesDeath = PreparePool(containerImagesDeath, Inst<ImageBase>(deathConfig.PrefabPath), poolsConfig.ImagesOrdinary, null, isMultiplayer);
+            SplashesStone = PreparePool(containerSplashStones, Inst<ImageBase>(splahesConfig.PrefabPath), poolsConfig.ImagesPopular, null, isMultiplayer);
+            Skulls = PreparePool(containerSkulls, Inst<WeaponModelBase>(skullsConfig.PrefabPath), poolsConfig.WeaponsOrdinary, InitializationPoolAxe, isMultiplayer);
+            Stones = PreparePool(containerStones, Inst<WeaponModelBase>(stonesConfig.PrefabPath), poolsConfig.WeaponsPopular, InitializationPoolStone, isMultiplayer);
             //Axes = PreparePool(Inst<WeaponModelBase>(axesConfig.PrefabPath), poolsConfig.BonusesOrdinary);
-            BonusesSpeed = PreparePool(containerBonusesSpeed, Inst<BonusBase>(bonusSpeedConfig.PrefabPath), poolsConfig.BonusesOrdinary, InitializationPoolBonus);
+            BonusesSpeed = PreparePool(containerBonusesSpeed, Inst<BonusBase>(bonusSpeedConfig.PrefabPath), poolsConfig.BonusesOrdinary, InitializationPoolBonus, isMultiplayer);
 
             Pools.Add(deathConfig.PrefabPath, ImagesDeath);
             Pools.Add(splahesConfig.PrefabPath, SplashesStone);
@@ -67,11 +67,11 @@ namespace Caveman.Pools
             return Instantiate(Resources.Load(prefabPath, typeof (T))) as T;
         }
 
-        private ObjectPool<T> PreparePool<T>(Transform container, T prefab, int initialBufferSize, Action<GameObject, ObjectPool<T>> init)
+        private ObjectPool<T> PreparePool<T>(Transform container, T prefab, int initialBufferSize, Action<GameObject, ObjectPool<T>> init, bool isMultiplayer)
             where T : MonoBehaviour
         {
             var pool = container.GetComponent<ObjectPool<T>>();
-            pool.Initialization(prefab, initialBufferSize);
+            pool.Initialization(prefab, initialBufferSize, isMultiplayer);
             for (var i = 0; i < initialBufferSize; i++)
             {
                 var item = Instantiate(prefab);

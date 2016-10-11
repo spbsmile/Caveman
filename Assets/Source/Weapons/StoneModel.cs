@@ -17,7 +17,7 @@ namespace Caveman.Weapons
 
         public void Update()
         {
-            MotionUpdate();
+            MoveUpdate();
         }
 
         public override void Destroy()
@@ -41,7 +41,7 @@ namespace Caveman.Weapons
             poolStonesSplash = objectPool;
         }
 
-        protected override void MotionUpdate()
+        protected override void MoveUpdate()
         {
             if (Vector2.SqrMagnitude(moveUnit) > UnityExtensions.ThresholdPosition)
             {

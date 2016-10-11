@@ -45,7 +45,7 @@ namespace Caveman
             rand = new Random();
             var isMultiplayer = serverNotify != null;
 
-            poolsManager.PrepareAllPools(CurrentSettings);
+            poolsManager.InitializationPools(CurrentSettings, isMultiplayer);
             poolStones = poolsManager.Stones;
             poolBonusesSpeed = poolsManager.BonusesSpeed;
 

@@ -10,7 +10,7 @@
         // TODO разные кривые траекторий
         public void Update()
         {
-            MotionUpdate();
+            MoveUpdate();
         }
     }
 }

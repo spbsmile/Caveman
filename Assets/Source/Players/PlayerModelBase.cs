@@ -83,7 +83,7 @@ namespace Caveman.Players
         public virtual void ActivateWeapon(Vector2 aim)
         {
             playerAnimation.Throw();
-            currentPoolWeapons.New().SetMotion(PlayerCore, transform.position, aim);
+            currentPoolWeapons.New().InitializationMove(PlayerCore, transform.position, aim);
         }
 
         public virtual IEnumerator Respawn(Vector2 position)

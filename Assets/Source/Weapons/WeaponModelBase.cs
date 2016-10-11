@@ -42,7 +42,7 @@ namespace Caveman.Weapons
             transform.position = position;
         }
 
-        public void SetMotion(PlayerCore playerCore, Vector3 start, Vector2 aim)
+        public void InitializationMove(PlayerCore playerCore, Vector3 start, Vector2 aim)
         {
             Owner = playerCore;
             startPosition = start;
@@ -57,7 +57,7 @@ namespace Caveman.Weapons
             pool = weaponPool;
         }
 
-        protected virtual void MotionUpdate()
+        protected virtual void MoveUpdate()
         {
             if (Vector2.SqrMagnitude(moveUnit) > UnityExtensions.ThresholdPosition)
             {
