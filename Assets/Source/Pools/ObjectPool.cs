@@ -11,14 +11,16 @@ namespace Caveman.Pools
 
     public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour
     {
-        private Stack<T> stack;
+        private Stack<T> stack; 
         private T prefab;
 
         //for multiplayer <id, item>
         private Dictionary<string, T> poolServer;
 
-        public void Initialization(T prefab, int initialBufferSize)
+        public void Initialization(T prefab, int initialBufferSize, bool isMultiplayer)
         {
+            if (isMultiplayer) poolServer = new Dictionary<string, T>();
+
             stack = new Stack<T>(initialBufferSize);
             this.prefab = prefab;
             GetActivedCount = initialBufferSize;
