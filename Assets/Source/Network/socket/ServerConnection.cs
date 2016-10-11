@@ -2,22 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using Caveman.Setting;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Caveman.Network
 {
     public class ServerConnection
     {
-        //"127.0.0.1";
-        //private const string Ip = "188.166.37.212";
+        //"127.0.0.1"; 
+        private const string Ip = "185.117.155.113";
         private const int Port = 8080;
 
-        private static ServerConnection instance;
-        private readonly Queue<ServerMessage> messageQueue = new Queue<ServerMessage>();
+        private readonly Queue<ServerMessageManager> messageQueue = new Queue<ServerMessageManager>();
 
         private TcpClient client;
         private float lastTimeUpdated;
@@ -26,7 +25,7 @@ namespace Caveman.Network
         private StreamWriter writer;
         private string clientId;
 
-        public ServerConnection()
+        protected ServerConnection()
         {
             lastTimeUpdated = Time.timeSinceLevelLoad;
         }
@@ -70,10 +69,7 @@ namespace Caveman.Network
             {
                 try
                 {
-                    var ipServer = PlayerPrefs.HasKey(Settings.KeyIpServer)
-                        ? PlayerPrefs.GetString(Settings.KeyIpServer)
-                        : Settings.IP_SERVER;
-                    client = new TcpClient(ipServer, Port);
+                    client = new TcpClient(Ip, Port);
                     var stream = client.GetStream();
 
                     reader = new StreamReader(stream, Encoding.UTF8);
@@ -96,60 +92,27 @@ namespace Caveman.Network
                 client.Close();
                 client = null;
                 reader.Close();
-                reader = null;
+                reader = null; 
                 writer.Close();
                 writer = null;
             }
         }
 
-        public void SendUseWeapon(Vector2 point, int weaponType)
-        {
-            SendMessageToSocket(ClientMessage.UseWeapon(point));
-        }
-
-        public void SendPickWeapon(string weaponId, int weaponType)
-        {
-            SendMessageToSocket(ClientMessage.PickWeapon(weaponId));
-        }
-
-        public void SendPickBonus(string bonusId, int bonusType)
-        {
-            SendMessageToSocket(ClientMessage.PickBonus(bonusId));
-        }
-
-        public void SendRespawn(Vector2 point)
-        {
-            SendMessageToSocket(ClientMessage.Respawn(point));
-        }
-
-        public void SendPlayerDead()
-        {
-            SendMessageToSocket(ClientMessage.PlayerDead());
-        }
-
-        public void SendPlayerDeadTest(string killerId)
-        {
-            SendMessageToSocket(ClientMessage.PlayerDeadTest(killerId));
-        }
-
-        public void SendLogout()
-        {
-            SendMessageToSocket(ClientMessage.Logout());
-        }
-
-        public void SendMove(Vector2 point)
-        {
-            SendMessageToSocket(ClientMessage.Move(point));
-        }
-
         private void SendTick()
         {
-            SendMessageToSocket(ClientMessage.TickMessage());
+            SendMessageToSocket(new JObject
+            {
+                {ServerParams.ActionType, ServerParams.PingAction}
+            });
         }
 
         private void SendLogin(string userName)
         {
-            SendMessageToSocket(ClientMessage.LoginMessage(userName));
+            SendMessageToSocket(new JObject
+            {
+                {ServerParams.ActionType, ServerParams.LoginAction},
+                {ServerParams.UserName, userName}
+            });
         }
 
         private void SendStringToSocket(string str)
@@ -161,13 +124,16 @@ namespace Caveman.Network
             }
         }
 
-        private void SendMessageToSocket(ClientMessage msg)
+        protected void SendMessageToSocket(JObject jObject)
         {
-            if (msg != null)
-            {
-                CompleteClientMessage(msg);
-                SendStringToSocket(msg.Content);
-            }
+            if (jObject == null) return;
+            jObject.Add(ServerParams.UserId, clientId);
+            SendStringToSocket(ParseContentForServer(jObject));
+        }
+
+        private string ParseContentForServer(JObject jObject)
+        {
+            return jObject != null ? "#" + jObject + "#" : "";
         }
 
         /**
@@ -190,7 +156,7 @@ namespace Caveman.Network
                             if (currentChar != '#')
                                 result += currentChar;
                         }
-                        AddItemToQueue(new ServerMessage(result));
+                        AddItemToQueue(new ServerMessageManager(result));
                     }
                     catch (Exception e)
                     {
@@ -207,7 +173,7 @@ namespace Caveman.Network
             networkThread.Start();
         }
 
-        private void AddItemToQueue(ServerMessage item)
+        private void AddItemToQueue(ServerMessageManager item)
         {
             lock (messageQueue)
             {
@@ -215,18 +181,12 @@ namespace Caveman.Network
             }
         }
 
-        private ServerMessage GetItemFromQueue()
+        private ServerMessageManager GetItemFromQueue()
         {
             lock (messageQueue)
             {
                 return messageQueue.Count > 0 ? messageQueue.Dequeue() : null;
             }
-        }
-
-        // invoke on each   send message
-        private void CompleteClientMessage(ClientMessage msg)
-        {
-            msg.AddParam(ServerParams.UserId, clientId);
         }
     }
 }

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using Caveman.Bonuses;
 using Caveman.CustomAnimation;
 using Caveman.Network;
-using Caveman.Specification;
+using Caveman.Pools;
+using Caveman.Configs;
 using Caveman.Utils;
 using Caveman.Weapons;
 using UnityEngine;
@@ -13,66 +13,50 @@ using Random = System.Random;
 namespace Caveman.Players
 {
     /*
-     * Player concept consists of two types: Player and PlayerModelBase
+     * Player concept consists of two types: PlayerCore and PlayerModelBase
      * Type PlayerModelBase - Behavior 
-     * Type Player - contains all parameters/stats.
+     * Type PlayerCore - contains all parameters/stats.
      */
     public class PlayerModelBase : MonoBehaviour
     {
-        public Action<Vector2> Death;
-        public Action RespawnGuiDisabled;
-        // todo two some event. 
-        public Func<WeaponSpecification.Types, ObjectPool<WeaponModelBase>> ChangedWeaponsPool;
-        protected Action ChangedWeapons;
+        public Func<WeaponConfig.Types, ObjectPool<WeaponModelBase>> WeaponPoolChange;        
 
         [HideInInspector] public BonusBase bonusBase;
         [HideInInspector] public SpriteRenderer spriteRenderer;
-        [HideInInspector] public bool firstRespawn = true;
-        [HideInInspector] public PlayerSpecification specification;
-
-        protected Vector2 target;
-        protected Vector2 delta;
-        protected Random r;
 
         //todo one parameter
-        protected ServerConnection serverConnection;
+        protected IServerNotify serverNotify;
         protected bool multiplayer;
         
-        protected WeaponSpecification weaponSpecification;
+        protected WeaponConfig WeaponConfig;
         protected internal bool invulnerability;
         protected PlayerAnimation playerAnimation;
-        protected List<PlayerModelBase> players;
+	    protected PlayersManager playersManager;
+        protected Vector2 moveUnit;
+        protected Random rand;
+        private ObjectPool<WeaponModelBase> currentPoolWeapons;
 
-        private PlayerPool poolPlayers;
-        private ObjectPool<WeaponModelBase> poolWeapons;
+        public PlayerCore PlayerCore { private set; get; }
 
-        public float Speed { get; set; }
-        public Player Player { private set; get; }
+	    private PlayerPool pool;
 
-        protected virtual void Awake()
+	    protected virtual void Awake()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
             playerAnimation = new PlayerAnimation(GetComponent<Animator>());
-            specification = EnterPoint.CurrentSettings.DictionaryPlayer["sample"];
-            weaponSpecification = EnterPoint.CurrentSettings.DictionaryWeapons["stone"];
-            Speed = specification.Speed;
+            WeaponConfig = EnterPoint.CurrentSettings.WeaponsConfigs["stone"];
         }
 
-        public void Init(Player player, Random random, PlayerPool pool, ServerConnection serverConnection)
+        public void Initialization(PlayerCore playerCore, Random rand, IServerNotify serverNotify, PlayersManager playersManager, PlayerPool pool)
         {
-            this.serverConnection = serverConnection;
-            if (serverConnection != null) multiplayer = true;
-            name = player.Name;
-            transform.GetChild(0).GetComponent<TextMesh>().text = name;
-            Player = player;
-            poolPlayers = pool;
-            players = new List<PlayerModelBase>();
-            players.AddRange(poolPlayers.GetCurrentPlayers());
-            poolPlayers.AddedPlayer += @base => players.Add(@base);
-            poolPlayers.RemovePlayer += @base => players.Remove(@base);
-            r = random;
+            this.serverNotify = serverNotify;
+	        this.playersManager = playersManager;
+	        this.pool = pool;
+            this.rand = rand;
+            if (serverNotify != null) multiplayer = true;
+            PlayerCore = playerCore;
         }
-
+        
         public virtual void PickupBonus(BonusBase bonus)
         {
             bonus.Effect(this);
@@ -80,56 +64,49 @@ namespace Caveman.Players
 
         public virtual void Die()
         {
-            Death(transform.position);
-            poolPlayers.Store(this);
+	        PlayerCore.IsAlive = false;
+            pool.Store(this);
         }
 
         public virtual void PickupWeapon(WeaponModelBase weaponModel)
         {
-            if (poolWeapons == null || weaponModel.Specification.Type != weaponSpecification.Type)
+            if (currentPoolWeapons == null || weaponModel.Config.Type != WeaponConfig.Type)
             {
-                poolWeapons = ChangedWeaponsPool(weaponModel.Specification.Type);
-                weaponSpecification = weaponModel.Specification;
-                if (ChangedWeapons != null)
-                {
-                    ChangedWeapons();    
-                }
-                else
-                {
-                    print("ChangedWeapons null" + name);
-                }
+                currentPoolWeapons = WeaponPoolChange(weaponModel.Config.Type);
+                WeaponConfig = weaponModel.Config;
+                PlayerCore.WeaponCount = 0;
             }
             playerAnimation.Pickup();
             weaponModel.Take();
         }
 
-        public virtual void Throw(Vector2 aim)
+        public virtual void ActivateWeapon(Vector2 aim)
         {
             playerAnimation.Throw();
-            poolWeapons.New().SetMotion(Player, transform.position, aim);
+            currentPoolWeapons.New().InitializationMove(PlayerCore, transform.position, aim);
         }
 
-        public virtual IEnumerator Respawn(Vector2 point)
+        public virtual IEnumerator Respawn(Vector2 position)
         {
-            yield return new WaitForSeconds(specification.TimeRespawn);
-            Birth(point);
+            yield return new WaitForSeconds(PlayerCore.Config.RespawnDuration);
+            RespawnInstantly(position);
             StopMove();
-            if (RespawnGuiDisabled != null) RespawnGuiDisabled();
+	        PlayerCore.IsAlive = true;
         }
 
-        public void Birth(Vector2 position)
+        public virtual void RespawnInstantly(Vector2 position)
         {
-            poolPlayers.New(Player.Id).transform.position = position;
+            pool.New(PlayerCore.Id).transform.position = position;
             invulnerability = true;
-            StartCoroutine(ProggressInvulnerability(specification.TimeInvulnerability));
+            StartCoroutine(ProggressInvulnerability(PlayerCore.Config.InvulnerabilityDuration));
         }
 
         // invoke, when respawn
-        private IEnumerator ProggressInvulnerability(float playerTimeInvulnerability)
+        private IEnumerator ProggressInvulnerability(float duration)
         {
             var startTime = Time.time;
             var render = spriteRenderer ? spriteRenderer : GetComponent<SpriteRenderer>();
-            while (Time.time  < startTime + playerTimeInvulnerability)
+            while (Time.time  < startTime + duration)
             {
                 render.enabled = false;
                 yield return new WaitForSeconds(0.1f);
@@ -145,24 +122,19 @@ namespace Caveman.Players
         /// </summary>
         protected virtual void Move()
         {
-            transform.position = new Vector3(transform.position.x + delta.x*Time.deltaTime,
-                transform.position.y + delta.y*Time.deltaTime);
-            playerAnimation.SetMoving(delta.y < 0, delta.x > 0);
+            transform.position = new Vector3(transform.position.x + moveUnit.x * Time.deltaTime,
+                transform.position.y + moveUnit.y * Time.deltaTime);
+            playerAnimation.SetMoving(moveUnit.y < 0, moveUnit.x > 0);
         }
 
-        /// <summary>
-        /// set delta - direction of motion
-        /// </summary>
-        /// <param name="target"></param>
-        public void SetMove(Vector2 target)
+        public void CalculateMoveUnit(Vector2 targetPosition)
         {
-            this.target = target;
-            delta = UnityExtensions.CalculateDelta(transform.position, target, Speed);
+            moveUnit = UnityExtensions.CalculateDelta(transform.position, targetPosition, PlayerCore.Speed);
         }
 
         public void StopMove()
         {
-            delta = Vector2.zero;
+            moveUnit = Vector2.zero;
             playerAnimation.IsMoving_B = false;
             playerAnimation.IsMoving_F = false;
         }

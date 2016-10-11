@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using Caveman.Bonuses;
 using Caveman.CustomAnimation;
-using Caveman.Bonuses;
 using Caveman.Level;
 using Caveman.Network;
 using Caveman.Players;
+using Caveman.Pools;
 using Caveman.Setting;
-using Caveman.Specification;
 using Caveman.UI;
-using Caveman.Utils;
 using Caveman.Weapons;
 using UnityEngine;
 using Random = System.Random;
@@ -17,222 +14,62 @@ namespace Caveman
 {
     public class EnterPoint : MonoBehaviour
     {
+        // this fields initialization from scene
         public Transform prefabHumanPlayer;
         public Transform prefabAiPlayer;
-
-        public AxeModel prefabAxe;
-        public StoneModel prefabStone;
-        public StoneSplash prefabStoneFlagmentInc;
-        public EffectBase prefabDeathImage;
-        public SpeedBonus prefabBonusSpeed;
-
+        public MapModel mapModel;
+        public PoolsManager poolsManager;
         public SmoothCamera smoothCamera;
-        public Transform containerStones;
-        public Transform containerSplashStones;
-        public Transform containerSkulls;
-        public Transform containerDeathImages;
-        public Transform containerPlayers;
-        public Transform containerBonusesSpeed;
-
-        protected Random r;
-        protected ServerConnection serverConnection;
-        protected PlayerPool poolPlayers;
-        protected ObjectPool<WeaponModelBase> poolStones;
-        protected ObjectPool<WeaponModelBase> poolSkulls;
-        protected ObjectPool<BonusBase> poolBonusesSpeed;
-        protected ObjectPool<EffectBase> poolStonesSplash;
-        protected ObjectPool<EffectBase> poolDeathImage;
-        
-        //used only single player mode for bots
-        private readonly string[] names = { "Kiracosyan", "IkillU", "skaska", "loser", "yohoho", "shpuntik" };
+        public PlayerPool playerPool;
+        public string currentLevelName;
 
         public static CurrentGameSettings CurrentSettings { get; private set; }
 
-        public virtual void Awake()
+        protected IServerNotify serverNotify;
+        protected PlayersManager playersManager;
+
+        // caсhe fields for server message handler
+        protected ObjectPool<WeaponModelBase> poolStones;
+        protected ObjectPool<BonusBase> poolBonusesSpeed;
+
+        private Random rand;
+
+        public void Awake()
         {
-            // load data from json files
-            CurrentSettings = CurrentGameSettings.Load();
-            Settings.multiplayerMode = false;
+            CurrentSettings = CurrentGameSettings.Load(
+                "bonuses", "weapons", "players", "pools", "images", "maps", "levelsSingle", " ");
         }
 
         public virtual void Start()
         {
-            //todo may be use only UnityEngine.Random
-            r = new Random();
+            rand = new Random();
+            var isMultiplayer = serverNotify != null;
 
-            poolStonesSplash = CreatePool<EffectBase>(Settings.PoolCountSplashStones, containerSplashStones, prefabStoneFlagmentInc, null);
-            poolDeathImage = CreatePool<EffectBase>(Settings.PoolCountDeathImages, containerDeathImages, prefabDeathImage, null);
-            poolStones = CreatePool<WeaponModelBase>(Settings.PoolCountStones, containerStones, prefabStone, InitStoneModel);
-            poolSkulls = CreatePool<WeaponModelBase>(Settings.PoolCountSkulls, containerSkulls, prefabAxe, InitSkullModel);
-            poolBonusesSpeed = CreatePool<BonusBase>(Settings.BonusSpeedPoolCount, containerBonusesSpeed, prefabBonusSpeed, InitBonusModel);
+            poolsManager.InitializationPools(CurrentSettings, isMultiplayer);
+            poolStones = poolsManager.Stones;
+            poolBonusesSpeed = poolsManager.BonusesSpeed;
 
-            poolStones.RelatedPool += () => poolStonesSplash;
+            new MapCore(CurrentSettings.MapConfigs["sample"] , isMultiplayer, mapModel, rand);
 
-            poolPlayers = containerPlayers.GetComponent<PlayerPool>();
+            var humanCore = new PlayerCore(PlayerPrefs.GetString(AccountManager.KeyNickname),
+                SystemInfo.deviceUniqueIdentifier, CurrentSettings.PlayersConfigs["sample"]);
+            BattleGui.instance.SubscribeOnEvents(humanCore);
+            playersManager = new PlayersManager(serverNotify, smoothCamera, rand, playerPool);
+            playersManager.CreatePlayerModel(humanCore, false, false, Instantiate(prefabHumanPlayer));
 
-            var humanPlayer = new Player(PlayerPrefs.GetString(AccountManager.KeyNickname),
-                SystemInfo.deviceUniqueIdentifier);
-            BattleGui.instance.SubscribeOnEvents(humanPlayer);
-            BattleGui.instance.resultRound.SetPlayerPool(poolPlayers);
-            BattleGui.instance.waitForResp.SetPlayerPool(poolPlayers);
-            CreatePlayer(humanPlayer, false, false, prefabHumanPlayer);
-            
-            if (serverConnection == null)
+            if (!isMultiplayer)
             {
-                for (var i = 1; i < Settings.BotsCount + 1; i++)
+                for (var i = 1; i < CurrentSettings.SingleLevelConfigs[currentLevelName].BotsCount + 1; i++)
                 {
-                    CreatePlayer(new Player(names[i], i.ToString()), true, false, prefabAiPlayer);
+                    var playerCore = new PlayerCore(CurrentSettings.SingleLevelConfigs[currentLevelName].BotsName[i],
+                        i.ToString(),
+                        CurrentSettings.PlayersConfigs["sample"]);
+
+                    playersManager.CreatePlayerModel(playerCore,
+                        true, false, Instantiate(prefabAiPlayer));
                 }
-                StartCoroutine(PutWeapons());
-                StartCoroutine(PutBonuses());
+                playersManager.StartUseWeapon();
             }
-        }
-        /// <summary>
-        /// Each model assigned reference on objectpool
-        /// </summary>
-        /// <param name="item"></param>
-        /// <param name="pool"></param>
-        private void InitBonusModel(GameObject item, ObjectPool<BonusBase> pool)
-        {
-            item.GetComponent<BonusBase>().SetPool(pool);
-        }
-
-        private void InitSkullModel(GameObject item, ObjectPool<WeaponModelBase> pool) 
-        {
-            item.GetComponent<AxeModel>().SetPool(pool);
-        }
-
-        private void InitStoneModel(GameObject item, ObjectPool<WeaponModelBase> pool)
-        {
-            var model = item.GetComponent<StoneModel>();
-            model.SetPool(pool);
-            model.SetPoolSplash(poolStonesSplash);
-        }
-
-        private IEnumerator PutBonuses()
-        {
-            var bound = Settings.BonusSpeedMaxCount - poolBonusesSpeed.GetActivedCount; 
-            for (var i = 0; i < bound; i++)
-            {
-                PutItem(poolBonusesSpeed);
-            }
-            yield return new WaitForSeconds(Settings.BonusTimeRespawn);
-            StartCoroutine(PutBonuses());
-        }
-
-        private IEnumerator PutWeapons()
-        {
-            for (var i = 0; i < Settings.WeaponInitialLying; i++)
-            {
-                PutItem(poolStones);
-            }
-            for (var i = 0; i < Settings.CountLyingSkulls; i++)
-            {
-                PutItem(poolSkulls);
-            }
-            yield return new WaitForSeconds(Settings.WeaponTimeRespawn);
-            StartCoroutine(PutWeapons());
-        }
-
-        private void PutItem<T>(ObjectPool<T> pool) where T : MonoBehaviour
-        {
-            var item = pool.New();
-            StartCoroutine(UnityExtensions.FadeIn(item.GetComponent<SpriteRenderer>()));
-            item.transform.position = new Vector2(r.Next(Settings.WidthMap),
-                r.Next(Settings.HeightMap));
-        }
-
-        /// <summary>
-        /// Used object pool pattern
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="initialBufferSize"></param>
-        /// <param name="container"></param>
-        /// <param name="prefab"></param>
-        /// <param name="init"></param>
-        /// <returns></returns>
-        private ObjectPool<T> CreatePool<T>(int initialBufferSize, Transform container, T prefab, Action<GameObject, ObjectPool<T>> init) where T : MonoBehaviour
-        {
-            var pool = container.GetComponent<ObjectPool<T>>();
-            pool.CreatePool(prefab, initialBufferSize, serverConnection != null);
-            for (var i = 0; i < initialBufferSize; i++)
-            {
-                var item = Instantiate(prefab);
-                if (init != null)
-                {
-                    init(item.gameObject, pool);
-                }
-                item.transform.SetParent(container);
-                pool.Store(item);
-            }
-            return pool;
-        }
-
-        protected void CreatePlayer(Player player, bool isAiPlayer, bool isServerPlayer, Transform prefabModel)
-        {
-            var prefab = Instantiate(prefabModel);
-            var playerModel = prefab.GetComponent<PlayerModelBase>();
-            if (!isServerPlayer)
-            {
-                if (isAiPlayer)
-                {
-                    (playerModel as AiPlayerModel).SetWeapons(containerStones);
-                }
-                else
-                {
-                    BattleGui.instance.SubscribeOnEvents(playerModel);
-                    smoothCamera.target = prefab.transform;
-                    smoothCamera.SetPlayer(prefab.GetComponent<PlayerModelBase>());
-                    if (serverConnection != null) playerModel.GetComponent<SpriteRenderer>().material.color = Color.red;
-                }
-            }
-            playerModel.Init(player, r, poolPlayers, serverConnection);
-            poolPlayers.Add(player.Id, playerModel);
-            playerModel.transform.SetParent(containerPlayers);
-            playerModel.Death += position => StartCoroutine(DeathAnimate(position));
-            playerModel.ChangedWeaponsPool += ChangedWeapons;
-            playerModel.Birth(new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)));
-        }
-
-        /// <summary>
-        /// Changed weapon pool storage in player 
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        private ObjectPool<WeaponModelBase> ChangedWeapons(WeaponSpecification.Types type)
-        {
-            switch (type)
-            {
-                case WeaponSpecification.Types.Stone:
-                    return poolStones;
-                case WeaponSpecification.Types.Skull:
-                    return poolSkulls;
-            }
-            return null;
-        }
-
-        // todo extracted this method from enterpoint
-        /// <summary>
-        /// used player
-        /// </summary>
-        /// <param name="position"></param>
-        /// <returns></returns>
-        private IEnumerator DeathAnimate(Vector2 position)
-        {
-            var deathImage = poolDeathImage.New();
-            deathImage.transform.position = position;
-            var spriteRenderer = deathImage.GetComponent<SpriteRenderer>();
-            if (spriteRenderer)
-            {
-                for (var i = 1f; i > 0; i -= 0.1f)
-                {
-                    var c = spriteRenderer.color;
-                    c.a = i;
-                    spriteRenderer.color = c;
-                    yield return new WaitForSeconds(0.1f);
-                }
-            }
-            poolDeathImage.Store(deathImage);
         }
     }
 }

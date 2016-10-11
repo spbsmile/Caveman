@@ -9,6 +9,7 @@ namespace Caveman.UI.Windows
     {
         public Button buttonRespawn;
         public Slider progress;
+        public CNJoystick joystick;
 
         //public void OnEnable()
         //{
@@ -20,10 +21,12 @@ namespace Caveman.UI.Windows
         public void OnDisable()
         {
             progress.value = 0;
+            joystick.Enable();
         }
 
         public void Activate(int timeRespawn)
         {
+            joystick.Disable();
             gameObject.SetActive(true);
             StartCoroutine(WithProgress(timeRespawn));
             StartCoroutine(DisplayResult());

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
+using Caveman.Configs;
 using Caveman.Players;
-using Caveman.Specification;
-using Caveman.Utils;
+using Caveman.Pools;
 using Caveman.Weapons;
 using UnityEngine;
 
@@ -12,7 +12,7 @@ namespace Caveman.Bonuses
         protected float preValue;
         protected ObjectPool<BonusBase> pool;
 
-        public BonusSpecification Specification { protected set; get; } 
+        public BonusConfig Config { protected set; get; } 
 
         public void OnTriggerEnter2D(Collider2D other)
         {
@@ -27,24 +27,26 @@ namespace Caveman.Bonuses
             }
         }
 
-        public override void SetPool(ObjectPool<BonusBase> item)
+        public override void InitializationPool(ObjectPool<BonusBase> item)
         {
             pool = item;
         }
 
-        public virtual void Effect(PlayerModelBase playerModel)
+        public virtual void Effect(PlayerModelBase model)
         {
             // HACK: trigger methods calling before Start
-            if (playerModel.Player == null)
+            if (model.PlayerCore == null)
                 return;
-            playerModel.Player.PickUpBonus(Specification.Type, Specification.Duration);
+            if (Config == null)
+                return;
+            model.PlayerCore.ActivatedBonus(Config.Type, Config.Duration);
             //todo внедрить систему событий
-            playerModel.bonusBase = this;
+            model.bonusBase = this;
             transform.position = new Vector3(200, 200, 200);
-            StartCoroutine(UnEffect(playerModel));
+            StartCoroutine(UnEffect(model));
         }
 
-        protected virtual IEnumerator UnEffect(PlayerModelBase playerModel)
+        protected virtual IEnumerator UnEffect(PlayerModelBase model)
         {
             yield return null;
         }

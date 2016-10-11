@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Caveman.Utils;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Caveman.UI.Common
@@ -10,12 +11,15 @@ namespace Caveman.UI.Common
         public Slider slider;
         public Transform root;
         public Image blackscreen;
+        public float TimeEmergenceBlackScreen = 0.2f;
+        public float TimeHidingBlackScreen = 0.5f;        
 
         public override void Awake()
         {
             if (!instance)
             {
                 root.gameObject.SetActive(false);
+                blackscreen.gameObject.SetActive(false);
             }
             else
             {
@@ -26,12 +30,12 @@ namespace Caveman.UI.Common
 
         public void ProgressTo(string name)
         {
-            ProgressTo(Application.LoadLevelAsync(name));
+            ProgressTo(SceneManager.LoadSceneAsync(name));
         }
 
         public void ProgressTo(int level)
         {
-            ProgressTo(Application.LoadLevelAsync(level));
+            ProgressTo(SceneManager.LoadSceneAsync(level));
         }
 
         private void ProgressTo(AsyncOperation loadLevelAsync)
@@ -43,6 +47,7 @@ namespace Caveman.UI.Common
         private IEnumerator WithProgress(AsyncOperation load)
         {
             root.gameObject.SetActive(true);
+            blackscreen.gameObject.SetActive(true);
 
             while (!load.isDone)
             {
@@ -50,22 +55,31 @@ namespace Caveman.UI.Common
                 yield return new WaitForFixedUpdate();
             }
 
-            yield return StartCoroutine(FateTestImage());
-
+            // Hide loading screen
+            var color = blackscreen.color;
+            color.a = 0;
+            blackscreen.color = color;
+            var startTime = Time.time;
+            while (blackscreen.color.a < 1)
+            {
+                var c = blackscreen.color;
+                c.a = Mathf.Lerp(0, 1, (Time.time - startTime) / TimeEmergenceBlackScreen);
+                blackscreen.color = c;
+                yield return null;
+            }
             root.gameObject.SetActive(false);
-        }
+            
+            // Show game screen
+            startTime = Time.time;
+            while (blackscreen.color.a > 0)
+            {
+                var c = blackscreen.color;
+                c.a = Mathf.Lerp(1, 0, (Time.time - startTime) / TimeHidingBlackScreen);
+                blackscreen.color = c;
+                yield return null;
+            }
 
-        private IEnumerator FateTestImage()
-        {
-            // todo color.a = Mathf.Lerp(0,128,timer); coroutine 
-            // todo CrossFadeAlpha no work !(
-            blackscreen.CrossFadeAlpha(1, 0.2f, false);
-            yield return new WaitForSeconds(0.2f);
+            blackscreen.gameObject.SetActive(false);           
         }
-
-        //public void Update()
-        //{
-        //    print(blackscreen.color.a + " alfa");
-        //}
     }
 }

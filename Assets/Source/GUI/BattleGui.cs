@@ -1,6 +1,7 @@
 ﻿using Caveman.Players;
 using Caveman.Setting;
 using Caveman.UI.Battle;
+using Caveman.UI.Common;
 using Caveman.UI.Windows;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +21,9 @@ namespace Caveman.UI
 
         public static BattleGui instance;
 
-        private System.Random r;
+        public bool IsMultiplayerMode { get; private set; }
+
+        private Random r;
 
         public void Awake()
         {
@@ -33,35 +36,40 @@ namespace Caveman.UI
             };
         }
 
-        public void SubscribeOnEvents(Player player)
+        public void SubscribeOnEvents(PlayerCore playerCore)
         {
-            player.WeaponsCountChanged += WeaponsCountChanged;
-            player.KillsCountChanged += KillsCountChanged;
-            player.BonusActivated += bonusesPanel.BonusActivated;
+            playerCore.WeaponCountChange += count => weapons.text = count.ToString();
+            playerCore.KillCountChange += count => killed.text = count.ToString();
+	        playerCore.BonusActivate += bonusesPanel.BonusActivated;
         }
 
         public void SubscribeOnEvents(PlayerModelBase playerModelBase)
         {
-            playerModelBase.Death += vector2 => waitForResp.Activate(playerModelBase.specification.TimeRespawn);
-            playerModelBase.RespawnGuiDisabled += () => waitForResp.gameObject.SetActive(false);
+	        playerModelBase.PlayerCore.IsAliveChange += isAlive => ReportIsAliveChange(playerModelBase.PlayerCore.Config.RespawnDuration, isAlive);
             waitForResp.buttonRespawn.onClick.AddListener(delegate
             {
+                // TODO: set count gold respawn received from server
+                //if (!playerModelBase.SpendGold(0))
+                //   return;
+	            playerModelBase.PlayerCore.IsAlive = true;
                 playerModelBase.StopAllCoroutines();
-                playerModelBase.Birth(RandomPosition);
-                waitForResp.gameObject.SetActive(false);
+                playerModelBase.RespawnInstantly(RandomPosition);
             });
         }
 
-        private void WeaponsCountChanged(int count)
-        {
-            weapons.text = count.ToString();
-        }
 
-        private void KillsCountChanged(int count)
-        {
-            killed.text = count.ToString();
-        }
-       
+	    private void ReportIsAliveChange(int respawnDuration, bool isAlive)
+	    {
+		    if (isAlive)
+		    {
+			    waitForResp.gameObject.SetActive(false);
+		    }
+		    else
+		    {
+			    waitForResp.Activate(respawnDuration);
+		    }
+	    }
+
         private Vector2 RandomPosition
         {
             get { return new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)); }

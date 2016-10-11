@@ -12,31 +12,38 @@ namespace Caveman.UI.Battle
 
         private Text value;
 
-        public void Start()
+        public void Awake()
         {
             value = GetComponent<Text>();
         }
 
-        public void OnEnable()
+        public void Start() 
         {
-            if (!Settings.multiplayerMode)
+            if (!BattleGui.instance.IsMultiplayerMode)
             {
-                StartCoroutine(UpdateTime(Settings.RoundTime));    
+                StartCoroutine(UpdateTime(Settings.RoundTime));
             }
         }
 
         public IEnumerator UpdateTime(int roundTime)
         {
-            if (roundTime <= 0) yield break;
-            yield return  new WaitForSeconds(1);
-            var remainTime = roundTime - 1;
-            value.text = remainTime/60 + ":" +  remainTime%60;
-            if (remainTime <= 0 && RoundEnded != null && !Settings.multiplayerMode)
+            if (roundTime <= 0)
+                yield break;
+
+            do
+            {
+                var minutes = roundTime / 60;
+                var seconds = roundTime % 60;
+                value.text = minutes.ToString("D2") + ":" + seconds.ToString("D2");
+                if (roundTime > 0)
+                    yield return new WaitForSeconds(1);
+            } while (--roundTime >= 0);
+
+            if (RoundEnded != null && !BattleGui.instance.IsMultiplayerMode)
             {
                 RoundEnded();
                 StopAllCoroutines();
             }
-            StartCoroutine(UpdateTime(remainTime));
         }
     }
 }

@@ -1,10 +1,10 @@
-﻿using Caveman.Setting;
+﻿using Caveman.Pools;
 using Caveman.Utils;
 using UnityEngine;
 
 namespace Caveman.CustomAnimation
 {
-    public class StoneSplash : EffectBase
+    public class StoneSplash : ImageBase
     {
         public float speed;
 
@@ -12,7 +12,7 @@ namespace Caveman.CustomAnimation
         private Vector2 target;
 
         private bool afterInit;
-        private ObjectPool<EffectBase> pool;
+        private ObjectPool<ImageBase> pool;
 
         public void Update()
         {
@@ -39,7 +39,7 @@ namespace Caveman.CustomAnimation
             }
         }
 
-        public void Init(int i, Vector2 position, ObjectPool<EffectBase> pool)
+        public void Init(int i, Vector2 position, ObjectPool<ImageBase> pool)
         {
             this.pool = pool;
             transform.position = position;

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -7,6 +9,15 @@ namespace Caveman.Setting
 {
     public class SettingsHandler 
     {
+        private const string RESOURCES_NAME = "JSON";
+
+        private static TextAsset[] settings;
+
+        static SettingsHandler()
+        {
+            settings = Resources.LoadAll<TextAsset>(RESOURCES_NAME);
+        }
+
         public static string SerializeSettings<T>(T data)
         {
             try
@@ -47,20 +58,28 @@ namespace Caveman.Setting
             return default(T);
         }
 
+        //deserilizations
         public static T ParseSettingsFromFile<T>(string fileName)
         {
+            var settingsFromFile = default(T);
+            if (settings == null)
+                return settingsFromFile;
+
+            var textAsset = settings.FirstOrDefault(t => t.name == fileName);
+            if (textAsset == default(TextAsset))
+                return settingsFromFile;
+
             try
             {
-                var textAsset = Resources.Load(Path.Combine("Settings/", fileName), typeof(TextAsset)) as TextAsset;
-                var settingsFromFile = ParseSettings<T>(textAsset.text);
-                return settingsFromFile;
+                settingsFromFile = ParseSettings<T>(textAsset.text);
             }
             catch (Exception e)
             {
                 var i = e.Message;
                 Debug.Log(i);
             }
-            return default(T);
+
+            return settingsFromFile;
         }
     }
 }
