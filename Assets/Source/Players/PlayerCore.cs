@@ -12,7 +12,7 @@ namespace Caveman.Players
        
         private int weaponCount;
         private int killCount;
-	    private bool isAlive;
+	    private bool isAlive = true;
 	    private float speed;
 
 	    public PlayerCore(string name, string id, PlayerConfig config)
@@ -71,7 +71,7 @@ namespace Caveman.Players
 			    isAlive = value;
 			    if (IsAliveChange != null)
 			    {
-				    IsAliveChange(value);
+                    IsAliveChange(value);
 			    }
 		    }
 	    }
