@@ -12,8 +12,7 @@ namespace Caveman.Network
 {
     public class ServerConnection
     {
-        //"127.0.0.1"; 
-        private const string Ip = "185.117.155.113";
+        //"127.0.0.1/185.117.155.113/10.0.1.17 "; 
         private const int Port = 8080;
 
         private readonly Queue<ServerMessageManager> messageQueue = new Queue<ServerMessageManager>();
