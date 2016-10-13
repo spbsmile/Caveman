@@ -11,15 +11,17 @@ namespace Caveman.UI.Battle
         public Action RoundEnded;
 
         private Text value;
+        private bool isMultiplayer;
 
         public void Awake()
         {
             value = GetComponent<Text>();
         }
 
-        public void Start() 
+        public void Initialization(bool isMultiplayer)
         {
-            if (!BattleGui.instance.IsMultiplayerMode)
+            this.isMultiplayer = isMultiplayer;
+            if (!isMultiplayer)
             {
                 StartCoroutine(UpdateTime(Settings.RoundTime));
             }
@@ -39,7 +41,7 @@ namespace Caveman.UI.Battle
                     yield return new WaitForSeconds(1);
             } while (--roundTime >= 0);
 
-            if (RoundEnded != null && !BattleGui.instance.IsMultiplayerMode)
+            if (RoundEnded != null && !isMultiplayer)
             {
                 RoundEnded();
                 StopAllCoroutines();

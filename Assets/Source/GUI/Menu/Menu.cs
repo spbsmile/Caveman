@@ -41,6 +41,11 @@ namespace Caveman.UI.Menu
             }
         }
 
+        public void LoadObserverGame()
+        {
+            //LoadingScreen.instance.ProgressTo(4);
+        }
+
         public void LoadMenu()
         {
             Time.timeScale = 1;

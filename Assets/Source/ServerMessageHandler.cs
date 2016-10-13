@@ -102,18 +102,18 @@ namespace Caveman.Network
                 var playerId = player[ServerParams.UserId].ToString();
                 if (!PlayerPool.instance.ContainsKey(playerId))
                     playersManager.CreatePlayerModel(new PlayerCore(player[ServerParams.UserName].ToString(), playerId,
-		                    CurrentSettings.PlayersConfigs["sample"]), false, true, Instantiate(prefabServerPlayer));
+		                    CurrentSettings.PlayersConfigs["sample"]), false, true, Instantiate(prefabServerPlayer), battleGui);
             }
         }
 
         public void GameTimeReceive(float time)
         {
-            StartCoroutine(BattleGui.instance.mainGameTimer.UpdateTime((int)time));
+            StartCoroutine(battleGui.mainGameTimer.UpdateTime((int)time));
         }
 
         public void GameResultReceive(JToken jToken)
         {
-            var resultRound = BattleGui.instance.resultRound;
+            var resultRound = battleGui.resultRound;
             resultRound.gameObject.SetActive(true);
 
             var lineIndex = 0;
@@ -130,7 +130,7 @@ namespace Caveman.Network
         public void LoginReceive(string playerId, string playerName)
         {
             playersManager.CreatePlayerModel(new PlayerCore(playerName, playerId,
-	            CurrentSettings.PlayersConfigs["sample"]), false, true, Instantiate(prefabServerPlayer));
+	            CurrentSettings.PlayersConfigs["sample"]), false, true, Instantiate(prefabServerPlayer), battleGui);
             serverNotify.RespawnSend(PlayerPool.instance[OwnId].transform.position);
         }
 

@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using Caveman.Setting;
-using Caveman.UI;
 using UnityEngine;
 
 namespace Caveman.Players
@@ -9,19 +8,12 @@ namespace Caveman.Players
     {
         private bool isMoving;
 
-        protected override void Awake()
-        {
-            base.Awake();
-            BattleGui.instance.movementJoystick.ControllerMovedEvent += MovePlayer;
-            BattleGui.instance.movementJoystick.FingerLiftedEvent += controller => HandlerOnStopMove();
-        }
-
         protected void Start()
         {
             if (multiplayer && !Settings.DisableSendMove) StartCoroutine(SendMove());
         }
 
-        private void HandlerOnStopMove()
+        public void HandlerOnStopMove()
         {
             StopMove();
             isMoving = false;
@@ -34,7 +26,7 @@ namespace Caveman.Players
             StartCoroutine(SendMove());
         }
 
-        private void MovePlayer(Vector3 direction, CNAbstractController arg2)
+        public void MovePlayer(Vector3 direction, CNAbstractController arg2)
         {
             if (!isMoving) isMoving = true;
             moveUnit = direction*PlayerCore.Speed;

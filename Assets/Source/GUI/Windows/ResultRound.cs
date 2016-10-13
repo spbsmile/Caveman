@@ -7,9 +7,16 @@ namespace Caveman.UI.Windows
     {
         public CNJoystick joystick;
 
+        private bool isMultiplayer;
+
+        public void Initialization(bool isMultiplayer)
+        {
+            this.isMultiplayer = isMultiplayer;
+        }
+
         public void OnEnable()
         {
-            if (!BattleGui.instance.IsMultiplayerMode)
+            if (!isMultiplayer)
             {
                 StartCoroutine(DisplayResult());
             }

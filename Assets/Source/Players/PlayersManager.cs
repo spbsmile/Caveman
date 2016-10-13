@@ -41,15 +41,16 @@ namespace Caveman.Players
             }
         }
      
-	    public void CreatePlayerModel(PlayerCore playerCore, bool isAiPlayer, bool isServerPlayer, Transform prefab)
+	    public void CreatePlayerModel(PlayerCore playerCore, bool isAiPlayer, bool isServerPlayer, Transform prefab, BattleGui battleGui)
         {
             var model = prefab.GetComponent<PlayerModelBase>();
             model.Initialization(playerCore, rand, serverNotify, this, pool);
             pool.Add(playerCore.Id, model);
 
+            //todo extracted to method
             if (!isServerPlayer && !isAiPlayer)
             {
-                BattleGui.instance.SubscribeOnEvents(model);
+                battleGui.SubscribeOnEvents((PlayerModelHuman)model);
                 smoothCamera.target = prefab.transform;
                 smoothCamera.SetPlayer(prefab.GetComponent<PlayerModelBase>());
                 if (serverNotify != null) model.GetComponent<SpriteRenderer>().material.color = Color.red;

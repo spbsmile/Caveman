@@ -1,5 +1,6 @@
 ﻿using System;
 using Caveman.Configs;
+using UnityEngine;
 
 namespace Caveman.Players
 {
@@ -75,6 +76,13 @@ namespace Caveman.Players
 			    }
 		    }
 	    }
+
+        // todo may be add this 
+        //public struct AliveChange
+        //{
+        //    Vector3 position;
+        //    bool isAlive;
+        //}
 
 	    //todo very strange
         public void ActivatedBonus(BonusConfig.Types type, float duration)

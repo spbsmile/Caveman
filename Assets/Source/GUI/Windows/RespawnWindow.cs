@@ -1,11 +1,10 @@
 ﻿using System.Collections;
-using Caveman.Setting;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Caveman.UI.Windows
 {
-    public class WaitForResp : Result
+    public class RespawnWindow : Result
     {
         public Button buttonRespawn;
         public Slider progress;

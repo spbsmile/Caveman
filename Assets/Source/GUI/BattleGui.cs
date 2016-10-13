@@ -1,7 +1,6 @@
 ﻿using Caveman.Players;
 using Caveman.Setting;
 using Caveman.UI.Battle;
-using Caveman.UI.Common;
 using Caveman.UI.Windows;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,68 +10,66 @@ namespace Caveman.UI
 {
     public class BattleGui : MonoBehaviour
     {
-        public CNAbstractController movementJoystick;
+        public CNAbstractController joystick;
         public BonusesPanel bonusesPanel;
         public MainGameTimer mainGameTimer;
         public ResultRound resultRound;
-        public WaitForResp waitForResp;
+        public RespawnWindow respawnWindow;
         public Text weapons;
         public Text killed;
 
-        public static BattleGui instance;
-
-        public bool IsMultiplayerMode { get; private set; }
-
-        private Random r;
+        private Random rand;
 
         public void Awake()
         {
-            r = new Random();
-            instance = this;
+            rand = new Random();
             mainGameTimer.RoundEnded += () =>
             {
                 resultRound.gameObject.SetActive(true);
-                waitForResp.gameObject.SetActive(false);
+                respawnWindow.gameObject.SetActive(false);
             };
         }
 
-        public void SubscribeOnEvents(PlayerCore playerCore)
+        public void Initialization(bool isMultiplayer)
         {
-            playerCore.WeaponCountChange += count => weapons.text = count.ToString();
-            playerCore.KillCountChange += count => killed.text = count.ToString();
-	        playerCore.BonusActivate += bonusesPanel.BonusActivated;
+            resultRound.Initialization(isMultiplayer);
+            mainGameTimer.Initialization(isMultiplayer);
         }
 
-        public void SubscribeOnEvents(PlayerModelBase playerModelBase)
+        public void SubscribeOnEvents(PlayerModelHuman model)
         {
-	        playerModelBase.PlayerCore.IsAliveChange += isAlive => ReportIsAliveChange(playerModelBase.PlayerCore.Config.RespawnDuration, isAlive);
-            waitForResp.buttonRespawn.onClick.AddListener(delegate
+            var playerCore = model.PlayerCore;
+            playerCore.WeaponCountChange += count => weapons.text = count.ToString();
+            playerCore.KillCountChange += count => killed.text = count.ToString();
+            playerCore.BonusActivate += bonusesPanel.BonusActivated;
+            playerCore.IsAliveChange += isAlive =>
+            {
+                if (isAlive)
+                {
+                    respawnWindow.gameObject.SetActive(false);
+                }
+                else
+                {
+                    respawnWindow.Activate(playerCore.Config.RespawnDuration);
+                }
+            };
+
+            joystick.ControllerMovedEvent += model.MovePlayer;
+            joystick.FingerLiftedEvent += controller => model.HandlerOnStopMove();
+            respawnWindow.buttonRespawn.onClick.AddListener(delegate
             {
                 // TODO: set count gold respawn received from server
                 //if (!playerModelBase.SpendGold(0))
                 //   return;
-	            playerModelBase.PlayerCore.IsAlive = true;
-                playerModelBase.StopAllCoroutines();
-                playerModelBase.RespawnInstantly(RandomPosition);
+	            model.PlayerCore.IsAlive = true;
+                model.StopAllCoroutines();
+                model.RespawnInstantly(RandomPosition);
             });
         }
 
-
-	    private void ReportIsAliveChange(int respawnDuration, bool isAlive)
-	    {
-		    if (isAlive)
-		    {
-			    waitForResp.gameObject.SetActive(false);
-		    }
-		    else
-		    {
-			    waitForResp.Activate(respawnDuration);
-		    }
-	    }
-
         private Vector2 RandomPosition
         {
-            get { return new Vector2(r.Next(Settings.WidthMap), r.Next(Settings.HeightMap)); }
+            get { return new Vector2(rand.Next(Settings.WidthMap), rand.Next(Settings.HeightMap)); }
         }
     }
 }
