@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Net.Sockets;
 using Caveman.UI.Common;
 using Caveman.Utils;
 using UnityEngine;
@@ -12,9 +14,16 @@ namespace Caveman.UI.Menu
         public CanvasGroup tooltipNickname;
         public InputField inputNickname;
 
+        public Text metaServerIp;
+
         public void Start()
         {
             Screen.orientation = ScreenOrientation.Landscape;
+
+            // temp for developer
+            metaServerIp.text += PlayerPrefs.HasKey(Setting.Settings.KeyIpServer)
+                ? PlayerPrefs.GetString(Setting.Settings.KeyIpServer)
+                : Setting.Settings.IP_SERVER;
         }
 
         public void LoadSingleGame()
