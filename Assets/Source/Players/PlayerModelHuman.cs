@@ -7,6 +7,8 @@ namespace Caveman.Players
     public class PlayerModelHuman : PlayerModelClient
     {
         private bool isMoving;
+        private int mapWidth;
+        private int mapHeight;
 
         protected void Start()
         {
@@ -17,6 +19,12 @@ namespace Caveman.Players
         {
             StopMove();
             isMoving = false;
+        }
+
+        public void InitializationByMap(int mapWidth, int mapHeight)
+        {
+            this.mapWidth = mapWidth;
+            this.mapHeight = mapHeight;
         }
 
         private IEnumerator SendMove()
@@ -38,27 +46,25 @@ namespace Caveman.Players
             var x = transform.position.x + moveUnit.x * Time.deltaTime;
             var y = transform.position.y + moveUnit.y * Time.deltaTime;
 
-
             // check movement out field
             var halfX = spriteRenderer.bounds.size.x / 2;
             if (x < halfX)
                 x = halfX;
-            else if (x > Settings.WidthMap - halfX)
-                x = Settings.WidthMap - halfX;
+            else if (x > mapHeight - halfX)
+                x = mapWidth - halfX;
 
             var halfY = spriteRenderer.bounds.size.y / 2;
             if (y < halfY)
                 y = halfY;
-            else if (y > Settings.HeightMap - halfY)
-                y = Settings.HeightMap - halfY;
-
+            else if (y > mapHeight - halfY)
+                y = mapHeight - halfY;
 
             transform.position = new Vector3(x, y);
 
             playerAnimation.SetMoving(moveUnit.y < 0, moveUnit.x > 0);
         }
 
-        // todo OnEnable must see last commits
+        //todo OnEnable must see last commits
         //public override void OnEnable()
         //{
         //    base.OnEnable();

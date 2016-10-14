@@ -1,13 +1,15 @@
 ﻿using Caveman.Pools;
-using Caveman.Setting;
 using Caveman.Utils;
 using UnityEngine;
+using Random = System.Random;
 
 namespace Caveman.Players
 {
     public class PlayerModelAi : PlayerModelClient
     {
         private Vector2 targetPosition;
+        private float maxDistance;
+        private Random rand;
 
         protected void Start()
         {
@@ -27,22 +29,28 @@ namespace Caveman.Players
                 if (IsEnoughStrength(WeaponConfig.Weight))
                 {
                     var closestPosition = FindClosestLyingWeapon;
-                    targetPosition = closestPosition == Vector2.zero ? RandomPosition : closestPosition;
+                    targetPosition = closestPosition == Vector2.zero ? GetRandomPosition() : closestPosition;
                     CalculateMoveUnit(targetPosition);
                 }
                 else
                 {
-                    targetPosition = RandomPosition;
+                    targetPosition = GetRandomPosition();
                     CalculateMoveUnit(targetPosition);
                 }
             }
+        }
+
+        public void Initialization(Random rand, float maxDistance)
+        {
+            this.rand = rand;
+            this.maxDistance = maxDistance;
         }
      
         private Vector2 FindClosestLyingWeapon
         {
             get
             {
-                var minDistance = (float)Settings.HeightMap*Settings.WidthMap;
+                var minDistance = maxDistance;
                 var nearPosition = Vector2.zero;
 
                 foreach (Transform weapon in PoolsManager.instance.containerStones)
@@ -57,11 +65,6 @@ namespace Caveman.Players
                 }
                 return nearPosition;
             }
-        }
-
-        private Vector2 RandomPosition
-        {
-            get { return new Vector2(rand.Next(Settings.WidthMap), rand.Next(Settings.HeightMap)); }
         }
     }
 }

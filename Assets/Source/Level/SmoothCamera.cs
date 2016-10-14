@@ -1,6 +1,5 @@
 ﻿using Caveman.Players;
 using UnityEngine;
-using Caveman.Setting;
 
 namespace Caveman.Level
 {
@@ -16,11 +15,11 @@ namespace Caveman.Level
         private Vector2 section;
         private PlayerModelBase player;
 
-        public void Start()
+        public void Initialization(int mapWidth, int mapHeight)
         {
             section = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 10));
-            criticalX = Settings.WidthMap - section.x;
-            criticalY = Settings.HeightMap - section.y;
+            criticalX = mapWidth - section.x;
+            criticalY = mapHeight - section.y;
 
             if (target != null)
             {

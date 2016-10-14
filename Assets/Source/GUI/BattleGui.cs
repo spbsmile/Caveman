@@ -1,10 +1,9 @@
-﻿using Caveman.Players;
-using Caveman.Setting;
+﻿using System;
+using Caveman.Players;
 using Caveman.UI.Battle;
 using Caveman.UI.Windows;
 using UnityEngine;
 using UnityEngine.UI;
-using Random = System.Random;
 
 namespace Caveman.UI
 {
@@ -18,11 +17,8 @@ namespace Caveman.UI
         public Text weapons;
         public Text killed;
 
-        private Random rand;
-
         public void Awake()
         {
-            rand = new Random();
             mainGameTimer.RoundEnded += () =>
             {
                 resultRound.gameObject.SetActive(true);
@@ -30,13 +26,13 @@ namespace Caveman.UI
             };
         }
 
-        public void Initialization(bool isMultiplayer)
+        public void Initialization(bool isMultiplayer, int roundTime)
         {
             resultRound.Initialization(isMultiplayer);
-            mainGameTimer.Initialization(isMultiplayer);
+            mainGameTimer.Initialization(isMultiplayer, roundTime);
         }
 
-        public void SubscribeOnEvents(PlayerModelHuman model)
+        public void SubscribeOnEvents(PlayerModelHuman model, Func<Vector2> randomPosition)
         {
             var playerCore = model.PlayerCore;
             playerCore.WeaponCountChange += count => weapons.text = count.ToString();
@@ -63,13 +59,8 @@ namespace Caveman.UI
                 //   return;
 	            model.PlayerCore.IsAlive = true;
                 model.StopAllCoroutines();
-                model.RespawnInstantly(RandomPosition);
+                model.RespawnInstantly(randomPosition());
             });
-        }
-
-        private Vector2 RandomPosition
-        {
-            get { return new Vector2(rand.Next(Settings.WidthMap), rand.Next(Settings.HeightMap)); }
         }
     }
 }

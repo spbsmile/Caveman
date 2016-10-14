@@ -8,7 +8,7 @@ using Caveman.Configs;
 using Caveman.Utils;
 using Caveman.Weapons;
 using UnityEngine;
-using Random = System.Random;
+
 
 namespace Caveman.Players
 {
@@ -19,7 +19,9 @@ namespace Caveman.Players
      */
     public class PlayerModelBase : MonoBehaviour
     {
-        public Func<WeaponConfig.Types, ObjectPool<WeaponModelBase>> WeaponPoolChange;        
+        public Func<WeaponConfig.Types, ObjectPool<WeaponModelBase>> WeaponPoolChange;
+        protected Func<Vector2> GetRandomPosition;
+        protected Func<PlayerModelBase, PlayerModelBase> FindClosestPlayer;
 
         [HideInInspector] public BonusBase bonusBase;
         [HideInInspector] public SpriteRenderer spriteRenderer;
@@ -31,9 +33,7 @@ namespace Caveman.Players
         protected WeaponConfig WeaponConfig;
         protected internal bool invulnerability;
         protected PlayerAnimation playerAnimation;
-	    protected PlayersManager playersManager;
         protected Vector2 moveUnit;
-        protected Random rand;
         private ObjectPool<WeaponModelBase> currentPoolWeapons;
 
         public PlayerCore PlayerCore { private set; get; }
@@ -47,12 +47,12 @@ namespace Caveman.Players
             WeaponConfig = EnterPoint.CurrentSettings.WeaponsConfigs["stone"];
         }
 
-        public void Initialization(PlayerCore playerCore, Random rand, IServerNotify serverNotify, PlayersManager playersManager, PlayerPool pool)
+        public void Initialization(PlayerCore playerCore, IServerNotify serverNotify, Func<PlayerModelBase, PlayerModelBase> findClosestPlayer, PlayerPool pool, Func<Vector2> getRandomPosition)
         {
             this.serverNotify = serverNotify;
-	        this.playersManager = playersManager;
 	        this.pool = pool;
-            this.rand = rand;
+            GetRandomPosition = getRandomPosition;
+            FindClosestPlayer = findClosestPlayer;
             if (serverNotify != null) multiplayer = true;
             PlayerCore = playerCore;
         }

@@ -18,12 +18,12 @@ namespace Caveman.UI.Battle
             value = GetComponent<Text>();
         }
 
-        public void Initialization(bool isMultiplayer)
+        public void Initialization(bool isMultiplayer, int roundTime)
         {
             this.isMultiplayer = isMultiplayer;
             if (!isMultiplayer)
             {
-                StartCoroutine(UpdateTime(Settings.RoundTime));
+                StartCoroutine(UpdateTime(roundTime));
             }
         }
 

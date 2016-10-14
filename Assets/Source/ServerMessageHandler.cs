@@ -1,6 +1,5 @@
 ﻿using Caveman.Players;
 using Caveman.Pools;
-using Caveman.UI;
 using Caveman.Utils;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
@@ -101,7 +100,7 @@ namespace Caveman.Network
             {
                 var playerId = player[ServerParams.UserId].ToString();
                 if (!PlayerPool.instance.ContainsKey(playerId))
-                    playersManager.CreatePlayerModel(new PlayerCore(player[ServerParams.UserName].ToString(), playerId,
+                    playersManager.CreateModel(new PlayerCore(player[ServerParams.UserName].ToString(), playerId,
 		                    CurrentSettings.PlayersConfigs["sample"]), false, true, Instantiate(prefabServerPlayer), battleGui);
             }
         }
@@ -129,7 +128,7 @@ namespace Caveman.Network
 
         public void LoginReceive(string playerId, string playerName)
         {
-            playersManager.CreatePlayerModel(new PlayerCore(playerName, playerId,
+            playersManager.CreateModel(new PlayerCore(playerName, playerId,
 	            CurrentSettings.PlayersConfigs["sample"]), false, true, Instantiate(prefabServerPlayer), battleGui);
             serverNotify.RespawnSend(PlayerPool.instance[OwnId].transform.position);
         }

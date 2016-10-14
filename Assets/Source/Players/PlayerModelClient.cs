@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using Caveman.Bonuses;
-using Caveman.Setting;
 using Caveman.Configs;
 using Caveman.Weapons;
 using UnityEngine;
@@ -41,7 +40,7 @@ namespace Caveman.Players
                         weapon.Destroy();
                         StopAllCoroutines();
                         Die();
-                        StartCoroutine(Respawn(new Vector2(rand.Next(Settings.WidthMap), rand.Next(Settings.HeightMap))));
+                        StartCoroutine(Respawn(GetRandomPosition()));
                     }
                 }
             }
@@ -73,9 +72,9 @@ namespace Caveman.Players
 
         public override void PickupBonus(BonusBase bonus)
         {
-            if (multiplayer) serverNotify.PickBonusSend(bonus.Id, (int)bonus.Config.Type);
-	        //todo hack
-	        base.PickupBonus(bonus);
+            if (multiplayer) serverNotify.PickBonusSend(bonus.Id, (int) bonus.Config.Type);
+            //todo hack
+            base.PickupBonus(bonus);
         }
 
         public override void PickupWeapon(WeaponModelBase weaponModel)
@@ -83,7 +82,7 @@ namespace Caveman.Players
             if (!IsEnoughStrength(weaponModel.Config.Weight)) return;
             base.PickupWeapon(weaponModel);
             PlayerCore.WeaponCount += weaponModel.Config.CountItems;
-            if (multiplayer) serverNotify.PickWeaponSend(weaponModel.Id, (int)weaponModel.Config.Type);
+            if (multiplayer) serverNotify.PickWeaponSend(weaponModel.Id, (int) weaponModel.Config.Type);
         }
 
         public override void ActivateWeapon(Vector2 aim)
@@ -103,12 +102,17 @@ namespace Caveman.Players
             yield return new WaitForSeconds(WeaponConfig.Cooldown);
             if (PlayerCore.WeaponCount > 0)
             {
-                var victim = playersManager.FindClosestPlayer(this);
+                var victim = FindClosestPlayer(this);
                 if (victim != null)
                 {
                     ActivateWeapon(victim.transform.position);
                 }
             }
+            StartCoroutine(PerformWeaponAction());
+        }
+
+        public virtual void OnEnable()
+        {
             StartCoroutine(PerformWeaponAction());
         }
     }

@@ -31,8 +31,7 @@ namespace Caveman
         protected ObjectPool<WeaponModelBase> poolStones;
         protected ObjectPool<BonusBase> poolBonusesSpeed;
         protected BattleGui battleGui;
-
-        private Random rand;        
+        protected MapCore mapCore;
 
         public void Awake()
         {
@@ -44,18 +43,19 @@ namespace Caveman
         {
             var isMultiplayer = serverNotify != null;
             battleGui = FindObjectOfType<BattleGui>();
-            battleGui.Initialization(isMultiplayer);
+            battleGui.Initialization(isMultiplayer, CurrentSettings.SingleLevelConfigs[currentLevelName].RoundTime);
 
-            rand = new Random();
+            var rand = new Random();
           
             poolsManager.InitializationPools(CurrentSettings, isMultiplayer);
             poolStones = poolsManager.Stones;
             poolBonusesSpeed = poolsManager.BonusesSpeed;
 
-            new MapCore(CurrentSettings.MapConfigs["sample"] , isMultiplayer, mapModel, rand);
+            mapCore = new MapCore(CurrentSettings.MapConfigs["sample"] , isMultiplayer, mapModel, rand);
 
-            playersManager = new PlayersManager(serverNotify, smoothCamera, rand, playerPool);
-            playersManager.CreatePlayerModel(
+            smoothCamera.Initialization(mapCore.Width, mapCore.Height);
+            playersManager = new PlayersManager(serverNotify, smoothCamera, rand, playerPool, mapCore);
+            playersManager.CreateModel(
                 new PlayerCore(PlayerPrefs.GetString(AccountManager.KeyNickname),
                 SystemInfo.deviceUniqueIdentifier, CurrentSettings.PlayersConfigs["sample"]), 
                 false, false, Instantiate(prefabHumanPlayer), battleGui);
@@ -68,7 +68,7 @@ namespace Caveman
                         i.ToString(),
                         CurrentSettings.PlayersConfigs["sample"]);
 
-                    playersManager.CreatePlayerModel(
+                    playersManager.CreateModel(
                         playerCore,
                         true, false, Instantiate(prefabAiPlayer), battleGui);
                 }

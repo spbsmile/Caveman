@@ -29,7 +29,7 @@ namespace Caveman.Setting
 
         public void Start()
         {
-            roundTime.text = Settings.RoundTime.ToString();
+            //roundTime.text = Settings.RoundTime.ToString();
             //botsCount.text = Settings.BotsCount.ToString();
             //playerSpeed.text = Settings.PlayerSpeed.ToString();
             //weaponSpeed.text = Settings.StoneSpeed.ToString();
@@ -44,10 +44,10 @@ namespace Caveman.Setting
 
             ip_server.text = PlayerPrefs.HasKey(Settings.KeyIpServer) ? PlayerPrefs.GetString(Settings.KeyIpServer) : Settings.IP_SERVER;
 
-            roundTime.onEndEdit.AddListener(delegate
-            {
-                Settings.RoundTime = Convert.ToInt32(roundTime.text);
-            });
+            //roundTime.onEndEdit.AddListener(delegate
+            //{
+            //    Settings.RoundTime = Convert.ToInt32(roundTime.text);
+            //});
             botsCount.onEndEdit.AddListener(delegate
             {
               //  Settings.BotsCount = Convert.ToInt32(botsCount.text);

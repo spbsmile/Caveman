@@ -4,7 +4,6 @@
     {
         public static int WidthMap = 24;
         public static int HeightMap = 24;
-        public static int RoundTime = 60;
 
         public static bool DisableSendMove;
 
