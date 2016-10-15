@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Caveman.UI.Windows
 {
@@ -31,6 +32,12 @@ namespace Caveman.UI.Windows
             joystick.Disable();
             Time.timeScale = 0.00001f;
             yield return StartCoroutine(base.DisplayResult());
+        }
+
+        public void LoadMenu()
+        {
+            Time.timeScale = 1;
+            SceneManager.LoadScene(0);
         }
     }
 }
