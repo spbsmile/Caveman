@@ -26,10 +26,14 @@ namespace Caveman.UI
             };
         }
 
-        public void Initialization(bool isMultiplayer, int roundTime)
+        public void Initialization(bool isMultiplayer, int roundTime, bool isObservableMode)
         {
             resultRound.Initialization(isMultiplayer);
             mainGameTimer.Initialization(isMultiplayer, roundTime);
+            if (isObservableMode)
+            {
+                joystick.Disable();
+            }
         }
 
         public void SubscribeOnEvents(PlayerModelHuman model, Func<Vector2> randomPosition)

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Net.Sockets;
+﻿using System.Collections;
 using Caveman.UI.Common;
 using Caveman.Utils;
 using UnityEngine;
@@ -52,7 +50,7 @@ namespace Caveman.UI.Menu
 
         public void LoadObserverGame()
         {
-            //LoadingScreen.instance.ProgressTo(4);
+            LoadingScreen.instance.ProgressTo(7);
         }
 
         public void LoadMenu()
