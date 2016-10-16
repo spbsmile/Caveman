@@ -1,4 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using Caveman.Players;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,13 +10,6 @@ namespace Caveman.UI.Windows
     public class ResultRound : Result
     {
         public CNJoystick joystick;
-
-        private bool isMultiplayer;
-
-        public void Initialization(bool isMultiplayer)
-        {
-            this.isMultiplayer = isMultiplayer;
-        }
 
         public void OnEnable()
         {

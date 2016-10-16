@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
-using Caveman.Pools;
+using System.Collections.Generic;
+using Caveman.Players;
 using UnityEngine.UI;
 
 namespace Caveman.UI.Windows
@@ -11,9 +13,18 @@ namespace Caveman.UI.Windows
         public Transform kills;
         public Transform deaths;
 
+        private Func<IEnumerable<PlayerModelBase>> getCurrentPlayersModel;
+        protected bool isMultiplayer;
+
+        public virtual void Initialization(bool isMultiplayer, Func<IEnumerable<PlayerModelBase>> getCurrentPlayers)
+        {
+            this.isMultiplayer = isMultiplayer;
+            getCurrentPlayersModel = getCurrentPlayers;
+        }
+
         protected  virtual IEnumerator DisplayResult()
         {
-            var players = PlayerPool.instance.GetCurrentPlayerModels();
+            var players = getCurrentPlayersModel();
             var lineIndex = 0;
             foreach (var playerModelBase in players)
             {

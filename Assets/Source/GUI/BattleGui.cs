@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Caveman.Players;
 using Caveman.UI.Battle;
 using Caveman.UI.Windows;
@@ -26,9 +27,9 @@ namespace Caveman.UI
             };
         }
 
-        public void Initialization(bool isMultiplayer, int roundTime, bool isObservableMode)
+        public void Initialization(bool isMultiplayer, int roundTime, bool isObservableMode, Func<IEnumerable<PlayerModelBase>> getCurrentPlayers)
         {
-            resultRound.Initialization(isMultiplayer);
+            resultRound.Initialization(isMultiplayer, getCurrentPlayers);
             mainGameTimer.Initialization(isMultiplayer, roundTime);
             if (isObservableMode)
             {

@@ -47,14 +47,14 @@ namespace Caveman.Players
             WeaponConfig = EnterPoint.CurrentSettings.WeaponsConfigs["stone"];
         }
 
-        public void Initialization(PlayerCore playerCore, IServerNotify serverNotify, Func<PlayerModelBase, PlayerModelBase> findClosestPlayer, PlayerPool pool, Func<Vector2> getRandomPosition)
+        public void Initialization(PlayerCore core, IServerNotify serverNotify, Func<PlayerModelBase, PlayerModelBase> findClosestPlayer, PlayerPool pool, Func<Vector2> getRandomPosition)
         {
             this.serverNotify = serverNotify;
 	        this.pool = pool;
             GetRandomPosition = getRandomPosition;
             FindClosestPlayer = findClosestPlayer;
             if (serverNotify != null) multiplayer = true;
-            PlayerCore = playerCore;
+            PlayerCore = core;
         }
         
         public virtual void PickupBonus(BonusBase bonus)

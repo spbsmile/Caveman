@@ -33,7 +33,7 @@ namespace Caveman
         protected ObjectPool<WeaponModelBase> poolStones;
         protected ObjectPool<BonusBase> poolBonusesSpeed;
         protected BattleGui battleGui;
-        protected MapCore mapCore;
+
 
         public void Awake()
         {
@@ -45,7 +45,7 @@ namespace Caveman
         {
             var isMultiplayer = serverNotify != null;
             battleGui = FindObjectOfType<BattleGui>();
-            battleGui.Initialization(isMultiplayer, CurrentSettings.SingleLevelConfigs[currentLevelName].RoundTime, isObservableMode);
+            battleGui.Initialization(isMultiplayer, CurrentSettings.SingleLevelConfigs[currentLevelName].RoundTime, isObservableMode, playerPool.GetCurrentPlayerModels);
 
             var rand = new Random();
           
@@ -53,17 +53,17 @@ namespace Caveman
             poolStones = poolsManager.Stones;
             poolBonusesSpeed = poolsManager.BonusesSpeed;
 
-            mapCore = new MapCore(CurrentSettings.MapConfigs["sample"] , isMultiplayer, mapModel, rand);
+            var mapCore = new MapCore(CurrentSettings.MapConfigs["sample"] , isMultiplayer, mapModel, rand);
 
             smoothCamera.Initialization(mapCore.Width, mapCore.Height);
             playersManager = new PlayersManager(serverNotify, smoothCamera, rand, playerPool, mapCore);
 
             if (!isObservableMode)
             {
-                playersManager.CreateModel(
+                playersManager.CreatePlayerModel(
                     new PlayerCore(PlayerPrefs.GetString(AccountManager.KeyNickname),
                         SystemInfo.deviceUniqueIdentifier, CurrentSettings.PlayersConfigs["sample"]),
-                    false, false, Instantiate(prefabHumanPlayer), battleGui);
+                    Instantiate(prefabHumanPlayer), battleGui);
             }
 
             if (!isMultiplayer)
@@ -73,10 +73,7 @@ namespace Caveman
                     var playerCore = new PlayerCore(CurrentSettings.SingleLevelConfigs[currentLevelName].BotsName[i],
                         i.ToString(),
                         CurrentSettings.PlayersConfigs["sample"]);
-
-                    playersManager.CreateModel(
-                        playerCore,
-                        true, false, Instantiate(prefabAiPlayer), battleGui);
+                    playersManager.CreateClientAiModel(playerCore, Instantiate(prefabAiPlayer));
                 }
                 playersManager.StartUseWeapon();
             }

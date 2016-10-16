@@ -25,7 +25,7 @@ namespace Caveman.Network
 	        serverConnection.StartSession(OwnId,
                 PlayerPrefs.GetString(AccountManager.KeyNickname));
             base.Start();
-            serverNotify.RespawnSend(PlayerPool.instance[OwnId].transform.position);
+            serverNotify.RespawnSend(playerPool[OwnId].transform.position);
         }
 
         public void Update()
@@ -46,12 +46,12 @@ namespace Caveman.Network
 
         public void WeaponPickReceive(string playerId, string key)
         {
-            PlayerPool.instance[playerId].PickupWeapon(poolStones[key]);
+            playerPool[playerId].PickupWeapon(poolStones[key]);
         }
 
         public void WeaponUseReceive(string playerId, Vector2 aim)
         {
-            PlayerPool.instance[playerId].ActivateWeapon(aim);
+            playerPool[playerId].ActivateWeapon(aim);
         }
 
         public void BonusAddedReceive(string key, Vector2 point)
@@ -67,30 +67,30 @@ namespace Caveman.Network
 
         public void BonusPickReceive(string playerId, string key)
         {
-            PlayerPool.instance[playerId].PickupBonus(poolBonusesSpeed[key]);
+            playerPool[playerId].PickupBonus(poolBonusesSpeed[key]);
         }
 
 	    public void PlayerRespawnReceive(string playerId, Vector2 point)
 	    {
-		    PlayerPool.instance[playerId].RespawnInstantly(point);
+            playerPool[playerId].RespawnInstantly(point);
 	    }
 
 	    public void PlayerDeadReceive(string playerId)
         {
-            PlayerPool.instance[playerId].Die();
+            playerPool[playerId].Die();
         }
 
         public void PlayerMoveReceive(string playerId, Vector2 point)
         {
-            if (!PlayerExist(PlayerPool.instance, playerId)) return;
-            if (Vector2.SqrMagnitude((Vector2)PlayerPool.instance[playerId].transform.position - point) <
+            if (!PlayerExist(playerPool, playerId)) return;
+            if (Vector2.SqrMagnitude((Vector2)playerPool[playerId].transform.position - point) <
                 UnityExtensions.ThresholdPosition)
             {
-                PlayerPool.instance[playerId].StopMove();
+                playerPool[playerId].StopMove();
             }
             else
             {
-                PlayerPool.instance[playerId].CalculateMoveUnit(point);
+                playerPool[playerId].CalculateMoveUnit(point);
             }
         }
 
@@ -99,9 +99,9 @@ namespace Caveman.Network
             foreach (var player in jToken.Children<JObject>())
             {
                 var playerId = player[ServerParams.UserId].ToString();
-                if (!PlayerPool.instance.ContainsKey(playerId))
-                    playersManager.CreateModel(new PlayerCore(player[ServerParams.UserName].ToString(), playerId,
-		                    CurrentSettings.PlayersConfigs["sample"]), false, true, Instantiate(prefabServerPlayer), battleGui);
+                if (!playerPool.ContainsKey(playerId))
+                    playersManager.CreateServerModel(new PlayerCore(player[ServerParams.UserName].ToString(), playerId,
+                        CurrentSettings.PlayersConfigs["sample"]), Instantiate(prefabServerPlayer));
             }
         }
 
@@ -128,15 +128,15 @@ namespace Caveman.Network
 
         public void LoginReceive(string playerId, string playerName)
         {
-            playersManager.CreateModel(new PlayerCore(playerName, playerId,
-	            CurrentSettings.PlayersConfigs["sample"]), false, true, Instantiate(prefabServerPlayer), battleGui);
-            serverNotify.RespawnSend(PlayerPool.instance[OwnId].transform.position);
+            playersManager.CreateServerModel(new PlayerCore(playerName, playerId,
+                CurrentSettings.PlayersConfigs["sample"]), Instantiate(prefabServerPlayer));
+            serverNotify.RespawnSend(playerPool[OwnId].transform.position);
         }
 
         public void LogoutReceive(string playerId)
         {
-            PlayerPool.instance.Remove(playerId);
-            Destroy(PlayerPool.instance[playerId].gameObject);
+            playerPool.Remove(playerId);
+            Destroy(playerPool[playerId].gameObject);
         }
 
         public void OnDestroy()

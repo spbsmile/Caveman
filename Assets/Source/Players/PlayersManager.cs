@@ -42,52 +42,44 @@ namespace Caveman.Players
             }
         }
      
-	    public void CreateModel(PlayerCore playerCore, bool isAiPlayer, bool isServerPlayer, Transform prefab, BattleGui battleGui)
+        private PlayerModelBase CreateModel(PlayerCore playerCore, Transform prefab)
         {
             var model = prefab.GetComponent<PlayerModelBase>();
-	        model.Initialization(playerCore, serverNotify, FindClosestPlayer, pool, mapCore.GetRandomPosition);
+            model.Initialization(playerCore, serverNotify, FindClosestPlayer, pool, mapCore.GetRandomPosition);
             pool.Add(playerCore.Id, model);
 
-            //todo extracted to method
-            if (!isServerPlayer && !isAiPlayer)
-            {
-                var playerModel = (PlayerModelHuman) model;
-                playerModel.InitializationByMap(mapCore.Width, mapCore.Height);
-                battleGui.SubscribeOnEvents(playerModel, mapCore.GetRandomPosition);
-                smoothCamera.target = prefab.transform;
-                smoothCamera.SetPlayer(prefab.GetComponent<PlayerModelBase>());
-                if (serverNotify != null) model.GetComponent<SpriteRenderer>().material.color = Color.red;
-            }
-
-	        if (isAiPlayer)
-	        {
-	            var modelAi = (PlayerModelAi) model;
-	            modelAi.Initialization(rand, mapCore.MaxDistance);
-	        }
-
             model.WeaponPoolChange += PoolsManager.instance.ChangeWeaponPool;
-	        // todo deleted this row, ectracte in method
+            // todo deleted this row, ectracte in method
             model.RespawnInstantly(mapCore.RandomPosition);
             model.name = playerCore.Name;
             model.transform.GetChild(0).GetComponent<TextMesh>().text = playerCore.Name;
+            return model;
         }
 
-        public void CreateClientAiModel()
+        public void CreateClientAiModel(PlayerCore playerCore, Transform prefab)
         {
-            
+            var model = CreateModel(playerCore, prefab);
+            var modelAi = (PlayerModelAi) model;
+            modelAi.Initialization(rand, mapCore.MaxDistance);
         }
 
-        public void CreateServerModel()
+        public void CreateServerModel(PlayerCore playerCore, Transform prefab)
         {
-            
+            CreateModel(playerCore, prefab);
         }
 
-        public void CreatePlayerModel()
+        public void CreatePlayerModel(PlayerCore playerCore, Transform prefab, BattleGui battleGui)
         {
-            
+            var model = CreateModel(playerCore, prefab);
+            var playerModel = (PlayerModelHuman)model;
+            playerModel.InitializationByMap(mapCore.Width, mapCore.Height);
+            battleGui.SubscribeOnEvents(playerModel, mapCore.GetRandomPosition);
+            smoothCamera.target = prefab.transform;
+            smoothCamera.SetPlayer(prefab.GetComponent<PlayerModelBase>());
+            if (serverNotify != null) model.GetComponent<SpriteRenderer>().material.color = Color.red;
         }
 
-	    public PlayerModelBase FindClosestPlayer(PlayerModelBase playerModelBase)
+        private PlayerModelBase FindClosestPlayer(PlayerModelBase playerModelBase)
 	    {
 	        var minDistance = mapCore.MaxDistance;
             var positionPlayer = playerModelBase.transform.position;
