@@ -34,6 +34,7 @@ namespace Caveman.UI.Windows
         protected override IEnumerator DisplayResult()
         {
             yield return StartCoroutine(base.DisplayResult());
+            // for real-time update display data
             yield return StartCoroutine(DisplayResult());
         }
 

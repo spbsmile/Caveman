@@ -3,6 +3,7 @@ using Caveman.Level;
 using Caveman.Network;
 using Caveman.Pools;
 using Caveman.UI;
+using JetBrains.Annotations;
 using Random = System.Random;
 using UnityEngine;
 
@@ -49,7 +50,6 @@ namespace Caveman.Players
             pool.Add(playerCore.Id, model);
 
             model.WeaponPoolChange += PoolsManager.instance.ChangeWeaponPool;
-            // todo deleted this row, ectracte in method
             model.RespawnInstantly(mapCore.RandomPosition);
             model.name = playerCore.Name;
             model.transform.GetChild(0).GetComponent<TextMesh>().text = playerCore.Name;
@@ -79,6 +79,7 @@ namespace Caveman.Players
             if (serverNotify != null) model.GetComponent<SpriteRenderer>().material.color = Color.red;
         }
 
+        [CanBeNull]
         private PlayerModelBase FindClosestPlayer(PlayerModelBase playerModelBase)
 	    {
 	        var minDistance = mapCore.MaxDistance;

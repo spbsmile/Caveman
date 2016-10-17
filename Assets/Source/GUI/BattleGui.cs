@@ -30,6 +30,8 @@ namespace Caveman.UI
         public void Initialization(bool isMultiplayer, int roundTime, bool isObservableMode, Func<IEnumerable<PlayerModelBase>> getCurrentPlayers)
         {
             resultRound.Initialization(isMultiplayer, getCurrentPlayers);
+            respawnWindow.Initialization(isMultiplayer, getCurrentPlayers);
+
             mainGameTimer.Initialization(isMultiplayer, roundTime);
             if (isObservableMode)
             {

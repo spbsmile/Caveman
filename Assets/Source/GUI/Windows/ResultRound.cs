@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Caveman.Players;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
