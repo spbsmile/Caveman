@@ -10,6 +10,7 @@ namespace Caveman.Players
         private Vector2 targetPosition;
         private float maxDistance;
         private Random rand;
+        private Transform containerStones;
 
         protected void Start()
         {
@@ -40,10 +41,11 @@ namespace Caveman.Players
             }
         }
 
-        public void Initialization(Random rand, float maxDistance)
+        public void Initialization(Random rand, float maxDistance, Transform containerStones)
         {
             this.rand = rand;
             this.maxDistance = maxDistance;
+            this.containerStones = containerStones;
         }
      
         private Vector2 FindClosestLyingWeapon
@@ -53,7 +55,7 @@ namespace Caveman.Players
                 var minDistance = maxDistance;
                 var nearPosition = Vector2.zero;
 
-                foreach (Transform weapon in PoolsManager.instance.containerStones)
+                foreach (Transform weapon in containerStones)
                 {
                     if (!weapon.gameObject.activeSelf) continue;
                     var childDistance = Vector2.SqrMagnitude(weapon.position - transform.position);

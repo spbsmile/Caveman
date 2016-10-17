@@ -15,6 +15,7 @@ namespace Caveman.Level
         private Random rand;
         private int width;
         private int height;
+        private Dictionary<string, object> poolsManagerPools;
 
         public void CreateTerrain(Random rand, string pathPrefabTile, IEnumerable<MapConfig.Artefacts> artefacts, int width, int height, bool isMultiplayer)
         {
@@ -85,7 +86,7 @@ namespace Caveman.Level
             // todo var bound = Settings.BonusSpeedMaxCount - PoolsManager.instance.BonusesSpeed.GetActivedCount; 
             for (var i = 0; i < count; i++)
             {
-                PutItem((ObjectPool<T>)PoolsManager.instance.Pools[poolId]);
+                PutItem((ObjectPool<T>) poolsManagerPools[poolId]);
             }
             yield return new WaitForSeconds(period);
             StartCoroutine(PutItems<T>(poolId, period, count));
@@ -96,6 +97,11 @@ namespace Caveman.Level
             var item = pool.New();
             StartCoroutine(UnityExtensions.FadeIn(item.GetComponent<SpriteRenderer>()));
             item.transform.position = new Vector2(rand.Next(1, width - 1), rand.Next(1, height - 1));
+        }
+
+        public void InitializatonPool(Dictionary<string, object> poolsManagerPools)
+        {
+            this.poolsManagerPools = poolsManagerPools;
         }
     }
 }

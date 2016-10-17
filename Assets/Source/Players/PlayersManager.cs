@@ -1,8 +1,12 @@
+using System;
 using System.Collections.Generic;
+using Caveman.Configs;
+using Caveman.CustomAnimation;
 using Caveman.Level;
 using Caveman.Network;
 using Caveman.Pools;
 using Caveman.UI;
+using Caveman.Weapons;
 using JetBrains.Annotations;
 using Random = System.Random;
 using UnityEngine;
@@ -17,15 +21,19 @@ namespace Caveman.Players
 	    private readonly PlayerPool pool;
 	    private readonly Random rand;
         private readonly MapCore mapCore;
+        private readonly Func<WeaponConfig.Types, ObjectPool<WeaponModelBase>> ChangeWeaponPool;
+        private readonly ObjectPool<ImageBase> imagesDeath;
 
-	    public PlayersManager(IServerNotify serverNotify, SmoothCamera smoothCamera, Random rand, PlayerPool pool, MapCore mapCore)
+        public PlayersManager(IServerNotify serverNotify, SmoothCamera smoothCamera, Random rand, PlayerPool pool, MapCore mapCore, Func<WeaponConfig.Types, ObjectPool<WeaponModelBase>> changeWeaponPool, ObjectPool<ImageBase> imagesDeath)
         {
             this.serverNotify = serverNotify;
             this.smoothCamera = smoothCamera;
             this.pool = pool;
             this.rand = rand;
 	        this.mapCore = mapCore;
-	        
+            this.ChangeWeaponPool = changeWeaponPool;
+            this.imagesDeath = imagesDeath;
+
             models = new List<PlayerModelBase>();
             models.AddRange(pool.GetCurrentPlayerModels());
             // only for multiplayer
@@ -46,21 +54,20 @@ namespace Caveman.Players
         private PlayerModelBase CreateModel(PlayerCore playerCore, Transform prefab)
         {
             var model = prefab.GetComponent<PlayerModelBase>();
-            model.Initialization(playerCore, serverNotify, FindClosestPlayer, pool, mapCore.GetRandomPosition);
+            model.Initialization(playerCore, serverNotify, FindClosestPlayer, pool, mapCore.GetRandomPosition, ChangeWeaponPool, imagesDeath);
             pool.Add(playerCore.Id, model);
 
-            model.WeaponPoolChange += PoolsManager.instance.ChangeWeaponPool;
             model.RespawnInstantly(mapCore.RandomPosition);
             model.name = playerCore.Name;
             model.transform.GetChild(0).GetComponent<TextMesh>().text = playerCore.Name;
             return model;
         }
 
-        public void CreateClientAiModel(PlayerCore playerCore, Transform prefab)
+        public void CreateClientAiModel(PlayerCore playerCore, Transform prefab, Transform containerStones)
         {
             var model = CreateModel(playerCore, prefab);
             var modelAi = (PlayerModelAi) model;
-            modelAi.Initialization(rand, mapCore.MaxDistance);
+            modelAi.Initialization(rand, mapCore.MaxDistance, containerStones);
         }
 
         public void CreateServerModel(PlayerCore playerCore, Transform prefab)

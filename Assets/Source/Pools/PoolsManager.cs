@@ -5,14 +5,13 @@ using Caveman.CustomAnimation;
 using Caveman.Setting;
 using Caveman.Configs;
 using Caveman.Weapons;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Caveman.Pools
 {
     public class PoolsManager : MonoBehaviour
     {
-        public static PoolsManager instance;
-
         public Transform containerStones;
         public Transform containerSplashStones;
         public Transform containerSkulls;
@@ -28,14 +27,6 @@ namespace Caveman.Pools
         public ObjectPool<BonusBase> BonusesSpeed { private set; get; }
 
         public readonly Dictionary<string, object> Pools = new Dictionary<string, object>();
-
-        public void Awake()
-        {
-            if (instance == null)
-            {
-                instance = this;
-            }
-        }
 
         public void InitializationPools(CurrentGameSettings settings, bool isMultiplayer)
         {
@@ -55,8 +46,7 @@ namespace Caveman.Pools
             //Axes = PreparePool(Inst<WeaponModelBase>(axesConfig.PrefabPath), poolsConfig.BonusesOrdinary);
             BonusesSpeed = PreparePool(containerBonusesSpeed, Inst<BonusBase>(bonusSpeedConfig.PrefabPath), poolsConfig.BonusesOrdinary, InitializationPoolBonus, isMultiplayer);
 
-            Pools.Add(deathConfig.PrefabPath, ImagesDeath);
-            Pools.Add(splahesConfig.PrefabPath, SplashesStone);
+            // for map 
             Pools.Add(stonesConfig.PrefabPath, Stones);
             Pools.Add(axesConfig.PrefabPath, Axes);
             Pools.Add(bonusSpeedConfig.PrefabPath, BonusesSpeed);
@@ -67,7 +57,7 @@ namespace Caveman.Pools
             return Instantiate(Resources.Load(prefabPath, typeof(T))) as T;
         }
 
-        private ObjectPool<T> PreparePool<T>(Transform container, T prefab, int initialBufferSize, Action<GameObject, ObjectPool<T>> init, bool isMultiplayer)
+        private ObjectPool<T> PreparePool<T>(Transform container, T prefab, int initialBufferSize, [CanBeNull] Action<GameObject, ObjectPool<T>> init, bool isMultiplayer)
             where T : MonoBehaviour
         {
             var pool = container.GetComponent<ObjectPool<T>>();
@@ -81,7 +71,7 @@ namespace Caveman.Pools
             return pool;
         }
 
-        private void AddItem<T>(ObjectPool<T> pool, Action<GameObject, ObjectPool<T>> init, Transform container, T item) where T : MonoBehaviour
+        private void AddItem<T>(ObjectPool<T> pool, [CanBeNull] Action<GameObject, ObjectPool<T>> init, Transform container, T item) where T : MonoBehaviour
         {
             if (init != null)
             {

@@ -10,9 +10,12 @@ namespace Caveman.CustomAnimation
         private readonly Animator animator;
         private readonly Transform transform;
         private readonly Transform name;
+        // todo convert to simple image
+        private readonly ObjectPool<ImageBase> imagesDeath;
 
-        public PlayerAnimation(Animator animator)
+        public PlayerAnimation(Animator animator, ObjectPool<ImageBase> imagesDeath)
         {
+            this.imagesDeath = imagesDeath;
             this.animator = animator;
             transform = animator.GetComponent<Transform>();
             name = transform.GetChild(0);
@@ -79,7 +82,7 @@ namespace Caveman.CustomAnimation
 
         public IEnumerator Death(Vector2 position)
         {
-            var deathImage = PoolsManager.instance.ImagesDeath.New();
+            var deathImage = imagesDeath.New();
             deathImage.transform.position = position;
             var spriteRenderer = deathImage.GetComponent<SpriteRenderer>();
             if (spriteRenderer)
@@ -92,7 +95,7 @@ namespace Caveman.CustomAnimation
                     yield return new WaitForSeconds(0.1f);
                 }
             }
-            PoolsManager.instance.ImagesDeath.Store(deathImage);
+            imagesDeath.Store(deathImage);
         }
     }
 }

@@ -53,10 +53,11 @@ namespace Caveman
             poolStones = poolsManager.Stones;
             poolBonusesSpeed = poolsManager.BonusesSpeed;
 
+            mapModel.InitializatonPool(poolsManager.Pools);
             var mapCore = new MapCore(CurrentSettings.MapConfigs["sample"] , isMultiplayer, mapModel, rand);
 
             smoothCamera.Initialization(mapCore.Width, mapCore.Height);
-            playersManager = new PlayersManager(serverNotify, smoothCamera, rand, playerPool, mapCore);
+            playersManager = new PlayersManager(serverNotify, smoothCamera, rand, playerPool, mapCore, poolsManager.ChangeWeaponPool, poolsManager.ImagesDeath);
 
             if (!isObservableMode)
             {
@@ -73,7 +74,7 @@ namespace Caveman
                     var playerCore = new PlayerCore(CurrentSettings.SingleLevelConfigs[currentLevelName].BotsName[i],
                         i.ToString(),
                         CurrentSettings.PlayersConfigs["sample"]);
-                    playersManager.CreateClientAiModel(playerCore, Instantiate(prefabAiPlayer));
+                    playersManager.CreateClientAiModel(playerCore, Instantiate(prefabAiPlayer), poolsManager.containerStones);
                 }
                 playersManager.StartUseWeapon();
             }

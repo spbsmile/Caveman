@@ -19,7 +19,7 @@ namespace Caveman.Players
      */
     public class PlayerModelBase : MonoBehaviour
     {
-        public Func<WeaponConfig.Types, ObjectPool<WeaponModelBase>> WeaponPoolChange;
+        private Func<WeaponConfig.Types, ObjectPool<WeaponModelBase>> WeaponPoolChange;
         protected Func<Vector2> GetRandomPosition;
         protected Func<PlayerModelBase, PlayerModelBase> FindClosestPlayer;
 
@@ -43,18 +43,19 @@ namespace Caveman.Players
 	    protected virtual void Awake()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
-            playerAnimation = new PlayerAnimation(GetComponent<Animator>());
             WeaponConfig = EnterPoint.CurrentSettings.WeaponsConfigs["stone"];
         }
 
-        public void Initialization(PlayerCore core, IServerNotify serverNotify, Func<PlayerModelBase, PlayerModelBase> findClosestPlayer, PlayerPool pool, Func<Vector2> getRandomPosition)
+        public void Initialization(PlayerCore core, IServerNotify serverNotify, Func<PlayerModelBase, PlayerModelBase> findClosestPlayer, PlayerPool pool, Func<Vector2> getRandomPosition, Func<WeaponConfig.Types, ObjectPool<WeaponModelBase>> changeWeaponPool, ObjectPool<ImageBase> imagesDeath)
         {
             this.serverNotify = serverNotify;
 	        this.pool = pool;
             GetRandomPosition = getRandomPosition;
             FindClosestPlayer = findClosestPlayer;
+            WeaponPoolChange = changeWeaponPool;
             if (serverNotify != null) multiplayer = true;
             PlayerCore = core;
+            playerAnimation = new PlayerAnimation(GetComponent<Animator>(), imagesDeath);
         }
         
         public virtual void PickupBonus(BonusBase bonus)
@@ -64,7 +65,7 @@ namespace Caveman.Players
 
         public virtual void Die()
         {
-	        PlayerCore.IsAlive = false;
+            PlayerCore.IsAlive = false;
             pool.Store(this);
         }
 

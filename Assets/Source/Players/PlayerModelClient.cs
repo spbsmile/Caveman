@@ -39,6 +39,7 @@ namespace Caveman.Players
                         }
                         weapon.Destroy();
                         StopAllCoroutines();
+                        StartCoroutine(playerAnimation.Death(transform.position));
                         Die();
                         StartCoroutine(Respawn(GetRandomPosition()));
                     }
