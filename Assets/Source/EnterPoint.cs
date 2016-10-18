@@ -64,7 +64,7 @@ namespace Caveman
                 playersManager.CreatePlayerModel(
                     new PlayerCore(PlayerPrefs.GetString(AccountManager.KeyNickname),
                         SystemInfo.deviceUniqueIdentifier, CurrentSettings.PlayersConfigs["sample"]),
-                    Instantiate(prefabHumanPlayer), battleGui);
+                    Instantiate(prefabHumanPlayer), battleGui.SubscribeOnEvents);
             }
 
             if (!isMultiplayer)

@@ -5,7 +5,7 @@ namespace Caveman.Level
 {
     public class SmoothCamera : MonoBehaviour
     {
-        public Transform target;
+        private Transform target;
 
         private const float DampTime = 0.15f;
         
@@ -14,6 +14,12 @@ namespace Caveman.Level
         private float criticalY;
         private Vector2 section;
         private PlayerModelBase player;
+
+        public void Watch(Transform player)
+        {
+            target = player;
+            this.player = player.GetComponent<PlayerModelBase>();
+        }
 
         public void Initialization(int mapWidth, int mapHeight)
         {
@@ -128,11 +134,6 @@ namespace Caveman.Level
                 var destination = transform.position + delta;
                 transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, DampTime);
             }
-        }
-
-        public void SetPlayer(PlayerModelBase player)
-        {
-            this.player = player;
         }
 
         //private void OnDrawGizmos()

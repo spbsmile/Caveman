@@ -41,7 +41,7 @@ namespace Caveman.Players
 
 	    protected virtual void Awake()
         {
-          //  spriteRenderer = GetComponent<SpriteRenderer>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
             WeaponConfig = EnterPoint.CurrentSettings.WeaponsConfigs["stone"];
         }
 

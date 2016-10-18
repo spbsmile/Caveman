@@ -5,7 +5,6 @@ using Caveman.CustomAnimation;
 using Caveman.Level;
 using Caveman.Network;
 using Caveman.Pools;
-using Caveman.UI;
 using Caveman.Weapons;
 using JetBrains.Annotations;
 using Random = System.Random;
@@ -75,15 +74,19 @@ namespace Caveman.Players
             CreateModel(playerCore, prefab);
         }
 
-        public void CreatePlayerModel(PlayerCore playerCore, Transform prefab, BattleGui battleGui)
+        public void CreatePlayerModel(PlayerCore playerCore, Transform prefab, Action<PlayerModelHuman, Func<Vector2>> subscribeGuiOnEvents)
         {
             var model = CreateModel(playerCore, prefab);
             var playerModel = (PlayerModelHuman)model;
             playerModel.InitializationByMap(mapCore.Width, mapCore.Height);
-            battleGui.SubscribeOnEvents(playerModel, mapCore.GetRandomPosition);
-            smoothCamera.target = prefab.transform;
-            smoothCamera.SetPlayer(prefab.GetComponent<PlayerModelBase>());
+            subscribeGuiOnEvents(playerModel, mapCore.GetRandomPosition);
+            WatchCamera(prefab);
             if (serverNotify != null) model.GetComponent<SpriteRenderer>().material.color = Color.red;
+        }
+
+        private void WatchCamera(Transform item)
+        {
+            smoothCamera.Watch(item);
         }
 
         [CanBeNull]
