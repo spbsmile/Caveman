@@ -31,7 +31,6 @@ namespace Caveman.Players
         protected bool multiplayer;
         
         protected WeaponConfig WeaponConfig;
-        protected internal bool invulnerability;
         protected PlayerAnimation playerAnimation;
         protected Vector2 moveUnit;
         private ObjectPool<WeaponModelBase> currentPoolWeapons;
@@ -42,11 +41,11 @@ namespace Caveman.Players
 
 	    protected virtual void Awake()
         {
-            spriteRenderer = GetComponent<SpriteRenderer>();
+          //  spriteRenderer = GetComponent<SpriteRenderer>();
             WeaponConfig = EnterPoint.CurrentSettings.WeaponsConfigs["stone"];
         }
 
-        public void Initialization(PlayerCore core, IServerNotify serverNotify, Func<PlayerModelBase, PlayerModelBase> findClosestPlayer, PlayerPool pool, Func<Vector2> getRandomPosition, Func<WeaponConfig.Types, ObjectPool<WeaponModelBase>> changeWeaponPool, ObjectPool<ImageBase> imagesDeath)
+        public void Initialization(PlayerCore core, IServerNotify serverNotify, Func<PlayerModelBase, PlayerModelBase> findClosestPlayer, PlayerPool pool, Func<Vector2> getRandomPosition, Func<WeaponConfig.Types, ObjectPool<WeaponModelBase>> changeWeaponPool, Transform imageDeath)
         {
             this.serverNotify = serverNotify;
 	        this.pool = pool;
@@ -55,7 +54,7 @@ namespace Caveman.Players
             WeaponPoolChange = changeWeaponPool;
             if (serverNotify != null) multiplayer = true;
             PlayerCore = core;
-            playerAnimation = new PlayerAnimation(GetComponent<Animator>(), imagesDeath);
+            playerAnimation = new PlayerAnimation(GetComponent<Animator>(), imageDeath);
         }
         
         public virtual void PickupBonus(BonusBase bonus)
@@ -98,24 +97,9 @@ namespace Caveman.Players
         public virtual void RespawnInstantly(Vector2 position)
         {
             pool.New(PlayerCore.Id).transform.position = position;
-            invulnerability = true;
-            StartCoroutine(ProggressInvulnerability(PlayerCore.Config.InvulnerabilityDuration));
-        }
-
-        // invoke, when respawn
-        private IEnumerator ProggressInvulnerability(float duration)
-        {
-            var startTime = Time.time;
-            var render = spriteRenderer ? spriteRenderer : GetComponent<SpriteRenderer>();
-            while (Time.time  < startTime + duration)
-            {
-                render.enabled = false;
-                yield return new WaitForSeconds(0.1f);
-                render.enabled = true;
-                yield return new WaitForSeconds(0.1f);
-            }
-            render.enabled = true;
-            invulnerability = false;
+            PlayerCore.Invulnerability = true;
+            StartCoroutine(playerAnimation.Invulnerability(PlayerCore.Config.InvulnerabilityDuration, spriteRenderer));
+            PlayerCore.Invulnerability = false;
         }
 
         /// <summary>

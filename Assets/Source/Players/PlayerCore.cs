@@ -62,7 +62,9 @@ namespace Caveman.Players
             }
         }
 
-	    public bool IsAlive
+        public bool Invulnerability { get; set; }
+
+        public bool IsAlive
 	    {
 		    get { return isAlive; }
 		    set

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using Caveman.Pools;
 using UnityEngine;
 
 namespace Caveman.CustomAnimation
@@ -10,12 +9,11 @@ namespace Caveman.CustomAnimation
         private readonly Animator animator;
         private readonly Transform transform;
         private readonly Transform name;
-        // todo convert to simple image
-        private readonly ObjectPool<ImageBase> imagesDeath;
+        private readonly Transform imageDeath;
 
-        public PlayerAnimation(Animator animator, ObjectPool<ImageBase> imagesDeath)
+        public PlayerAnimation(Animator animator, Transform imageDeath)
         {
-            this.imagesDeath = imagesDeath;
+            this.imageDeath = imageDeath;
             this.animator = animator;
             transform = animator.GetComponent<Transform>();
             name = transform.GetChild(0);
@@ -82,9 +80,9 @@ namespace Caveman.CustomAnimation
 
         public IEnumerator Death(Vector2 position)
         {
-            var deathImage = imagesDeath.New();
-            deathImage.transform.position = position;
-            var spriteRenderer = deathImage.GetComponent<SpriteRenderer>();
+            imageDeath.gameObject.SetActive(true);
+            imageDeath.position = position;
+            var spriteRenderer = imageDeath.GetComponent<SpriteRenderer>();
             if (spriteRenderer)
             {
                 for (var i = 1f; i > 0; i -= 0.1f)
@@ -95,7 +93,21 @@ namespace Caveman.CustomAnimation
                     yield return new WaitForSeconds(0.1f);
                 }
             }
-            imagesDeath.Store(deathImage);
+            imageDeath.gameObject.SetActive(false);
+        }
+
+        // invoke, when respawn
+        public IEnumerator Invulnerability(float duration, SpriteRenderer spriteRenderer)
+        {
+            var startTime = Time.time;
+            while (Time.time < startTime + duration)
+            {
+                spriteRenderer.enabled = false;
+                yield return new WaitForSeconds(0.1f);
+                spriteRenderer.enabled = true;
+                yield return new WaitForSeconds(0.1f);
+            }
+            spriteRenderer.enabled = true;
         }
     }
 }

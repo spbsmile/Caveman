@@ -54,7 +54,7 @@ namespace Caveman.Players
         private PlayerModelBase CreateModel(PlayerCore playerCore, Transform prefab)
         {
             var model = prefab.GetComponent<PlayerModelBase>();
-            model.Initialization(playerCore, serverNotify, FindClosestPlayer, pool, mapCore.GetRandomPosition, ChangeWeaponPool, imagesDeath);
+            model.Initialization(playerCore, serverNotify, FindClosestPlayer, pool, mapCore.GetRandomPosition, ChangeWeaponPool, imagesDeath.New().transform);
             pool.Add(playerCore.Id, model);
 
             model.RespawnInstantly(mapCore.RandomPosition);
@@ -95,7 +95,7 @@ namespace Caveman.Players
 		    for (var i = 0; i < models.Count; i++)
 		    {
 			    if (!models[i].gameObject.activeSelf || models[i] == playerModelBase ||
-			        !models[i].spriteRenderer.isVisible || models[i].invulnerability) continue;
+			        !models[i].spriteRenderer.isVisible || models[i].PlayerCore.Invulnerability) continue;
 			    var childDistance = Vector2.SqrMagnitude(models[i].transform.position - positionPlayer);
 			    if (minDistance > childDistance)
 			    {
