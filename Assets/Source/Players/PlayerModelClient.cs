@@ -112,6 +112,7 @@ namespace Caveman.Players
             StartCoroutine(PerformWeaponAction());
         }
 
+        //todo bug! when two players, OnTriggerEnter2D invoke twice
         public virtual void OnEnable()
         {
             StartCoroutine(PerformWeaponAction());
