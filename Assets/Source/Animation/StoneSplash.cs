@@ -12,6 +12,7 @@ namespace Caveman.CustomAnimation
         private Vector2 target;
 
         private bool afterInit;
+        // todo delete, add callback
         private ObjectPool<ImageBase> pool;
 
         public void Update()
@@ -39,25 +40,25 @@ namespace Caveman.CustomAnimation
             }
         }
 
-        public void Init(int i, Vector2 position, ObjectPool<ImageBase> pool)
+        public void Initialization(int i, Vector2 position, ObjectPool<ImageBase> pool)
         {
             this.pool = pool;
             transform.position = position;
             if (i == 0)
             {
-                target = position + (0.5f)*Vector2.right;
+                target = position + 0.5f*Vector2.right;
             }
             if (i == 1)
             {
-                target = position - (0.5f)*Vector2.right;
+                target = position - 0.5f*Vector2.right;
             }
             if (i == 2)
             {
-                target = position + (0.5f)*Vector2.up;
+                target = position + 0.5f*Vector2.up;
             }
             if (i == 3)
             {
-                target = position - (0.5f)*Vector2.up;
+                target = position - 0.5f*Vector2.up;
             }
             afterInit = true;
             delta = UnityExtensions.CalculateDelta(transform.position, target, speed);

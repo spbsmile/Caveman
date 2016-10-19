@@ -1,5 +1,4 @@
-﻿using Caveman.Pools;
-using Caveman.Utils;
+﻿using Caveman.Utils;
 using UnityEngine;
 using Random = System.Random;
 

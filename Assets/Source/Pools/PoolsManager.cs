@@ -46,6 +46,8 @@ namespace Caveman.Pools
             //Axes = PreparePool(Inst<WeaponModelBase>(axesConfig.PrefabPath), poolsConfig.BonusesOrdinary);
             BonusesSpeed = PreparePool(containerBonusesSpeed, Inst<BonusBase>(bonusSpeedConfig.PrefabPath), poolsConfig.BonusesOrdinary, InitializationPoolBonus, isMultiplayer);
 
+            Stones.RelatedPool += () => SplashesStone;
+
             // for map 
             Pools.Add(stonesConfig.PrefabPath, Stones);
             Pools.Add(axesConfig.PrefabPath, Axes);

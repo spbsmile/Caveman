@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Caveman.CustomAnimation;
+using Caveman.Weapons;
 using UnityEngine;
 
 namespace Caveman.Pools
 {
-    public abstract class ASupportPool<T> : MonoBehaviour where T : MonoBehaviour
+    public abstract class ASupportPool<T> : MonoBehaviour where T : MonoBehaviour 
     {
         public abstract void InitializationPool(ObjectPool<T> item);
         public string Id;
@@ -11,6 +14,8 @@ namespace Caveman.Pools
 
     public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour
     {
+        public Func<ObjectPool<ImageBase>> RelatedPool;
+
         private Stack<T> stack; 
         private T prefab;
 
@@ -20,7 +25,6 @@ namespace Caveman.Pools
         public void Initialization(T prefab, int initialBufferSize, bool isMultiplayer)
         {
             if (isMultiplayer) poolServer = new Dictionary<string, T>();
-
             stack = new Stack<T>(initialBufferSize);
             this.prefab = prefab;
             GetActivedCount = initialBufferSize;
@@ -41,6 +45,10 @@ namespace Caveman.Pools
             {
                 item.transform.SetParent(transform);
                 item.GetComponent<ASupportPool<T>>().InitializationPool(this);
+            }
+            if (RelatedPool != null && item.GetComponent<StoneModel>())
+            {
+                item.GetComponent<StoneModel>().InitializationPoolSplashesStone(RelatedPool());
             }
             return item;
         }

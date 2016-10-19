@@ -8,7 +8,7 @@ namespace Caveman.Players
     {
         private bool isMoving;
         private int mapWidth;
-        private int mapHeight;
+        private int mapHeight;  
 
         protected void Start()
         {
@@ -64,11 +64,10 @@ namespace Caveman.Players
             playerAnimation.SetMoving(moveUnit.y < 0, moveUnit.x > 0);
         }
 
-        //todo OnEnable must see last commits
-        //public override void OnEnable()
-        //{
-        //    base.OnEnable();
-        //    if (multiplayer && !Settings.DisableSendMove) StartCoroutine(SendMove());
-        //}
+        public override void OnEnable()
+        {
+            base.OnEnable();
+            if (multiplayer && !Settings.DisableSendMove) StartCoroutine(SendMove());
+        }
     }
 }
