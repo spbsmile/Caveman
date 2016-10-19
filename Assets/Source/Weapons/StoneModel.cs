@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Caveman.Weapons
 {
-    public class StoneModel : WeaponModelBase
+    public class StoneModel : WeaponModelBase 
     {
         private ObjectPool<ImageBase> poolStonesSplash;
         private float bezierTime;
@@ -32,7 +32,8 @@ namespace Caveman.Weapons
             for (var i = 0; i < 4; i++)
             {
                 var flagment = poolStonesSplash.New();
-                flagment.GetComponent<StoneSplash>().Init(i, position, poolStonesSplash);
+                flagment.GetComponent<StoneSplash>()
+                    .Initialization(i, position, stoneSplash => poolStonesSplash.Store(stoneSplash));
             }
         }
 

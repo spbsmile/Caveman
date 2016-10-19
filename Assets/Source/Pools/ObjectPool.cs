@@ -58,7 +58,7 @@ namespace Caveman.Pools
             return stack.Count > 0 ? stack.Pop() : null;
         }
 
-        public void  Store(T obj)
+        public void Store(T obj)
         {
             GetActivedCount--;
             obj.gameObject.SetActive(false);

@@ -1,4 +1,4 @@
-﻿using Caveman.Pools;
+﻿using System;
 using Caveman.Utils;
 using UnityEngine;
 
@@ -10,10 +10,8 @@ namespace Caveman.CustomAnimation
 
         private Vector2 delta;
         private Vector2 target;
-
         private bool afterInit;
-        // todo delete, add callback
-        private ObjectPool<ImageBase> pool;
+        private Action<StoneSplash> Disable;
 
         public void Update()
         {
@@ -31,18 +29,15 @@ namespace Caveman.CustomAnimation
                     Destroy();
                 }
             }
-            else
+            else if (afterInit)
             {
-                if (afterInit)
-                {
-                    Destroy();
-                }
+                Destroy();
             }
         }
 
-        public void Initialization(int i, Vector2 position, ObjectPool<ImageBase> pool)
+        public void Initialization(int i, Vector2 position, Action<StoneSplash> disable)
         {
-            this.pool = pool;
+            Disable = disable;
             transform.position = position;
             if (i == 0)
             {
@@ -67,7 +62,7 @@ namespace Caveman.CustomAnimation
         private void Destroy()
         {
             delta = Vector2.zero;
-            pool.Store(this);
+            Disable(this);
         }
     }
 }
