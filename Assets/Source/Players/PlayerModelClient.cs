@@ -39,8 +39,8 @@ namespace Caveman.Players
                         }
                         weapon.Destroy();
                         StopAllCoroutines();
-                        StartCoroutine(playerAnimation.Death(transform.position));
                         Die();
+                        StartCoroutine(playerAnimation.Death(transform.position));
                         StartCoroutine(Respawn(GetRandomPosition()));
                     }
                 }
@@ -55,20 +55,15 @@ namespace Caveman.Players
             }
         }
 
-        public void StartUseWeapon()
-        {
-            StartCoroutine(PerformWeaponAction());
-        }
-
         public override IEnumerator Respawn(Vector2 position)
         {
-            yield return StartCoroutine(base.Respawn(position));
+            yield return StartCoroutine(base.Respawn(position));                        
         }
 
         public override void RespawnInstantly(Vector2 position)
-        {
+        {            
             base.RespawnInstantly(position);
-            if (multiplayer) serverNotify.RespawnSend(position);
+            if (multiplayer) serverNotify.RespawnSend(position);            
         }
 
         public override void PickupBonus(BonusBase bonus)
@@ -112,7 +107,6 @@ namespace Caveman.Players
             StartCoroutine(PerformWeaponAction());
         }
 
-        //todo bug! when two players, OnTriggerEnter2D invoke twice
         public virtual void OnEnable()
         {
             StartCoroutine(PerformWeaponAction());

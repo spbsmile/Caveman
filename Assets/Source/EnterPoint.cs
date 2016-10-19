@@ -76,7 +76,6 @@ namespace Caveman
                         CurrentSettings.PlayersConfigs["sample"]);
                     playersManager.CreateClientAiModel(playerCore, Instantiate(prefabAiPlayer), poolsManager.containerStones);
                 }
-                playersManager.StartUseWeapon();
             }
         }
     }

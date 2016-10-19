@@ -40,16 +40,6 @@ namespace Caveman.Players
             pool.RemovePlayer += model => models.Remove(model);
         }
 
-        public void StartUseWeapon()
-        {
-            var players = pool.GetCurrentPlayerModels();
-            foreach (var player in players)
-            {
-                var playerClient = (PlayerModelClient) player;
-                playerClient.StartUseWeapon();
-            }
-        }
-     
         private PlayerModelBase CreateModel(PlayerCore playerCore, Transform prefab)
         {
             var model = prefab.GetComponent<PlayerModelBase>();
