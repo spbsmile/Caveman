@@ -22,6 +22,7 @@ namespace Caveman
         public PlayerPool playerPool;
         public string currentLevelName;
 
+        // todo temp
         public bool isObservableMode;
 
         public static CurrentGameSettings CurrentSettings { get; private set; }
@@ -45,7 +46,8 @@ namespace Caveman
         {
             var isMultiplayer = serverNotify != null;
             battleGui = FindObjectOfType<BattleGui>();
-            battleGui.Initialization(isMultiplayer, CurrentSettings.SingleLevelConfigs[currentLevelName].RoundTime, isObservableMode, playerPool.GetCurrentPlayerModels);
+            var roundTime = isMultiplayer ? 0 : CurrentSettings.SingleLevelConfigs[currentLevelName].RoundTime;
+            battleGui.Initialization(isMultiplayer, roundTime, isObservableMode, playerPool.GetCurrentPlayerModels);
 
             var rand = new Random();
           
@@ -54,7 +56,7 @@ namespace Caveman
             poolBonusesSpeed = poolsManager.BonusesSpeed;
 
             mapModel.InitializatonPool(poolsManager.Pools);
-            var mapCore = new MapCore(CurrentSettings.MapConfigs["sample"] , isMultiplayer, mapModel, rand);
+            var mapCore = new MapCore(CurrentSettings.MapConfigs["sample"], isMultiplayer, mapModel, rand);
 
             smoothCamera.Initialization(mapCore.Width, mapCore.Height);
             playersManager = new PlayersManager(serverNotify, smoothCamera, rand, playerPool, mapCore, poolsManager.ChangeWeaponPool, poolsManager.ImagesDeath);

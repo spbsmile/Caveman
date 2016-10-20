@@ -10,7 +10,6 @@ namespace Caveman.Players
     {
         public void OnTriggerEnter2D(Collider2D other)
         {
-            if (Time.time < 1) return;
             var weapon = other.GetComponent<WeaponModelBase>();
             if (weapon)
             {
@@ -39,8 +38,8 @@ namespace Caveman.Players
                         }
                         weapon.Destroy();
                         StopAllCoroutines();
-                        Die();
                         StartCoroutine(playerAnimation.Death(transform.position));
+                        Die();
                         StartCoroutine(Respawn(GetRandomPosition()));
                     }
                 }
