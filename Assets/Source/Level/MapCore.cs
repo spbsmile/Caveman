@@ -34,6 +34,11 @@ namespace Caveman.Level
             return new Vector2(rand.Next(Width), rand.Next(Height));
         }
 
+        public Vector2 GetCenterMap()
+        {
+            return  new Vector2(Width/2, Height/2);
+        }
+
         /// <summary>
         /// roughly interval as max on map
         /// </summary>

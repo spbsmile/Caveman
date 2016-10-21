@@ -1,5 +1,7 @@
-﻿using Caveman.Players;
+﻿using System.Linq;
+using Caveman.Players;
 using Caveman.Pools;
+using Caveman.Setting;
 using Caveman.Utils;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
@@ -17,20 +19,27 @@ namespace Caveman.Network
         private bool resultReceived;
 	    private ServerConnection serverConnection;
 
+        private bool isMoving;
+        private float lastTimeUpdateMoving;
+
         public override void Start()
         {
             OwnId = SystemInfo.deviceUniqueIdentifier;
             serverNotify = new ServerNotify {ServerListener = this};
 	        serverConnection = (ServerConnection) serverNotify;
 	        serverConnection.StartSession(OwnId,
-                PlayerPrefs.GetString(AccountManager.KeyNickname));
+                PlayerPrefs.GetString(AccountManager.KeyNickname), isObservableMode);
             base.Start();
-            serverNotify.RespawnSend(playerPool[OwnId].transform.position);
+            if (!isObservableMode) serverNotify.RespawnSend(playerPool[OwnId].transform.position);
         }
 
         public void Update()
         {
             if (!resultReceived) serverConnection.Update();
+            //if (isMoving && Time.timeSinceLevelLoad - lastTimeUpdateMoving > Settings.ServerPingTime)
+            //{
+            //    isMoving = false;
+            //}
         }
 
         public void WeaponAddedReceive(string key, Vector2 point)
@@ -103,6 +112,10 @@ namespace Caveman.Network
                     playersManager.CreateServerModel(new PlayerCore(player[ServerParams.UserName].ToString(), playerId,
                         CurrentSettings.PlayersConfigs["sample"]), Instantiate(prefabServerPlayer));
             }
+            if (!smoothCamera.IsWatcher && playerPool.GetCurrentPlayerModels().Any())
+            {
+                smoothCamera.Watch(playerPool.GetCurrentPlayerModels().First().transform);
+            }
         }
 
         public void GameTimeReceive(float time)
@@ -131,6 +144,10 @@ namespace Caveman.Network
             playersManager.CreateServerModel(new PlayerCore(playerName, playerId,
                 CurrentSettings.PlayersConfigs["sample"]), Instantiate(prefabServerPlayer));
             serverNotify.RespawnSend(playerPool[OwnId].transform.position);
+            if (!smoothCamera.IsWatcher)
+            {
+                smoothCamera.Watch(playerPool[playerId].transform);
+            }
         }
 
         public void LogoutReceive(string playerId)

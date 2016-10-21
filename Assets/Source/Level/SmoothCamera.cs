@@ -1,4 +1,5 @@
 ﻿using Caveman.Players;
+using Caveman.Setting;
 using UnityEngine;
 
 namespace Caveman.Level
@@ -15,10 +16,16 @@ namespace Caveman.Level
         private Vector2 section;
         private PlayerModelBase player;
 
+        public bool IsWatcher
+        {
+            get { return player != null; }
+        }
+
         public void Watch(Transform player)
         {
             target = player;
             this.player = player.GetComponent<PlayerModelBase>();
+            transform.position = Vector3.zero;
         }
 
         public void Initialization(int mapWidth, int mapHeight)
@@ -134,28 +141,35 @@ namespace Caveman.Level
                 var destination = transform.position + delta;
                 transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, DampTime);
             }
+            else
+            {
+                
+            }
         }
 
-        //private void OnDrawGizmos()
-        //{
-        //    Gizmos.color = Color.yellow;
-        //    Gizmos.DrawSphere(new Vector3(Settings.HeightMap, 0, 0), 0.5f);
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawSphere(new Vector3(Settings.HeightMap, 0, 0), 0.5f);
 
-        //    Gizmos.color = Color.red;
-        //    Gizmos.DrawSphere(new Vector3(criticalX, 0, 0), 0.5f);
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(new Vector3(Settings.HeightMap/2, Settings.HeightMap / 2, 0), 0.5f);
 
-        //    Gizmos.color = Color.yellow;
-        //    Gizmos.DrawSphere(new Vector3(0, Settings.HeightMap, 0), 0.5f);
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(new Vector3(criticalX, 0, 0), 0.5f);
 
-        //    Gizmos.color = Color.red;
-        //    Gizmos.DrawSphere(new Vector3(0, criticalY, 0), 0.5f);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawSphere(new Vector3(0, Settings.HeightMap, 0), 0.5f);
 
-        //    //Gizmos.color = Color.yellow;
-        //    //Gizmos.DrawSphere(new Vector3(-Settings.BoundaryEndMap, 0, 0), 0.5f);
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(new Vector3(0, criticalY, 0), 0.5f);
 
-        //    Gizmos.color = Color.red;
-        //    Gizmos.DrawSphere(new Vector3(-criticalX, 0, 0), 0.5f);
-        //}
+            //Gizmos.color = Color.yellow;
+            //Gizmos.DrawSphere(new Vector3(-Settings.BoundaryEndMap, 0, 0), 0.5f);
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(new Vector3(-criticalX, 0, 0), 0.5f);
+        }
     }
 }
 

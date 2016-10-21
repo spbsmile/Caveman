@@ -61,7 +61,7 @@ namespace Caveman.Network
          * Runs session and starts listen to the server
          * */
 
-        public void StartSession(string userId, string userName)
+        public void StartSession(string userId, string userName, bool isObserableMode)
         {
             clientId = userId;
             if (client == null)
@@ -77,7 +77,10 @@ namespace Caveman.Network
                     reader = new StreamReader(stream, Encoding.UTF8);
                     writer = new StreamWriter(stream);
 
-                    SendLogin(userName);
+                    if (!isObserableMode)
+                    {
+                        SendLogin(userName);
+                    }
                     StartListeningServer();
                 }
                 catch (Exception e)
