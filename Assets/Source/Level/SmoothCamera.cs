@@ -25,7 +25,6 @@ namespace Caveman.Level
         {
             target = player;
             this.player = player.GetComponent<PlayerModelBase>();
-            transform.position = Vector3.zero;
         }
 
         public void Initialization(int mapWidth, int mapHeight)
@@ -140,10 +139,6 @@ namespace Caveman.Level
                 }
                 var destination = transform.position + delta;
                 transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, DampTime);
-            }
-            else
-            {
-                
             }
         }
 
