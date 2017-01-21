@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.IO;
+﻿using System;
 using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -9,56 +7,15 @@ namespace Caveman.Setting
 {
     public class SettingsHandler 
     {
-        private const string RESOURCES_NAME = "JSON";
+        private const string ResourcesName = "JSON";
 
-        private static TextAsset[] settings;
+        private static readonly TextAsset[] settings;
 
         static SettingsHandler()
         {
-            settings = Resources.LoadAll<TextAsset>(RESOURCES_NAME);
+            settings = Resources.LoadAll<TextAsset>(ResourcesName);
         }
 
-        public static string SerializeSettings<T>(T data)
-        {
-            try
-            {
-                return JsonConvert.SerializeObject(data, Formatting.Indented);
-            }
-            catch (Exception e)
-            {
-                return e.Message;
-            }
-        }
-
-        public void SaveSettings<T>(T data, string file)
-        {
-            var s = SerializeSettings(data);
-            StreamWriter sw = null;
-            try
-            {
-                sw = new StreamWriter(file);
-                sw.WriteLine(s);
-            }
-            finally
-            {
-                if (sw != null) sw.Close();
-            }
-        }
-
-        public static T ParseSettings<T>(string data)
-        {
-            try
-            {
-                return JsonConvert.DeserializeObject<T>(data);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e.Message);
-            }
-            return default(T);
-        }
-
-        //deserilizations
         public static T ParseSettingsFromFile<T>(string fileName)
         {
             var settingsFromFile = default(T);
@@ -75,11 +32,22 @@ namespace Caveman.Setting
             }
             catch (Exception e)
             {
-                var i = e.Message;
-                Debug.Log(i);
+                Debug.Log(e.Message);
             }
-
             return settingsFromFile;
+        }
+
+        private static T ParseSettings<T>(string data)
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<T>(data);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+            return default(T);
         }
     }
 }
