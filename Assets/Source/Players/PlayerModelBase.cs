@@ -112,7 +112,7 @@ namespace Caveman.Players
             playerAnimation.SetMoving(moveUnit.y < 0, moveUnit.x > 0);
         }
 
-        public void CalculateMoveUnit(Vector2 targetPosition)
+        public virtual void CalculateMoveUnit(Vector2 targetPosition)
         {
             moveUnit = UnityExtensions.CalculateDelta(transform.position, targetPosition, PlayerCore.Speed);
         }

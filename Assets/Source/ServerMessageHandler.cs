@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Caveman.Players;
 using Caveman.Pools;
-using Caveman.Setting;
 using Caveman.Utils;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
@@ -19,9 +18,6 @@ namespace Caveman.Network
         private bool resultReceived;
 	    private ServerConnection serverConnection;
 
-        private bool isMoving;
-        private float lastTimeUpdateMoving;
-
         public override void Start()
         {
             OwnId = SystemInfo.deviceUniqueIdentifier;
@@ -36,10 +32,6 @@ namespace Caveman.Network
         public void Update()
         {
             if (!resultReceived) serverConnection.Update();
-            //if (isMoving && Time.timeSinceLevelLoad - lastTimeUpdateMoving > Settings.ServerPingTime)
-            //{
-            //    isMoving = false;
-            //}
         }
 
         public void WeaponAddedReceive(string key, Vector2 point)
@@ -89,18 +81,10 @@ namespace Caveman.Network
             playerPool[playerId].Die();
         }
 
-        public void PlayerMoveReceive(string playerId, Vector2 point)
+        public void PlayerMoveReceive(string playerId, Vector2 targetPoint)
         {
             if (!PlayerExist(playerPool, playerId)) return;
-            if (Vector2.SqrMagnitude((Vector2)playerPool[playerId].transform.position - point) <
-                UnityExtensions.ThresholdPosition)
-            {
-                playerPool[playerId].StopMove();
-            }
-            else
-            {
-                playerPool[playerId].CalculateMoveUnit(point);
-            }
+            playerPool[playerId].CalculateMoveUnit(targetPoint);
         }
 
         public void GameInfoReceive(JToken jToken)

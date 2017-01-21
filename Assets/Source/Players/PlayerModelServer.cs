@@ -1,4 +1,5 @@
-﻿using Caveman.Weapons;
+﻿using Caveman.Utils;
+using Caveman.Weapons;
 using UnityEngine;
 
 namespace Caveman.Players
@@ -8,6 +9,8 @@ namespace Caveman.Players
      */
     public class PlayerModelServer : PlayerModelBase
     {
+        private Vector3 targetPosition;
+
         public override void PickupWeapon(WeaponModelBase weaponModel)
         {
             if (PlayerCore.WeaponCount > weaponModel.Config.Weight) return;
@@ -27,9 +30,24 @@ namespace Caveman.Players
             PlayerCore.WeaponCount--;
         }
 
+        public override void CalculateMoveUnit(Vector2 targetPosition)
+        {
+            base.CalculateMoveUnit(targetPosition);
+            this.targetPosition = targetPosition;
+        }
+
         public void Update()
         {
-            Move();
+            // todo add check time interval also
+            if (Vector2.SqrMagnitude(transform.position - targetPosition) <
+                UnityExtensions.ThresholdPosition)
+            {
+                StopMove();
+            }
+            else
+            {
+                Move();
+            }
         }
     }
 }
