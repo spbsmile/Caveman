@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Caveman.Players
 {
-    public class PlayerModelHuman : PlayerModelClient
+    public class PlayerModelHero : PlayerModelClient
     {
         private bool isMoving;
         private int mapWidth;

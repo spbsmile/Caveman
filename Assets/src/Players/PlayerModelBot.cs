@@ -4,7 +4,7 @@ using Random = System.Random;
 
 namespace Caveman.Players
 {
-    public class PlayerModelAi : PlayerModelClient
+    public class PlayerModelBot : PlayerModelClient
     {
         private Vector2 targetPosition;
         private float maxDistance;

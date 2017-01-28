@@ -42,7 +42,7 @@ namespace Caveman.Players
 	    protected virtual void Awake()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
-            WeaponConfig = EnterPoint.CurrentSettings.WeaponsConfigs["stone"];
+            WeaponConfig = EnterPoint.Configs.Weapon["stone"];
         }
 
         public void Initialization(PlayerCore core, IServerNotify serverNotify, Func<PlayerModelBase, PlayerModelBase> findClosestPlayer, PlayerPool pool, Func<Vector2> getRandomPosition, Func<WeaponConfig.Types, ObjectPool<WeaponModelBase>> changeWeaponPool, Transform imageDeath)

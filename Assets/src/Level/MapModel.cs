@@ -67,14 +67,14 @@ namespace Caveman.Level
                 if (config.Type == "weapon")
                 {
                     StartCoroutine(
-                        PutItems<WeaponModelBase>(EnterPoint.CurrentSettings.WeaponsConfigs[config.Name].PrefabPath,
+                        PutItems<WeaponModelBase>(EnterPoint.Configs.Weapon[config.Name].PrefabPath,
                             config.Period, config.Count
                         ));
                 }
                 else if (config.Type == "bonus")
                 {
                     StartCoroutine(PutItems<BonusBase>(
-                        EnterPoint.CurrentSettings.BonusesConfigs[config.Name].PrefabPath, config.Period, config.Count));
+                        EnterPoint.Configs.Bonus[config.Name].PrefabPath, config.Period, config.Count));
                 }
             }
         }

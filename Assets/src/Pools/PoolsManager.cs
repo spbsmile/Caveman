@@ -28,16 +28,16 @@ namespace Caveman.Pools
 
         public readonly Dictionary<string, object> Pools = new Dictionary<string, object>();
 
-        public void InitializationPools(CurrentGameSettings settings, bool isMultiplayer)
+        public void InitializationPools(GameConfigs settings, bool isMultiplayer)
         {
-            var poolsConfig = settings.PoolsConfigs["sample"];
+            var poolsConfig = settings.Pool["sample"];
 
-            var deathConfig = settings.ImagesConfigs["death"];
-            var splahesConfig = settings.ImagesConfigs["stones_fragment"];
-            var stonesConfig = settings.WeaponsConfigs["stone"];
-            var axesConfig = settings.WeaponsConfigs["axe"];
-            var skullsConfig = settings.WeaponsConfigs["skulls"];
-            var bonusSpeedConfig = settings.BonusesConfigs["speed"];
+            var deathConfig = settings.Image["death"];
+            var splahesConfig = settings.Image["stones_fragment"];
+            var stonesConfig = settings.Weapon["stone"];
+            var axesConfig = settings.Weapon["axe"];
+            var skullsConfig = settings.Weapon["skulls"];
+            var bonusSpeedConfig = settings.Bonus["speed"];
 
             ImagesDeath = PreparePool(containerImagesDeath, Inst<ImageBase>(deathConfig.PrefabPath), poolsConfig.ImagesOrdinary, null, isMultiplayer);
             SplashesStone = PreparePool(containerSplashStones, Inst<ImageBase>(splahesConfig.PrefabPath), poolsConfig.ImagesPopular, null, isMultiplayer);

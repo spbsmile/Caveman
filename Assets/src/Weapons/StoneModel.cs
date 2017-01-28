@@ -12,7 +12,7 @@ namespace Caveman.Weapons
 
         public void Awake()
         {
-            Config = EnterPoint.CurrentSettings.WeaponsConfigs["stone"];
+            Config = EnterPoint.Configs.Weapon["stone"];
         }
 
         public void Update()

@@ -4,7 +4,7 @@
     {
         public void Awake()
         {
-            Config = EnterPoint.CurrentSettings.WeaponsConfigs["axe"];
+            Config = EnterPoint.Configs.Weapon["axe"];
         }
 
         // TODO разные кривые траекторий

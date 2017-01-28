@@ -39,7 +39,7 @@ namespace Caveman.UI
             }
         }
 
-        public void SubscribeOnEvents(PlayerModelHuman model, Func<Vector2> randomPosition)
+        public void SubscribeOnEvents(PlayerModelHero model, Func<Vector2> randomPosition)
         {
             var playerCore = model.PlayerCore;
             playerCore.WeaponCountChange += count => weapons.text = count.ToString();
