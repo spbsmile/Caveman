@@ -20,6 +20,7 @@ namespace Caveman.Network
 
         public void ActivateWeaponSend(Vector2 pointClient, int type)
         {
+            Debug.Log("ActivateWeaponSend");
             var pointServer = GetServerPoint(pointClient);
             SendMessageToSocket(new JObject
             {
@@ -31,6 +32,7 @@ namespace Caveman.Network
 
         public void PickBonusSend(string bonusId, int type)
         {
+            Debug.Log("PickBonusSend");
             var pointServer = GetServerPoint(bonusId);
             SendMessageToSocket(new JObject
             {
@@ -38,19 +40,11 @@ namespace Caveman.Network
                 {ServerParams.X, pointServer.x},
                 {ServerParams.Y, pointServer.y}
             });
-        }
-
-        // TODO: set gold player on server
-        public void PlayerGold(int gold)
-        {
-            SendMessageToSocket(new JObject
-            {
-               
-            });
-        }
-
+        }    
+            
         public void RespawnSend(Vector2 pointClient)
         {
+            Debug.Log("RespawnSend");
             var pointServer = GetServerPoint(pointClient);
             SendMessageToSocket(new JObject
             {
@@ -79,6 +73,7 @@ namespace Caveman.Network
 
         public void MoveSend(Vector2 pointClient)
         {
+            Debug.Log("MoveSend");
             var pointServer = GetServerPoint(pointClient);
             SendMessageToSocket(new JObject
             {
@@ -106,8 +101,11 @@ namespace Caveman.Network
 
         private static Vector2 GetServerPoint(Vector2 pointClient)
         {
+            Debug.Log("GetServerPoint hello ");
             var x = (pointClient.x / Settings.WidthMap) * ServerMessageHandler.WidthMapServer;
             var y = (pointClient.y / Settings.HeightMap) * ServerMessageHandler.HeigthMapServer;
+            //var x = (pointClient.x / Settings.WidthMap) * ServerMessageHandler.MapServerConfig.Width;
+            //var y = (pointClient.y / Settings.HeightMap) * ServerMessageHandler.MapServerConfig.Heght;
             return new Vector2(x, y);
         }
     }

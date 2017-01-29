@@ -1,32 +1,30 @@
 ﻿using System.Linq;
+using Caveman.Configs;
 using Caveman.Players;
 using Caveman.Pools;
-using Caveman.Utils;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Caveman.Network
 {
     public class ServerMessageHandler : EnterPoint, IServerListener
-    {
+    {        
         public Transform prefabServerPlayer;
-
-        //todo this const - temp. Defined on server 
         public const float WidthMapServer = 1350;
         public const float HeigthMapServer = 1350;
-        private static string OwnId;
+        
         private bool resultReceived;
-	    private ServerConnection serverConnection;
+        private ServerConnection serverConnection;
 
         public override void Start()
-        {
-            OwnId = SystemInfo.deviceUniqueIdentifier;
+        {            
             serverNotify = new ServerNotify {ServerListener = this};
-	        serverConnection = (ServerConnection) serverNotify;
-	        serverConnection.StartSession(OwnId,
+            serverConnection = (ServerConnection) serverNotify;
+            serverConnection.StartSession(HeroId,
                 PlayerPrefs.GetString(AccountManager.KeyNickname), isObservableMode);
-            base.Start();
-            if (!isObservableMode) serverNotify.RespawnSend(playerPool[OwnId].transform.position);
+            CreatePoolManager(true);
+            CreateCachePools();                     
         }
 
         public void Update()
@@ -58,7 +56,7 @@ namespace Caveman.Network
         public void BonusAddedReceive(string key, Vector2 point)
         {
             if (RepeatKey(poolBonusesSpeed, key)) return;
-            poolBonusesSpeed.New(key).transform.position = point;    
+            poolBonusesSpeed.New(key).transform.position = point;
         }
 
         public void BonusRemovedReceive(string key, Vector2 point)
@@ -71,12 +69,12 @@ namespace Caveman.Network
             playerPool[playerId].PickupBonus(poolBonusesSpeed[key]);
         }
 
-	    public void PlayerRespawnReceive(string playerId, Vector2 point)
-	    {
+        public void PlayerRespawnReceive(string playerId, Vector2 point)
+        {
             playerPool[playerId].RespawnInstantly(point);
-	    }
+        }
 
-	    public void PlayerDeadReceive(string playerId)
+        public void PlayerDeadReceive(string playerId)
         {
             playerPool[playerId].Die();
         }
@@ -87,24 +85,39 @@ namespace Caveman.Network
             playerPool[playerId].CalculateMoveUnit(targetPoint);
         }
 
-        public void GameInfoReceive(JToken jToken)
+        /*  todo use map config
+            http://stackoverflow.com/questions/11927135/converting-a-jtoken-or-string-to-a-given-type
+        */
+        public void GameInfoMapReceive(JObject jObject)
+        {
+            var mapConfig = JsonConvert.DeserializeObject<MapConfig>(jObject.ToString());
+            print(mapConfig.Heght);
+            var mapCore = CreateMap(true, rand, mapConfig.Width, MapConfig.Heght, MapConfig);
+            CreatePlayersManager(rand, mapCore);
+              
+            CreateHero(Configs.Player["sample"]);              
+        }
+
+        public void GameInfoPlayersReceive(JToken jToken)
         {
             foreach (var player in jToken.Children<JObject>())
             {
                 var playerId = player[ServerParams.UserId].ToString();
                 if (!playerPool.ContainsKey(playerId))
                     playersManager.CreateServerModel(new PlayerCore(player[ServerParams.UserName].ToString(), playerId,
-                        CurrentSettings.PlayersConfigs["sample"]), Instantiate(prefabServerPlayer));
+                        Configs.Player["sample"]), Instantiate(prefabServerPlayer));
+            }            
+            if (!camera.IsWatcher && playerPool.GetCurrentPlayerModels().Any())
+            {                 
+                camera.Watch(playerPool.GetCurrentPlayerModels().First().transform);
             }
-            if (!smoothCamera.IsWatcher && playerPool.GetCurrentPlayerModels().Any())
-            {
-                smoothCamera.Watch(playerPool.GetCurrentPlayerModels().First().transform);
-            }
-        }
+        }        
 
         public void GameTimeReceive(float time)
         {
-            StartCoroutine(battleGui.mainGameTimer.UpdateTime((int)time));
+            //todo after get round time from server
+            CreateGui(true, isObservableMode, 0);      
+            StartCoroutine(battleGui.mainGameTimer.UpdateTime((int) time));
         }
 
         public void GameResultReceive(JToken jToken)
@@ -124,13 +137,13 @@ namespace Caveman.Network
         }
 
         public void LoginReceive(string playerId, string playerName)
-        {
+        {            
             playersManager.CreateServerModel(new PlayerCore(playerName, playerId,
-                CurrentSettings.PlayersConfigs["sample"]), Instantiate(prefabServerPlayer));
-            serverNotify.RespawnSend(playerPool[OwnId].transform.position);
-            if (!smoothCamera.IsWatcher)
+                Configs.Player["sample"]), Instantiate(prefabServerPlayer));
+            serverNotify.RespawnSend(playerPool[HeroId].transform.position);
+            if (!camera.IsWatcher)
             {
-                smoothCamera.Watch(playerPool[playerId].transform);
+                camera.Watch(playerPool[playerId].transform);
             }
         }
 
@@ -142,7 +155,7 @@ namespace Caveman.Network
 
         public void OnDestroy()
         {
-	        serverConnection.StopSession();
+            serverConnection.StopSession();
         }
 
         /// <summary>

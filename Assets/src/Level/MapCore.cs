@@ -12,15 +12,15 @@ namespace Caveman.Level
         public int Width { get; private set; }
         public int Height { get; private set; }
 
-        public MapCore(MapConfig config, bool isMultiplayer, MapModel model, Random rand)
+        public MapCore(int width, int height, MapConfig offlineConfig, bool isMultiplayer, MapModel model, Random rand)
         {
             this.rand = rand;
-            MaxDistance = config.Width*config.Heght;
-            Config = config;
-            Width = config.Width;
-            Height = config.Heght;
-            model.CreateTerrain(rand, config.PathPrefabTile, config.Artefactses, config.Width, config.Heght, isMultiplayer);
-            if (!isMultiplayer) model.StartItemPeriodicals(config.ItemsPeriodicals);
+            MaxDistance = offlineConfig.Width*offlineConfig.Heght;
+            Config = offlineConfig;
+            Width = offlineConfig.Width;
+            Height = offlineConfig.Heght;
+            model.CreateTerrain(rand, offlineConfig.PathPrefabTile, offlineConfig.Artefactses, offlineConfig.Width, offlineConfig.Heght, isMultiplayer);
+            if (!isMultiplayer) model.StartItemPeriodicals(offlineConfig.ItemsPeriodicals);
         }
 
         public Vector2 RandomPosition

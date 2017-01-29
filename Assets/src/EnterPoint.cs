@@ -1,4 +1,6 @@
 ﻿using Caveman.Bonuses;
+using Caveman.Configs;
+using Caveman.Configs.Levels;
 using Caveman.Level;
 using Caveman.Network;
 using Caveman.Players;
@@ -14,18 +16,19 @@ namespace Caveman
     public class EnterPoint : MonoBehaviour
     {
         // this fields initialization from scene
-        public Transform prefabHumanPlayer;
-        public Transform prefabAiPlayer;
+        public Transform prefabHero;
+        public Transform prefabBot;
         public MapModel mapModel;
         public PoolsManager poolsManager;
-        public SmoothCamera smoothCamera;
+        public SmoothCamera camera;
         public PlayerPool playerPool;
         public string currentLevelName;
+        public static GameConfigs Configs { get; private set; }
+        public static MapConfig MapConfig { set; get; }
 
-        // todo temp
+        public static string HeroId { private set; get; }
+
         public bool isObservableMode;
-
-        public static CurrentGameSettings CurrentSettings { get; private set; }
 
         protected IServerNotify serverNotify;
         protected PlayersManager playersManager;
@@ -35,50 +38,89 @@ namespace Caveman
         protected ObjectPool<BonusBase> poolBonusesSpeed;
         protected BattleGui battleGui;
 
+        protected Random rand;
 
         public void Awake()
         {
-            CurrentSettings = CurrentGameSettings.Load(
+            Configs = GameConfigs.Load(
                 "bonuses", "weapons", "players", "pools", "images", "maps", "levelsSingle", " ");
+            HeroId = SystemInfo.deviceUniqueIdentifier;
+            MapConfig = Configs.Map["sample"];
+             rand = new Random();
         }
 
         public virtual void Start()
-        {
-            var isMultiplayer = serverNotify != null;
-            battleGui = FindObjectOfType<BattleGui>();
-            var roundTime = isMultiplayer ? 0 : CurrentSettings.SingleLevelConfigs[currentLevelName].RoundTime;
-            battleGui.Initialization(isMultiplayer, roundTime, isObservableMode, playerPool.GetCurrentPlayerModels);
+        {           
+            CreateGui(false, isObservableMode, Configs.SingleLevel[currentLevelName].RoundTime);           
 
-            var rand = new Random();
-          
-            poolsManager.InitializationPools(CurrentSettings, isMultiplayer);
+            CreatePoolManager(false);
+            CreateCachePools();
+
+            var mapConfig = Configs.Map["sample"];
+            var mapCore = CreateMap(false, rand, mapConfig.Width, mapConfig.Heght, mapConfig);            
+            CreatePlayersManager(rand, mapCore);
+            CreateHero(Configs.Player["sample"]);
+            CreateBots(Configs.SingleLevel[currentLevelName], Configs.Player["sample"]);
+            CreateCamera();
+        }
+
+        public void CreatePoolManager(bool isMultiplayer)
+        {
+            poolsManager.InitializationPools(Configs, isMultiplayer);
+        }
+
+        public void CreatePlayersManager(Random rand, MapCore mapCore)
+        {
+            playersManager = new PlayersManager(rand, playerPool, mapCore, poolsManager.ChangeWeaponPool, poolsManager.ImagesDeath);
+        }
+
+        //todo after get gameInfo if multiplayer 
+        public MapCore CreateMap(bool isMultiplayer, Random rand, int width, int height, MapConfig offlineConfig)
+        {
+            mapModel.InitializatonPool(poolsManager.Pools);
+            return new MapCore(width, height, offlineConfig, isMultiplayer, mapModel, rand);
+        }
+
+        public void CreateCachePools()
+        {
             poolStones = poolsManager.Stones;
             poolBonusesSpeed = poolsManager.BonusesSpeed;
+        }
 
-            mapModel.InitializatonPool(poolsManager.Pools);
-            var mapCore = new MapCore(CurrentSettings.MapConfigs["sample"], isMultiplayer, mapModel, rand);
+        //todo also after get gameInfo if multiplayer 
+        // GameTimeReceive
+        public void CreateGui(bool isMultiplayer, bool isObservableMode, int roundTime)
+        {
+            battleGui = FindObjectOfType<BattleGui>();
+            // todo change this after update code get time from server
+            battleGui.Initialization(isMultiplayer, roundTime, isObservableMode, playerPool.GetCurrentPlayerModels);
+        }        
 
-            smoothCamera.Initialization(mapCore.Width, mapCore.Height);
-            playersManager = new PlayersManager(serverNotify, smoothCamera, rand, playerPool, mapCore, poolsManager.ChangeWeaponPool, poolsManager.ImagesDeath);
-
-            if (!isObservableMode)
-            {
-                playersManager.CreatePlayerModel(
+        public void CreateHero(PlayerConfig heroConfig)
+        {
+            playersManager.CreateHeroModel(
                     new PlayerCore(PlayerPrefs.GetString(AccountManager.KeyNickname),
-                        SystemInfo.deviceUniqueIdentifier, CurrentSettings.PlayersConfigs["sample"]),
-                    Instantiate(prefabHumanPlayer), battleGui.SubscribeOnEvents);
-            }
+                        HeroId, heroConfig),
+                    Instantiate(prefabHero), battleGui.SubscribeOnEvents);
+        }
 
-            if (!isMultiplayer)
+        public void CreateBots(SingleLevelConfig levelConfig, PlayerConfig botConfig)
+        {
+            for (var i = 1; i < levelConfig.BotsCount + 1; i++)
             {
-                for (var i = 1; i < CurrentSettings.SingleLevelConfigs[currentLevelName].BotsCount + 1; i++)
-                {
-                    var playerCore = new PlayerCore(CurrentSettings.SingleLevelConfigs[currentLevelName].BotsName[i],
-                        i.ToString(),
-                        CurrentSettings.PlayersConfigs["sample"]);
-                    playersManager.CreateClientAiModel(playerCore, Instantiate(prefabAiPlayer), poolsManager.containerStones);
-                }
+                //todo name bots from bots config ??
+                var playerCore = new PlayerCore(levelConfig.BotsName[i],
+                    i.ToString(), botConfig);
+                playersManager.CreateBotModel(playerCore, Instantiate(prefabBot), poolsManager.containerStones);
             }
+        }
+
+        // todo after create hero
+        public void CreateCamera()
+        {
+            // todo miss typeing
+            camera.Initialization(MapConfig.Width, MapConfig.Heght);
+            camera.Watch(playerPool[HeroId].transform);
         }
     }
 }

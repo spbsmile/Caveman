@@ -25,6 +25,8 @@ namespace Caveman.Level
         {
             target = player;
             this.player = player.GetComponent<PlayerModelBase>();
+            // todo hot_fix
+            Initialization(1350, 1350);
         }
 
         public void Initialization(int mapWidth, int mapHeight)
@@ -64,7 +66,7 @@ namespace Caveman.Level
         public void LateUpdate()
         {
             if (target && player.enabled)
-            {
+            {                
                 var point = Camera.main.WorldToViewportPoint(target.position);
                 var delta = Vector3.zero;
                 var indent = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, point.z));

@@ -29,6 +29,7 @@ namespace Caveman.UI
 
         public void Initialization(bool isMultiplayer, int roundTime, bool isObservableMode, Func<IEnumerable<PlayerModelBase>> getCurrentPlayers)
         {
+            // todo update this after improve get time from server
             resultRound.Initialization(isMultiplayer, getCurrentPlayers);
             respawnWindow.Initialization(isMultiplayer, getCurrentPlayers);
 

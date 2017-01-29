@@ -77,11 +77,11 @@ namespace Caveman.Network
                     reader = new StreamReader(stream, Encoding.UTF8);
                     writer = new StreamWriter(stream);
 
+                    StartListeningServer();
                     if (!isObservableMode)
                     {
                         SendLogin(userName);
                     }
-                    StartListeningServer();
                 }
                 catch (Exception e)
                 {

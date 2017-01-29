@@ -19,7 +19,9 @@ namespace Caveman.Network
         void BonusRemovedReceive(string key, Vector2 point);
 
         void GameResultReceive(JToken jToken);
-        void GameInfoReceive(JToken jToken);
+        void GameInfoPlayersReceive(JToken jToken);
+        void GameInfoMapReceive(JObject jObject);
+
         void GameTimeReceive(float time);
 
         void LoginReceive(string playerId, string playerName);
