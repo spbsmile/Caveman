@@ -33,9 +33,7 @@ namespace Caveman.Network
         public const string LoginAction = "login";
         public const string LogoutAction = "logout";
         public const string PingAction = "ping";
-
-        public const string MapWidth = "MAP_WIDTH";
-        public const string MapHeight = "MAP_HEIGHT";
+        public const string IsObservable = "obs";
 
         //client side action only
         public const string UseWeaponAction = "use_weapon";

@@ -77,11 +77,8 @@ namespace Caveman.Network
                     reader = new StreamReader(stream, Encoding.UTF8);
                     writer = new StreamWriter(stream);
 
-                    StartListeningServer();
-                    if (!isObservableMode)
-                    {
-                        SendLogin(userName);
-                    }
+                    StartListeningServer();                   
+                    SendLogin(userName, isObservableMode);                
                 }
                 catch (Exception e)
                 {
@@ -111,12 +108,13 @@ namespace Caveman.Network
             });
         }
 
-        private void SendLogin(string userName)
+        private void SendLogin(string userName, bool isObservable)
         {
             SendMessageToSocket(new JObject
             {
                 {ServerParams.ActionType, ServerParams.LoginAction},
-                {ServerParams.UserName, userName}
+                {ServerParams.UserName, userName},
+                {ServerParams.IsObservable, isObservable}
             });
         }
 
