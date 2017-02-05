@@ -93,7 +93,10 @@ namespace Caveman.Network
 
             //todo after get round time from server
             CreateGui(true, isObservableMode, 0);     
-            CreateHero(Configs.Player["sample"]);              
+            if(!isObservableMode)
+            {
+                CreateHero(Configs.Player["sample"]);              
+            }                        
         }
 
         public void GameInfoPlayersReceive(JToken jToken)
