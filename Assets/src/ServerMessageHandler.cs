@@ -92,7 +92,7 @@ namespace Caveman.Network
         {
             var mapConfig = JsonConvert.DeserializeObject<MapConfig>(jObject.ToString());
             print(mapConfig.Heght);
-            var mapCore = CreateMap(true, rand, mapConfig.Width, MapConfig.Heght, MapConfig);
+            var mapCore = CreateMap(true, rand, mapConfig.Width, mapConfig.Heght, MapConfig);
             CreatePlayersManager(rand, mapCore);
               
             CreateHero(Configs.Player["sample"]);              
