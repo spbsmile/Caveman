@@ -24,7 +24,7 @@ namespace Caveman
         public PlayerPool playerPool;
         public string currentLevelName;
         public static GameConfigs Configs { get; private set; }
-        public static MapConfig MapConfig { set; get; }
+        public static MapConfig MapOfflineConfig { set; get; }
 
         public static string HeroId { private set; get; }
 
@@ -45,7 +45,7 @@ namespace Caveman
             Configs = GameConfigs.Load(
                 "bonuses", "weapons", "players", "pools", "images", "maps", "levelsSingle", " ");
             HeroId = SystemInfo.deviceUniqueIdentifier;
-            MapConfig = Configs.Map["sample"];
+            MapOfflineConfig = Configs.Map["sample"];
              rand = new Random();
         }
 
@@ -101,7 +101,7 @@ namespace Caveman
             playersManager.CreateHeroModel(
                     new PlayerCore(PlayerPrefs.GetString(AccountManager.KeyNickname),
                         HeroId, heroConfig),
-                    Instantiate(prefabHero), battleGui.SubscribeOnEvents);
+                    Instantiate(prefabHero), battleGui.SubscribeOnEvents); 
         }
 
         public void CreateBots(SingleLevelConfig levelConfig, PlayerConfig botConfig)
@@ -119,7 +119,7 @@ namespace Caveman
         public void CreateCamera()
         {
             // todo miss typeing
-            camera.Initialization(MapConfig.Width, MapConfig.Heght);
+            camera.Initialization(MapOfflineConfig.Width, MapOfflineConfig.Heght);
             camera.Watch(playerPool[HeroId].transform);
         }
     }

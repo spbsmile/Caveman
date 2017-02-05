@@ -84,15 +84,11 @@ namespace Caveman.Network
             if (!PlayerExist(playerPool, playerId)) return;
             playerPool[playerId].CalculateMoveUnit(targetPoint);
         }
-
-        /*  todo use map config
-            http://stackoverflow.com/questions/11927135/converting-a-jtoken-or-string-to-a-given-type
-        */
+        
         public void GameInfoMapReceive(JObject jObject)
         {
-            var mapConfig = JsonConvert.DeserializeObject<MapConfig>(jObject.ToString());
-            MapServerConfig = mapConfig;            
-            var mapCore = CreateMap(true, rand, mapConfig.Width, mapConfig.Heght, MapConfig);
+            MapServerConfig = JsonConvert.DeserializeObject<MapConfig>(jObject.ToString());                    
+            var mapCore = CreateMap(true, rand, MapServerConfig.Width, MapServerConfig.Heght, MapOfflineConfig);
             CreatePlayersManager(rand, mapCore);
 
             //todo after get round time from server
