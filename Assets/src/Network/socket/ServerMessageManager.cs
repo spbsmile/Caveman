@@ -23,7 +23,7 @@ namespace Caveman.Network
                 {
                     if (jToken[ServerParams.ActionType].ToString()!= "move")
                     {
-                        Debug.Log(jToken);
+                        //Debug.Log(jToken);
                         Debug.Log(jToken[ServerParams.ActionType].ToString());
                     }
                     SendMessageToListener(listener, jToken, jToken.Value<string>(ServerParams.ActionType));
@@ -118,13 +118,9 @@ namespace Caveman.Network
         }
 
         private Vector2 Convector(Vector2 pointServer)
-        {
-            Debug.Log("Convector hello convector!!");
-            var x = (pointServer.x / ServerMessageHandler.WidthMapServer) * Settings.WidthMap;
-            var y = (pointServer.y / ServerMessageHandler.HeigthMapServer) * Settings.HeightMap;
-            //var x = (pointServer.x / ServerMessageHandler.MapServerConfig.Width) * Settings.WidthMap;
-            //var y = (pointServer.y / ServerMessageHandler.MapServerConfig.Heght) * Settings.HeightMap;
-            return new Vector2(x, y);
+        {                                    
+            return new Vector2(pointServer.x / ServerMessageHandler.MapServerConfig.Width * Settings.WidthMap,
+             pointServer.y / ServerMessageHandler.MapServerConfig.Heght * Settings.HeightMap);
         }
     }
 }

@@ -10,9 +10,9 @@ namespace Caveman.Network
 {
     public class ServerMessageHandler : EnterPoint, IServerListener
     {        
-        public Transform prefabServerPlayer;
-        public const float WidthMapServer = 1350;
-        public const float HeigthMapServer = 1350;
+        public Transform prefabServerPlayer;        
+
+        public static MapConfig MapServerConfig { private set; get;}
         
         private bool resultReceived;
         private ServerConnection serverConnection;
@@ -91,10 +91,12 @@ namespace Caveman.Network
         public void GameInfoMapReceive(JObject jObject)
         {
             var mapConfig = JsonConvert.DeserializeObject<MapConfig>(jObject.ToString());
-            print(mapConfig.Heght);
+            MapServerConfig = mapConfig;            
             var mapCore = CreateMap(true, rand, mapConfig.Width, mapConfig.Heght, MapConfig);
             CreatePlayersManager(rand, mapCore);
-              
+
+            //todo after get round time from server
+            CreateGui(true, isObservableMode, 0);     
             CreateHero(Configs.Player["sample"]);              
         }
 
@@ -114,9 +116,7 @@ namespace Caveman.Network
         }        
 
         public void GameTimeReceive(float time)
-        {
-            //todo after get round time from server
-            CreateGui(true, isObservableMode, 0);      
+        {               
             StartCoroutine(battleGui.mainGameTimer.UpdateTime((int) time));
         }
 
