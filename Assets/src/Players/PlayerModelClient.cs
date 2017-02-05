@@ -61,8 +61,7 @@ namespace Caveman.Players
 
         public override void RespawnInstantly(Vector2 position)
         {            
-            base.RespawnInstantly(position);
-            print("hello RespawnInstantly player");
+            base.RespawnInstantly(position);            
             if (multiplayer) serverNotify.RespawnSend(position);            
         }
 
