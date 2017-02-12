@@ -1,4 +1,5 @@
-﻿using Caveman.Setting;
+﻿using Caveman.Players;
+using Caveman.Setting;
 using Newtonsoft.Json;
 
 namespace Caveman.Configs
@@ -7,7 +8,7 @@ namespace Caveman.Configs
     public class PlayerConfig : ISettings
     {
         public PlayerConfig(string name, float speed, int respawnDuration, int invulnerabilityDuration, float strength,
-            Types type, string prefabPath)
+            PlayerType type, string prefabPath)
         {
             this.name = name;
             this.speed = speed;
@@ -23,8 +24,8 @@ namespace Caveman.Configs
         [JsonProperty] private readonly int respawnDuration;
         [JsonProperty] private readonly int invulnerabilityDuration;
         [JsonProperty] private readonly float strength;
-        [JsonProperty] private readonly Types type;
-        [JsonProperty] private string prefabPath;
+        [JsonProperty] private readonly PlayerType type;
+        [JsonProperty] private readonly string prefabPath;
 
         public string Name
         {
@@ -56,14 +57,9 @@ namespace Caveman.Configs
             get { return prefabPath; }
         }
 
-        public Types Type
+        public PlayerType Type
         {
             get { return type; }
-        }
-
-        public enum Types
-        {
-            Sample
         }
     }
 }

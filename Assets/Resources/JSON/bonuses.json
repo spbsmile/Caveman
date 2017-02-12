@@ -1,25 +1,22 @@
 [
     {
         "name": "speed",
-        "timeRespawn": 10,
         "duration": 4,
-        "prefabPath": "Bonuses/Speed_bonus"
+        "factor": 1.5,  
+        "prefabPath": "Bonuses/bonus_speed"
     },
     {
         "name": "shield",
-        "timeRespawn": 10,
         "duration": 4,
         "prefabPath": "Bonuses/bonus_shield_test"
     },
     {
         "name": "vacuumCleaner",
-        "timeRespawn": 10,
         "duration": 4,
         "prefabPath": "Bonuses/"
     },
     {
         "name": "instantReaction",
-        "timeRespawn": 10,
         "duration": 4,
         "prefabPath": "Bonuses/"
     }

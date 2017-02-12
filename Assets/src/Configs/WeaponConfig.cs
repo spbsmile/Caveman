@@ -1,4 +1,5 @@
 ﻿using Caveman.Setting;
+using Caveman.Weapons;
 using Newtonsoft.Json;
 
 namespace Caveman.Configs
@@ -6,12 +7,11 @@ namespace Caveman.Configs
     [JsonObject(MemberSerialization.OptIn)]
     public class WeaponConfig : ISettings
     {
-        public WeaponConfig(string name, float speed, int timeRespawn, float cooldown, int countItems, int weight,
-            int rotateParameter, Types type, string prefabPath)
+        public WeaponConfig(string name, float speed, float cooldown, int countItems, int weight,
+            int rotateParameter, WeaponType type, string prefabPath)
         {
             this.name = name;
             this.speed = speed;
-            this.timeRespawn = timeRespawn;
             this.cooldown = cooldown;
             this.countItems = countItems;
             this.weight = weight;
@@ -22,13 +22,12 @@ namespace Caveman.Configs
 
         [JsonProperty] private readonly string name;
         [JsonProperty] private readonly float speed;
-        [JsonProperty] private readonly int timeRespawn;
         [JsonProperty] private readonly float cooldown;
         [JsonProperty] private readonly int countItems;
         [JsonProperty] private readonly int weight;
         [JsonProperty] private readonly int rotateParameter;
         [JsonProperty] private readonly string prefabPath;
-        [JsonProperty] private readonly Types type;
+        [JsonProperty] private readonly WeaponType type;
         
         public string Name
         {
@@ -38,11 +37,6 @@ namespace Caveman.Configs
         public float Speed
         {
             get { return speed; }
-        }
-
-        public int TimeRespawn
-        {
-            get { return timeRespawn; }
         }
 
         public float Cooldown
@@ -65,7 +59,7 @@ namespace Caveman.Configs
             get { return countItems; }
         }
 
-        public Types Type
+        public WeaponType Type
         {
             get { return type; }
         }
@@ -73,12 +67,6 @@ namespace Caveman.Configs
         public string PrefabPath
         {
             get { return prefabPath; }
-        }
-
-        public enum Types
-        {
-            Stone,
-            Skull
         }
     }
 }

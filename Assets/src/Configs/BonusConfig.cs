@@ -1,4 +1,5 @@
-﻿using Caveman.Setting;
+﻿using Caveman.BonusSystem;
+using Caveman.Setting;
 using Newtonsoft.Json;
 
 namespace Caveman.Configs
@@ -6,28 +7,24 @@ namespace Caveman.Configs
     [JsonObject(MemberSerialization.OptIn)]
     public class BonusConfig : ISettings
     {
-        public BonusConfig(string name, float duration, Types type, string prefabPath)
+        public BonusConfig(string name, float duration, BonusType type, string prefabPath, float factor)
         {
             this.name = name;
             this.duration = duration;
             this.type = type;
             this.prefabPath = prefabPath;
+            this.factor = factor;
         }
 
         [JsonProperty] private readonly string name;
-        [JsonProperty] private readonly int timeRespawn;
         [JsonProperty] private readonly float duration;
-        [JsonProperty] private readonly Types type;
-        [JsonProperty] private string prefabPath;
+        [JsonProperty] private readonly BonusType type;
+        [JsonProperty] private readonly string prefabPath;
+        [JsonProperty] private readonly float factor;
 
         public string Name
         {
             get { return name; }
-        }
-
-        public int TimeRespawn
-        {
-            get { return timeRespawn; }
         }
 
         public float Duration
@@ -35,7 +32,12 @@ namespace Caveman.Configs
             get { return duration; }
         }
 
-        public Types Type
+        public float Factor
+        {
+            get { return factor; }
+        }
+
+        public BonusType Type
         {
             get { return type; }
         }
@@ -43,12 +45,6 @@ namespace Caveman.Configs
         public string PrefabPath
         {
             get { return prefabPath; }
-        }
-
-        public enum Types
-        {
-            Speed,
-            Shield
         }
     }
 }
