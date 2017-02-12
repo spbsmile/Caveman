@@ -64,24 +64,24 @@ namespace Caveman
             CreateCamera();
         }
 
-        public void CreatePoolManager(bool isMultiplayer)
+        protected void CreatePoolManager(bool isMultiplayer)
         {
             poolsManager.InitializationPools(Configs, isMultiplayer);
         }
 
-        public void CreatePlayersManager(Random rand, MapCore mapCore)
+        protected void CreatePlayersManager(Random rand, MapCore mapCore)
         {
             playersManager = new PlayersManager(rand, playerPool, mapCore, poolsManager.ChangeWeaponPool, poolsManager.ImagesDeath);
         }
 
         //todo after get gameInfo if multiplayer 
-        public MapCore CreateMap(bool isMultiplayer, Random rand, int width, int height, MapConfig offlineConfig)
+        protected MapCore CreateMap(bool isMultiplayer, Random rand, int width, int height, MapConfig offlineConfig)
         {
             mapModel.InitializatonPool(poolsManager.Pools);
             return new MapCore(width, height, offlineConfig, isMultiplayer, mapModel, rand);
         }
 
-        public void CreateCachePools()
+        protected void CreateCachePools()
         {
             poolStones = poolsManager.Stones;
             poolBonusesSpeed = poolsManager.BonusesSpeed;
@@ -89,14 +89,14 @@ namespace Caveman
 
         //todo also after get gameInfo if multiplayer 
         // GameTimeReceive
-        public void CreateGui(bool isMultiplayer, bool isObservableMode, int roundTime)
+        protected void CreateGui(bool isMultiplayer, bool isObservableMode, int roundTime)
         {
             battleGui = FindObjectOfType<BattleGui>();
             // todo change this after update code get time from server
             battleGui.Initialization(isMultiplayer, roundTime, isObservableMode, playerPool.GetCurrentPlayerModels);
-        }        
+        }
 
-        public void CreateHero(PlayerConfig heroConfig)
+        protected void CreateHero(PlayerConfig heroConfig)
         {
             playersManager.CreateHeroModel(
                     new PlayerCore(PlayerPrefs.GetString(AccountManager.KeyNickname),
@@ -104,7 +104,7 @@ namespace Caveman
                     Instantiate(prefabHero), battleGui.SubscribeOnEvents); 
         }
 
-        public void CreateBots(SingleLevelConfig levelConfig, PlayerConfig botConfig)
+        private void CreateBots(SingleLevelConfig levelConfig, PlayerConfig botConfig)
         {
             for (var i = 1; i < levelConfig.BotsCount + 1; i++)
             {
@@ -116,7 +116,7 @@ namespace Caveman
         }
 
         // todo after create hero
-        public void CreateCamera()
+        private void CreateCamera()
         {
             // todo miss typeing
             camera.Initialization(MapOfflineConfig.Width, MapOfflineConfig.Heght);
