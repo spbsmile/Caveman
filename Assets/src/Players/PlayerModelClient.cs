@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using Caveman.Bonuses;
-using Caveman.Configs;
 using Caveman.Weapons;
 using UnityEngine;
 
@@ -17,10 +16,10 @@ namespace Caveman.Players
                 {
                     switch (weapon.Config.Type)
                     {
-                        case WeaponConfig.Types.Stone:
+                        case WeaponType.Stone:
                             PickupWeapon(other.gameObject.GetComponent<StoneModel>());
                             break;
-                        case WeaponConfig.Types.Skull:
+                        case WeaponType.Skull:
                             PickupWeapon(other.gameObject.GetComponent<AxeModel>());
                             break;
                     }
@@ -44,17 +43,9 @@ namespace Caveman.Players
                     }
                 }
             }
-            else
-            {
-                var bonus = other.gameObject.GetComponent<BonusBase>();
-                if (bonus)
-                {
-                    PickupBonus(bonus);
-                }
-            }
         }
 
-        public override IEnumerator Respawn(Vector2 position)
+        protected override IEnumerator Respawn(Vector2 position)
         {
             yield return StartCoroutine(base.Respawn(position));                        
         }

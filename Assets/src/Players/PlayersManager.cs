@@ -19,16 +19,16 @@ namespace Caveman.Players
 	    private readonly PlayerPool pool;
 	    private readonly Random rand;
         private readonly MapCore mapCore;
-        private readonly Func<WeaponConfig.Types, ObjectPool<WeaponModelBase>> ChangeWeaponPool;
+        private readonly Func<WeaponType, ObjectPool<WeaponModelBase>> ChangeWeaponPool;
         private readonly ObjectPool<ImageBase> imagesDeath;
 
-        public PlayersManager(IServerNotify serverNotify, Random rand, PlayerPool pool, MapCore mapCore, Func<WeaponConfig.Types, ObjectPool<WeaponModelBase>> changeWeaponPool, ObjectPool<ImageBase> imagesDeath) 
+        public PlayersManager(IServerNotify serverNotify, Random rand, PlayerPool pool, MapCore mapCore, Func<WeaponType, ObjectPool<WeaponModelBase>> changeWeaponPool, ObjectPool<ImageBase> imagesDeath) 
         : this(rand, pool, mapCore, changeWeaponPool, imagesDeath)
         {
             this.serverNotify = serverNotify;              
         }
 
-        public PlayersManager(Random rand, PlayerPool pool, MapCore mapCore, Func<WeaponConfig.Types, ObjectPool<WeaponModelBase>> changeWeaponPool, ObjectPool<ImageBase> imagesDeath)
+        public PlayersManager(Random rand, PlayerPool pool, MapCore mapCore, Func<WeaponType, ObjectPool<WeaponModelBase>> changeWeaponPool, ObjectPool<ImageBase> imagesDeath)
         {                  
             this.pool = pool;
             this.rand = rand;

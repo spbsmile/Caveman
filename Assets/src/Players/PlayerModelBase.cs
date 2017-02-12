@@ -19,7 +19,7 @@ namespace Caveman.Players
      */
     public class PlayerModelBase : MonoBehaviour
     {
-        private Func<WeaponConfig.Types, ObjectPool<WeaponModelBase>> WeaponPoolChange;
+        private Func<WeaponType, ObjectPool<WeaponModelBase>> WeaponPoolChange;
         protected Func<Vector2> GetRandomPosition;
         protected Func<PlayerModelBase, PlayerModelBase> FindClosestPlayer;
 
@@ -39,13 +39,12 @@ namespace Caveman.Players
 
 	    private PlayerPool pool;
 
-	    protected virtual void Awake()
+	    protected void Awake()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
             WeaponConfig = EnterPoint.Configs.Weapon["stone"];
         }
-
-        public void Initialization(PlayerCore core, IServerNotify serverNotify, Func<PlayerModelBase, PlayerModelBase> findClosestPlayer, PlayerPool pool, Func<Vector2> getRandomPosition, Func<WeaponConfig.Types, ObjectPool<WeaponModelBase>> changeWeaponPool, Transform imageDeath)
+        public void Initialization(PlayerCore core, IServerNotify serverNotify, Func<PlayerModelBase, PlayerModelBase> findClosestPlayer, PlayerPool pool, Func<Vector2> getRandomPosition, Func<WeaponType, ObjectPool<WeaponModelBase>> changeWeaponPool, Transform imageDeath)
         {
             this.serverNotify = serverNotify;
 	        this.pool = pool;
@@ -59,7 +58,7 @@ namespace Caveman.Players
         
         public virtual void PickupBonus(BonusBase bonus)
         {
-            bonus.Effect(this);
+            bonus.Effect(PlayerCore);
         }
 
         public virtual void Die()
@@ -86,7 +85,7 @@ namespace Caveman.Players
             currentPoolWeapons.New().InitializationMove(PlayerCore, transform.position, aim);
         }
 
-        public virtual IEnumerator Respawn(Vector2 position)
+        protected virtual IEnumerator Respawn(Vector2 position)
         {
             yield return new WaitForSeconds(PlayerCore.Config.RespawnDuration);
             RespawnInstantly(position);
@@ -117,7 +116,7 @@ namespace Caveman.Players
             moveUnit = UnityExtensions.CalculateDelta(transform.position, targetPosition, PlayerCore.Speed);
         }
 
-        public void StopMove()
+        protected void StopMove()
         {
             moveUnit = Vector2.zero;
             playerAnimation.IsMoving_B = false;
