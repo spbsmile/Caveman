@@ -1,26 +1,27 @@
 ﻿using System;
+using Caveman.Bonuses;
+using Caveman.BonusSystem;
 using Caveman.Configs;
 
 namespace Caveman.Players
 {
-    public class PlayerCore 
+    public class PlayerCore : ISupportBonus
     {
         public Action<int> WeaponCountChange;
         public Action<int> KillCountChange;
 	    public Action<bool> IsAliveChange;
-	    public Action<BonusConfig.Types, float> BonusActivate;
+	    public Action<BonusType, float> BonusActivate;
        
         private int weaponCount;
         private int killCount;
 	    private bool isAlive = true;
-	    private float speed;
 
-	    public PlayerCore(string name, string id, PlayerConfig config)
+        public PlayerCore(string name, string id, PlayerConfig config)
         {
             Name = name;
             Id = id;
 	        Config = config;
-	        speed = Config.Speed;
+	        Speed = Config.Speed;
         }
 
 	    public PlayerConfig Config { get; private set; }
@@ -28,11 +29,7 @@ namespace Caveman.Players
         public string Name { get; private set; }
 	    public int DeathCount { set; get; }
 
-	    public float Speed
-	    {
-		    get { return speed; }
-		    set { speed = value; }
-	    }
+	    public float Speed { get; private set; }
 
         public int WeaponCount
         {
@@ -86,12 +83,17 @@ namespace Caveman.Players
         //}
 
 	    //todo very strange
-        public void ActivatedBonus(BonusConfig.Types type, float duration)
+        public void ActivatedBonus(BonusType type, float duration)
         {
             if (BonusActivate != null)
             {
                 BonusActivate(type, duration);
             }
+        }
+
+        public void ChangeSpeed(float factor)
+        {
+            Speed = factor > 0 ? Speed*factor : Speed/factor*(-1);
         }
     }
 }
