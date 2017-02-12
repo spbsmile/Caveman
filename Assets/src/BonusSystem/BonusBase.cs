@@ -9,19 +9,18 @@ namespace Caveman.Bonuses
 {
     public class BonusBase : ASupportPool<BonusBase>
     {
-        protected float preValue;
         protected ObjectPool<BonusBase> pool;
 
         public BonusConfig Config { protected set; get; } 
 
         public void OnTriggerEnter2D(Collider2D other)
         {
-            if (Time.time < 1) return; // todo подумать. 
+            if (Time.time < 1) return; // todo 
             if (other.gameObject.GetComponent<PlayerModelBase>())
             {
-                Effect(other.gameObject.GetComponent<PlayerModelBase>());
+                Effect(other.gameObject.GetComponent<PlayerModelBase>().PlayerCore);
             }
-            if (other.gameObject.GetComponent<WeaponModelBase>())
+            else if (other.gameObject.GetComponent<WeaponModelBase>())
             {
                 pool.Store(this);
             }
@@ -32,21 +31,17 @@ namespace Caveman.Bonuses
             pool = item;
         }
 
-        public virtual void Effect(PlayerModelBase model)
+        public virtual void Effect(ISupportBonus item)
         {
             // HACK: trigger methods calling before Start
-            if (model.PlayerCore == null)
+            if (item == null || Config == null)
                 return;
-            if (Config == null)
-                return;
-            model.PlayerCore.ActivatedBonus(Config.Type, Config.Duration);
-            //todo внедрить систему событий
-            model.bonusBase = this;
+            item.ActivatedBonus(Config.Type, Config.Duration);
             transform.position = new Vector3(200, 200, 200);
-            StartCoroutine(UnEffect(model));
+            StartCoroutine(UnEffect(item));
         }
 
-        protected virtual IEnumerator UnEffect(PlayerModelBase model)
+        protected virtual IEnumerator UnEffect(ISupportBonus model)
         {
             yield return null;
         }

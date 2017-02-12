@@ -1,4 +1,6 @@
-﻿namespace Caveman.Bonuses
+﻿using Caveman.Bonuses;
+
+namespace Caveman.BonusesSystem.Bonuses
 {
     public class ShieldBonus : BonusBase
     {
