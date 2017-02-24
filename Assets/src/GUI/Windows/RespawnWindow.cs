@@ -10,13 +10,6 @@ namespace Caveman.UI.Windows
         public Slider progress;
         public CNJoystick joystick;
 
-        //public void OnEnable()
-        //{
-        //    var timeRespawn = Settings.PlayerTimeRespawn;
-        //    StartCoroutine(WithProgress(timeRespawn));
-        //    StartCoroutine(DisplayResult());
-        //}
-
         public void OnDisable()
         {
             progress.value = 0;
