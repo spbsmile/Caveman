@@ -1,4 +1,4 @@
-# CavemanUnity5
+# Caveman
 
 Indie game project driven by a few enthusiasts.
 
