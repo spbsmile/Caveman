@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using Caveman.Setting;
+using Caveman.Level;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,10 +18,10 @@ namespace Caveman.UI.Battle
             value = GetComponent<Text>();
         }
 
-        public void Initialization(bool isMultiplayer, int roundTime)
+        public void Initialization(bool isMultiplayer, int roundTime, LevelMode levelMode)
         {
             this.isMultiplayer = isMultiplayer;
-            if (!isMultiplayer)
+            if (!isMultiplayer && levelMode != LevelMode.designer)
             {
                 StartCoroutine(UpdateTime(roundTime));
             }

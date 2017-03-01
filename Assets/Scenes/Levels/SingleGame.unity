@@ -200,6 +200,7 @@ MonoBehaviour:
   camera: {fileID: 229995655}
   playerPool: {fileID: 1866214286}
   currentLevelName: sample
+  levelMode: 0
   isObservableMode: 0
 --- !u!4 &189053030
 Transform:

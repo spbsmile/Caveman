@@ -7,8 +7,10 @@ namespace Caveman.Players
 {
     public class PlayerModelClient : PlayerModelBase
     {
-        public void OnTriggerEnter2D(Collider2D other)
+        public virtual void OnTriggerEnter2D(Collider2D other)
         {
+
+            print("hello OnTriggerEnter2D");
             var weapon = other.GetComponent<WeaponModelBase>();
             if (weapon)
             {
@@ -99,7 +101,7 @@ namespace Caveman.Players
 
         public virtual void OnEnable()
         {
-            StartCoroutine(PerformWeaponAction());
+            //StartCoroutine(PerformWeaponAction());
         }
     }
 }

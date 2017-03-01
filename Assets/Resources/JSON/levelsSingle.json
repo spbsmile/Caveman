@@ -11,5 +11,13 @@
         "yohoho",
         "shpuntik"
     ]
+  },
+  {
+    "name":"designer",
+    "botsCount": 0,
+    "roundTime": 600,    
+    "botsName": [
+        "bob"
+    ]
   }
 ]

@@ -11,6 +11,8 @@ namespace Caveman.Players
         public Action<int> KillCountChange;
 	    public Action<bool> IsAliveChange;
 	    public Action<BonusType, float> BonusActivate;
+
+        public Action<Action, bool> ChestActivate;
        
         private int weaponCount;
         private int killCount;
@@ -75,19 +77,19 @@ namespace Caveman.Players
 		    }
 	    }
 
-        // todo may be add this 
-        //public struct AliveChange
-        //{
-        //    Vector3 position;
-        //    bool isAlive;
-        //}
-
-	    //todo very strange
         public void ActivatedBonus(BonusType type, float duration)
         {
             if (BonusActivate != null)
             {
                 BonusActivate(type, duration);
+            }
+        }
+
+        public void ActivatedChest(Action openHandler, bool isOpenGui)
+        {
+            if (ChestActivate != null)
+            {
+                ChestActivate(openHandler, isOpenGui);
             }
         }
 

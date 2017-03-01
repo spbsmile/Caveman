@@ -23,6 +23,7 @@ namespace Caveman
         public SmoothCamera camera;
         public PlayerPool playerPool;
         public string currentLevelName;
+        public LevelMode levelMode;
         public static GameConfigs Configs { get; private set; }
         public static MapConfig MapOfflineConfig { set; get; }
 
@@ -60,7 +61,7 @@ namespace Caveman
             var mapCore = CreateMap(false, rand, mapConfig.Width, mapConfig.Heght, mapConfig);            
             CreatePlayersManager(rand, mapCore);
             CreateHero(Configs.Player["sample"]);
-            CreateBots(Configs.SingleLevel[currentLevelName], Configs.Player["sample"]);
+            CreateBots(Configs.SingleLevel[levelMode.ToString()], Configs.Player["sample"]);
             CreateCamera();
         }
 
@@ -78,7 +79,7 @@ namespace Caveman
         protected MapCore CreateMap(bool isMultiplayer, Random rand, int width, int height, MapConfig offlineConfig)
         {
             mapModel.InitializatonPool(poolsManager.Pools);
-            return new MapCore(width, height, offlineConfig, isMultiplayer, mapModel, rand);
+            return new MapCore(width, height, offlineConfig, isMultiplayer, mapModel, rand, levelMode);
         }
 
         protected void CreateCachePools()
@@ -93,7 +94,7 @@ namespace Caveman
         {
             battleGui = FindObjectOfType<BattleGui>();
             // todo change this after update code get time from server
-            battleGui.Initialization(isMultiplayer, roundTime, isObservableMode, playerPool.GetCurrentPlayerModels);
+            battleGui.Initialization(isMultiplayer, roundTime, isObservableMode, playerPool.GetCurrentPlayerModels, levelMode);
         }
 
         protected void CreateHero(PlayerConfig heroConfig)

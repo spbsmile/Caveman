@@ -1,0 +1,34 @@
+[
+  {
+    "name": "sample",
+    "width": 24,
+    "height": 24,
+    "pathPrefabTile": "Map/ground1",
+    "artefacts": [
+      {
+        "name": "dot",
+        "pathPrefab": "Map/dot",
+        "count": "30"
+      },
+      {
+        "name": "pool",
+        "pathPrefab": "Map/pool",
+        "count": "3"
+      }
+    ],
+    "itemsPeriodical": [
+      {
+        "name": "stone",
+        "period": "10",
+        "count": "10",
+        "type": "weapon"   
+      },
+      {
+        "name": "speed",
+        "period": "10",
+        "count": "5",
+        "type": "bonus"  
+     }
+    ] 
+  }
+]

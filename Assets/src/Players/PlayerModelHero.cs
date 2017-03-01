@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Caveman.Level;
 using Caveman.Setting;
 using UnityEngine;
 
@@ -39,6 +40,18 @@ namespace Caveman.Players
             if (!isMoving) isMoving = true;
             moveUnit = direction*PlayerCore.Speed;
             Move();
+        }
+
+        public override void OnTriggerEnter2D(Collider2D other)
+        {
+            base.OnTriggerEnter2D(other);
+            
+            var blockerMove = other.GetComponent<CustomRigidBody>();
+            if(blockerMove)
+            {
+                print("hello blocker move!!! ");
+                print(other.name);
+            }
         }
 
         protected override void Move()
