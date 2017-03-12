@@ -7,9 +7,11 @@ namespace Caveman.Players
 {
     public class PlayerModelHero : PlayerModelClient
     {
-        private bool isMoving;
+        private bool move;
         private int mapWidth;
         private int mapHeight;  
+
+        private BlockerMove blocker;
 
         protected void Start()
         {
@@ -19,7 +21,7 @@ namespace Caveman.Players
         public void HandlerOnStopMove()
         {
             StopMove();
-            isMoving = false;
+            move = false;
         }
 
         public void InitializationByMap(int mapWidth, int mapHeight)
@@ -31,13 +33,13 @@ namespace Caveman.Players
         private IEnumerator SendMove()
         {
             yield return new WaitForSeconds(0.3f);
-            if (isMoving) serverNotify.MoveSend(transform.position);            
+            if (move) serverNotify.MoveSend(transform.position);            
             StartCoroutine(SendMove());
         }
 
         public void MovePlayer(Vector3 direction, CNAbstractController arg2)
         {
-            if (!isMoving) isMoving = true;
+            if (!move) move = true;
             moveUnit = direction*PlayerCore.Speed;
             Move();
         }
@@ -46,11 +48,11 @@ namespace Caveman.Players
         {
             base.OnTriggerEnter2D(other);
             
-            var blockerMove = other.GetComponent<CustomRigidBody>();
+            var blockerMove = other.GetComponent<BlockerMove>();
             if(blockerMove)
             {
-                print("hello blocker move!!! ");
-                print(other.name);
+                blocker = other.GetComponent<BlockerMove>();
+
             }
         }
 
@@ -60,20 +62,26 @@ namespace Caveman.Players
             var y = transform.position.y + moveUnit.y * Time.deltaTime;
 
             // check movement out field
-            var halfX = spriteRenderer.bounds.size.x / 2;
-            if (x < halfX)
-                x = halfX;
-            else if (x > mapHeight - halfX)
-                x = mapWidth - halfX;
+            var halfHeroX = spriteRenderer.bounds.size.x / 2;
+            if (x < halfHeroX)
+                x = halfHeroX;
+            else if (x > mapHeight - halfHeroX)
+                x = mapWidth - halfHeroX;
 
-            var halfY = spriteRenderer.bounds.size.y / 2;
-            if (y < halfY)
-                y = halfY;
-            else if (y > mapHeight - halfY)
-                y = mapHeight - halfY;
+            var halfHeroY = spriteRenderer.bounds.size.y / 2;
+            if (y < halfHeroY)
+                y = halfHeroY;
+            else if (y > mapHeight - halfHeroY)
+                y = mapHeight - halfHeroY;
+
+            if(blocker)
+            {
+                transform.position = blocker.CorrectionMove(x, y, halfHeroX);
+                playerAnimation.SetMoving(moveUnit.y < 0, moveUnit.x > 0);
+                return;
+            }
 
             transform.position = new Vector3(x, y);
-
             playerAnimation.SetMoving(moveUnit.y < 0, moveUnit.x > 0);
         }
 
