@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 61302853324705294}
   - component: {fileID: 114230029949864562}
   m_Layer: 0
-  m_Name: blocker
+  m_Name: blocker_move
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,13 +88,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f413187b0e6e6a4caff40ebb9a76a3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Height: 0
-  Width: 0
-  Center: {x: 0, y: 0}
-  RightTop: {x: 16.878963, y: 15.614877}
-  LeftTop: {x: 12.021036, y: 15.614877}
-  LeftBottom: {x: 12.021036, y: 13.625125}
-  RightBottom: {x: 16.878963, y: 13.625125}
 --- !u!212 &212004191867545834
 SpriteRenderer:
   m_ObjectHideFlags: 1
