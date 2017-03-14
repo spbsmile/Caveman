@@ -7,7 +7,7 @@ namespace Caveman.Players
 {
     public class PlayerModelHero : PlayerModelClient
     {
-        private bool move;
+        private bool isMoving;
         private int mapWidth;
         private int mapHeight;  
 
@@ -21,7 +21,7 @@ namespace Caveman.Players
         public void HandlerOnStopMove()
         {
             StopMove();
-            move = false;
+            isMoving = false;
         }
 
         public void InitializationByMap(int mapWidth, int mapHeight)
@@ -33,13 +33,13 @@ namespace Caveman.Players
         private IEnumerator SendMove()
         {
             yield return new WaitForSeconds(0.3f);
-            if (move) serverNotify.MoveSend(transform.position);            
+            if (isMoving) serverNotify.MoveSend(transform.position);            
             StartCoroutine(SendMove());
         }
 
         public void MovePlayer(Vector3 direction, CNAbstractController arg2)
         {
-            if (!move) move = true;
+            if (!isMoving) isMoving = true;
             moveUnit = direction*PlayerCore.Speed;
             Move();
         }
