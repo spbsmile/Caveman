@@ -1,5 +1,4 @@
 ﻿using Caveman.Players;
-using Caveman.Setting;
 using UnityEngine;
 
 namespace Caveman.Level

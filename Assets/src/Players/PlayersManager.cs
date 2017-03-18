@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Caveman.Configs;
 using Caveman.CustomAnimation;
 using Caveman.Level;
 using Caveman.Network;

@@ -31,16 +31,9 @@ namespace Caveman.Network
 
         public IServerListener ServerListener { private get; set; }
 
-        // API
-
-        /**
-            Sends tick if it is time
-            Checks if there are messages for client and sends them via listener interface
-        */
-
         public void Update()
         {
-            if (Time.timeSinceLevelLoad - lastTimeUpdated > Settings.ServerPingTime)
+            if (Time.timeSinceLevelLoad - lastTimeUpdated > DevSettings.ServerPingTime)
             {
                 lastTimeUpdated = Time.timeSinceLevelLoad;
                 SendTick();
@@ -57,10 +50,6 @@ namespace Caveman.Network
             }
         }
 
-        /**
-         * Runs session and starts listen to the server
-         * */
-
         public void StartSession(string userId, string userName, bool isObservableMode)
         {
             clientId = userId;
@@ -68,9 +57,9 @@ namespace Caveman.Network
             {
                 try
                 {
-                    var ipServer = PlayerPrefs.HasKey(Settings.KeyIpServer)
-                        ? PlayerPrefs.GetString(Settings.KeyIpServer)
-                        : Settings.IP_SERVER;
+                    var ipServer = PlayerPrefs.HasKey(DevSettings.KeyIpServer)
+                        ? PlayerPrefs.GetString(DevSettings.KeyIpServer)
+                        : DevSettings.IP_SERVER;
                     client = new TcpClient(ipServer, Port);
                     var stream = client.GetStream();
 
@@ -138,10 +127,6 @@ namespace Caveman.Network
         {
             return jObject != null ? "#" + jObject + "#" : "";
         }
-
-        /**
-            Listens to the server while Reader is not null
-        */
 
         private void StartListeningServer()
         {
