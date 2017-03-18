@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caveman", "Caveman.csproj", "{CDB7B727-4140-9CAA-E353-9A938DCE8CE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caveman.Editor", "Caveman.Editor.csproj", "{FD9726A1-68EF-72D8-0DC1-D590B8B4BA9C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CDB7B727-4140-9CAA-E353-9A938DCE8CE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDB7B727-4140-9CAA-E353-9A938DCE8CE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDB7B727-4140-9CAA-E353-9A938DCE8CE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDB7B727-4140-9CAA-E353-9A938DCE8CE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD9726A1-68EF-72D8-0DC1-D590B8B4BA9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD9726A1-68EF-72D8-0DC1-D590B8B4BA9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD9726A1-68EF-72D8-0DC1-D590B8B4BA9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD9726A1-68EF-72D8-0DC1-D590B8B4BA9C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
