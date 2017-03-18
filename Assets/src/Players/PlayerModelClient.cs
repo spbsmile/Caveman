@@ -9,8 +9,6 @@ namespace Caveman.Players
     {
         public virtual void OnTriggerEnter2D(Collider2D other)
         {
-
-            print("hello OnTriggerEnter2D");
             var weapon = other.GetComponent<WeaponModelBase>();
             if (weapon)
             {
