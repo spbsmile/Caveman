@@ -1,10 +1,9 @@
-﻿using Caveman.Setting;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Caveman.Configs.Levels
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class MultiplayerLevelConfig : ISettings
+    public class MultiplayerLevelConfig : IConfig
     {
         public MultiplayerLevelConfig(string name, int roundTime)
         {

@@ -1,11 +1,10 @@
 ﻿using Caveman.BonusSystem;
-using Caveman.Setting;
 using Newtonsoft.Json;
 
 namespace Caveman.Configs
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class BonusConfig : ISettings
+    public class BonusConfig : IConfig
     {
         public BonusConfig(string name, float duration, BonusType type, string prefabPath, float factor)
         {

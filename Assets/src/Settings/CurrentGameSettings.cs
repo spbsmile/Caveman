@@ -48,7 +48,7 @@ namespace Caveman.Setting
             );
         }
 
-        private void WriteConfig<T>(IEnumerable<T> source, Dictionary<string, T> targetConfig) where T : ISettings
+        private void WriteConfig<T>(IEnumerable<T> source, Dictionary<string, T> targetConfig) where T : IConfig
         {
             if (source == null) return;
             foreach (var config in source)

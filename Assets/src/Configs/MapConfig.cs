@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using Caveman.Setting;
 using Newtonsoft.Json;
 
 namespace Caveman.Configs
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class MapConfig : ISettings
+    public class MapConfig : IConfig
     {
         [JsonProperty] private readonly string name;
         [JsonProperty] private readonly int width;
@@ -55,7 +54,7 @@ namespace Caveman.Configs
         }
 
         [JsonObject(MemberSerialization.OptIn)]
-        public class Artefacts : ISettings
+        public class Artefacts : IConfig
         {
             [JsonProperty] private readonly string name;
             [JsonProperty] private readonly string pathPrefab;
@@ -74,7 +73,7 @@ namespace Caveman.Configs
         }
 
         [JsonObject(MemberSerialization.OptIn)]
-        public class ItemPeriodical: ISettings
+        public class ItemPeriodical: IConfig
         {
             [JsonProperty] private readonly string name;
             [JsonProperty] private readonly int period;

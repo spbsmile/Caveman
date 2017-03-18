@@ -1,10 +1,9 @@
-﻿using Caveman.Setting;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Caveman.Configs
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class ImageConfig : ISettings
+    public class ImageConfig : IConfig
     {
         public ImageConfig(string name, string prefabPath)
         {

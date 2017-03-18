@@ -1,10 +1,9 @@
-﻿using Caveman.Setting;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Caveman.Configs.Levels
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class SingleLevelConfig : ISettings
+    public class SingleLevelConfig : IConfig
     {
         public SingleLevelConfig(string name, int roundTime, int botsCount, string[] botsName)
         {

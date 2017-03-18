@@ -1,5 +1,4 @@
-﻿using Caveman.Setting;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Caveman.Configs
 {
@@ -7,7 +6,7 @@ namespace Caveman.Configs
     /// define initial count items in pools, may be deleted this file later
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public class PoolsConfig : ISettings
+    public class PoolsConfig : IConfig
     {
         public PoolsConfig(string name, int weaponsRare, int weaponsOrdinary, int weaponsPopular, int imagesRare,
             int imagesOrdinary, int imagesPopular)

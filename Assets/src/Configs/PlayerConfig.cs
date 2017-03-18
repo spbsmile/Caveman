@@ -1,11 +1,10 @@
 ﻿using Caveman.Players;
-using Caveman.Setting;
 using Newtonsoft.Json;
 
 namespace Caveman.Configs
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class PlayerConfig : ISettings
+    public class PlayerConfig : IConfig
     {
         public PlayerConfig(string name, float speed, int respawnDuration, int invulnerabilityDuration, float strength,
             PlayerType type, string prefabPath)

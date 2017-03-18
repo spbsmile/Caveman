@@ -1,11 +1,10 @@
-﻿using Caveman.Setting;
-using Caveman.Weapons;
+﻿using Caveman.Weapons;
 using Newtonsoft.Json;
 
 namespace Caveman.Configs
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class WeaponConfig : ISettings
+    public class WeaponConfig : IConfig
     {
         public WeaponConfig(string name, float speed, float cooldown, int countItems, int weight,
             int rotateParameter, WeaponType type, string prefabPath)
