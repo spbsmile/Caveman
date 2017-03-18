@@ -1,9 +1,10 @@
 ﻿using System;
+using Caveman.Setting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace Caveman.Setting
+namespace Caveman.UI.Menu.Options
 {
     // This for developer settings, when game on build, possible changed parameters
     public class ForceSettings : MonoBehaviour
@@ -40,9 +41,9 @@ namespace Caveman.Setting
             //bonusSpeedMaxCount.text = Settings.BonusSpeedMaxCount.ToString();
             //bonusSpeedTimeRespawn.text = Settings.BonusTimeRespawn.ToString();
             //weaponWeight.text = Settings.WeaponsMaxOnPlayer.ToString();
-            serverPingTime.text = Settings.ServerPingTime.ToString();    
+            serverPingTime.text = DevSettings.ServerPingTime.ToString();    
 
-            ip_server.text = PlayerPrefs.HasKey(Settings.KeyIpServer) ? PlayerPrefs.GetString(Settings.KeyIpServer) : Settings.IP_SERVER;
+            ip_server.text = PlayerPrefs.HasKey(DevSettings.KeyIpServer) ? PlayerPrefs.GetString(DevSettings.KeyIpServer) : DevSettings.IP_SERVER;
 
             //roundTime.onEndEdit.AddListener(delegate
             //{
@@ -90,22 +91,22 @@ namespace Caveman.Setting
             });
             serverPingTime.onEndEdit.AddListener(delegate
             {
-                Settings.ServerPingTime = Convert.ToInt32(serverPingTime.text);
+                DevSettings.ServerPingTime = Convert.ToInt32(serverPingTime.text);
             });
             ip_server.onEndEdit.AddListener(delegate
             {
-                Settings.IP_SERVER = Convert.ToString(ip_server.text);
-                PlayerPrefs.SetString(Settings.KeyIpServer, Convert.ToString(ip_server.text));
+                DevSettings.IP_SERVER = Convert.ToString(ip_server.text);
+                PlayerPrefs.SetString(DevSettings.KeyIpServer, Convert.ToString(ip_server.text));
             });
 
             disableSendMove.onValueChanged.AddListener(delegate
             {
                 if (disableSendMove.isOn)
                 {
-                    Settings.DisableSendMove = true;
+                    DevSettings.DisableSendMove = true;
                 }
                 else {
-                    Settings.DisableSendMove = false;
+                    DevSettings.DisableSendMove = false;
                 }
             });
         }
