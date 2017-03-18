@@ -97,8 +97,8 @@ namespace Caveman.Network
 
         private static Vector2 GetServerPoint(Vector2 pointClient)
         {                                                
-            return new Vector2(pointClient.x / Settings.WidthMap * ServerMessageHandler.MapServerConfig.Width,
-             pointClient.y / Settings.HeightMap * ServerMessageHandler.MapServerConfig.Heght);
+            return new Vector2(pointClient.x / DevSettings.WidthMap * ServerMessageHandler.MapServerConfig.Width,
+             pointClient.y / DevSettings.HeightMap * ServerMessageHandler.MapServerConfig.Heght);
         }
     }
 }

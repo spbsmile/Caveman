@@ -119,8 +119,8 @@ namespace Caveman.Network
 
         private Vector2 Convector(Vector2 pointServer)
         {                                    
-            return new Vector2(pointServer.x / ServerMessageHandler.MapServerConfig.Width * Settings.WidthMap,
-             pointServer.y / ServerMessageHandler.MapServerConfig.Heght * Settings.HeightMap);
+            return new Vector2(pointServer.x / ServerMessageHandler.MapServerConfig.Width * DevSettings.WidthMap,
+             pointServer.y / ServerMessageHandler.MapServerConfig.Heght * DevSettings.HeightMap);
         }
     }
 }

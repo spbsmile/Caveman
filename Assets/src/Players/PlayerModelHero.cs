@@ -15,7 +15,7 @@ namespace Caveman.Players
 
         protected void Start()
         {
-            if (multiplayer && !Settings.DisableSendMove) StartCoroutine(SendMove());
+            if (multiplayer && !DevSettings.DisableSendMove) StartCoroutine(SendMove());
         }
 
         public void HandlerOnStopMove()
@@ -88,7 +88,7 @@ namespace Caveman.Players
         public override void OnEnable()
         {
             base.OnEnable();
-            if (multiplayer && !Settings.DisableSendMove) StartCoroutine(SendMove());
+            if (multiplayer && !DevSettings.DisableSendMove) StartCoroutine(SendMove());
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Caveman.Setting
 {
-    public class Settings
+    public class DevSettings
     {
         public static int WidthMap = 24;
         public static int HeightMap = 24;
