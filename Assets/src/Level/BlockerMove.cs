@@ -4,11 +4,19 @@ namespace Caveman.Level
 {
     public class BlockerMove : MonoBehaviour
     {
+        public DirectionBlock direction;
+
         private Vector2 min;
 
         private Vector2 max;
 
         private SpriteRenderer render;
+
+        public enum DirectionBlock
+        {
+            TopButton,
+            LeftRight
+        }
 
         public void Start()
         {
@@ -21,13 +29,24 @@ namespace Caveman.Level
         {
             if (min.y < y && y < max.y)
             {
-                if (x > min.x - halfHeroX && x < max.x - 2 * halfHeroX)
+                if (min.x - halfHeroX < x && x < max.x - 2 * halfHeroX)
                 {
                     x = min.x - halfHeroX;
                 }
-                else if (x < max.x + halfHeroX && x > min.x + 2 * halfHeroX)
+                else if (min.x + 2 * halfHeroX < x && x < max.x + halfHeroX)
                 {
                     x = max.x + halfHeroX;
+                }
+            }
+            if (min.x < x && x < max.x)
+            {
+                if (min.y - halfHeroX < y && y < max.y - 2 * halfHeroX)
+                {
+                    y = min.y - halfHeroX;
+                }
+                else if (min.y + 2 * halfHeroX < y && y < max.y + halfHeroX)
+                {
+                    y = max.y + halfHeroX;
                 }
             }
             return new Vector2(x, y);
