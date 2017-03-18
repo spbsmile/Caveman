@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using UnityEditor;
+﻿using UnityEditor;
 
 public class CNButtonCreatorMenu : EditorWindow
 {

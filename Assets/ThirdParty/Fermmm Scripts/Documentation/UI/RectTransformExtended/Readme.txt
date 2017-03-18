@@ -1,5 +1,5 @@
 Current version:
-3.1
+3.2
 
 Instructions:
 
@@ -24,6 +24,9 @@ RectTransform.SetAnchorsPositionY()
 
 RectTransform.SetAnchorsWidth()
 RectTransform.SetAnchorsHeight()
+
+RectTransform.GetPivotPosition()
+RectTransform.SetPivotPosition()
 
 Note:
 

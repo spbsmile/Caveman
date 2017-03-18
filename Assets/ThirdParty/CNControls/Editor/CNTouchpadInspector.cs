@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-using UnityEditor;
-using System.Collections;
+﻿using UnityEditor;
 
 [CustomEditor(typeof(CNTouchpad))]
 public class CNTouchpadInspector : CNAbstractControllerInspector

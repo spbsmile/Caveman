@@ -22,6 +22,7 @@ public class RectTransformExtended : MonoBehaviour
                        
     // Position:       
     public  Vector2    PositionIgnoringAnchors;
+    public  Vector2    PositionIgnoringAnchorsAndPivot;
     public  Vector2    PositionIgnoringAnchorsRelative;
     public  Vector2    CanvasPos;
     public  Vector2    CanvasPosNormalized;
@@ -52,7 +53,7 @@ public class RectTransformExtended : MonoBehaviour
     private  Vector2   AnchorsPixelPositionPrev;
     private  Vector2   PixelPositionPrev;
     private  Vector2   AnchorsSizePrev;
-    private  Vector2   PositionIgnoringAnchorsPrev;
+    private  Vector2   PositionIgnoringAnchorsAndPivotPrev;
     private  Vector2   SizeIgnoringAnchorsPrev;
     private  Vector2   AnchorsCanvasPosPrev;
     private  Vector2   AnchorsOutOfCanvasPosPrev;
@@ -69,10 +70,12 @@ public class RectTransformExtended : MonoBehaviour
     private  Vector2   AnchorsPixelsSizePrev;
     private  Vector2   AnchorsRectPosPrev;
     private  Vector2   AnchorsRectSizePrev;
+    private  Vector2   PositionIgnoringAnchorsPrev;
                        
     //Editor           
-    public int         SelectedCoordinates;
-    public int         SelectedAnchorCoordinates;
+    public CoordinateSystem         SelectedCoordinates;
+    public AnchorsCoordinateSystem  SelectedAnchorCoordinates;
+    public PivotCoordinateSystem    SelectedPivotCoordinates;
 
     private RectTransform   Rt;
 
@@ -116,9 +119,9 @@ public class RectTransformExtended : MonoBehaviour
     {
         bool changed = false;
         
-        if(!PositionIgnoringAnchors.IsAproximately(PositionIgnoringAnchorsPrev))
+        if(!PositionIgnoringAnchorsAndPivot.IsAproximately(PositionIgnoringAnchorsAndPivotPrev))
         {
-            Rt.SetPosition(PositionIgnoringAnchors, CoordinateSystem.IgnoreAnchorsAndPivot, CenterPivot);
+            Rt.SetPosition(PositionIgnoringAnchorsAndPivot, CoordinateSystem.IgnoreAnchorsAndPivot, CenterPivot);
             changed = true;
         }
         
@@ -242,12 +245,19 @@ public class RectTransformExtended : MonoBehaviour
             changed = true;
         }
 
+        if(!PositionIgnoringAnchors.IsAproximately(PositionIgnoringAnchorsPrev))
+        {
+            Rt.SetPosition(PositionIgnoringAnchors, CoordinateSystem.IgnoreAnchors, CenterPivot);
+            changed = true;
+        }
+
         return changed;
     }
 
     public void UpdateChanges()
     {
-        PositionIgnoringAnchors         = Rt.GetPosition(CoordinateSystem.IgnoreAnchorsAndPivot, CenterPivot);
+        PositionIgnoringAnchors         = Rt.GetPosition(CoordinateSystem.IgnoreAnchors, CenterPivot);
+        PositionIgnoringAnchorsAndPivot = Rt.GetPosition(CoordinateSystem.IgnoreAnchorsAndPivot, CenterPivot);
         SizeIgnoringAnchors             = Rt.GetSize(CoordinateSystem.IgnoreAnchorsAndPivot);
         AnchorsPosition                 = Rt.GetAnchorsPosition(AnchorsCoordinateSystem.Default, CenterPivot);
         AnchorsPixelPosition            = Rt.GetAnchorsPosition(AnchorsCoordinateSystem.ScreenSpacePixels, CenterPivot);
@@ -272,7 +282,7 @@ public class RectTransformExtended : MonoBehaviour
 
     public void SaveFrameData()
     {
-        PositionIgnoringAnchorsPrev = PositionIgnoringAnchors;
+        PositionIgnoringAnchorsAndPivotPrev = PositionIgnoringAnchorsAndPivot;
         SizeIgnoringAnchorsPrev     = SizeIgnoringAnchors;
         AnchorsPositionPrev         = AnchorsPosition;
         AnchorsPixelPositionPrev    = AnchorsPixelPosition;
@@ -293,6 +303,7 @@ public class RectTransformExtended : MonoBehaviour
         AnchorsPixelsSizePrev        = AnchorsPixelsSize;
         AnchorsRectPosPrev           = AnchorsRectPos;
         AnchorsRectSizePrev          = AnchorsRectSize;
+        PositionIgnoringAnchorsPrev  = PositionIgnoringAnchors;
     }
 }
 
@@ -321,34 +332,39 @@ public class RectTransformExtendedInspector : Editor
         EditorGUILayout.Space();
 
         
-        EditorGUILayout.HelpBox("Rect control", MessageType.None);
-        Script.SelectedCoordinates              = EditorGUILayout.Popup("Coordinates", Script.SelectedCoordinates, new string[]{"Ignore Anchors And Pivot", "Ignore Anchors And Pivot Normalized", "As Child Of Canvas", "As Child Of Canvas Normalized", "Screen Space Pixels"});
+        ColoredHelpBox("Rect control", Color.gray);
+        Script.SelectedCoordinates                  = (CoordinateSystem)EditorGUILayout.EnumPopup("Coordinates", Script.SelectedCoordinates);
+        if(Script.SelectedCoordinates == CoordinateSystem.IgnoreAnchorsAndPivot)
+        {
+            Script.PositionIgnoringAnchorsAndPivot  = PositionControl(new GUIContent("Position", "To control the position using a value relative to the parent, ignoring anchors position. Without this the only option is to control position with a value relative to the anchors using RectTransform.AnchoredPosition. \n \nUsefull to ignore anchors in one or both axis."), Script.PositionIgnoringAnchorsAndPivot);
+            Script.SizeIgnoringAnchors              = SizeControl(new GUIContent("Size", "To control the size using a value relative to the parent, ignoring anchors. Without this the only option is to control size with a value relative to the anchors using RectTransform.SizeDelta. \n \nUsefull to ignore anchors in one or both axis."), Script.SizeIgnoringAnchors, Script.AllowDistortion);
+        }
 
-        if(Script.SelectedCoordinates == (int)CoordinateSystem.IgnoreAnchorsAndPivot)
+        if(Script.SelectedCoordinates == CoordinateSystem.IgnoreAnchors)
         {
             Script.PositionIgnoringAnchors          = PositionControl(new GUIContent("Position", "To control the position using a value relative to the parent, ignoring anchors and pivot position. Without this the only option is to control position with a value relative to the anchors using RectTransform.AnchoredPosition. \n \nUsefull to ignore anchors in one or both axis."), Script.PositionIgnoringAnchors);
             Script.SizeIgnoringAnchors              = SizeControl(new GUIContent("Size", "To control the size using a value relative to the parent, ignoring anchors. Without this the only option is to control size with a value relative to the anchors using RectTransform.SizeDelta. \n \nUsefull to ignore anchors in one or both axis."), Script.SizeIgnoringAnchors, Script.AllowDistortion);
         }
 
-        if(Script.SelectedCoordinates == (int)CoordinateSystem.IgnoreAnchorsAndPivotNormalized)
+        if(Script.SelectedCoordinates == CoordinateSystem.IgnoreAnchorsAndPivotNormalized)
         {
             Script.PositionIgnoringAnchorsRelative  = PositionControl(new GUIContent("Position", "To control the position using a value relative to the parent with a range from 0 to 1, ignoring anchors. \n\nUsefull to divide the space of the parent between the children."), Script.PositionIgnoringAnchorsRelative);
             Script.SizeIgnoringAnchorsRelative      = SizeControl(new GUIContent("Size", "To control the size using a value relative to the parent with a range from 0 to 1, ignoring anchors. \n\nUsefull to divide the space of the parent between the children."), Script.SizeIgnoringAnchorsRelative, Script.AllowDistortion);
         }
 
-        if(Script.SelectedCoordinates == (int)CoordinateSystem.AsChildOfCanvas)
+        if(Script.SelectedCoordinates == CoordinateSystem.AsChildOfCanvas)
         {
             Script.CanvasPos                        = PositionControl(new GUIContent("Position", "Move the element as if it was a child of the canvas when is not. \n\nUseful for example to match coordinates from objects located at different containers."), Script.CanvasPos);
             Script.SizeAsCanvas                     = SizeControl(new GUIContent("Size", "Resize the element as if it was a child of the canvas when is not. \n\nUseful for example to match coordinates from objects located at different containers."), Script.SizeAsCanvas, Script.AllowDistortion);
         }
 
-        if(Script.SelectedCoordinates == (int)CoordinateSystem.AsChildOfCanvasNormalized)
+        if(Script.SelectedCoordinates == CoordinateSystem.AsChildOfCanvasNormalized)
         {
             Script.CanvasPosNormalized              = PositionControl(new GUIContent("Position", "This is The same than Position As Canvas Child but using values from 0 to 1 (normalized). Move the element as if it was a child of the canvas when is not. \n\nUseful for example to match coordinates from objects located at different containers."), Script.CanvasPosNormalized);
             Script.SizeAsCanvasNormalized           = SizeControl(new GUIContent("Size", "This is The same than Size As Canvas but using values from 0 to 1 (normalized). Resize the element as if it was a child of the canvas when is not. \n\nUseful for example to match coordinates from objects located at different containers."), Script.SizeAsCanvasNormalized, Script.AllowDistortion);
         }
 
-        if(Script.SelectedCoordinates == (int)CoordinateSystem.ScreenSpacePixels)
+        if(Script.SelectedCoordinates == CoordinateSystem.ScreenSpacePixels)
         {
             Script.PixelPos                         = PositionControl(new GUIContent("Position", "To control the position in screen space pixels instead of units. \n \nUsefull when you want to control the position of an object using the mouse/touch position."), Script.PixelPos);
             Script.SizeInPixels                     = SizeControl(new GUIContent("Size", "To control the size in screen space pixels instead of units. \n\nUsefull when you want to control the size of an object using the mouse/touch position."), Script.SizeInPixels, Script.AllowDistortion);
@@ -358,51 +374,51 @@ public class RectTransformExtendedInspector : Editor
         EditorGUILayout.Space();
         EditorGUILayout.Space();
 
-        EditorGUILayout.HelpBox("Anchors control", MessageType.None);
-        Script.SelectedAnchorCoordinates        = EditorGUILayout.Popup("Anchor Coordinates", Script.SelectedAnchorCoordinates, new string[]{"Default", "As Child Of Canvas", "Screen Space Pixels", "As Rect", "Outside Container", "Outside Canvas", "Inside Canvas"});
+        ColoredHelpBox("Anchors control", Color.gray);
+        Script.SelectedAnchorCoordinates        = (AnchorsCoordinateSystem)EditorGUILayout.EnumPopup("Anchor Coordinates", Script.SelectedAnchorCoordinates);
 
-        if(Script.SelectedAnchorCoordinates == (int)AnchorsCoordinateSystem.Default)
+        if(Script.SelectedAnchorCoordinates == AnchorsCoordinateSystem.Default)
         {
             Script.AnchorsPosition                  = PositionControl(new GUIContent("Anchors Position", "To control anchors position with a single Vector2 instead of AnchorsMin and AnchorsMax. \n \nUsefull for tweens and simplicity."), Script.AnchorsPosition);
             Script.AnchorsSize                      = SizeControl(new GUIContent("Anchors Size", "To control anchors size with a single Vector2 instead of AnchorsMin and AnchorsMax. \n \nUsefull for tweens and simplicity."), Script.AnchorsSize, Script.AllowDistortion);
         }
 
-        if (Script.SelectedAnchorCoordinates == (int)AnchorsCoordinateSystem.AsChildOfCanvas)
+        if (Script.SelectedAnchorCoordinates == AnchorsCoordinateSystem.AsChildOfCanvas)
         {
             Script.AnchorsCanvasPos                 = PositionControl(new GUIContent("Anchors Position", "To control the anchors position with values as if the object was chid of the canvas. \n \nUsefull when you want to set or get the position relative to the canvas but the object is not a child of the canvas."), Script.AnchorsCanvasPos);
             Script.AnchorsCanvasSize                = SizeControl(new GUIContent("Anchors Size", "To control the anchors size with values as if the object was chid of the canvas. \n \nUsefull when you want to set or get the size relative to the canvas but the object is not a child of the canvas."), Script.AnchorsCanvasSize, Script.AllowDistortion);
         }
 
-        if (Script.SelectedAnchorCoordinates == (int)AnchorsCoordinateSystem.ScreenSpacePixels)
+        if (Script.SelectedAnchorCoordinates == AnchorsCoordinateSystem.ScreenSpacePixels)
         {
             Script.AnchorsPixelPosition             = PositionControl(new GUIContent("Anchors Position", "To control anchors position in screen space pixels instead of anchor values from 0 to 1. \n \nUsefull when you want to control the position of an object using the mouse/touch position and you want to keep the anchors attached."), Script.AnchorsPixelPosition);
             Script.AnchorsPixelsSize                = SizeControl(new GUIContent("Anchors Size", "To control anchors size in screen space pixels instead of anchor values from 0 to 1. \n \nUsefull when you want to control the size of the anchors using the mouse/touch values."), Script.AnchorsPixelsSize, Script.AllowDistortion);
         }
 
-        if (Script.SelectedAnchorCoordinates == (int)AnchorsCoordinateSystem.AsRect)
+        if (Script.SelectedAnchorCoordinates == AnchorsCoordinateSystem.AsRect)
         {
             Script.AnchorsRectPos                   = PositionControl(new GUIContent("Anchors Position", "Move the anchors with the same kind of coordinates used for the rect in the IgnoreAnchorsAndPivot coordinate system. \n \nUsefull to fit the anchors with the rect in different ways."), Script.AnchorsRectPos);
             Script.AnchorsRectSize                  = SizeControl(new GUIContent("Anchors Size", "Resize the anchors with the same kind of coordinates used for the rect in the IgnoreAnchorsAndPivot coordinate system. \n \nUsefull to fit the anchors with the rect in different ways."), Script.AnchorsRectSize, Script.AllowDistortion);
         }
 
-        if (Script.SelectedAnchorCoordinates == (int)AnchorsCoordinateSystem.OutsideCanvas)
+        if (Script.SelectedAnchorCoordinates == AnchorsCoordinateSystem.OutsideCanvas)
         {
             Script.AnchorsOutOfCanvasPos            = PositionControl(new GUIContent("Anchors Position", "To control how much outside of the canvas is the object. 0 means outside of the canvas. Does not matter if the container is not the canvas, or any anchor configuration. \n \nUsefull to move and animate elements from or to the outside of the screen in a very easy way."), Script.AnchorsOutOfCanvasPos);
         }
 
-        if (Script.SelectedAnchorCoordinates == (int)AnchorsCoordinateSystem.OutsideContainer)
+        if (Script.SelectedAnchorCoordinates == AnchorsCoordinateSystem.OutsideContainer)
         {
             Script.AnchorsOutOfContainerPos         = PositionControl(new GUIContent("Anchors Position", "To control how much outside of the container is the object. 0 means outside of the container. Does not matter the anchor configuration in the object or in the container. \n \nUsefull to move and animate elements from or to the outside of the container in a very easy way."), Script.AnchorsOutOfContainerPos);
         }
 
-        if (Script.SelectedAnchorCoordinates == (int)AnchorsCoordinateSystem.InsideCanvas)
+        if (Script.SelectedAnchorCoordinates == AnchorsCoordinateSystem.InsideCanvas)
         {
             Script.AnchorsInsideOfCanvasPos         = PositionControl(new GUIContent("Anchors Position", "To control the object preventing to go outside of the screen. Does not matter the anchor configuration in the object or in the container. \n \nUsefull to make dragable UI elements that can't be dragged outside of the screen."), Script.AnchorsInsideOfCanvasPos);
         }
 
         EditorGUIUtility.labelWidth = 140;
 
-        if(Script.SelectedAnchorCoordinates != (int)AnchorsCoordinateSystem.OutsideCanvas && Script.SelectedAnchorCoordinates != (int)AnchorsCoordinateSystem.InsideCanvas && Script.SelectedAnchorCoordinates != (int)AnchorsCoordinateSystem.OutsideContainer)
+        if(Script.SelectedAnchorCoordinates != AnchorsCoordinateSystem.OutsideCanvas && Script.SelectedAnchorCoordinates != AnchorsCoordinateSystem.InsideCanvas && Script.SelectedAnchorCoordinates != AnchorsCoordinateSystem.OutsideContainer)
             Script.ChangeRectWithAnchors            = EditorGUILayout.Toggle(new GUIContent("Change Also Rect", "Check to move and resize the anchors and the rect at the same time."), Script.ChangeRectWithAnchors);
 
         if(Script.UpdateAndApply() && !Application.isPlaying)
@@ -481,6 +497,14 @@ public class RectTransformExtendedInspector : Editor
         RectTransform rt = Script.GetComponent<RectTransform>();
         if(!rt.localScale.IsAproximately(Vector3.one))
             EditorGUILayout.HelpBox("The scale of the object is not 1. This causes unexpected results since Width and Height does not represent the real visual size anymore.", MessageType.Warning);
+    }
+
+    private void ColoredHelpBox(string message, Color color)
+    {
+        Color previousColor = GUI.backgroundColor;
+        GUI.backgroundColor = color;
+        EditorGUILayout.HelpBox(message, MessageType.None);
+        GUI.backgroundColor = previousColor;
     }
 }
 #endif

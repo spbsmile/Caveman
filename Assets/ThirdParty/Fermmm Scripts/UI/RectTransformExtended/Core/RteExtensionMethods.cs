@@ -7,22 +7,32 @@ public static class RteExtensionMethods
     /// </summary>
     /// <param name="tr"></param>
     /// <param name="coordinateSystem"> The returned position will be from the coordinate system you specify in this parameter.</param>
-    /// <param name="rtePivotCentered"> When using this tool the Unity pivot is ignored and a pivot from this tool is used, wich is located at the lower left corner of this object, if this parameter is true then the pivot will be located at the center of this object.</param>
+    /// <param name="rtePivotCentered"> This tool has it's own pivot, the Unity pivot is ignored in all the coordinate systems except "IgnoreAnchors", the pivot of this tool is located at the lower left corner of this object, if this parameter is true then the pivot will be located at the center of this object.</param>
     public static Vector2 GetPosition(this RectTransform tr, CoordinateSystem coordinateSystem = CoordinateSystem.IgnoreAnchorsAndPivot, bool rtePivotCentered = false)
     {
-        Vector2 result = RteRectTools.GetPositionIgnoringAnchorsAndPivot(tr, rtePivotCentered);
+        Vector2 result = default(Vector2);
 
         switch (coordinateSystem)
         {
+            case CoordinateSystem.IgnoreAnchorsAndPivot:
+                result = RteRectTools.GetPositionIgnoringAnchorsAndPivot(tr, rtePivotCentered);
+                break;
+
+            case CoordinateSystem.IgnoreAnchors:
+                result = RteRectTools.GetPositionIgnoringAnchors(tr);
+                break;
+
             case CoordinateSystem.IgnoreAnchorsAndPivotNormalized:
                 result = RteRectTools.GetPositionNormalizedIgnoringAnchorsAndPivot(tr, rtePivotCentered);
                 break;
 
             case CoordinateSystem.AsChildOfCanvas:
+                result = RteRectTools.GetPositionIgnoringAnchorsAndPivot(tr, rtePivotCentered);
                 result = RteAnchorTools.GetCanvasAnchorCoordinateFromRectCoordinate(tr, result);
                 break;
 
             case CoordinateSystem.AsChildOfCanvasNormalized:
+                result = RteRectTools.GetPositionIgnoringAnchorsAndPivot(tr, rtePivotCentered);
                 result = RteAnchorTools.GetCanvasAnchorCoordinateNormalizedFromRectCoordinate(tr, result);
                 break;
 
@@ -40,11 +50,15 @@ public static class RteExtensionMethods
     /// <param name="tr"></param>
     /// <param name="targetPosition"> Your target position.</param>
     /// <param name="coordinateSystem"> The coordinate system of your target position.</param>
-    /// <param name="rtePivotCentered"> When using this tool the Unity pivot is ignored and a pivot from this tool is used, wich is located at the lower left corner of this object, if this parameter is true then the pivot will be located at the center of this object.</param>
+    /// <param name="rtePivotCentered"> This tool has it's own pivot, the Unity pivot is ignored in all the coordinate systems except "IgnoreAnchors", the pivot of this tool is located at the lower left corner of this object, if this parameter is true then the pivot will be located at the center of this object.</param>
     public static void SetPosition(this RectTransform tr, Vector2 targetPosition, CoordinateSystem coordinateSystem = CoordinateSystem.IgnoreAnchorsAndPivot, bool rtePivotCentered = false)
     {
         switch (coordinateSystem)
         {
+            case CoordinateSystem.IgnoreAnchors:
+                RteRectTools.SetPositionIgnoringAnchors(tr, targetPosition);
+                return;
+
             case CoordinateSystem.IgnoreAnchorsAndPivotNormalized:
                 RteRectTools.SetPositionNormalizedIgnoringAnchorsAndPivot(tr, targetPosition, rtePivotCentered);
                 return;
@@ -71,7 +85,7 @@ public static class RteExtensionMethods
     /// <param name="tr"></param>
     /// <param name="targetPositionX"></param>
     /// <param name="coordinateSystem">The coordinate system of your target position.</param>
-    /// <param name="rtePivotCentered">When using this tool the Unity pivot is ignored and a pivot from this tool is used, wich is located at the lower left corner of this object, if this parameter is true then the pivot will be located at the center of this object.</param>
+    /// <param name="rtePivotCentered">This tool has it's own pivot, the Unity pivot is ignored in all the coordinate systems except "IgnoreAnchors", the pivot of this tool is located at the lower left corner of this object, if this parameter is true then the pivot will be located at the center of this object.</param>
     public static void SetPositionX(this RectTransform tr, float targetPositionX, CoordinateSystem coordinateSystem = CoordinateSystem.IgnoreAnchorsAndPivot, bool rtePivotCentered = false)
     {
         Vector2 currentPos = tr.GetPosition(coordinateSystem, rtePivotCentered);
@@ -84,7 +98,7 @@ public static class RteExtensionMethods
     /// <param name="tr"></param>
     /// <param name="targetPositionY"></param>
     /// <param name="coordinateSystem">The coordinate system of your target position.</param>
-    /// <param name="rtePivotCentered">When using this tool the Unity pivot is ignored and a pivot from this tool is used, wich is located at the lower left corner of this object, if this parameter is true then the pivot will be located at the center of this object.</param>
+    /// <param name="rtePivotCentered">This tool has it's own pivot, the Unity pivot is ignored in all the coordinate systems except "IgnoreAnchors", the pivot of this tool is located at the lower left corner of this object, if this parameter is true then the pivot will be located at the center of this object.</param>
     public static void SetPositionY(this RectTransform tr, float targetPositionY, CoordinateSystem coordinateSystem = CoordinateSystem.IgnoreAnchorsAndPivot, bool rtePivotCentered = false)
     {
         Vector2 currentPos = tr.GetPosition(coordinateSystem, rtePivotCentered);
@@ -102,6 +116,9 @@ public static class RteExtensionMethods
 
         switch (coordinateSystem)
         {
+            case CoordinateSystem.IgnoreAnchors:
+                result = RteRectTools.GetSizeIgnoringAnchors(tr);
+                break;
             case CoordinateSystem.IgnoreAnchorsAndPivot:
                 result = RteRectTools.GetSizeIgnoringAnchors(tr);
                 break;
@@ -133,6 +150,10 @@ public static class RteExtensionMethods
     {
         switch (coordinateSystem)
         {
+            case CoordinateSystem.IgnoreAnchors:
+                RteRectTools.SetSizeIgnoringAnchors(tr, targetSize, rtePivotCentered);
+                break;
+
             case CoordinateSystem.IgnoreAnchorsAndPivot:
                 RteRectTools.SetSizeIgnoringAnchors(tr, targetSize, rtePivotCentered);
                 break;
@@ -365,17 +386,55 @@ public static class RteExtensionMethods
         Vector2 currentSize = tr.GetAnchorsSize(coordinateSystem);
         tr.SetAnchorsSize(new Vector2(currentSize.x, targetHeight), coordinateSystem, rtePivotCentered, alsoResizeTheRect);
     }
+
+    /// <summary>
+    /// A method to get the pivot position in more coordinate systems.
+    /// </summary>
+    /// <param name="tr"></param>
+    /// <param name="coordinateSystem"></param>
+    public static Vector2 GetPivotPosition(this RectTransform tr, PivotCoordinateSystem coordinateSystem = PivotCoordinateSystem.Default)
+    {
+        switch (coordinateSystem)
+        {
+            case PivotCoordinateSystem.AsChildOfCanvas:
+                return RtePivotTools.GetCanvasPositionFromLocalPosition(tr, tr.pivot);
+        }
+
+        return tr.pivot;
+    }
+
+    /// <summary>
+    /// A method to move the pivot position in more coordinate systems and with the option to only move the pivot without moving the rect.
+    /// Unty moves the rect when setting RectTransform.pivot with this method now you can choose.
+    /// </summary>
+    /// <param name="tr"></param>
+    /// <param name="newPivotPosition">The target pivot position.</param>
+    /// <param name="coordinateSystem"></param>
+    /// <param name="alsoMoveRect">By default unty moves the rect when setting RectTransform.pivot, with this bool now you can choose.</param>
+    public static void SetPivotPosition(this RectTransform tr, Vector2 newPivotPosition, PivotCoordinateSystem coordinateSystem = PivotCoordinateSystem.Default, bool alsoMoveRect = false)
+    {
+        switch (coordinateSystem)
+        {
+            case PivotCoordinateSystem.Default:
+                RtePivotTools.SetPivotPosition(tr, newPivotPosition, alsoMoveRect);
+                break;
+            case PivotCoordinateSystem.AsChildOfCanvas:
+                RtePivotTools.SetPivotPosition(tr, RtePivotTools.GetLocalPositionFromCanvasPosition(tr, newPivotPosition), alsoMoveRect);
+                break;
+        }
+    }
 }
 
 public enum CoordinateSystem
 {
     /// <summary>
-    /// Ignores anchors and instead of the Unity's pivot uses the Rect Transform Extended pivot wich is located at the lower 
+    /// Ignores anchors and instead of the Unity's pivot uses the "Rect Transform Extended" own pivot wich is located at the lower 
     /// left corner by default. The result is the same with any anchor or Unity pivot position because they are ignored.
     /// This coordinate system allows you to control the UI object in the same way than other frameworks like CSS, Flash, etc.
     /// All the other coordinate systems of this method also ignores anchors and pivot.
     /// </summary>
     IgnoreAnchorsAndPivot,
+
 
     /// <summary>
     /// This is The same than IgnoreAnchorsAndPivot but using values from 0 to 1 (normalized). Ignores anchors and instead 
@@ -387,6 +446,11 @@ public enum CoordinateSystem
     /// generate unexpected results.
     /// </summary>
     IgnoreAnchorsAndPivotNormalized,
+
+    /// <summary>
+    /// Ignores anchors but not the pivot, uses the Unity pivot instead of the "Rect Transform Extended" pivot.
+    /// </summary>
+    IgnoreAnchors,
 
     /// <summary>
     /// Move or resize the element as if it was a child of the canvas. This is useful for example to match coordinates 
@@ -462,4 +526,18 @@ public enum AnchorsCoordinateSystem
     /// AsChildOfCanvas.
     /// </summary>
     InsideCanvas
+}
+
+public enum PivotCoordinateSystem
+{
+    /// <summary>
+    /// The default pivot coordinates.
+    /// </summary>
+    Default,
+    /// <summary>
+    /// Move the pivot as if the UI object was a child of the canvas.
+    /// This is used to match the pivot position of different objects located at different containers, specially usefull in animations.
+    /// The position range goes from 0 to 1 like the usual for pivots. 
+    /// </summary>
+    AsChildOfCanvas
 }

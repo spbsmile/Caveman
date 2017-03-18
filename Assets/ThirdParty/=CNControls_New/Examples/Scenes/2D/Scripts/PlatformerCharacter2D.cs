@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 // Just in case so no "duplicate definition" stuff shows up

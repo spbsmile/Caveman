@@ -1,7 +1,51 @@
 ﻿using UnityEngine;
 
 public static class RteRectTools
-{      
+{
+    // Todo: The following 3 methods can be used as a replace for the old ones and get a performance upgrade.
+
+    public static void GetRectCornersInScreenSpacePixels(RectTransform transform, Canvas canvas, Vector3[] cornersArray)
+    {
+        if(canvas.renderMode == RenderMode.ScreenSpaceCamera)
+        {
+            GetCornersInCanvasSpace(transform, cornersArray);
+            cornersArray[0] = RectTransformUtility.WorldToScreenPoint(canvas.worldCamera, cornersArray[0]);
+            cornersArray[1] = RectTransformUtility.WorldToScreenPoint(canvas.worldCamera, cornersArray[1]);
+            cornersArray[2] = RectTransformUtility.WorldToScreenPoint(canvas.worldCamera, cornersArray[2]);
+            cornersArray[3] = RectTransformUtility.WorldToScreenPoint(canvas.worldCamera, cornersArray[3]);
+        }
+        else
+        {
+            transform.GetWorldCorners(cornersArray);
+        }
+    }
+
+    /// <summary>
+    /// Gets the corners of a RectTransform in global canvas space.
+    /// </summary>
+    public static void GetCornersInCanvasSpace(RectTransform transform, Vector3[] cornersArray)
+    {
+        //Bounds
+        Vector2 min = transform.rect.min;
+        Vector2 max = transform.rect.max;
+
+        //The corners
+        var a = transform.TransformPoint(min);
+        var b = transform.TransformPoint(new Vector3(min.x, max.y));
+        var c = transform.TransformPoint(max);
+        var d = transform.TransformPoint(new Vector3(max.x, min.y));
+
+        cornersArray[0] = a;
+        cornersArray[1] = b;
+        cornersArray[2] = c;
+        cornersArray[3] = d;
+    }
+
+    public static Rect ConvertCornersToRect(Vector3[] corners)
+    {
+        return new Rect(corners[0].x, corners[0].y, corners[2].x - corners[0].x, corners[2].y - corners[0].y);
+    }
+    
     /// <summary>
     /// The With and Height parameters on the RectTransform of the parent ignoring anchors. With this you can get the real Size of the RectTransform. Like when the anchors are joined.
     /// </summary>

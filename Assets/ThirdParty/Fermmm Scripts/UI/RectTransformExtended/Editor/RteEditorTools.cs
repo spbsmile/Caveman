@@ -5,7 +5,7 @@ using UnityEngine;
 public class uGUITools : MonoBehaviour 
 {
     
-    [MenuItem("Tools/UI Anchors to Corners %&a")]
+    [MenuItem("Tools/UI Anchors to Corners %&a", false, 10)]
 	static void AnchorsToCorners(){
 		foreach(Transform transform in Selection.transforms)
         {
@@ -37,7 +37,7 @@ public class uGUITools : MonoBehaviour
 		}
 	}
 
-    [MenuItem("Tools/UI Corners to Anchors %&c")]
+    [MenuItem("Tools/UI Corners to Anchors %&c", false, 10)]
 	static void CornersToAnchors(){
 		foreach(Transform transform in Selection.transforms){
 			RectTransform t = transform as RectTransform;
@@ -52,7 +52,7 @@ public class uGUITools : MonoBehaviour
 		}
 	}
 
-    [MenuItem("Tools/UI Center Rect %&x")]
+    [MenuItem("Tools/UI Center Rect %&x", false, 10)]
 	static void Center(){
 		foreach(Transform transform in Selection.transforms){
 			RectTransform t = transform as RectTransform;
@@ -67,7 +67,7 @@ public class uGUITools : MonoBehaviour
 		}
 	}
 
-    [MenuItem("Tools/UI Center Anchors %&z")]
+    [MenuItem("Tools/UI Center Anchors %&z", false, 10)]
 	static void CenterWithAnchors(){
 		foreach(Transform transform in Selection.transforms){
 			RectTransform t = transform as RectTransform;
