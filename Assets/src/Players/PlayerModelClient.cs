@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Caveman.Bonuses;
+using Caveman.Level;
 using Caveman.Weapons;
 using UnityEngine;
 
@@ -99,7 +100,10 @@ namespace Caveman.Players
 
         public virtual void OnEnable()
         {
-            //StartCoroutine(PerformWeaponAction());
+            if (levelMode != LevelMode.designer)
+            {
+                StartCoroutine(PerformWeaponAction());
+            }
         }
     }
 }

@@ -5,6 +5,7 @@ using Caveman.CustomAnimation;
 using Caveman.Network;
 using Caveman.Pools;
 using Caveman.Configs;
+using Caveman.Level;
 using Caveman.Utils;
 using Caveman.Weapons;
 using UnityEngine;
@@ -29,6 +30,7 @@ namespace Caveman.Players
         //todo one parameter
         protected IServerNotify serverNotify;
         protected bool multiplayer;
+        protected LevelMode levelMode;
         
         protected WeaponConfig WeaponConfig;
         protected PlayerAnimation playerAnimation;
@@ -44,7 +46,10 @@ namespace Caveman.Players
             spriteRenderer = GetComponent<SpriteRenderer>();
             WeaponConfig = EnterPoint.Configs.Weapon["stone"];
         }
-        public void Initialization(PlayerCore core, IServerNotify serverNotify, Func<PlayerModelBase, PlayerModelBase> findClosestPlayer, PlayerPool pool, Func<Vector2> getRandomPosition, Func<WeaponType, ObjectPool<WeaponModelBase>> changeWeaponPool, Transform imageDeath)
+        public void Initialization(PlayerCore core, IServerNotify serverNotify,
+            Func<PlayerModelBase, PlayerModelBase> findClosestPlayer, PlayerPool pool,
+            Func<Vector2> getRandomPosition, Func<WeaponType, ObjectPool<WeaponModelBase>> changeWeaponPool,
+            Transform imageDeath, LevelMode levelMode)
         {
             this.serverNotify = serverNotify;
 	        this.pool = pool;
@@ -54,6 +59,7 @@ namespace Caveman.Players
             if (serverNotify != null) multiplayer = true;
             PlayerCore = core;
             playerAnimation = new PlayerAnimation(GetComponent<Animator>(), imageDeath);
+            this.levelMode = levelMode;
         }
         
         public virtual void PickupBonus(BonusBase bonus)

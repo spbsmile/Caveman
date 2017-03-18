@@ -72,7 +72,7 @@ namespace Caveman
 
         protected void CreatePlayersManager(Random rand, MapCore mapCore)
         {
-            playersManager = new PlayersManager(rand, playerPool, mapCore, poolsManager.ChangeWeaponPool, poolsManager.ImagesDeath);
+            playersManager = new PlayersManager(rand, playerPool, mapCore, poolsManager.ChangeWeaponPool, poolsManager.ImagesDeath, levelMode);
         }
 
         //todo after get gameInfo if multiplayer 

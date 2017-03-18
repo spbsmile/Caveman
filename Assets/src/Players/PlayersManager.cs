@@ -20,20 +20,25 @@ namespace Caveman.Players
         private readonly MapCore mapCore;
         private readonly Func<WeaponType, ObjectPool<WeaponModelBase>> ChangeWeaponPool;
         private readonly ObjectPool<ImageBase> imagesDeath;
+        private readonly LevelMode levelMode;
 
-        public PlayersManager(IServerNotify serverNotify, Random rand, PlayerPool pool, MapCore mapCore, Func<WeaponType, ObjectPool<WeaponModelBase>> changeWeaponPool, ObjectPool<ImageBase> imagesDeath) 
-        : this(rand, pool, mapCore, changeWeaponPool, imagesDeath)
+        public PlayersManager(IServerNotify serverNotify, Random rand, PlayerPool pool, MapCore mapCore, Func<WeaponType, ObjectPool<WeaponModelBase>> changeWeaponPool, ObjectPool<ImageBase> imagesDeath
+        , LevelMode levelMode)
+        : this(rand, pool, mapCore, changeWeaponPool, imagesDeath, levelMode)
         {
             this.serverNotify = serverNotify;              
         }
 
-        public PlayersManager(Random rand, PlayerPool pool, MapCore mapCore, Func<WeaponType, ObjectPool<WeaponModelBase>> changeWeaponPool, ObjectPool<ImageBase> imagesDeath)
+        public PlayersManager(Random rand, PlayerPool pool,
+            MapCore mapCore, Func<WeaponType, ObjectPool<WeaponModelBase>> changeWeaponPool,
+            ObjectPool<ImageBase> imagesDeath, LevelMode levelMode)
         {                  
             this.pool = pool;
             this.rand = rand;
 	        this.mapCore = mapCore;
-            ChangeWeaponPool = changeWeaponPool;
             this.imagesDeath = imagesDeath;
+            this.levelMode = levelMode;
+            ChangeWeaponPool = changeWeaponPool;
             models = new List<PlayerModelBase>();
             models.AddRange(pool.GetCurrentPlayerModels());   
             pool.AddedPlayer += model => models.Add(model);
@@ -81,11 +86,18 @@ namespace Caveman.Players
 		    return result;
 	    }
 
-        private PlayerModelBase CreateModel(PlayerCore playerCore, Transform prefab)
+        private PlayerModelBase CreateModel(PlayerCore playerCore, Component prefab)
         {
             var model = prefab.GetComponent<PlayerModelBase>();
             //todo FindClosestPlayer  only for offline mode
-            model.Initialization(playerCore, serverNotify, FindClosestPlayer, pool, mapCore.GetRandomPosition, ChangeWeaponPool, imagesDeath.New().transform);
+            model.Initialization(
+                playerCore,
+                serverNotify,
+                FindClosestPlayer,
+                pool, mapCore.GetRandomPosition,
+                ChangeWeaponPool,
+                imagesDeath.New().transform,
+                levelMode);
             pool.Add(playerCore.Id, model);
 
             model.RespawnInstantly(mapCore.RandomPosition);
