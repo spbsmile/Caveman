@@ -1,5 +1,5 @@
 ﻿using System;
-using Caveman.Setting;
+using Caveman.DevSetting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;

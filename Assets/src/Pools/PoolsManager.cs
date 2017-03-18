@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Caveman.Bonuses;
 using Caveman.CustomAnimation;
-using Caveman.Setting;
+using Caveman.DevSetting;
 using Caveman.Weapons;
 using JetBrains.Annotations;
 using UnityEngine;

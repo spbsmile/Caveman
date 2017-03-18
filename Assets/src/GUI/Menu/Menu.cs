@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Caveman.DevSetting;
 using Caveman.UI.Common;
 using Caveman.Utils;
 using UnityEngine;
@@ -19,9 +20,9 @@ namespace Caveman.UI.Menu
             Screen.orientation = ScreenOrientation.Landscape;
 
             // temp for developer
-            metaServerIp.text += PlayerPrefs.HasKey(Setting.DevSettings.KeyIpServer)
-                ? PlayerPrefs.GetString(Setting.DevSettings.KeyIpServer)
-                : Setting.DevSettings.IP_SERVER;
+            metaServerIp.text += PlayerPrefs.HasKey(DevSettings.KeyIpServer)
+                ? PlayerPrefs.GetString(DevSettings.KeyIpServer)
+                : DevSettings.IP_SERVER;
         }
 
         public void LoadSingleGame()

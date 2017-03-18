@@ -1,4 +1,4 @@
-using Caveman.Setting;
+using Caveman.DevSetting;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 

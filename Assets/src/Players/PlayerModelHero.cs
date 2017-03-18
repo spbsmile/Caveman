@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using Caveman.Level;
-using Caveman.Setting;
+using Caveman.DevSetting;
 using UnityEngine;
 
 namespace Caveman.Players

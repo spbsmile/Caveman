@@ -5,7 +5,7 @@ using Caveman.Level;
 using Caveman.Network;
 using Caveman.Players;
 using Caveman.Pools;
-using Caveman.Setting;
+using Caveman.DevSetting;
 using Caveman.UI;
 using Caveman.Weapons;
 using UnityEngine;

@@ -1,4 +1,4 @@
-﻿namespace Caveman.Setting
+﻿namespace Caveman.DevSetting
 {
     public class DevSettings
     {

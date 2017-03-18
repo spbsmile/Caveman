@@ -3,7 +3,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace Caveman.Setting
+namespace Caveman.DevSetting
 {
     public class SettingsHandler 
     {

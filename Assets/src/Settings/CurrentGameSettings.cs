@@ -2,7 +2,7 @@
 using Caveman.Configs;
 using Caveman.Configs.Levels;
 
-namespace Caveman.Setting
+namespace Caveman.DevSetting
 {
     public class GameConfigs
     {
