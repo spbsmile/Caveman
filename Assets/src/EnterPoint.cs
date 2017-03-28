@@ -15,19 +15,18 @@ namespace Caveman
 {
     public class EnterPoint : MonoBehaviour
     {
-        // this fields initialization from scene
         [SerializeField] private Transform prefabHero;
         [SerializeField] private Transform prefabBot;
         [SerializeField] private MapModel mapModel;
         [SerializeField] private PoolsManager poolsManager;
-        public SmoothCamera camera;
-        public PlayerPool playerPool;
         [SerializeField] private string currentLevelName;
         [SerializeField] private LevelMode levelMode;
         public static GameConfigs Configs { get; private set; }
-        public static MapConfig MapOfflineConfig { set; get; }
+        public SmoothCamera camera;
+        public PlayerPool playerPool;
 
-        public static string HeroId { private set; get; }
+        protected static MapConfig MapOfflineConfig { set; get; }
+        protected static string HeroId { private set; get; }
 
         public bool isObservableMode;
 

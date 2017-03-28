@@ -12,7 +12,7 @@ namespace Caveman.Level
 
         private SpriteRenderer render;
 
-        public enum DirectionBlock
+        private enum DirectionBlock
         {
             TopButton,
             LeftRight

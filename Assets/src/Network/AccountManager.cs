@@ -7,7 +7,7 @@ namespace Caveman.Network
     {
         public const string KeyNickname = "Nickname";
 
-        public InputField inputNickname;        
+        [SerializeField] private InputField inputNickname;
         
         public void Start()
         {

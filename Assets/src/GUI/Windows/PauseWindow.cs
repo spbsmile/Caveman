@@ -5,8 +5,8 @@ namespace Caveman.UI.Windows
 {
     public class PauseWindow : MonoBehaviour
     {
-        public Transform window;
-        public CNJoystick joystick;
+        [SerializeField] private Transform window;
+        [SerializeField] private CNJoystick joystick;
 
         public void ResumeGame()
         {

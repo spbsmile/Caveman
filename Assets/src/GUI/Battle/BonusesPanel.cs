@@ -7,8 +7,8 @@ namespace Caveman.UI.Battle
 {
     public class BonusesPanel : MonoBehaviour
     {
-        public Image iconSpeedBonus;
-        public Text timerBonus;
+        [SerializeField] private Image iconSpeedBonus;
+        [SerializeField] private Text timerBonus;
 
         private Image iconCurrentBonus;
         private float timeLastBonusUpdate;
@@ -28,6 +28,8 @@ namespace Caveman.UI.Battle
             {
                 case BonusType.Speed:
                     iconCurrentBonus = iconSpeedBonus;
+                    break;
+                case BonusType.Shield:
                     break;
             }
 

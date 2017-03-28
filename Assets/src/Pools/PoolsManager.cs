@@ -12,10 +12,10 @@ namespace Caveman.Pools
     public class PoolsManager : MonoBehaviour
     {
         public Transform containerStones;
-        public Transform containerSplashStones;
-        public Transform containerSkulls;
-        public Transform containerImagesDeath;
-        public Transform containerBonusesSpeed;
+        [SerializeField] private Transform containerSplashStones;
+        [SerializeField] private Transform containerSkulls;
+        [SerializeField] private Transform containerImagesDeath;
+        [SerializeField] private Transform containerBonusesSpeed;
 
         public ObjectPool<ImageBase> SplashesStone { private set; get; }
         public ObjectPool<ImageBase> ImagesDeath { private set; get; }
