@@ -10,10 +10,10 @@ namespace Caveman.UI.Menu
 {
     public class Menu : MonoBehaviour
     {
-        public CanvasGroup tooltipNickname;
-        public InputField inputNickname;
+        [SerializeField] private CanvasGroup tooltipNickname;
+        [SerializeField] private InputField inputNickname;
 
-        public Text metaServerIp;
+        [SerializeField] private Text metaServerIp;
 
         public void Start()
         {

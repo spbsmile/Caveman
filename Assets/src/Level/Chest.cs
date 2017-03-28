@@ -22,7 +22,6 @@ namespace Caveman.Level
             Open
         }
 
-
         public void Start()
         {
             render = GetComponent<SpriteRenderer>();

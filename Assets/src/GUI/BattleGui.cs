@@ -11,14 +11,14 @@ namespace Caveman.UI
 {
     public class BattleGui : MonoBehaviour
     {
-        public CNAbstractController joystick;
-        public BonusesPanel bonusesPanel;
+        [SerializeField] private CNAbstractController joystick;
+        [SerializeField] private BonusesPanel bonusesPanel;
         public MainGameTimer mainGameTimer;
         public ResultRound resultRound;
-        public RespawnWindow respawnWindow;
-        public ChestIcon chestIcon;
-        public Text weapons;
-        public Text killed;
+        [SerializeField] private RespawnWindow respawnWindow;
+        [SerializeField] private ChestIcon chestIcon;
+        [SerializeField] private Text weapons;
+        [SerializeField] private Text killed;
 
         public void Awake()
         {

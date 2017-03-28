@@ -6,7 +6,7 @@ namespace Caveman.UI.Windows
 {
     public class ResultRound : Result
     {
-        public CNJoystick joystick;
+        [SerializeField] private CNJoystick joystick;
 
         public void OnEnable()
         {

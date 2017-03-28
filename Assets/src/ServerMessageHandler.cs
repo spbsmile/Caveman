@@ -10,7 +10,7 @@ namespace Caveman.Network
 {
     public class ServerMessageHandler : EnterPoint, IServerListener
     {        
-        public Transform prefabServerPlayer;        
+        [SerializeField] private Transform prefabServerPlayer;
 
         public static MapConfig MapServerConfig { private set; get;}
         

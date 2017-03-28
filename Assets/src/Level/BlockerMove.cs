@@ -4,7 +4,7 @@ namespace Caveman.Level
 {
     public class BlockerMove : MonoBehaviour
     {
-        public DirectionBlock direction;
+        [SerializeField] private DirectionBlock direction;
 
         private Vector2 min;
 

@@ -9,24 +9,24 @@ namespace Caveman.UI.Menu.Options
     // This for developer settings, when game on build, possible changed parameters
     public class ForceSettings : MonoBehaviour
     {
-        public InputField roundTime;
+        [SerializeField] private InputField roundTime;
 
-        public InputField weaponTimeRespawn;
-        public InputField weaponInitialCount;
-        public InputField weaponSpeed;
-        public InputField weaponCooldown;
-        public InputField weaponCountItems;
-        public InputField weaponWeight;
+        [SerializeField] private InputField weaponTimeRespawn;
+        [SerializeField] private InputField weaponInitialCount;
+        [SerializeField] private InputField weaponSpeed;
+        [SerializeField] private InputField weaponCooldown;
+        [SerializeField] private InputField weaponCountItems;
+        [SerializeField] private InputField weaponWeight;
 
-        public InputField bonusSpeedMaxCount;
-        public InputField bonusSpeedTimeRespawn;
+        [SerializeField] private InputField bonusSpeedMaxCount;
+        [SerializeField] private InputField bonusSpeedTimeRespawn;
        
-        public InputField botsCount;
-        public InputField playerSpeed;
+        [SerializeField] private InputField botsCount;
+        [SerializeField] private InputField playerSpeed;
 
-        public InputField serverPingTime;
-        public InputField ip_server;
-        public Toggle disableSendMove;
+        [SerializeField] private InputField serverPingTime;
+        [SerializeField] private InputField ip_server;
+        [SerializeField] private Toggle disableSendMove;
 
         public void Start()
         {
