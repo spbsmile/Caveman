@@ -46,7 +46,7 @@ namespace Caveman
                 "bonuses", "weapons", "players", "pools", "images", "maps", "levelsSingle", " ");
             HeroId = SystemInfo.deviceUniqueIdentifier;
             MapOfflineConfig = Configs.Map["sample"];
-             rand = new Random();
+            rand = new Random();
         }
 
         public virtual void Start()
@@ -111,7 +111,7 @@ namespace Caveman
                 //todo name bots from bots config ??
                 var playerCore = new PlayerCore(levelConfig.BotsName[i],
                     i.ToString(), botConfig);
-                playersManager.CreateBotModel(playerCore, Instantiate(prefabBot), poolsManager.containerStones);
+                playersManager.CreateBotModel(playerCore, Instantiate(prefabBot), poolsManager.ContainerStones);
             }
         }
 

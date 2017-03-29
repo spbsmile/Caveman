@@ -127,9 +127,9 @@ namespace Caveman.Network
             var lineIndex = 0;
             foreach (var player in jToken.Children<JObject>())
             {
-                resultRound.Write(player[ServerParams.UserName].ToString(), resultRound.names, lineIndex);
-                resultRound.Write(player[ServerParams.Kills].ToString(), resultRound.kills, lineIndex);
-                resultRound.Write(player[ServerParams.Deaths].ToString(), resultRound.deaths, lineIndex);
+                resultRound.Write(player[ServerParams.UserName].ToString(), resultRound.Names, lineIndex);
+                resultRound.Write(player[ServerParams.Kills].ToString(), resultRound.Kills, lineIndex);
+                resultRound.Write(player[ServerParams.Deaths].ToString(), resultRound.Deaths, lineIndex);
                 lineIndex++;
             }
             resultReceived = true;

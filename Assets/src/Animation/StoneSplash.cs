@@ -6,7 +6,7 @@ namespace Caveman.CustomAnimation
 {
     public class StoneSplash : ImageBase
     {
-        public float speed;
+        [SerializeField] private float speed;
 
         private Vector2 delta;
         private Vector2 target;

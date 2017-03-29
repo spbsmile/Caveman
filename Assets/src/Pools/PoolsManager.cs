@@ -11,21 +11,27 @@ namespace Caveman.Pools
 {
     public class PoolsManager : MonoBehaviour
     {
-        public Transform containerStones;
+        [SerializeField] private Transform containerStones;
         [SerializeField] private Transform containerSplashStones;
         [SerializeField] private Transform containerSkulls;
         [SerializeField] private Transform containerImagesDeath;
         [SerializeField] private Transform containerBonusesSpeed;
 
-        public ObjectPool<ImageBase> SplashesStone { private set; get; }
         public ObjectPool<ImageBase> ImagesDeath { private set; get; }
-        public ObjectPool<WeaponModelBase> Axes { private set; get; }
-        public ObjectPool<WeaponModelBase> Stones { private set; get; }
-        // todo miss prefab skull in resource
-        public ObjectPool<WeaponModelBase> Skulls { private set; get; }
         public ObjectPool<BonusBase> BonusesSpeed { private set; get; }
+        public ObjectPool<WeaponModelBase> Stones { private set; get; }
 
-        public readonly Dictionary<string, object> Pools = new Dictionary<string, object>();
+        // todo miss prefab skull in resource
+        private ObjectPool<WeaponModelBase> Skulls { set; get; }
+        private ObjectPool<WeaponModelBase> Axes { set; get; }
+        private ObjectPool<ImageBase> SplashesStone { set; get; }
+
+        [HideInInspector] public readonly Dictionary<string, object> Pools = new Dictionary<string, object>();
+
+        public Transform ContainerStones
+        {
+            get { return containerStones; }
+        }
 
         public void InitializationPools(GameConfigs settings, bool isMultiplayer)
         {

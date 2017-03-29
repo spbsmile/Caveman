@@ -12,7 +12,7 @@ namespace Caveman.Weapons
         public PlayerCore Owner { private set; get; }
         
         protected Vector2 startPosition;
-        protected Vector2 target;
+        protected Vector2 targetPosition;
         /// <summary>
         /// Linear parameter, define direction and value and on each update
         /// </summary>
@@ -47,7 +47,7 @@ namespace Caveman.Weapons
             Owner = playerCore;
             startPosition = start;
             transform.position = start;
-            target = aim;
+            targetPosition = aim;
             // todo if weapon move no linear, moveUnit needless, example: stone model, bezier curve
             moveUnit = UnityExtensions.CalculateDelta(start, aim, Config.Speed);
         }
@@ -61,7 +61,7 @@ namespace Caveman.Weapons
         {
             if (Vector2.SqrMagnitude(moveUnit) > UnityExtensions.ThresholdPosition)
             {
-                if (Vector2.SqrMagnitude(target - (Vector2)transform.position) > UnityExtensions.ThresholdPosition)
+                if (Vector2.SqrMagnitude(targetPosition - (Vector2)transform.position) > UnityExtensions.ThresholdPosition)
                 {
                     transform.position = new Vector2(transform.position.x + moveUnit.x * Time.deltaTime,
                         transform.position.y + moveUnit.y * Time.deltaTime);

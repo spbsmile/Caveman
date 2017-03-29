@@ -6,9 +6,14 @@ namespace Caveman.UI.Windows
 {
     public class RespawnWindow : Result
     {
-        public Button buttonRespawn;
+        [SerializeField] private Button buttonRespawn;
         [SerializeField] private Slider progress;
         [SerializeField] private CNJoystick joystick;
+
+        public Button ButtonRespawn
+        {
+            get { return buttonRespawn; }
+        }
 
         public void OnDisable()
         {

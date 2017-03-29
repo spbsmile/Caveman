@@ -46,11 +46,11 @@ namespace Caveman.Weapons
         {
             if (Vector2.SqrMagnitude(moveUnit) > UnityExtensions.ThresholdPosition)
             {
-                if (Vector2.SqrMagnitude(target - (Vector2)transform.position) > UnityExtensions.ThresholdPosition)
+                if (Vector2.SqrMagnitude(targetPosition - (Vector2)transform.position) > UnityExtensions.ThresholdPosition)
                 {
-                    bezierTime += Time.deltaTime / Vector2.Distance(startPosition, target) * Config.Speed;
+                    bezierTime += Time.deltaTime / Vector2.Distance(startPosition, targetPosition) * Config.Speed;
                     if (bezierTime > 1) bezierTime = 0;
-                    transform.position = BezierUtils.Bezier2(startPosition, BezierUtils.ControlPoint(startPosition, target), target, bezierTime);
+                    transform.position = BezierUtils.Bezier2(startPosition, BezierUtils.ControlPoint(startPosition, targetPosition), targetPosition, bezierTime);
 
                     //linear moving. can be used for testing
                     //                    transform.position = new Vector2(transform.position.x + moveUnit.x * Time.deltaTime,

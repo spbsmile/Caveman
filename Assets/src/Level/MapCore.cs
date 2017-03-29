@@ -8,22 +8,24 @@ namespace Caveman.Level
     {
         private readonly Random rand;
 
-        public MapConfig Config { get; private set; }
-        public int Width { get; private set; }
-        public int Height { get; private set; }
+        private MapConfig Config { get; }
+        public int Width { get; }
+        public int Height { get; }
 
-        public MapCore(int width, int height, MapConfig offlineConfig, bool isMultiplayer, MapModel model, Random rand, LevelMode levelMode)
+        public MapCore(int width, int height, MapConfig offlineConfig, bool isMultiplayer, MapModel model, Random rand,
+            LevelMode levelMode)
         {
             this.rand = rand;
-            MaxDistance = offlineConfig.Width*offlineConfig.Heght;
+            MaxDistance = offlineConfig.Width * offlineConfig.Heght;
             Config = offlineConfig;
             Width = offlineConfig.Width;
             Height = offlineConfig.Heght;
-            if(levelMode != LevelMode.designer)
+            if (levelMode != LevelMode.designer)
             {
-                model.CreateTerrain(rand, offlineConfig.PathPrefabTile, offlineConfig.Artefactses, offlineConfig.Width, offlineConfig.Heght, isMultiplayer);
-                if (!isMultiplayer) model.StartItemPeriodicals(offlineConfig.ItemsPeriodicals);    
-            }            
+                model.CreateTerrain(rand, offlineConfig.PathPrefabTile, offlineConfig.Artefactses, offlineConfig.Width,
+                    offlineConfig.Heght, isMultiplayer);
+                if (!isMultiplayer) model.StartItemPeriodicals(offlineConfig.ItemsPeriodicals);
+            }
         }
 
         public Vector2 RandomPosition
@@ -39,12 +41,12 @@ namespace Caveman.Level
 
         public Vector2 GetCenterMap()
         {
-            return  new Vector2(Width/2, Height/2);
+            return new Vector2(Width / 2, Height / 2);
         }
 
         /// <summary>
         /// roughly interval as max on map
         /// </summary>
-        public float MaxDistance { get; private set; }
+        public float MaxDistance { get; }
     }
 }

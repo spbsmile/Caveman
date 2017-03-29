@@ -9,14 +9,29 @@ namespace Caveman.UI.Windows
 {
     public class Result : MonoBehaviour
     {
-        public Transform names;
-        public Transform kills;
-        public Transform deaths;
+        [SerializeField] private Transform names;
+        [SerializeField] private Transform kills;
+        [SerializeField] private Transform deaths;
+
+        public Transform Names
+        {
+            get { return names; }
+        }
+
+        public Transform Kills
+        {
+            get { return kills; }
+        }
+
+        public Transform Deaths
+        {
+            get { return deaths; }
+        }
 
         private Func<IEnumerable<PlayerModelBase>> getCurrentPlayersModel;
         protected bool isMultiplayer;
 
-        public virtual void Initialization(bool isMultiplayer, Func<IEnumerable<PlayerModelBase>> getCurrentPlayers)
+        public void Initialization(bool isMultiplayer, Func<IEnumerable<PlayerModelBase>> getCurrentPlayers)
         {
             this.isMultiplayer = isMultiplayer;
             getCurrentPlayersModel = getCurrentPlayers;
