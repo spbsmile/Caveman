@@ -21,13 +21,13 @@ namespace Caveman.CustomAnimation
 
         public bool IsMoving_F
         {
-            get { return animator.GetBool("IsMoving_F"); }
+            private get { return animator.GetBool("IsMoving_F"); }
             set { animator.SetBool("IsMoving_F", value); }
         }
 
         public bool IsMoving_B
         {
-            get { return animator.GetBool("IsMoving_B"); }
+            private get { return animator.GetBool("IsMoving_B"); }
             set { animator.SetBool("IsMoving_B", value); }
         }
 

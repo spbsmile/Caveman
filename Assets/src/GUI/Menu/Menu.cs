@@ -2,6 +2,7 @@
 using Caveman.DevSetting;
 using Caveman.UI.Common;
 using Caveman.Utils;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -12,7 +13,6 @@ namespace Caveman.UI.Menu
     {
         [SerializeField] private CanvasGroup tooltipNickname;
         [SerializeField] private InputField inputNickname;
-
         [SerializeField] private Text metaServerIp;
 
         public void Start()
@@ -25,6 +25,7 @@ namespace Caveman.UI.Menu
                 : DevSettings.IP_SERVER;
         }
 
+        [UsedImplicitly]
         public void LoadSingleGame()
         {
             if (string.IsNullOrEmpty(inputNickname.text))
@@ -37,6 +38,7 @@ namespace Caveman.UI.Menu
             }
         }
 
+        [UsedImplicitly]
         public void LoadMultiplayGame()
         {
             if (string.IsNullOrEmpty(inputNickname.text))
@@ -49,26 +51,31 @@ namespace Caveman.UI.Menu
             }
         }
 
+        [UsedImplicitly]
         public void LoadObserverGame()
         {
             LoadingScreen.instance.ProgressTo(7);
         }
 
+        [UsedImplicitly]
         public void LoadMenu()
         {
             SceneManager.LoadScene(0);
         }
 
+        [UsedImplicitly]
         public void Quit()
         {
             Application.Quit();
         }
 
+        [UsedImplicitly]
         public void Settings()
         {
             SceneManager.LoadScene(2);
         }
 
+        [UsedImplicitly]
         public void LoadProfile()
         {
             SceneManager.LoadScene(6);

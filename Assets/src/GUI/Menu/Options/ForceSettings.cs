@@ -1,5 +1,6 @@
 ﻿using System;
 using Caveman.DevSetting;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -111,6 +112,7 @@ namespace Caveman.UI.Menu.Options
             });
         }
 
+        [UsedImplicitly]
         public void LoadMainMenu()
         {
             SceneManager.LoadScene(0);

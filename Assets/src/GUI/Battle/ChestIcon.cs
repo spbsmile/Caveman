@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Caveman.UI.Battle
@@ -20,6 +21,7 @@ namespace Caveman.UI.Battle
             actionOnTap = openHandler;
         }
 
+        [UsedImplicitly]
         public void TapIcon()
         {
             if (actionOnTap != null)
