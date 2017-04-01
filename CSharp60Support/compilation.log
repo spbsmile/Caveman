@@ -1,0 +1,238 @@
+********************************************************************************
+*                     Saturday, April 01, 2017 12:56:24 PM                     *
+********************************************************************************
+CSharpCompilerWrapper.exe version: 2.0.3.30
+Platform: Windows
+Target assembly: Assembly-CSharp.dll
+Project directory: C:\Caveman
+Target profile directory: C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\2.0-api
+Unity 'Data' or 'Frameworks' directory: C:/Program Files/Unity/Editor/Data
+Compiler: Microsoft C# 6.0
+
+- Compilation -----------------------------------------------
+
+Process: C:\Caveman\CSharp60Support\Roslyn\csc.exe
+Arguments: -nostdlib+ -noconfig -nologo -r:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\2.0-api\mscorlib.dll" -r:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\2.0-api\System.dll" -r:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\2.0-api\System.Core.dll" -r:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\2.0-api\System.Xml.dll" @Temp/UnityTempFile-b5c66a838617c7f4da614387a1476b95 
+Exit code: 0
+Elapsed time: 0.62 sec
+
+- Compiler output (0 lines):
+
+- Compiler errors (51 lines):
+0: Assets\src\EnterPoint.cs(27,29): warning CS0108: 'EnterPoint.camera' hides inherited member 'Component.camera'. Use the new keyword if hiding was intended.
+1: Assets\ThirdParty\=CNControls_New\Examples\Scenes\2D\Scripts\Restarter.cs(12,39): warning CS0618: 'Application.loadedLevelName' is obsolete: 'Use SceneManager to determine what scenes have been loaded'
+2: Assets\ThirdParty\=CNControls_New\Examples\Scenes\2D\Scripts\Restarter.cs(12,17): warning CS0618: 'Application.LoadLevel(string)' is obsolete: 'Use SceneManager.LoadScene'
+3: Assets\src\Utils\AdditiveScene.cs(25,30): warning CS0618: 'Application.LoadLevelAdditiveAsync(string)' is obsolete: 'Use SceneManager.LoadSceneAsync'
+4: Assets\src\GUI\Common\CommonScene.cs(9,13): warning CS0618: 'Application.LoadLevelAdditiveAsync(string)' is obsolete: 'Use SceneManager.LoadSceneAsync'
+5: Assets\src\EnterPoint.cs(21,47): warning CS0649: Field 'EnterPoint.poolsManager' is never assigned to, and will always have its default value null
+6: Assets\src\GUI\BattleGui.cs(20,39): warning CS0649: Field 'BattleGui.weapons' is never assigned to, and will always have its default value null
+7: Assets\src\EnterPoint.cs(18,44): warning CS0649: Field 'EnterPoint.prefabHero' is never assigned to, and will always have its default value null
+8: Assets\src\GUI\Battle\BonusesPanel.cs(11,39): warning CS0649: Field 'BonusesPanel.timerBonus' is never assigned to, and will always have its default value null
+9: Assets\src\GUI\Windows\RespawnWindow.cs(10,41): warning CS0649: Field 'RespawnWindow.progress' is never assigned to, and will always have its default value null
+10: Assets\src\GUI\BattleGui.cs(15,47): warning CS0649: Field 'BattleGui.bonusesPanel' is never assigned to, and will always have its default value null
+11: Assets\src\GUI\BattleGui.cs(17,46): warning CS0649: Field 'BattleGui.resultRound' is never assigned to, and will always have its default value null
+12: Assets\src\Configs\PoolsConfig.cs(29,36): warning CS0649: Field 'PoolsConfig.bonusesPopular' is never assigned to, and will always have its default value 0
+13: Assets\src\Pools\PoolsManager.cs(15,44): warning CS0649: Field 'PoolsManager.containerSplashStones' is never assigned to, and will always have its default value null
+14: Assets\src\EnterPoint.cs(20,43): warning CS0649: Field 'EnterPoint.mapModel' is never assigned to, and will always have its default value null
+15: Assets\src\GUI\Windows\Result.cs(13,44): warning CS0649: Field 'Result.kills' is never assigned to, and will always have its default value null
+16: Assets\src\GUI\Menu\Options\ForceSettings.cs(27,45): warning CS0649: Field 'ForceSettings.serverPingTime' is never assigned to, and will always have its default value null
+17: Assets\src\GUI\BattleGui.cs(18,48): warning CS0649: Field 'BattleGui.respawnWindow' is never assigned to, and will always have its default value null
+18: Assets\src\GUI\Windows\RespawnWindow.cs(9,41): warning CS0649: Field 'RespawnWindow.buttonRespawn' is never assigned to, and will always have its default value null
+19: Assets\src\EnterPoint.cs(22,41): warning CS0649: Field 'EnterPoint.currentLevelName' is never assigned to, and will always have its default value null
+20: Assets\src\GUI\BattleGui.cs(21,39): warning CS0649: Field 'BattleGui.killed' is never assigned to, and will always have its default value null
+21: Assets\src\GUI\Windows\PauseWindow.cs(8,44): warning CS0649: Field 'PauseWindow.window' is never assigned to, and will always have its default value null
+22: Assets\src\GUI\Menu\Options\ForceSettings.cs(28,45): warning CS0649: Field 'ForceSettings.ip_server' is never assigned to, and will always have its default value null
+23: Assets\src\GUI\Windows\RespawnWindow.cs(11,45): warning CS0649: Field 'RespawnWindow.joystick' is never assigned to, and will always have its default value null
+24: Assets\src\GUI\Menu\Options\ForceSettings.cs(22,45): warning CS0649: Field 'ForceSettings.bonusSpeedTimeRespawn' is never assigned to, and will always have its default value null
+25: Assets\src\Pools\PoolsManager.cs(14,44): warning CS0649: Field 'PoolsManager.containerStones' is never assigned to, and will always have its default value null
+26: Assets\src\GUI\Menu\Menu.cs(16,39): warning CS0649: Field 'Menu.metaServerIp' is never assigned to, and will always have its default value null
+27: Assets\src\Pools\PoolsManager.cs(18,44): warning CS0649: Field 'PoolsManager.containerBonusesSpeed' is never assigned to, and will always have its default value null
+28: Assets\src\GUI\BattleGui.cs(19,44): warning CS0649: Field 'BattleGui.chestIcon' is never assigned to, and will always have its default value null
+29: Assets\src\Animation\StoneSplash.cs(9,40): warning CS0649: Field 'StoneSplash.speed' is never assigned to, and will always have its default value 0
+30: Assets\src\GUI\Windows\ResultRound.cs(9,45): warning CS0649: Field 'ResultRound.joystick' is never assigned to, and will always have its default value null
+31: Assets\src\GUI\Menu\Options\ForceSettings.cs(24,45): warning CS0649: Field 'ForceSettings.botsCount' is never assigned to, and will always have its default value null
+32: Assets\src\GUI\BattleGui.cs(16,48): warning CS0649: Field 'BattleGui.mainGameTimer' is never assigned to, and will always have its default value null
+33: Assets\src\Pools\PoolsManager.cs(16,44): warning CS0649: Field 'PoolsManager.containerSkulls' is never assigned to, and will always have its default value null
+34: Assets\src\Configs\PoolsConfig.cs(27,36): warning CS0649: Field 'PoolsConfig.bonusesRare' is never assigned to, and will always have its default value 0
+35: Assets\src\GUI\Menu\Menu.cs(14,45): warning CS0649: Field 'Menu.inputNickname' is never assigned to, and will always have its default value null
+36: Assets\src\GUI\Battle\BonusesPanel.cs(10,40): warning CS0649: Field 'BonusesPanel.iconSpeedBonus' is never assigned to, and will always have its default value null
+37: Assets\src\GUI\Windows\PauseWindow.cs(9,45): warning CS0649: Field 'PauseWindow.joystick' is never assigned to, and will always have its default value null
+38: Assets\src\GUI\Menu\Options\ForceSettings.cs(29,41): warning CS0649: Field 'ForceSettings.disableSendMove' is never assigned to, and will always have its default value null
+39: Assets\src\GUI\Menu\Options\ForceSettings.cs(21,45): warning CS0649: Field 'ForceSettings.bonusSpeedMaxCount' is never assigned to, and will always have its default value null
+40: Assets\ThirdParty\=CNControls_New\Examples\Scenes\2D\Scripts\PlatformerCharacter2D.cs(11,44): warning CS0649: Field 'PlatformerCharacter2D.m_WhatIsGround' is never assigned to, and will always have its default value
+41: Assets\src\GUI\Menu\Menu.cs(13,46): warning CS0649: Field 'Menu.tooltipNickname' is never assigned to, and will always have its default value null
+42: Assets\src\Pools\PoolsManager.cs(17,44): warning CS0649: Field 'PoolsManager.containerImagesDeath' is never assigned to, and will always have its default value null
+43: Assets\src\GUI\Windows\Result.cs(12,44): warning CS0649: Field 'Result.names' is never assigned to, and will always have its default value null
+44: Assets\src\Configs\PoolsConfig.cs(28,36): warning CS0649: Field 'PoolsConfig.bonusesOrdinary' is never assigned to, and will always have its default value 0
+45: Assets\src\EnterPoint.cs(23,44): warning CS0649: Field 'EnterPoint.levelMode' is never assigned to, and will always have its default value
+46: Assets\src\EnterPoint.cs(19,44): warning CS0649: Field 'EnterPoint.prefabBot' is never assigned to, and will always have its default value null
+47: Assets\src\GUI\Windows\Result.cs(14,44): warning CS0649: Field 'Result.deaths' is never assigned to, and will always have its default value null
+48: Assets\src\Network\AccountManager.cs(10,45): warning CS0649: Field 'AccountManager.inputNickname' is never assigned to, and will always have its default value null
+49: Assets\src\ServerMessageHandler.cs(13,44): warning CS0649: Field 'ServerMessageHandler.prefabServerPlayer' is never assigned to, and will always have its default value null
+50: Assets\src\GUI\BattleGui.cs(14,55): warning CS0649: Field 'BattleGui.joystick' is never assigned to, and will always have its default value null
+
+- PDB to MDB conversion --------------------------------------
+
+Process: C:\Caveman\CSharp60Support\Roslyn\pdb2mdb.exe
+Arguments: Temp\Assembly-CSharp.dll
+Exit code: 0
+Elapsed time: 0.07 sec
+
+- pdb2mdb.exe output (0 lines):
+********************************************************************************
+*                     Saturday, April 01, 2017 12:56:25 PM                     *
+********************************************************************************
+CSharpCompilerWrapper.exe version: 2.0.3.30
+Platform: Windows
+Target assembly: Assembly-CSharp-Editor.dll
+Project directory: C:\Caveman
+Target profile directory: C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\2.0-api
+Unity 'Data' or 'Frameworks' directory: C:/Program Files/Unity/Editor/Data
+Compiler: Microsoft C# 6.0
+
+- Compilation -----------------------------------------------
+
+Process: C:\Caveman\CSharp60Support\Roslyn\csc.exe
+Arguments: -nostdlib+ -noconfig -nologo -r:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\2.0-api\mscorlib.dll" -r:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\2.0-api\System.dll" -r:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\2.0-api\System.Core.dll" -r:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\2.0-api\System.Xml.dll" @Temp/UnityTempFile-3c7b8a03f9a01ae4e94da4050dd6b895 
+Exit code: 0
+Elapsed time: 0.44 sec
+
+- Compiler output (0 lines):
+
+- Compiler errors (8 lines):
+0: Assets\Editor\SceneSwitcher.cs(22,44): warning CS0618: 'EditorApplication.currentScene' is obsolete: 'Use EditorSceneManager to see which scenes are currently loaded'
+1: Assets\Editor\SceneSwitcher.cs(24,44): warning CS0618: 'EditorApplication.currentScene' is obsolete: 'Use EditorSceneManager to see which scenes are currently loaded'
+2: Assets\Editor\SceneSwitcher.cs(25,34): warning CS0618: 'EditorApplication.currentScene' is obsolete: 'Use EditorSceneManager to see which scenes are currently loaded'
+3: Assets\Editor\SceneSwitcher.cs(31,40): warning CS0618: 'EditorApplication.currentScene' is obsolete: 'Use EditorSceneManager to see which scenes are currently loaded'
+4: Assets\Editor\SceneSwitcher.cs(33,48): warning CS0618: 'EditorApplication.SaveCurrentSceneIfUserWantsTo()' is obsolete: 'Use EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo'
+5: Assets\Editor\SceneSwitcher.cs(35,21): warning CS0618: 'EditorApplication.OpenScene(string)' is obsolete: 'Use EditorSceneManager.OpenScene'
+6: Assets\Editor\SceneSwitcher.cs(37,70): warning CS0618: 'EditorApplication.SaveCurrentSceneIfUserWantsTo()' is obsolete: 'Use EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo'
+7: Assets\Editor\SceneSwitcher.cs(39,21): warning CS0618: 'EditorApplication.OpenScene(string)' is obsolete: 'Use EditorSceneManager.OpenScene'
+
+- PDB to MDB conversion --------------------------------------
+
+Process: C:\Caveman\CSharp60Support\Roslyn\pdb2mdb.exe
+Arguments: Temp\Assembly-CSharp-Editor.dll
+Exit code: 0
+Elapsed time: 0.08 sec
+
+- pdb2mdb.exe output (0 lines):
+********************************************************************************
+*                     Saturday, April 01, 2017 12:56:34 PM                     *
+********************************************************************************
+CSharpCompilerWrapper.exe version: 2.0.3.30
+Platform: Windows
+Target assembly: Assembly-CSharp.dll
+Project directory: C:\Caveman
+Target profile directory: C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\2.0-api
+Unity 'Data' or 'Frameworks' directory: C:/Program Files/Unity/Editor/Data
+Compiler: Microsoft C# 6.0
+
+- Compilation -----------------------------------------------
+
+Process: C:\Caveman\CSharp60Support\Roslyn\csc.exe
+Arguments: -nostdlib+ -noconfig -nologo -r:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\2.0-api\mscorlib.dll" -r:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\2.0-api\System.dll" -r:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\2.0-api\System.Core.dll" -r:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\2.0-api\System.Xml.dll" @Temp/UnityTempFile-1f4796827f498b346ad40bc247779b15 
+Exit code: 0
+Elapsed time: 0.64 sec
+
+- Compiler output (0 lines):
+
+- Compiler errors (51 lines):
+0: Assets\src\EnterPoint.cs(27,29): warning CS0108: 'EnterPoint.camera' hides inherited member 'Component.camera'. Use the new keyword if hiding was intended.
+1: Assets\ThirdParty\=CNControls_New\Examples\Scenes\2D\Scripts\Restarter.cs(12,39): warning CS0618: 'Application.loadedLevelName' is obsolete: 'Use SceneManager to determine what scenes have been loaded'
+2: Assets\ThirdParty\=CNControls_New\Examples\Scenes\2D\Scripts\Restarter.cs(12,17): warning CS0618: 'Application.LoadLevel(string)' is obsolete: 'Use SceneManager.LoadScene'
+3: Assets\src\Utils\AdditiveScene.cs(25,30): warning CS0618: 'Application.LoadLevelAdditiveAsync(string)' is obsolete: 'Use SceneManager.LoadSceneAsync'
+4: Assets\src\GUI\Common\CommonScene.cs(9,13): warning CS0618: 'Application.LoadLevelAdditiveAsync(string)' is obsolete: 'Use SceneManager.LoadSceneAsync'
+5: Assets\src\GUI\Battle\BonusesPanel.cs(11,39): warning CS0649: Field 'BonusesPanel.timerBonus' is never assigned to, and will always have its default value null
+6: Assets\src\Network\AccountManager.cs(10,45): warning CS0649: Field 'AccountManager.inputNickname' is never assigned to, and will always have its default value null
+7: Assets\src\GUI\Windows\ResultRound.cs(9,45): warning CS0649: Field 'ResultRound.joystick' is never assigned to, and will always have its default value null
+8: Assets\src\GUI\Menu\Options\ForceSettings.cs(24,45): warning CS0649: Field 'ForceSettings.botsCount' is never assigned to, and will always have its default value null
+9: Assets\src\GUI\Windows\PauseWindow.cs(9,45): warning CS0649: Field 'PauseWindow.joystick' is never assigned to, and will always have its default value null
+10: Assets\src\ServerMessageHandler.cs(13,44): warning CS0649: Field 'ServerMessageHandler.prefabServerPlayer' is never assigned to, and will always have its default value null
+11: Assets\src\GUI\Menu\Options\ForceSettings.cs(27,45): warning CS0649: Field 'ForceSettings.serverPingTime' is never assigned to, and will always have its default value null
+12: Assets\src\EnterPoint.cs(19,44): warning CS0649: Field 'EnterPoint.prefabBot' is never assigned to, and will always have its default value null
+13: Assets\src\GUI\Menu\Options\ForceSettings.cs(22,45): warning CS0649: Field 'ForceSettings.bonusSpeedTimeRespawn' is never assigned to, and will always have its default value null
+14: Assets\src\EnterPoint.cs(23,44): warning CS0649: Field 'EnterPoint.levelMode' is never assigned to, and will always have its default value
+15: Assets\src\GUI\Windows\Result.cs(13,44): warning CS0649: Field 'Result.kills' is never assigned to, and will always have its default value null
+16: Assets\src\Configs\PoolsConfig.cs(28,36): warning CS0649: Field 'PoolsConfig.bonusesOrdinary' is never assigned to, and will always have its default value 0
+17: Assets\ThirdParty\=CNControls_New\Examples\Scenes\2D\Scripts\PlatformerCharacter2D.cs(11,44): warning CS0649: Field 'PlatformerCharacter2D.m_WhatIsGround' is never assigned to, and will always have its default value
+18: Assets\src\Configs\PoolsConfig.cs(29,36): warning CS0649: Field 'PoolsConfig.bonusesPopular' is never assigned to, and will always have its default value 0
+19: Assets\src\Pools\PoolsManager.cs(17,44): warning CS0649: Field 'PoolsManager.containerImagesDeath' is never assigned to, and will always have its default value null
+20: Assets\src\GUI\BattleGui.cs(17,46): warning CS0649: Field 'BattleGui.resultRound' is never assigned to, and will always have its default value null
+21: Assets\src\GUI\BattleGui.cs(15,47): warning CS0649: Field 'BattleGui.bonusesPanel' is never assigned to, and will always have its default value null
+22: Assets\src\GUI\Windows\PauseWindow.cs(8,44): warning CS0649: Field 'PauseWindow.window' is never assigned to, and will always have its default value null
+23: Assets\src\GUI\BattleGui.cs(14,55): warning CS0649: Field 'BattleGui.joystick' is never assigned to, and will always have its default value null
+24: Assets\src\GUI\Windows\RespawnWindow.cs(11,45): warning CS0649: Field 'RespawnWindow.joystick' is never assigned to, and will always have its default value null
+25: Assets\src\EnterPoint.cs(18,44): warning CS0649: Field 'EnterPoint.prefabHero' is never assigned to, and will always have its default value null
+26: Assets\src\Pools\PoolsManager.cs(15,44): warning CS0649: Field 'PoolsManager.containerSplashStones' is never assigned to, and will always have its default value null
+27: Assets\src\Animation\StoneSplash.cs(9,40): warning CS0649: Field 'StoneSplash.speed' is never assigned to, and will always have its default value 0
+28: Assets\src\GUI\BattleGui.cs(18,48): warning CS0649: Field 'BattleGui.respawnWindow' is never assigned to, and will always have its default value null
+29: Assets\src\GUI\Menu\Options\ForceSettings.cs(21,45): warning CS0649: Field 'ForceSettings.bonusSpeedMaxCount' is never assigned to, and will always have its default value null
+30: Assets\src\EnterPoint.cs(21,47): warning CS0649: Field 'EnterPoint.poolsManager' is never assigned to, and will always have its default value null
+31: Assets\src\GUI\Battle\BonusesPanel.cs(10,40): warning CS0649: Field 'BonusesPanel.iconSpeedBonus' is never assigned to, and will always have its default value null
+32: Assets\src\GUI\Windows\Result.cs(12,44): warning CS0649: Field 'Result.names' is never assigned to, and will always have its default value null
+33: Assets\src\EnterPoint.cs(22,41): warning CS0649: Field 'EnterPoint.currentLevelName' is never assigned to, and will always have its default value null
+34: Assets\src\GUI\Windows\Result.cs(14,44): warning CS0649: Field 'Result.deaths' is never assigned to, and will always have its default value null
+35: Assets\src\GUI\Menu\Menu.cs(16,39): warning CS0649: Field 'Menu.metaServerIp' is never assigned to, and will always have its default value null
+36: Assets\src\Pools\PoolsManager.cs(18,44): warning CS0649: Field 'PoolsManager.containerBonusesSpeed' is never assigned to, and will always have its default value null
+37: Assets\src\GUI\BattleGui.cs(16,48): warning CS0649: Field 'BattleGui.mainGameTimer' is never assigned to, and will always have its default value null
+38: Assets\src\GUI\Menu\Options\ForceSettings.cs(28,45): warning CS0649: Field 'ForceSettings.ip_server' is never assigned to, and will always have its default value null
+39: Assets\src\GUI\Menu\Menu.cs(14,45): warning CS0649: Field 'Menu.inputNickname' is never assigned to, and will always have its default value null
+40: Assets\src\Pools\PoolsManager.cs(16,44): warning CS0649: Field 'PoolsManager.containerSkulls' is never assigned to, and will always have its default value null
+41: Assets\src\GUI\Menu\Menu.cs(13,46): warning CS0649: Field 'Menu.tooltipNickname' is never assigned to, and will always have its default value null
+42: Assets\src\Pools\PoolsManager.cs(14,44): warning CS0649: Field 'PoolsManager.containerStones' is never assigned to, and will always have its default value null
+43: Assets\src\EnterPoint.cs(20,43): warning CS0649: Field 'EnterPoint.mapModel' is never assigned to, and will always have its default value null
+44: Assets\src\GUI\BattleGui.cs(21,39): warning CS0649: Field 'BattleGui.killed' is never assigned to, and will always have its default value null
+45: Assets\src\GUI\Menu\Options\ForceSettings.cs(29,41): warning CS0649: Field 'ForceSettings.disableSendMove' is never assigned to, and will always have its default value null
+46: Assets\src\GUI\Windows\RespawnWindow.cs(9,41): warning CS0649: Field 'RespawnWindow.buttonRespawn' is never assigned to, and will always have its default value null
+47: Assets\src\Configs\PoolsConfig.cs(27,36): warning CS0649: Field 'PoolsConfig.bonusesRare' is never assigned to, and will always have its default value 0
+48: Assets\src\GUI\Windows\RespawnWindow.cs(10,41): warning CS0649: Field 'RespawnWindow.progress' is never assigned to, and will always have its default value null
+49: Assets\src\GUI\BattleGui.cs(19,44): warning CS0649: Field 'BattleGui.chestIcon' is never assigned to, and will always have its default value null
+50: Assets\src\GUI\BattleGui.cs(20,39): warning CS0649: Field 'BattleGui.weapons' is never assigned to, and will always have its default value null
+
+- PDB to MDB conversion --------------------------------------
+
+Process: C:\Caveman\CSharp60Support\Roslyn\pdb2mdb.exe
+Arguments: Temp\Assembly-CSharp.dll
+Exit code: 0
+Elapsed time: 0.10 sec
+
+- pdb2mdb.exe output (0 lines):
+********************************************************************************
+*                     Saturday, April 01, 2017 12:56:46 PM                     *
+********************************************************************************
+CSharpCompilerWrapper.exe version: 2.0.3.30
+Platform: Windows
+Target assembly: Assembly-CSharp-Editor.dll
+Project directory: C:\Caveman
+Target profile directory: C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\2.0-api
+Unity 'Data' or 'Frameworks' directory: C:/Program Files/Unity/Editor/Data
+Compiler: Microsoft C# 6.0
+
+- Compilation -----------------------------------------------
+
+Process: C:\Caveman\CSharp60Support\Roslyn\csc.exe
+Arguments: -nostdlib+ -noconfig -nologo -r:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\2.0-api\mscorlib.dll" -r:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\2.0-api\System.dll" -r:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\2.0-api\System.Core.dll" -r:"C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\lib\mono\2.0-api\System.Xml.dll" @Temp/UnityTempFile-23cd89e54f7b2db488c567ab139dfda8 
+Exit code: 0
+Elapsed time: 0.45 sec
+
+- Compiler output (0 lines):
+
+- Compiler errors (8 lines):
+0: Assets\Editor\SceneSwitcher.cs(22,44): warning CS0618: 'EditorApplication.currentScene' is obsolete: 'Use EditorSceneManager to see which scenes are currently loaded'
+1: Assets\Editor\SceneSwitcher.cs(24,44): warning CS0618: 'EditorApplication.currentScene' is obsolete: 'Use EditorSceneManager to see which scenes are currently loaded'
+2: Assets\Editor\SceneSwitcher.cs(25,34): warning CS0618: 'EditorApplication.currentScene' is obsolete: 'Use EditorSceneManager to see which scenes are currently loaded'
+3: Assets\Editor\SceneSwitcher.cs(31,40): warning CS0618: 'EditorApplication.currentScene' is obsolete: 'Use EditorSceneManager to see which scenes are currently loaded'
+4: Assets\Editor\SceneSwitcher.cs(33,48): warning CS0618: 'EditorApplication.SaveCurrentSceneIfUserWantsTo()' is obsolete: 'Use EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo'
+5: Assets\Editor\SceneSwitcher.cs(35,21): warning CS0618: 'EditorApplication.OpenScene(string)' is obsolete: 'Use EditorSceneManager.OpenScene'
+6: Assets\Editor\SceneSwitcher.cs(37,70): warning CS0618: 'EditorApplication.SaveCurrentSceneIfUserWantsTo()' is obsolete: 'Use EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo'
+7: Assets\Editor\SceneSwitcher.cs(39,21): warning CS0618: 'EditorApplication.OpenScene(string)' is obsolete: 'Use EditorSceneManager.OpenScene'
+
+- PDB to MDB conversion --------------------------------------
+
+Process: C:\Caveman\CSharp60Support\Roslyn\pdb2mdb.exe
+Arguments: Temp\Assembly-CSharp-Editor.dll
+Exit code: 0
+Elapsed time: 0.05 sec
+
+- pdb2mdb.exe output (0 lines):
