@@ -22,7 +22,7 @@ namespace Caveman.Network
             serverNotify = new ServerNotify {ServerListener = this};
             serverConnection = (ServerConnection) serverNotify;
             serverConnection.StartSession(HeroId,
-                PlayerPrefs.GetString(AccountManager.KeyNickname), isObservableMode);
+                PlayerPrefs.GetString(AccountManager.KeyNickname), IsObservableMode);
             CreatePoolManager(true);
             CreateCachePools();                     
         }
@@ -45,12 +45,12 @@ namespace Caveman.Network
 
         public void WeaponPickReceive(string playerId, string key)
         {
-            playerPool[playerId].PickupWeapon(poolStones[key]);
+            PlayerPool[playerId].PickupWeapon(poolStones[key]);
         }
 
         public void WeaponUseReceive(string playerId, Vector2 aim)
         {
-            playerPool[playerId].ActivateWeapon(aim);
+            PlayerPool[playerId].ActivateWeapon(aim);
         }
 
         public void BonusAddedReceive(string key, Vector2 point)
@@ -66,23 +66,23 @@ namespace Caveman.Network
 
         public void BonusPickReceive(string playerId, string key)
         {
-            playerPool[playerId].PickupBonus(poolBonusesSpeed[key]);
+            PlayerPool[playerId].PickupBonus(poolBonusesSpeed[key]);
         }
 
         public void PlayerRespawnReceive(string playerId, Vector2 point)
         {
-            playerPool[playerId].RespawnInstantly(point);
+            PlayerPool[playerId].RespawnInstantly(point);
         }
 
         public void PlayerDeadReceive(string playerId)
         {
-            playerPool[playerId].Die();
+            PlayerPool[playerId].Die();
         }
 
         public void PlayerMoveReceive(string playerId, Vector2 targetPoint)
         {
-            if (!PlayerExist(playerPool, playerId)) return;
-            playerPool[playerId].CalculateMoveUnit(targetPoint);
+            if (!PlayerExist(PlayerPool, playerId)) return;
+            PlayerPool[playerId].CalculateMoveUnit(targetPoint);
         }
         
         public void GameInfoMapReceive(JObject jObject)
@@ -92,8 +92,8 @@ namespace Caveman.Network
             CreatePlayersManager(rand, mapCore);
 
             //todo after get round time from server
-            CreateGui(true, isObservableMode, 0);     
-            if(!isObservableMode)
+            CreateGui(true, IsObservableMode, 0);
+            if(!IsObservableMode)
             {
                 CreateHero(Configs.Player["sample"]);              
             }                        
@@ -104,24 +104,24 @@ namespace Caveman.Network
             foreach (var player in jToken.Children<JObject>())
             {
                 var playerId = player[ServerParams.UserId].ToString();
-                if (!playerPool.ContainsKey(playerId))
+                if (!PlayerPool.ContainsKey(playerId))
                     playersManager.CreateServerModel(new PlayerCore(player[ServerParams.UserName].ToString(), playerId,
                         Configs.Player["sample"]), Instantiate(prefabServerPlayer));
             }            
-            if (!camera.IsWatcher && playerPool.GetCurrentPlayerModels().Any())
+            if (!Camera.IsWatcher && PlayerPool.GetCurrentPlayerModels().Any())
             {                 
-                camera.Watch(playerPool.GetCurrentPlayerModels().First().transform);
+                Camera.Watch(PlayerPool.GetCurrentPlayerModels().First().transform);
             }
         }        
 
         public void GameTimeReceive(float time)
         {               
-            StartCoroutine(battleGui.mainGameTimer.UpdateTime((int) time));
+            StartCoroutine(battleGui.MainGameTimer.UpdateTime((int) time));
         }
 
         public void GameResultReceive(JToken jToken)
         {
-            var resultRound = battleGui.resultRound;
+            var resultRound = battleGui.ResultRound;
             resultRound.gameObject.SetActive(true);
 
             var lineIndex = 0;
@@ -139,17 +139,17 @@ namespace Caveman.Network
         {            
             playersManager.CreateServerModel(new PlayerCore(playerName, playerId,
                 Configs.Player["sample"]), Instantiate(prefabServerPlayer));
-            serverNotify.RespawnSend(playerPool[HeroId].transform.position);
-            if (!camera.IsWatcher)
+            serverNotify.RespawnSend(PlayerPool[HeroId].transform.position);
+            if (!Camera.IsWatcher)
             {
-                camera.Watch(playerPool[playerId].transform);
+                Camera.Watch(PlayerPool[playerId].transform);
             }
         }
 
         public void LogoutReceive(string playerId)
         {
-            playerPool.Remove(playerId);
-            Destroy(playerPool[playerId].gameObject);
+            PlayerPool.Remove(playerId);
+            Destroy(PlayerPool[playerId].gameObject);
         }
 
         public void OnDestroy()
@@ -168,7 +168,7 @@ namespace Caveman.Network
         {
             if (pool.ContainsKey(key))
             {
-                Debug.LogWarning(string.Format("{0} at {1} already exists on map", key, pool[key].name));
+                Debug.LogWarning($"{key} at {pool[key].name} already exists on map");
                 return true;
             }
             return false;

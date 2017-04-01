@@ -28,10 +28,7 @@ namespace Caveman.Pools
 
         [HideInInspector] public readonly Dictionary<string, object> Pools = new Dictionary<string, object>();
 
-        public Transform ContainerStones
-        {
-            get { return containerStones; }
-        }
+        public Transform ContainerStones => containerStones;
 
         public void InitializationPools(GameConfigs settings, bool isMultiplayer)
         {

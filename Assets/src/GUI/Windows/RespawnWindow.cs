@@ -10,10 +10,7 @@ namespace Caveman.UI.Windows
         [SerializeField] private Slider progress;
         [SerializeField] private CNJoystick joystick;
 
-        public Button ButtonRespawn
-        {
-            get { return buttonRespawn; }
-        }
+        public Button ButtonRespawn => buttonRespawn;
 
         public void OnDisable()
         {

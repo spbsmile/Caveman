@@ -13,12 +13,15 @@ namespace Caveman.UI
     {
         [SerializeField] private CNAbstractController joystick;
         [SerializeField] private BonusesPanel bonusesPanel;
-        public MainGameTimer mainGameTimer;
-        public ResultRound resultRound;
+        [SerializeField] private MainGameTimer mainGameTimer;
+        [SerializeField] private ResultRound resultRound;
         [SerializeField] private RespawnWindow respawnWindow;
         [SerializeField] private ChestIcon chestIcon;
         [SerializeField] private Text weapons;
         [SerializeField] private Text killed;
+
+        public ResultRound ResultRound => resultRound;
+        public MainGameTimer MainGameTimer => mainGameTimer;
 
         public void Awake()
         {
@@ -55,13 +58,9 @@ namespace Caveman.UI
             playerCore.IsAliveChange += isAlive =>
             {
                 if (isAlive)
-                {
                     respawnWindow.gameObject.SetActive(false);
-                }
                 else
-                {
                     respawnWindow.Activate(playerCore.Config.RespawnDuration);
-                }
             };
 
             joystick.ControllerMovedEvent += model.MovePlayer;

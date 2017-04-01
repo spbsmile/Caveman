@@ -21,29 +21,14 @@ namespace Caveman.Configs
         [JsonProperty] private readonly string prefabPath;
         [JsonProperty] private readonly float factor;
 
-        public string Name
-        {
-            get { return name; }
-        }
+        public string Name => name;
 
-        public float Duration
-        {
-            get { return duration; }
-        }
+        public float Duration => duration;
 
-        public float Factor
-        {
-            get { return factor; }
-        }
+        public float Factor => factor;
 
-        public BonusType Type
-        {
-            get { return type; }
-        }
+        public BonusType Type => type;
 
-        public string PrefabPath
-        {
-            get { return prefabPath; }
-        }
+        public string PrefabPath => prefabPath;
     }
 }

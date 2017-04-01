@@ -21,24 +21,12 @@ namespace Caveman.Configs.Levels
         [JsonProperty]
         private readonly string[] botsName;
 
-        public string Name
-        {
-            get { return name; }
-        }
+        public string Name => name;
 
-        public int RoundTime
-        {
-            get { return roundTime; }
-        }
+        public int RoundTime => roundTime;
 
-        public int BotsCount
-        {
-            get { return botsCount; }
-        }
+        public int BotsCount => botsCount;
 
-        public string[] BotsName
-        {
-            get { return botsName; }
-        }
+        public string[] BotsName => botsName;
     }
 }

@@ -11,10 +11,10 @@ namespace Caveman.Configs
             this.prefabPath = prefabPath;
         }
 
-        [JsonProperty] private string name;
-        [JsonProperty] private string prefabPath;
+        [JsonProperty] private readonly string name;
+        [JsonProperty] private readonly string prefabPath;
 
-        public string Name { get { return name; } }
-        public string PrefabPath {  get { return prefabPath; } }
+        public string Name => name;
+        public string PrefabPath => prefabPath;
     }
 }

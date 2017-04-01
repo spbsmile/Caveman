@@ -13,10 +13,7 @@ namespace CnControls
 
         private static CnInputManager _instance;
 
-        private static CnInputManager Instance
-        {
-            get { return _instance ?? (_instance = new CnInputManager()); }
-        }
+        private static CnInputManager Instance => _instance ?? (_instance = new CnInputManager());
 
         private CnInputManager() { }
 
@@ -40,13 +37,7 @@ namespace CnControls
         /// Additional logic for touch retreival
         /// It's possible to add some reflection-based emulated touches
         /// </summary>
-        public static int TouchCount
-        {
-            get
-            {
-                return Input.touchCount;
-            }
-        }
+        public static int TouchCount => Input.touchCount;
 
         /// <summary>
         /// Additional logic for touch retreival

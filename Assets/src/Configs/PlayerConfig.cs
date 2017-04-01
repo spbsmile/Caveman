@@ -26,39 +26,18 @@ namespace Caveman.Configs
         [JsonProperty] private readonly PlayerType type;
         [JsonProperty] private readonly string prefabPath;
 
-        public string Name
-        {
-            get { return name; }
-        }
+        public string Name => name;
 
-        public float Strength
-        {
-            get { return strength; }
-        }
+        public float Strength => strength;
 
-        public float Speed
-        {
-            get { return speed; }
-        }
+        public float Speed => speed;
 
-        public int RespawnDuration
-        {
-            get { return respawnDuration; }
-        }
+        public int RespawnDuration => respawnDuration;
 
-        public int InvulnerabilityDuration
-        {
-            get { return invulnerabilityDuration; }
-        }
+        public int InvulnerabilityDuration => invulnerabilityDuration;
 
-        public string PrefabPath
-        {
-            get { return prefabPath; }
-        }
+        public string PrefabPath => prefabPath;
 
-        public PlayerType Type
-        {
-            get { return type; }
-        }
+        public PlayerType Type => type;
     }
 }

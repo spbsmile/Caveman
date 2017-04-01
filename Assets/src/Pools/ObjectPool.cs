@@ -110,13 +110,7 @@ namespace Caveman.Pools
             return poolServer.ContainsKey(key);
         }
 
-        public T this[string key]
-        {
-            get
-            {
-                return poolServer[key];
-            }
-        }
+        public T this[string key] => poolServer[key];
 
         public int GetActivedCount { private set; get; }
     }

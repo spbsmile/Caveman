@@ -4,10 +4,7 @@ namespace Caveman.UI.Common
 {
     public class LaunchGui : AdditiveScene
     {
-        public override string scene
-        {
-            get { return "BattleGui"; }
-        }
+        public override string scene => "BattleGui";
 
         private EnterPoint enterpoint;
 

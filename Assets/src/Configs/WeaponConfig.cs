@@ -28,44 +28,20 @@ namespace Caveman.Configs
         [JsonProperty] private readonly string prefabPath;
         [JsonProperty] private readonly WeaponType type;
         
-        public string Name
-        {
-            get { return name; }
-        }
+        public string Name => name;
 
-        public float Speed
-        {
-            get { return speed; }
-        }
+        public float Speed => speed;
 
-        public float Cooldown
-        {
-            get { return cooldown; }
-        }
+        public float Cooldown => cooldown;
 
-        public int Weight
-        {
-            get { return weight; }
-        }
+        public int Weight => weight;
 
-        public int RotateParameter
-        {
-            get { return rotateParameter; }
-        }
+        public int RotateParameter => rotateParameter;
 
-        public int CountItems
-        {
-            get { return countItems; }
-        }
+        public int CountItems => countItems;
 
-        public WeaponType Type
-        {
-            get { return type; }
-        }
+        public WeaponType Type => type;
 
-        public string PrefabPath
-        {
-            get { return prefabPath; }
-        }
+        public string PrefabPath => prefabPath;
     }
 }

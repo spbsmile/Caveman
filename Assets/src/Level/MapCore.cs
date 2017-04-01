@@ -28,10 +28,7 @@ namespace Caveman.Level
             }
         }
 
-        public Vector2 RandomPosition
-        {
-            get { return new Vector2(rand.Next(Width), rand.Next(Height)); }
-        }
+        public Vector2 RandomPosition => new Vector2(rand.Next(Width), rand.Next(Height));
 
         // for Func delegate  
         public Vector2 GetRandomPosition()

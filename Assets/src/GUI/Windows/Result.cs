@@ -13,20 +13,11 @@ namespace Caveman.UI.Windows
         [SerializeField] private Transform kills;
         [SerializeField] private Transform deaths;
 
-        public Transform Names
-        {
-            get { return names; }
-        }
+        public Transform Names => names;
 
-        public Transform Kills
-        {
-            get { return kills; }
-        }
+        public Transform Kills => kills;
 
-        public Transform Deaths
-        {
-            get { return deaths; }
-        }
+        public Transform Deaths => deaths;
 
         private Func<IEnumerable<PlayerModelBase>> getCurrentPlayersModel;
         protected bool isMultiplayer;

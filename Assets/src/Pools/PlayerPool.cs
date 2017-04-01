@@ -50,13 +50,7 @@ namespace Caveman.Pools
             return item;
         }
 
-        public PlayerModelBase this[string key]
-        {
-            get
-            {
-                return pool[key];
-            }
-        }
+        public PlayerModelBase this[string key] => pool[key];
 
         public bool ContainsKey(string playerId)
         {

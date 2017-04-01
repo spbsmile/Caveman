@@ -23,35 +23,17 @@ namespace Caveman.Configs
             this.itemsPeriodical = itemsPeriodical;
         }
 
-        public string Name
-        {
-            get { return name; }
-        }
+        public string Name => name;
 
-        public int Width
-        {
-            get { return width; }
-        }
+        public int Width => width;
 
-        public int Heght
-        {
-            get { return height; }
-        }
+        public int Heght => height;
 
-        public string PathPrefabTile
-        {
-            get { return pathPrefabTile; }
-        }
+        public string PathPrefabTile => pathPrefabTile;
 
-        public IEnumerable<Artefacts> Artefactses
-        {
-            get { return artefacts; }
-        }
+        public IEnumerable<Artefacts> Artefactses => artefacts;
 
-        public List<ItemPeriodical> ItemsPeriodicals
-        {
-            get { return itemsPeriodical; }
-        }
+        public List<ItemPeriodical> ItemsPeriodicals => itemsPeriodical;
 
         [JsonObject(MemberSerialization.OptIn)]
         public class Artefacts : IConfig
@@ -67,9 +49,9 @@ namespace Caveman.Configs
                 this.count = count;
             }
 
-            public string Name { get { return name; } }
-            public string PathPrefab { get { return pathPrefab; } }
-            public int Count { get { return count; } }
+            public string Name => name;
+            public string PathPrefab => pathPrefab;
+            public int Count => count;
         }
 
         [JsonObject(MemberSerialization.OptIn)]
@@ -88,10 +70,10 @@ namespace Caveman.Configs
                 this.type = type;
             }
 
-            public string Name { get { return name; } }
-            public int Period { get { return period; } }
-            public int Count { get { return count; } }
-            public string Type { get { return type; } }
+            public string Name => name;
+            public int Period => period;
+            public int Count => count;
+            public string Type => type;
         }
     }
 }

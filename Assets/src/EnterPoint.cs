@@ -21,17 +21,20 @@ namespace Caveman
         [SerializeField] private PoolsManager poolsManager;
         [SerializeField] private string currentLevelName;
         [SerializeField] private LevelMode levelMode;
-        public static GameConfigs Configs { get; private set; }
-        public SmoothCamera camera;
-        public PlayerPool playerPool;
+        [SerializeField] private SmoothCamera camera;
+        [SerializeField] private PlayerPool playerPool;
+        [SerializeField] private bool isObservableMode;
 
-        protected static MapConfig MapOfflineConfig { set; get; }
+        protected SmoothCamera Camera => camera;
+        protected PlayerPool PlayerPool => playerPool;
+        protected bool IsObservableMode => isObservableMode;
+
+        protected static MapConfig MapOfflineConfig { private set; get; }
         protected static string HeroId { private set; get; }
-
-        public bool isObservableMode;
-
         protected IServerNotify serverNotify;
         protected PlayersManager playersManager;
+
+        public static GameConfigs Configs { get; private set; }
 
         // caсhe fields for server message handler
         protected ObjectPool<WeaponModelBase> poolStones;

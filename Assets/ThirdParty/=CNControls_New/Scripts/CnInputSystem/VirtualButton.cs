@@ -57,31 +57,16 @@ namespace CnControls
 		/// <summary>
 		/// Is this button currently pressed?
 		/// </summary>
-		public bool GetButton
-		{
-			get { return IsPressed; }
-		}
+		public bool GetButton => IsPressed;
 
-		/// <summary>
+	    /// <summary>
 		/// Check whether this button has just been pressed 
 		/// </summary>
-		public bool GetButtonDown
-		{
-			get
-			{
-				return _lastPressedFrame != -1 && _lastPressedFrame - Time.frameCount == -1;
-			}
-		}
+		public bool GetButtonDown => _lastPressedFrame != -1 && _lastPressedFrame - Time.frameCount == -1;
 
-		/// <summary>
+	    /// <summary>
 		/// Check whether this button has just been released 
 		/// </summary>
-		public bool GetButtonUp
-		{
-			get
-			{
-				return _lastReleasedFrame != -1 && _lastReleasedFrame == Time.frameCount - 1;
-			}
-		}
+		public bool GetButtonUp => _lastReleasedFrame != -1 && _lastReleasedFrame == Time.frameCount - 1;
 	}
 }

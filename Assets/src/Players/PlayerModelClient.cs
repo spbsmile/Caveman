@@ -60,7 +60,6 @@ namespace Caveman.Players
         public override void PickupBonus(BonusBase bonus)
         {
             if (multiplayer) serverNotify.PickBonusSend(bonus.Id, (int) bonus.Config.Type);
-            //todo hack
             base.PickupBonus(bonus);
         }
 

@@ -14,14 +14,8 @@ namespace Caveman.Configs.Levels
         [JsonProperty] private readonly string name;
         [JsonProperty] private readonly int roundTime;
 
-        public string Name
-        {
-            get { return name; }
-        }
+        public string Name => name;
 
-        public int RoundTime
-        {
-            get { return roundTime; }
-        }
+        public int RoundTime => roundTime;
     }
 }

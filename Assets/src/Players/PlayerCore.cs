@@ -26,12 +26,13 @@ namespace Caveman.Players
 	        Speed = Config.Speed;
         }
 
-	    public PlayerConfig Config { get; private set; }
-	    public string Id { get; private set; }
-        public string Name { get; private set; }
+	    public PlayerConfig Config { get; }
+	    public string Id { get; }
+        public string Name { get; }
 	    public int DeathCount { set; get; }
-
 	    public float Speed { get; private set; }
+
+        public bool Invulnerability { get; set; }
 
         public int WeaponCount
         {
@@ -40,10 +41,7 @@ namespace Caveman.Players
             {
 	            if (weaponCount == value) return;
 	            weaponCount = value;
-	            if (WeaponCountChange != null)
-	            {
-		            WeaponCountChange(value);
-	            }
+                WeaponCountChange?.Invoke(value);
             }
         }
 
@@ -54,43 +52,28 @@ namespace Caveman.Players
             {
 	            if (killCount == value) return;
 	            killCount = value;
-	            if (KillCountChange != null)
-	            {
-		            KillCountChange(value);
-	            }
+                KillCountChange?.Invoke(value);
             }
         }
 
-        public bool Invulnerability { get; set; }
-
         public bool IsAlive
 	    {
-		    get { return isAlive; }
-		    set
+            set
 		    {
 			    if (isAlive == value) return;
 			    isAlive = value;
-			    if (IsAliveChange != null)
-			    {
-                    IsAliveChange(value);
-			    }
+		        IsAliveChange?.Invoke(value);
 		    }
 	    }
 
         public void ActivatedBonus(BonusType type, float duration)
         {
-            if (BonusActivate != null)
-            {
-                BonusActivate(type, duration);
-            }
+            BonusActivate?.Invoke(type, duration);
         }
 
         public void ActivatedChest(Action openHandler, bool isOpenGui)
         {
-            if (ChestActivate != null)
-            {
-                ChestActivate(openHandler, isOpenGui);
-            }
+            ChestActivate?.Invoke(openHandler, isOpenGui);
         }
 
         public void ChangeSpeed(float factor)

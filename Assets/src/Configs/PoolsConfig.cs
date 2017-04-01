@@ -31,54 +31,24 @@ namespace Caveman.Configs
         [JsonProperty] private int imagesOrdinary;
         [JsonProperty] private int imagesPopular;
 
-        public string Name
-        {
-            get { return name; }
-        }
+        public string Name => name;
 
-        public int WeaponsRare
-        {
-            get { return weaponsRare; }
-        }
+        public int WeaponsRare => weaponsRare;
 
-        public int WeaponsOrdinary
-        {
-            get { return weaponsOrdinary; }
-        }
+        public int WeaponsOrdinary => weaponsOrdinary;
 
-        public int WeaponsPopular
-        {
-            get { return weaponsPopular; }
-        }
+        public int WeaponsPopular => weaponsPopular;
 
-        public int BonusesRare
-        {
-            get { return bonusesRare; }
-        }
+        public int BonusesRare => bonusesRare;
 
-        public int BonusesOrdinary
-        {
-            get { return bonusesOrdinary; }
-        }
+        public int BonusesOrdinary => bonusesOrdinary;
 
-        public int BonusesPopular
-        {
-            get { return bonusesPopular; }
-        }
+        public int BonusesPopular => bonusesPopular;
 
-        public int ImagesRare
-        {
-            get { return imagesRare; }
-        }
+        public int ImagesRare => imagesRare;
 
-        public int ImagesOrdinary
-        {
-            get { return imagesOrdinary; }
-        }
+        public int ImagesOrdinary => imagesOrdinary;
 
-        public int ImagesPopular
-        {
-            get { return imagesPopular; }
-        }
+        public int ImagesPopular => imagesPopular;
     }
 }

@@ -15,10 +15,7 @@ namespace Caveman.Level
         private Vector2 section;
         private PlayerModelBase player;
 
-        public bool IsWatcher
-        {
-            get { return player != null; }
-        }
+        public bool IsWatcher => player != null;
 
         public void Watch(Transform player)
         {
