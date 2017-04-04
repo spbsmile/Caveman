@@ -32,16 +32,6 @@ namespace Caveman.Weapons
             pool.Store(this);    
         }
 
-        /// <summary>
-        /// player can simple put weapon on lang
-        /// </summary>
-        /// <param name="position"></param>
-        public void UnTake(Vector2 position)
-        {
-            Owner = null;
-            transform.position = position;
-        }
-
         public void InitializationMove(PlayerCore playerCore, Vector3 start, Vector2 aim)
         {
             Owner = playerCore;
