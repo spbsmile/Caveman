@@ -32,7 +32,7 @@ namespace Caveman
         protected static MapConfig MapOfflineConfig { private set; get; }
         protected static string HeroId { private set; get; }
         protected IServerNotify serverNotify;
-        protected PlayersManager playersManager;
+        protected PlayerManager PlayerManager;
 
         public static GameConfigs Configs { get; private set; }
 
@@ -74,7 +74,7 @@ namespace Caveman
 
         protected void CreatePlayersManager(Random rand, MapCore mapCore)
         {
-            playersManager = new PlayersManager(rand, playerPool, mapCore, poolsManager.ChangeWeaponPool, poolsManager.ImagesDeath, levelMode);
+            PlayerManager = new PlayerManager(rand, playerPool, mapCore, poolsManager.ImagesDeath, levelMode);
         }
 
         //todo after get gameInfo if multiplayer 
@@ -101,7 +101,7 @@ namespace Caveman
 
         protected void CreateHero(PlayerConfig heroConfig)
         {
-            playersManager.CreateHeroModel(
+            PlayerManager.CreateHeroModel(
                     new PlayerCore(PlayerPrefs.GetString(AccountManager.KeyNickname),
                         HeroId, heroConfig),
                     Instantiate(prefabHero), battleGui.SubscribeOnEvents); 
@@ -114,7 +114,7 @@ namespace Caveman
                 //todo name bots from bots config ??
                 var playerCore = new PlayerCore(levelConfig.BotsName[i],
                     i.ToString(), botConfig);
-                playersManager.CreateBotModel(playerCore, Instantiate(prefabBot), poolsManager.ContainerStones);
+                PlayerManager.CreateBotModel(playerCore, Instantiate(prefabBot), poolsManager.ContainerStones);
             }
         }
 

@@ -11,10 +11,10 @@ namespace Caveman.Players
     {
         private Vector3 targetPosition;
 
-        public override void PickupWeapon(WeaponModelBase weaponModel)
+        public override void PickupWeapon(IWeapon weapon)
         {
-            if (PlayerCore.WeaponCount > weaponModel.Config.Weight) return;
-            base.PickupWeapon(weaponModel);
+            if (PlayerCore.WeaponCount > weapon.Config.Weight) return;
+            base.PickupWeapon(weapon);
             PlayerCore.WeaponCount++;
         }
 

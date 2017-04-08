@@ -2,7 +2,6 @@
 using Caveman.Bonuses;
 using Caveman.Level;
 using Caveman.Weapons;
-using Caveman.Weapons.Ranged;
 using UnityEngine;
 
 namespace Caveman.Players
@@ -14,35 +13,22 @@ namespace Caveman.Players
             var weapon = other.GetComponent<WeaponModelBase>();
             if (weapon)
             {
-                if (weapon.Owner == null)
+                if (string.IsNullOrEmpty(weapon.OwnerId))
+                    PickupWeapon(weapon);
+                else if (weapon.OwnerId != PlayerCore.Id)
                 {
-                    switch (weapon.Config.Type)
+                    GetPlayerById(weapon.OwnerId).KillCount++;
+                    PlayerCore.DeathCount++;
+                    if (multiplayer)
                     {
-                        case WeaponType.Stone:
-                            PickupWeapon(other.gameObject.GetComponent<StoneModel>());
-                            break;
-                        case WeaponType.Skull:
-                            PickupWeapon(other.gameObject.GetComponent<AxeModel>());
-                            break;
+                        serverNotify.PlayerDeadSend();
+                        serverNotify.AddedKillStatSend(weapon.OwnerId);
                     }
-                }
-                else
-                {
-                    if (weapon.Owner != PlayerCore)
-                    {
-                        weapon.Owner.KillCount++;
-                        PlayerCore.DeathCount++;
-                        if (multiplayer)
-                        {
-                            serverNotify.PlayerDeadSend();
-                            serverNotify.AddedKillStatSend(weapon.Owner.Id);
-                        }
-                        weapon.Destroy();
-                        StopAllCoroutines();
-                        StartCoroutine(playerAnimation.Death(transform.position));
-                        Die();
-                        StartCoroutine(Respawn(GetRandomPosition()));
-                    }
+                    weapon.Destroy();
+                    StopAllCoroutines();
+                    StartCoroutine(playerAnimation.Death(transform.position));
+                    Die();
+                    StartCoroutine(Respawn(GetRandomPosition()));
                 }
             }
         }
@@ -64,17 +50,17 @@ namespace Caveman.Players
             base.PickupBonus(bonus);
         }
 
-        public override void PickupWeapon(WeaponModelBase weaponModel)
+        public override void PickupWeapon(IWeapon weapon)
         {
-            if (!IsEnoughStrength(weaponModel.Config.Weight)) return;
-            base.PickupWeapon(weaponModel);
-            PlayerCore.WeaponCount += weaponModel.Config.CountItems;
-            if (multiplayer) serverNotify.PickWeaponSend(weaponModel.Id, (int) weaponModel.Config.Type);
+            if (!IsEnoughStrength(weapon.Config.Weight)) return;
+            base.PickupWeapon(weapon);
+            PlayerCore.WeaponCount += weapon.Config.CountItems;
+            if (multiplayer) serverNotify.PickWeaponSend(weapon.Id, (int) weapon.Config.Type);
         }
 
         public override void ActivateWeapon(Vector2 aim)
         {
-            if (multiplayer) serverNotify.ActivateWeaponSend(aim, (int) WeaponConfig.Type);
+            if (multiplayer) serverNotify.ActivateWeaponSend(aim, (int) currentWeapon.Config.Type);
             base.ActivateWeapon(aim);
             PlayerCore.WeaponCount--;
         }
@@ -86,7 +72,7 @@ namespace Caveman.Players
 
         private IEnumerator PerformWeaponAction()
         {
-            yield return new WaitForSeconds(WeaponConfig.Cooldown);
+            yield return new WaitForSeconds(currentWeapon?.Config.Cooldown ?? 2f);
             if (PlayerCore.WeaponCount > 0)
             {
                 var victim = FindClosestPlayer(this);

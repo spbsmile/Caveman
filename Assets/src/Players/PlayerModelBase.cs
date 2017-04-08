@@ -4,7 +4,6 @@ using Caveman.Bonuses;
 using Caveman.CustomAnimation;
 using Caveman.Network;
 using Caveman.Pools;
-using Caveman.Configs;
 using Caveman.Level;
 using Caveman.Utils;
 using Caveman.Weapons;
@@ -18,11 +17,11 @@ namespace Caveman.Players
      * Type PlayerModelBase - Behavior 
      * Type PlayerCore - contains all parameters/stats.
      */
-    public class PlayerModelBase : MonoBehaviour
+    public class PlayerModelBase : MonoBehaviour, IDamageable
     {
-        private Func<WeaponType, ObjectPool<WeaponModelBase>> WeaponPoolChange;
         protected Func<Vector2> GetRandomPosition;
         protected Func<PlayerModelBase, PlayerModelBase> FindClosestPlayer;
+        protected Func<string, PlayerCore> GetPlayerById;
 
         [HideInInspector] public BonusBase bonusBase;
         [HideInInspector] public SpriteRenderer spriteRenderer;
@@ -32,10 +31,9 @@ namespace Caveman.Players
         protected bool multiplayer;
         protected LevelMode levelMode;
         
-        protected WeaponConfig WeaponConfig;
         protected PlayerAnimation playerAnimation;
         protected Vector2 moveUnit;
-        private ObjectPool<WeaponModelBase> currentPoolWeapons;
+        protected IWeapon currentWeapon;
 
         public PlayerCore PlayerCore { private set; get; }
 
@@ -44,19 +42,18 @@ namespace Caveman.Players
         protected void Awake()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
-            WeaponConfig = EnterPoint.Configs.Weapon["stone"];
         }
 
         public void Initialization(PlayerCore core, IServerNotify serverNotify,
             Func<PlayerModelBase, PlayerModelBase> findClosestPlayer, PlayerPool pool,
-            Func<Vector2> getRandomPosition, Func<WeaponType, ObjectPool<WeaponModelBase>> changeWeaponPool,
-            Transform imageDeath, LevelMode levelMode)
+            Func<Vector2> getRandomPosition,
+            Transform imageDeath, LevelMode levelMode, Func<string, PlayerCore> getPlayerById)
         {
             this.serverNotify = serverNotify;
 	        this.pool = pool;
             GetRandomPosition = getRandomPosition;
             FindClosestPlayer = findClosestPlayer;
-            WeaponPoolChange = changeWeaponPool;
+            GetPlayerById = getPlayerById;
             if (serverNotify != null) multiplayer = true;
             PlayerCore = core;
             playerAnimation = new PlayerAnimation(GetComponent<Animator>(), imageDeath);
@@ -74,22 +71,21 @@ namespace Caveman.Players
             pool.Store(this);
         }
 
-        public virtual void PickupWeapon(WeaponModelBase weaponModel)
+        public virtual void PickupWeapon(IWeapon weapon)
         {
-            if (currentPoolWeapons == null || weaponModel.Config.Type != WeaponConfig.Type)
+            if (currentWeapon == null || currentWeapon.Config.Type != weapon.Config.Type)
             {
-                currentPoolWeapons = WeaponPoolChange(weaponModel.Config.Type);
-                WeaponConfig = weaponModel.Config;
+                currentWeapon = weapon;
                 PlayerCore.WeaponCount = 0;
             }
             playerAnimation.Pickup();
-            weaponModel.Take();
+            weapon.Take();
         }
 
         public virtual void ActivateWeapon(Vector2 aim)
         {
             playerAnimation.Throw();
-            currentPoolWeapons.New().InitializationMove(PlayerCore, transform.position, aim);
+            currentWeapon.Activate(PlayerCore.Id, transform.position, aim);
         }
 
         protected virtual IEnumerator Respawn(Vector2 position)
@@ -128,6 +124,11 @@ namespace Caveman.Players
             moveUnit = Vector2.zero;
             playerAnimation.IsMoving_B = false;
             playerAnimation.IsMoving_F = false;
+        }
+
+        public void ApplyDamage(float mount)
+        {
+            throw new NotImplementedException();
         }
     }
 }

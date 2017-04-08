@@ -1,5 +1,4 @@
-﻿using Caveman.Players;
-using Caveman.Pools;
+﻿using Caveman.Pools;
 using Caveman.Utils;
 using UnityEngine;
 using Caveman.Configs;
@@ -8,9 +7,10 @@ namespace Caveman.Weapons
 { 
     public  class WeaponModelBase : ASupportPool<WeaponModelBase>, IWeapon
     {
+        public string Id => Id;
         public WeaponConfig Config { protected set; get; }
-        public PlayerCore Owner { private set; get; }
-        
+        public string OwnerId { private set; get; }
+
         protected Vector2 startPosition;
         protected Vector2 targetPosition;
         /// <summary>
@@ -18,28 +18,28 @@ namespace Caveman.Weapons
         /// </summary>
         protected Vector2 moveUnit;
 
-        private ObjectPool<WeaponModelBase> pool;
+        private ObjectPool<WeaponModelBase> Pool { set; get; }
 
         public virtual void Destroy()
         {
-            Owner = null;
+            OwnerId = "";
             moveUnit = Vector2.zero;
-            pool.Store(this);
+            Pool.Store(this);
+        }
+
+        public void Activate(string Id, Vector2 @from, Vector2 to)
+        {
+            Pool.New().InitializationMove(Id, @from, to);
         }
 
         public void Take()
         {
-            pool.Store(this);    
+            Pool.Store(this);
         }
 
-        public virtual void Damage()
+        private void InitializationMove(string ownerId, Vector3 start, Vector2 aim)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public void InitializationMove(PlayerCore playerCore, Vector3 start, Vector2 aim)
-        {
-            Owner = playerCore;
+            OwnerId = ownerId;
             startPosition = start;
             transform.position = start;
             targetPosition = aim;
@@ -49,7 +49,7 @@ namespace Caveman.Weapons
 
         public override void InitializationPool(ObjectPool<WeaponModelBase> weaponPool)
         {
-            pool = weaponPool;
+            Pool = weaponPool;
         }
 
         protected virtual void MoveUpdate()

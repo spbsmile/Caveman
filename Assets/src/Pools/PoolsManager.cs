@@ -105,20 +105,5 @@ namespace Caveman.Pools
             model.InitializationPool(pool);
             model.InitializationPoolSplashesStone(SplashesStone);
         }
-
-        /// <summary>
-        /// When player pickup weapon another type 
-        /// </summary>
-        public ObjectPool<WeaponModelBase> ChangeWeaponPool(WeaponType type)
-        {
-            switch (type)
-            {
-                case WeaponType.Stone:
-                    return Stones;
-                case WeaponType.Skull:
-                    return Skulls;
-            }
-            return null;
-        }
     }
 }

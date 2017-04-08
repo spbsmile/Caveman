@@ -5,7 +5,7 @@ using Caveman.Configs;
 
 namespace Caveman.Players
 {
-    public class PlayerCore : ISupportBonus
+    public partial class PlayerCore : ISupportBonus
     {
         public Action<int> WeaponCountChange;
         public Action<int> KillCountChange;
@@ -64,21 +64,6 @@ namespace Caveman.Players
                 isAlive = value;
                 IsAliveChange?.Invoke(value);
             }
-        }
-
-        public void ActivatedBonus(BonusType type, float duration)
-        {
-            BonusActivate?.Invoke(type, duration);
-        }
-
-        public void ActivatedChest(Action openHandler, bool isOpenGui)
-        {
-            ChestActivate?.Invoke(openHandler, isOpenGui);
-        }
-
-        public void ChangeSpeed(float factor)
-        {
-            Speed = factor > 0 ? Speed * factor : Speed / factor * -1;
         }
     }
 }

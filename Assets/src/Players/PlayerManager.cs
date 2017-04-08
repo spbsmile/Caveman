@@ -1,36 +1,35 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Caveman.CustomAnimation;
 using Caveman.Level;
 using Caveman.Network;
 using Caveman.Pools;
-using Caveman.Weapons;
 using JetBrains.Annotations;
 using Random = System.Random;
 using UnityEngine;
 
 namespace Caveman.Players
 {
-    public class PlayersManager
+    public class PlayerManager
     {
         private readonly IServerNotify serverNotify;        
 	    private readonly List<PlayerModelBase> models;
 	    private readonly PlayerPool pool;
 	    private readonly Random rand;
         private readonly MapCore mapCore;
-        private readonly Func<WeaponType, ObjectPool<WeaponModelBase>> ChangeWeaponPool;
         private readonly ObjectPool<ImageBase> imagesDeath;
         private readonly LevelMode levelMode;
 
-        public PlayersManager(IServerNotify serverNotify, Random rand, PlayerPool pool, MapCore mapCore, Func<WeaponType, ObjectPool<WeaponModelBase>> changeWeaponPool, ObjectPool<ImageBase> imagesDeath
+        public PlayerManager(IServerNotify serverNotify, Random rand, PlayerPool pool, MapCore mapCore, ObjectPool<ImageBase> imagesDeath
         , LevelMode levelMode)
-        : this(rand, pool, mapCore, changeWeaponPool, imagesDeath, levelMode)
+        : this(rand, pool, mapCore, imagesDeath, levelMode)
         {
             this.serverNotify = serverNotify;              
         }
 
-        public PlayersManager(Random rand, PlayerPool pool,
-            MapCore mapCore, Func<WeaponType, ObjectPool<WeaponModelBase>> changeWeaponPool,
+        public PlayerManager(Random rand, PlayerPool pool,
+            MapCore mapCore,
             ObjectPool<ImageBase> imagesDeath, LevelMode levelMode)
         {                  
             this.pool = pool;
@@ -38,7 +37,6 @@ namespace Caveman.Players
 	        this.mapCore = mapCore;
             this.imagesDeath = imagesDeath;
             this.levelMode = levelMode;
-            ChangeWeaponPool = changeWeaponPool;
             models = new List<PlayerModelBase>();
             models.AddRange(pool.GetCurrentPlayerModels());   
             pool.AddedPlayer += model => models.Add(model);
@@ -64,7 +62,12 @@ namespace Caveman.Players
             playerModel.InitializationByMap(mapCore.Width, mapCore.Height);
             subscribeGuiOnEvents(playerModel, mapCore.GetRandomPosition);            
             if (serverNotify != null) model.GetComponent<SpriteRenderer>().material.color = Color.red;
-        }    
+        }
+
+        private PlayerCore GetById(string playerId)
+        {
+            return models.FirstOrDefault(pl => pl.PlayerCore.Id == playerId)?.PlayerCore;
+        }
 
         [CanBeNull]
         private PlayerModelBase FindClosestPlayer(PlayerModelBase playerModelBase)
@@ -95,11 +98,10 @@ namespace Caveman.Players
                 serverNotify,
                 FindClosestPlayer,
                 pool, mapCore.GetRandomPosition,
-                ChangeWeaponPool,
                 imagesDeath.New().transform,
-                levelMode);
+                levelMode,
+                GetById);
             pool.Add(playerCore.Id, model);
-
             model.RespawnInstantly(mapCore.RandomPosition);
             model.name = playerCore.Name;
             model.transform.GetChild(0).GetComponent<TextMesh>().text = playerCore.Name;
