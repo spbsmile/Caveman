@@ -5,8 +5,8 @@ using UnityEngine;
 using Caveman.Configs;
 
 namespace Caveman.Weapons
-{
-    public  class WeaponModelBase : ASupportPool<WeaponModelBase>
+{ 
+    public  class WeaponModelBase : ASupportPool<WeaponModelBase>, IWeapon
     {
         public WeaponConfig Config { protected set; get; }
         public PlayerCore Owner { private set; get; }
@@ -30,6 +30,11 @@ namespace Caveman.Weapons
         public void Take()
         {
             pool.Store(this);    
+        }
+
+        public virtual void Damage()
+        {
+            throw new System.NotImplementedException();
         }
 
         public void InitializationMove(PlayerCore playerCore, Vector3 start, Vector2 aim)

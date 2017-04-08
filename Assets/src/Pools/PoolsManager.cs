@@ -5,6 +5,7 @@ using Caveman.CustomAnimation;
 using Caveman.DevSetting;
 using Caveman.Weapons;
 using JetBrains.Annotations;
+using Caveman.Weapons.Ranged;
 using UnityEngine;
 
 namespace Caveman.Pools

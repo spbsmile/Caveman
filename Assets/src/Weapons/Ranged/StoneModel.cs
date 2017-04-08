@@ -3,7 +3,7 @@ using Caveman.Pools;
 using Caveman.Utils;
 using UnityEngine;
 
-namespace Caveman.Weapons
+namespace Caveman.Weapons.Ranged
 {
     public class StoneModel : WeaponModelBase 
     {
@@ -19,6 +19,8 @@ namespace Caveman.Weapons
         {
             MoveUpdate();
         }
+
+
 
         public override void Destroy()
         {

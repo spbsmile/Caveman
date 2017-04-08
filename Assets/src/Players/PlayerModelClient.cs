@@ -2,6 +2,7 @@
 using Caveman.Bonuses;
 using Caveman.Level;
 using Caveman.Weapons;
+using Caveman.Weapons.Ranged;
 using UnityEngine;
 
 namespace Caveman.Players

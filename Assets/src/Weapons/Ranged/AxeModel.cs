@@ -1,4 +1,4 @@
-﻿namespace Caveman.Weapons
+﻿namespace Caveman.Weapons.Ranged
 {
     public class AxeModel : WeaponModelBase
     {
