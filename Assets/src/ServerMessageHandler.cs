@@ -105,7 +105,7 @@ namespace Caveman.Network
             {
                 var playerId = player[ServerParams.UserId].ToString();
                 if (!PlayerPool.ContainsKey(playerId))
-                    playersManager.CreateServerModel(new PlayerCore(player[ServerParams.UserName].ToString(), playerId,
+                    PlayerManager.CreateServerModel(new PlayerCore(player[ServerParams.UserName].ToString(), playerId,
                         Configs.Player["sample"]), Instantiate(prefabServerPlayer));
             }            
             if (!Camera.IsWatcher && PlayerPool.GetCurrentPlayerModels().Any())
@@ -137,7 +137,7 @@ namespace Caveman.Network
 
         public void LoginReceive(string playerId, string playerName)
         {            
-            playersManager.CreateServerModel(new PlayerCore(playerName, playerId,
+            PlayerManager.CreateServerModel(new PlayerCore(playerName, playerId,
                 Configs.Player["sample"]), Instantiate(prefabServerPlayer));
             serverNotify.RespawnSend(PlayerPool[HeroId].transform.position);
             if (!Camera.IsWatcher)
