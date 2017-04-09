@@ -9,6 +9,7 @@
         "name": "dot",
         "pathPrefab": "Map/dot",
         "count": "30"
+        
       },
       {
         "name": "pool",
@@ -28,6 +29,12 @@
         "period": "10",
         "count": "5",
         "type": "bonus"  
+     },
+      {
+        "name": "sword",
+        "period": "10",
+        "count": "5",
+        "type": "weapon"  
      }
     ] 
   }

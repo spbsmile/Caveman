@@ -1,22 +1,24 @@
-﻿using Caveman.Pools;
+﻿
+using System;
+using UnityEngine;
 
 namespace Caveman.Weapons.Melee
 {
-    public class SwordModel : WeaponModelBase
+    public class SwordModel : WeaponModelBase, IWeapon
     {
+        public void Activate(string ownerId, Vector2 from, Vector2 to)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Awake()
         {
             Config = EnterPoint.Configs.Weapon["sword"];
         }
 
-        public override void InitializationPool(ObjectPool<WeaponModelBase> item)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public override void Destroy()
         {
-            throw new System.NotImplementedException();
+            base.Destroy();
         }
 
     }

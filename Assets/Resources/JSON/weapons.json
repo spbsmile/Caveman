@@ -31,5 +31,15 @@
     "rotateParameter": 10,
     "prefabPath": "Weapons/axe",
     "type": 1
+  },
+  {
+    "name": "sword",
+    "countItems": 1,
+    "timeRespawn": 20,
+    "cooldown": 2,
+    "weight": 10,
+    "rotateParameter": 10,
+    "prefabPath": "Weapons/sword",
+    "type": 1
   }
 ]

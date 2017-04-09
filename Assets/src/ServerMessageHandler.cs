@@ -2,6 +2,7 @@
 using Caveman.Configs;
 using Caveman.Players;
 using Caveman.Pools;
+using Caveman.Weapons;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
@@ -45,7 +46,7 @@ namespace Caveman.Network
 
         public void WeaponPickReceive(string playerId, string key)
         {
-            PlayerPool[playerId].PickupWeapon(poolStones[key]);
+            PlayerPool[playerId].PickupWeapon((IWeapon)poolStones[key]);
         }
 
         public void WeaponUseReceive(string playerId, Vector2 aim)

@@ -5,20 +5,20 @@ using Caveman.Configs;
 
 namespace Caveman.Weapons
 { 
-    public  class WeaponModelBase : ASupportPool<WeaponModelBase>, IWeapon
+    public  class WeaponModelBase : ASupportPool<WeaponModelBase>
     {
         public string Id => Id;
         public WeaponConfig Config { protected set; get; }
-        public string OwnerId { private set; get; }
+        public string OwnerId { protected internal set; get; }
 
-        protected Vector2 startPosition;
-        protected Vector2 targetPosition;
+        protected internal Vector2 startPosition;
+        protected internal Vector2 targetPosition;
         /// <summary>
         /// Linear parameter, define direction and value and on each update
         /// </summary>
-        protected Vector2 moveUnit;
+        protected internal Vector2 moveUnit;
 
-        private ObjectPool<WeaponModelBase> Pool { set; get; }
+        protected ObjectPool<WeaponModelBase> Pool { private set; get; }
 
         public virtual void Destroy()
         {
@@ -27,24 +27,9 @@ namespace Caveman.Weapons
             Pool.Store(this);
         }
 
-        public void Activate(string Id, Vector2 @from, Vector2 to)
-        {
-            Pool.New().InitializationMove(Id, @from, to);
-        }
-
         public void Take()
         {
             Pool.Store(this);
-        }
-
-        private void InitializationMove(string ownerId, Vector3 start, Vector2 aim)
-        {
-            OwnerId = ownerId;
-            startPosition = start;
-            transform.position = start;
-            targetPosition = aim;
-            // todo if weapon move no linear, moveUnit needless, example: stone model, bezier curve
-            moveUnit = UnityExtensions.CalculateDelta(start, aim, Config.Speed);
         }
 
         public override void InitializationPool(ObjectPool<WeaponModelBase> weaponPool)

@@ -14,7 +14,7 @@ namespace Caveman.Players
             if (weapon)
             {
                 if (string.IsNullOrEmpty(weapon.OwnerId))
-                    PickupWeapon(weapon);
+                    PickupWeapon((IWeapon)weapon);
                 else if (weapon.OwnerId != PlayerCore.Id)
                 {
                     GetPlayerById(weapon.OwnerId).KillCount++;
@@ -30,6 +30,11 @@ namespace Caveman.Players
                     Die();
                     StartCoroutine(Respawn(GetRandomPosition()));
                 }
+            }
+
+            if (other.GetComponent<PlayerModelBase>())
+            {
+
             }
         }
 

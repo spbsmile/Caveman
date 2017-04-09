@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Caveman.Weapons.Ranged
 {
-    public class StoneModel : WeaponModelBase 
+    public class StoneModel : WeaponModelBase, IWeapon
     {
         private ObjectPool<ImageBase> poolStonesSplash;
         private float bezierTime;
@@ -20,7 +20,16 @@ namespace Caveman.Weapons.Ranged
             MoveUpdate();
         }
 
-
+        public void Activate(string Id, Vector2 from, Vector2 to)
+        {
+            var model = Pool.New();
+            model.OwnerId = Id;
+            model.startPosition = from;
+            model.transform.position = from;
+            model.targetPosition = to;
+            // todo if weapon move no linear, moveUnit needless, example: stone model, bezier curve
+            model.moveUnit = UnityExtensions.CalculateDelta(from, to, Config.Speed);
+        }
 
         public override void Destroy()
         {
