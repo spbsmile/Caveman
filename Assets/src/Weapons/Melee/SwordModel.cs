@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System.Collections;
 using UnityEngine;
 
 namespace Caveman.Weapons.Melee
@@ -8,7 +7,8 @@ namespace Caveman.Weapons.Melee
     {
         public void Activate(string ownerId, Vector2 from, Vector2 to)
         {
-            throw new NotImplementedException();
+            print("hello activate from editor");
+            //throw new NotImplementedException();
         }
 
         public void Awake()
@@ -20,6 +20,14 @@ namespace Caveman.Weapons.Melee
         {
             base.Destroy();
         }
+
+        IEnumerator ContinuousRotation ()
+         {
+             while(true){
+                 transform.Rotate(Vector3.forward,10);
+                 yield return new WaitForSeconds (0.01f);
+             }
+         }
 
     }
 }
