@@ -27,7 +27,7 @@ namespace Caveman.Weapons
             Pool.Store(this);
         }
 
-        public void Take()
+        public virtual void Take()
         {
             Pool.Store(this);
         }

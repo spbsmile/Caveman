@@ -7,8 +7,7 @@ namespace Caveman.Weapons.Melee
     {
         public void Activate(string ownerId, Vector2 from, Vector2 to)
         {
-            print("hello activate from editor");
-            //throw new NotImplementedException();
+            StartCoroutine(ContinuousRotation());
         }
 
         public void Awake()
@@ -16,18 +15,19 @@ namespace Caveman.Weapons.Melee
             Config = EnterPoint.Configs.Weapon["sword"];
         }
 
-        public override void Destroy()
+        public override void Take()
         {
-            base.Destroy();
+            print("hello my sword");
         }
 
-        IEnumerator ContinuousRotation ()
-         {
-             while(true){
-                 transform.Rotate(Vector3.forward,10);
-                 yield return new WaitForSeconds (0.01f);
-             }
-         }
+        IEnumerator ContinuousRotation()
+        {
+            while (true)
+            {
+                transform.Rotate(Vector3.forward, 10);
+                yield return new WaitForSeconds(0.01f);
+            }
+        }
 
     }
 }
