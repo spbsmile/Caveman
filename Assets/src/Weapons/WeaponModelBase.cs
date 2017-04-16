@@ -9,6 +9,7 @@ namespace Caveman.Weapons
     {
         public string Id => Id;
         public WeaponConfig Config { protected set; get; }
+        public Transform Transform => transform;
         public string OwnerId { protected internal set; get; }
 
         protected internal Vector2 startPosition;

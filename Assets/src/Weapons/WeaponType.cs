@@ -3,6 +3,8 @@
     public enum WeaponType
     {
         Stone,
-        Skull
+        Axe,
+        Skull,
+        Sword
     }
 }

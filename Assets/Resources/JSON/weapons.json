@@ -30,7 +30,7 @@
     "weight": 10,
     "rotateParameter": 10,
     "prefabPath": "Weapons/axe",
-    "type": 1
+    "type": 2
   },
   {
     "name": "sword",
@@ -40,6 +40,6 @@
     "weight": 10,
     "rotateParameter": 10,
     "prefabPath": "Weapons/sword",
-    "type": 2
+    "type": 3
   }
 ]

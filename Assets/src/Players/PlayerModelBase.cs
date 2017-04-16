@@ -71,6 +71,7 @@ namespace Caveman.Players
             pool.Store(this);
         }
 
+        // todo pickup manager
         public virtual void PickupWeapon(IWeapon weapon)
         {
             if (currentWeapon == null || currentWeapon.Config.Type != weapon.Config.Type)
@@ -79,6 +80,12 @@ namespace Caveman.Players
                 PlayerCore.WeaponCount = 0;
             }
             playerAnimation.Pickup();
+            if (weapon.Config.Type == WeaponType.Sword)
+            {
+                weapon.Transform.parent = transform;
+                weapon.Transform.localPosition = Vector2.zero;
+            }
+
             weapon.Take();
         }
 
