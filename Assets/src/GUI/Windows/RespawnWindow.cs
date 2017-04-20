@@ -9,11 +9,18 @@ namespace Caveman.UI.Windows
         [SerializeField] private Button buttonRespawn;
         [SerializeField] private Slider progress;
         [SerializeField] private CNJoystick joystick;
-
+        private CanvasGroup canvasGroup;
         public Button ButtonRespawn => buttonRespawn;
+
+        public void Awake()
+        {
+            canvasGroup = GetComponent<CanvasGroup>();
+            canvasGroup.alpha = 0;
+        }
 
         public void OnDisable()
         {
+            canvasGroup.alpha = 0;
             progress.value = 0;
             joystick.Enable();
         }
@@ -22,8 +29,15 @@ namespace Caveman.UI.Windows
         {
             joystick.Disable();
             gameObject.SetActive(true);
-            StartCoroutine(WithProgress(timeRespawn));
+            StartCoroutine(Delay());
+            StartCoroutine(DisplayRespawnTimeOut(timeRespawn));
             StartCoroutine(DisplayResult());
+        }
+
+        private IEnumerator Delay()
+        {
+            yield return new WaitForSeconds(0.2f);
+            canvasGroup.alpha = 1;
         }
 
         protected override IEnumerator DisplayResult()
@@ -33,12 +47,12 @@ namespace Caveman.UI.Windows
             yield return StartCoroutine(DisplayResult());
         }
 
-        private IEnumerator WithProgress(int timeRespawn)
+        private IEnumerator DisplayRespawnTimeOut(int timeRespawn)
         {
             var startTime = Time.time;
             while (progress.value < 0.99)
             {
-                progress.value = (Time.time - startTime)/timeRespawn;
+                progress.value = (Time.time - startTime) / timeRespawn;
                 yield return new WaitForFixedUpdate();
             }
         }
