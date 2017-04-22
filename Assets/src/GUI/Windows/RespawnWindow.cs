@@ -36,8 +36,12 @@ namespace Caveman.UI.Windows
 
         private IEnumerator Delay()
         {
-            yield return new WaitForSeconds(0.2f);
-            canvasGroup.alpha = 1;
+            const float intervalAlpha = 0.25f;
+            canvasGroup.alpha += intervalAlpha;
+            while(canvasGroup.alpha < 1){
+                yield return new WaitForSeconds(0.1f);
+                canvasGroup.alpha += intervalAlpha;
+            }
         }
 
         protected override IEnumerator DisplayResult()
