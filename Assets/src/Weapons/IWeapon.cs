@@ -10,6 +10,8 @@ namespace Caveman.Weapons
 
         Transform Transform { get; }
         void Activate(string ownerId, Vector2 from, Vector2 to);
-        void Take();
+        void Take(string playerId);
+
+        string OwnerId { get; }
     }
 }

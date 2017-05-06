@@ -47,7 +47,7 @@ namespace Caveman.UI
 
         public void SubscribeOnEvents(PlayerModelHero model, Func<Vector2> randomPosition)
         {
-            var playerCore = model.PlayerCore;
+            var playerCore = model.Core;
             playerCore.WeaponCountChange += count => weapons.text = count.ToString();
             playerCore.KillCountChange += count => killed.text = count.ToString();
             playerCore.BonusActivate += bonusesPanel.BonusActivated;
@@ -67,7 +67,7 @@ namespace Caveman.UI
             joystick.FingerLiftedEvent += controller => model.HandlerOnStopMove();
             respawnWindow.ButtonRespawn.onClick.AddListener(delegate
             {
-	            model.PlayerCore.IsAlive = true;
+	            model.Core.IsAlive = true;
                 model.StopAllCoroutines();
                 model.RespawnInstantly(randomPosition());
             });

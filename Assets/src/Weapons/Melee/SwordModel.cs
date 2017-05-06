@@ -23,8 +23,9 @@ namespace Caveman.Weapons.Melee
             StartCoroutine(ContinuousRotation());
         }
 
-        public override void Take()
+        public override void Take(string playerId)
         {
+            OwnerId = playerId;
             print("hello my sword");
         }
 

@@ -27,7 +27,7 @@ namespace Caveman.Level
         {
             if (currentState == State.Close && other.GetComponent<PlayerModelHero>())
             {
-                var owner = other.GetComponent<PlayerModelHero>().PlayerCore;
+                var owner = other.GetComponent<PlayerModelHero>().Core;
                 owner.ActivatedChest(() =>
                 {
                     currentState = State.Open;

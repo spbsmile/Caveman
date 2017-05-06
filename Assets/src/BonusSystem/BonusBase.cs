@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace Caveman.Bonuses
 {
+    [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(BoxCollider2D))]
+    [RequireComponent(typeof(SpriteRenderer))]
     public class BonusBase : ASupportPool<BonusBase>
     {
         protected ObjectPool<BonusBase> pool;
@@ -18,7 +21,7 @@ namespace Caveman.Bonuses
             if (Time.time < 1) return; // todo 
             if (other.gameObject.GetComponent<PlayerModelBase>())
             {
-                Effect(other.gameObject.GetComponent<PlayerModelBase>().PlayerCore);
+                Effect(other.gameObject.GetComponent<PlayerModelBase>().Core);
             }
             else if (other.gameObject.GetComponent<WeaponModelBase>())
             {

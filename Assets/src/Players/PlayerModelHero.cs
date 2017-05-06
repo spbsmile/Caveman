@@ -40,7 +40,7 @@ namespace Caveman.Players
         public void MovePlayer(Vector3 direction, CNAbstractController arg2)
         {
             if (!isMoving) isMoving = true;
-            moveUnit = direction*PlayerCore.Speed;
+            moveUnit = direction*Core.Speed;
             Move();
         }
 
@@ -85,10 +85,10 @@ namespace Caveman.Players
             playerAnimation.SetMoving(moveUnit.y < 0, moveUnit.x > 0);
         }
 
-        public override void OnEnable()
-        {
-            base.OnEnable();
-            if (multiplayer && !DevSettings.DisableSendMove) StartCoroutine(SendMove());
-        }
+        // public override void OnEnable()
+        // {
+        //     base.OnEnable();
+        //     if (multiplayer && !DevSettings.DisableSendMove) StartCoroutine(SendMove());
+        // }
     }
 }

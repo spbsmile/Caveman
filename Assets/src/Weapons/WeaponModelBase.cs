@@ -5,6 +5,9 @@ using Caveman.Configs;
 
 namespace Caveman.Weapons
 { 
+    [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(BoxCollider2D))]
+    [RequireComponent(typeof(SpriteRenderer))]
     public  class WeaponModelBase : ASupportPool<WeaponModelBase>
     {
         public string Id => Id;
@@ -28,7 +31,7 @@ namespace Caveman.Weapons
             Pool.Store(this);
         }
 
-        public virtual void Take()
+        public virtual void Take(string playerId)
         {
             Pool.Store(this);
         }

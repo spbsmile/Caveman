@@ -13,21 +13,21 @@ namespace Caveman.Players
 
         public override void PickupWeapon(IWeapon weapon)
         {
-            if (PlayerCore.WeaponCount > weapon.Config.Weight) return;
+            if (Core.WeaponCount > weapon.Config.Weight) return;
             base.PickupWeapon(weapon);
-            PlayerCore.WeaponCount++;
+            Core.WeaponCount++;
         }
 
         public override void Die()
         {
-            PlayerCore.WeaponCount = 0;
+            Core.WeaponCount = 0;
             base.Die();
         }
 
         public override void ActivateWeapon(Vector2 aim)
         {
             base.ActivateWeapon(aim);
-            PlayerCore.WeaponCount--;
+            Core.WeaponCount--;
         }
 
         public override void CalculateMoveUnit(Vector2 targetPosition)

@@ -12,72 +12,78 @@ using UnityEngine;
 
 namespace Caveman.Players
 {
+    [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(Animator))]
+    [RequireComponent(typeof(BoxCollider2D))]
+    [RequireComponent(typeof(SpriteRenderer))]
+    [RequireComponent(typeof(WeaponActionController))]
     /*
-     * Player concept consists of two types: PlayerCore and PlayerModelBase
-     * Type PlayerModelBase - Behavior 
-     * Type PlayerCore - contains all parameters/stats.
-     */
+    * Player concept consists of two types: PlayerCore and PlayerModelBase
+    * Type PlayerModelBase - Behavior
+    * Type PlayerCore - contains all parameters/stats.
+    */
     public class PlayerModelBase : MonoBehaviour, IDamageable
     {
         protected Func<Vector2> GetRandomPosition;
-        protected Func<PlayerModelBase, PlayerModelBase> FindClosestPlayer;
         protected Func<string, PlayerCore> GetPlayerById;
 
-        [HideInInspector] public BonusBase bonusBase;
-        [HideInInspector] public SpriteRenderer spriteRenderer;
-
+        protected SpriteRenderer spriteRenderer;
         //todo one parameter
         protected IServerNotify serverNotify;
         protected bool multiplayer;
         protected LevelMode levelMode;
-        
         protected PlayerAnimation playerAnimation;
         protected Vector2 moveUnit;
         protected IWeapon currentWeapon;
 
-        public PlayerCore PlayerCore { private set; get; }
+        protected WeaponActionController weaponActionController;
+        public PlayerCore Core { private set; get; }
+        public bool IsVisible => spriteRenderer.isVisible;
 
-	    private PlayerPool pool;
+        private PlayerPool pool;
+        private const int CountWeaponAfterDrop = 0;
 
         protected void Awake()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
+            weaponActionController = GetComponent<WeaponActionController>();
         }
 
         public void Initialization(PlayerCore core, IServerNotify serverNotify,
-            Func<PlayerModelBase, PlayerModelBase> findClosestPlayer, PlayerPool pool,
+            Func<Vector3, string, Vector3?> findClosestPlayer, PlayerPool pool,
             Func<Vector2> getRandomPosition,
             Transform imageDeath, LevelMode levelMode, Func<string, PlayerCore> getPlayerById)
         {
             this.serverNotify = serverNotify;
-	        this.pool = pool;
+            this.pool = pool;
             GetRandomPosition = getRandomPosition;
-            FindClosestPlayer = findClosestPlayer;
             GetPlayerById = getPlayerById;
             if (serverNotify != null) multiplayer = true;
-            PlayerCore = core;
+            Core = core;
             playerAnimation = new PlayerAnimation(GetComponent<Animator>(), imageDeath);
             this.levelMode = levelMode;
+            weaponActionController.Initilization(findClosestPlayer, ActivateWeapon, core);
         }
-        
+
         public virtual void PickupBonus(BonusBase bonus)
         {
-            bonus.Effect(PlayerCore);
+            bonus.Effect(Core);
         }
 
         public virtual void Die()
         {
-            PlayerCore.IsAlive = false;
+            Core.IsAlive = false;
             pool.Store(this);
         }
 
-        // todo pickup manager
+        // todo pickup controller
         public virtual void PickupWeapon(IWeapon weapon)
         {
             if (currentWeapon == null || currentWeapon.Config.Type != weapon.Config.Type)
             {
+                weaponActionController.UpdateWeapon(weapon);
                 currentWeapon = weapon;
-                PlayerCore.WeaponCount = 0;
+                Core.WeaponCount = CountWeaponAfterDrop;
             }
             playerAnimation.Pickup();
             if (weapon.Config.Type == WeaponType.Sword)
@@ -85,30 +91,29 @@ namespace Caveman.Players
                 weapon.Transform.parent = transform;
                 weapon.Transform.localPosition = Vector2.zero;
             }
-
-            weapon.Take();
+            weapon.Take(Core.Id);
         }
 
         public virtual void ActivateWeapon(Vector2 aim)
         {
             playerAnimation.Throw();
-            currentWeapon.Activate(PlayerCore.Id, transform.position, aim);
+            currentWeapon.Activate(Core.Id, transform.position, aim);
         }
 
         protected virtual IEnumerator Respawn(Vector2 position)
         {
-            yield return new WaitForSeconds(PlayerCore.Config.RespawnDuration);
+            yield return new WaitForSeconds(Core.Config.RespawnDuration);
             RespawnInstantly(position);
             StopMove();
-	        PlayerCore.IsAlive = true;
+            Core.IsAlive = true;
         }
 
         public virtual void RespawnInstantly(Vector2 position)
         {
-            pool.New(PlayerCore.Id).transform.position = position;
-            PlayerCore.Invulnerability = true;
-            StartCoroutine(playerAnimation.Invulnerability(PlayerCore.Config.InvulnerabilityDuration, spriteRenderer));
-            PlayerCore.Invulnerability = false;
+            pool.New(Core.Id).transform.position = position;
+            Core.Invulnerability = true;
+            StartCoroutine(playerAnimation.Invulnerability(Core.Config.InvulnerabilityDuration, spriteRenderer));
+            Core.Invulnerability = false;
         }
 
         /// <summary>
@@ -123,7 +128,7 @@ namespace Caveman.Players
 
         public virtual void CalculateMoveUnit(Vector2 targetPosition)
         {
-            moveUnit = UnityExtensions.CalculateDelta(transform.position, targetPosition, PlayerCore.Speed);
+            moveUnit = UnityExtensions.CalculateDelta(transform.position, targetPosition, Core.Speed);
         }
 
         protected void StopMove()

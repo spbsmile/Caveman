@@ -66,23 +66,22 @@ namespace Caveman.Players
 
         private PlayerCore GetById(string playerId)
         {
-            return models.FirstOrDefault(pl => pl.PlayerCore.Id == playerId)?.PlayerCore;
+            return models.FirstOrDefault(pl => pl.Core.Id == playerId)?.Core;
         }
 
         [CanBeNull]
-        private PlayerModelBase FindClosestPlayer(PlayerModelBase playerModelBase)
+        private Vector3? FindClosestPlayerPosition(Vector3 point, string playerId)
 	    {
 	        var minDistance = mapCore.MaxDistance;
-            var positionPlayer = playerModelBase.transform.position;
-		    PlayerModelBase result = null;
+		    Vector3? result = null;
 		    for (var i = 0; i < models.Count; i++)
 		    {
-			    if (!models[i].gameObject.activeSelf || models[i] == playerModelBase ||
-			        !models[i].spriteRenderer.isVisible || models[i].PlayerCore.Invulnerability) continue;
-			    var childDistance = Vector2.SqrMagnitude(models[i].transform.position - positionPlayer);
+			    if (!models[i].gameObject.activeSelf || models[i].Core.Id == playerId ||
+			        !models[i].IsVisible || models[i].Core.Invulnerability) continue;
+			    var childDistance = Vector2.SqrMagnitude(models[i].transform.position - point);
 			    if (minDistance > childDistance)
 			    {
-				    result = models[i];
+				    result = models[i].transform.position;
 				    minDistance = childDistance;
 			    }
 		    }
@@ -96,7 +95,7 @@ namespace Caveman.Players
             model.Initialization(
                 playerCore,
                 serverNotify,
-                FindClosestPlayer,
+                FindClosestPlayerPosition,
                 pool, mapCore.GetRandomPosition,
                 imagesDeath.New().transform,
                 levelMode,
