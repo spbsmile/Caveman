@@ -25,11 +25,12 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 418744}
+  - component: {fileID: 114088165570983486}
+  - component: {fileID: 114003430573511386}
   - component: {fileID: 21251226}
   - component: {fileID: 6175054}
   - component: {fileID: 5071324}
   - component: {fileID: 9504910}
-  - component: {fileID: 114088165570983486}
   m_Layer: 0
   m_Name: Bot
   m_TagString: Untagged
@@ -230,16 +231,25 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 174902}
   m_IsPrefabParent: 1
+--- !u!114 &114003430573511386
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 174902}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d59f3666db6da834ea60943822af07d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114088165570983486
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 174902}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a365f387874fdad4e9a373051d3f2b61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bonusBase: {fileID: 0}
-  spriteRenderer: {fileID: 0}
