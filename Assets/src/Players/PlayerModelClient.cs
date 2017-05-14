@@ -24,7 +24,6 @@ namespace Caveman.Players
                         serverNotify.PlayerDeadSend();
                         serverNotify.AddedKillStatSend(weapon.OwnerId);
                     }
-                    weapon.Destroy();
                     StopAllCoroutines();
                     StartCoroutine(playerAnimation.Death(transform.position));
                     Die();

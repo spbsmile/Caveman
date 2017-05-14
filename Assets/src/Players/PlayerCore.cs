@@ -2,12 +2,14 @@
 using Caveman.Bonuses;
 using Caveman.BonusSystem;
 using Caveman.Configs;
+using Caveman.Weapons;
 
 namespace Caveman.Players
 {
     public partial class PlayerCore : ISupportBonus
     {
         public Action<int> WeaponCountChange;
+        public Action<WeaponType> WeaponTypeChange;
         public Action<int> KillCountChange;
         public Action<bool> IsAliveChange;
         public Action<BonusType, float> BonusActivate;

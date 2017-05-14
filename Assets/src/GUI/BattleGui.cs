@@ -17,8 +17,9 @@ namespace Caveman.UI
         [SerializeField] private ResultRound resultRound;
         [SerializeField] private RespawnWindow respawnWindow;
         [SerializeField] private ChestIcon chestIcon;
-        [SerializeField] private Text weapons;
-        [SerializeField] private Text killed;
+        [SerializeField] private Text weaponCount;
+        [SerializeField] private Text killedCount;
+        [SerializeField] private WeaponIconFSM weaponIcon;
 
         public ResultRound ResultRound => resultRound;
         public MainGameTimer MainGameTimer => mainGameTimer;
@@ -47,20 +48,21 @@ namespace Caveman.UI
 
         public void SubscribeOnEvents(PlayerModelHero model, Func<Vector2> randomPosition)
         {
-            var playerCore = model.Core;
-            playerCore.WeaponCountChange += count => weapons.text = count.ToString();
-            playerCore.KillCountChange += count => killed.text = count.ToString();
-            playerCore.BonusActivate += bonusesPanel.BonusActivated;
-            playerCore.ChestActivate += (openHandler, isEnable) => 
+            var core = model.Core;
+            core.WeaponCountChange += count => weaponCount.text = count.ToString();
+            core.WeaponTypeChange += type => weaponIcon.SetImage(type);
+            core.KillCountChange += count => killedCount.text = count.ToString();
+            core.BonusActivate += bonusesPanel.BonusActivated;
+            core.ChestActivate += (openHandler, isEnable) => 
             {
                 chestIcon.ChestActivated(openHandler, isEnable);
             };
-            playerCore.IsAliveChange += isAlive =>
+            core.IsAliveChange += isAlive =>
             {
                 if (isAlive)
                     respawnWindow.gameObject.SetActive(false);
                 else
-                    respawnWindow.Activate(playerCore.Config.RespawnDuration);
+                    respawnWindow.Activate(core.Config.RespawnDuration);
             };
 
             joystick.ControllerMovedEvent += model.MovePlayer;

@@ -77,6 +77,7 @@ namespace Caveman.Players
         }
 
         // todo pickup controller
+        // todo change weapon 
         public virtual void PickupWeapon(IWeapon weapon)
         {
             if (currentWeapon == null || currentWeapon.Config.Type != weapon.Config.Type)
@@ -84,6 +85,7 @@ namespace Caveman.Players
                 weaponActionController.UpdateWeapon(weapon);
                 currentWeapon = weapon;
                 Core.WeaponCount = CountWeaponAfterDrop;
+                Core.WeaponTypeChange?.Invoke(currentWeapon.Config.Type);
             }
             playerAnimation.Pickup();
             if (weapon.Config.Type == WeaponType.Sword)
