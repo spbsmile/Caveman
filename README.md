@@ -10,4 +10,4 @@ We appreciate any help including feedback, advice and collaboration.
 
 [Roadmap Trello board](https://trello.com/b/YJKI6zTo)
 
-[apk file] (https://letsdrinktea.ru/APK/caveman_test.apk).
+[apk file](https://letsdrinktea.ru/APK/caveman_test.apk)
