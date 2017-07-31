@@ -7,6 +7,7 @@ Mainly, it is oriented on multiplayer play, however the single play is also unde
 
 We appreciate any help including feedback, advice and collaboration.
 
+[![CodeFactor](https://www.codefactor.io/repository/github/spbsmile/caveman/badge)](https://www.codefactor.io/repository/github/spbsmile/caveman)
 
 [Roadmap Trello board](https://trello.com/b/YJKI6zTo)
 
