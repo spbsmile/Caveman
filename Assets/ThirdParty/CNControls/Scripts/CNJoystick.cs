@@ -60,8 +60,8 @@ public class CNJoystick : CNAbstractController
 
         // Getting needed components
         // Hardcoded names. We have no need of renaming these objects anyway
-        _stickTransform = TransformCache.FindChild("Stick").GetComponent<Transform>();
-        _baseTransform = TransformCache.FindChild("Base").GetComponent<Transform>();
+        _stickTransform = TransformCache.Find("Stick").GetComponent<Transform>();
+        _baseTransform = TransformCache.Find("Base").GetComponent<Transform>();
 
         _stickGameObject = _stickTransform.gameObject;
         _baseGameObject = _baseTransform.gameObject;

@@ -25,7 +25,7 @@ public class Controller3DExample : MonoBehaviour
         _characterController = GetComponent<CharacterController>();
         _mainCameraTransform = Camera.main.GetComponent<Transform>();
         _transformCache = GetComponent<Transform>();
-        _playerTransform = _transformCache.FindChild("Cocoon");
+        _playerTransform = _transformCache.Find("Cocoon");
     }
 
     
